@@ -1,0 +1,11 @@
+{% comment %}
+  Loads Nether Compare framework assets when needed outside the header shell.
+  Safe to render multiple times — browsers cache deferred scripts/styles.
+
+  Usage:
+  {% render 'nether-compare-assets' %}
+{% endcomment %}
+
+{{ 'component-compare.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'nether-commerce-interaction.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-compare.js' | asset_url }}" defer="defer"></script>

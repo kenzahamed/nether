@@ -1,0 +1,93 @@
+{% comment %}
+  Section-level product or collection promotion aside for CTA layouts.
+
+  Accepts:
+  - section: {Object} CTA section (required)
+
+  Usage:
+  {% render 'nether-cta-aside', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign cta_layout = section.settings.nether_layout | default: 'centered_cta'
+  assign cta_product = nil
+  assign cta_collection = nil
+
+  if section.settings.nether_cta_product != blank
+    assign cta_product = all_products[section.settings.nether_cta_product]
+  endif
+
+  if section.settings.nether_cta_collection != blank
+    assign cta_collection = collections[section.settings.nether_cta_collection]
+  endif
+
+  assign aside_cta_label = section.settings.nether_cta_aside_cta_label
+  assign enable_glass = section.settings.nether_enable_glass
+-%}
+
+{%- if cta_layout == 'product_promotion_cta' and cta_product != blank -%}
+  <aside
+    class="nether-cta__aside nether-cta__aside--product{% if enable_glass %} nether-cta__aside--glass{% endif %}"
+    data-nether-cta-animate
+    data-nether-cta-card
+    data-nether-cta-role="aside"
+    data-nether-hero-role="card"
+    aria-label="{{ 'sections.nether_cta.aside.product' | t: title: cta_product.title | escape }}"
+  >
+    {%- liquid
+      assign promo_image = cta_product.featured_media.preview_image
+      assign promo_cta = aside_cta_label
+      if promo_cta == blank
+        assign promo_cta = 'sections.nether_cta.aside.shop_product' | t
+      endif
+    -%}
+    {%- render 'card',
+      type: 'content',
+      style: 'editorial',
+      heading: cta_product.title,
+      caption: cta_product.vendor,
+      image: promo_image,
+      cta_label: promo_cta,
+      cta_link: cta_product.url,
+      cta_style: 'primary',
+      link: cta_product.url,
+      hover: 'lift,shadow',
+      radius: 'lg',
+      shadow: 'lg'
+    -%}
+  </aside>
+{%- elsif cta_layout == 'collection_promotion_cta' and cta_collection != blank -%}
+  <aside
+    class="nether-cta__aside nether-cta__aside--collection{% if enable_glass %} nether-cta__aside--glass{% endif %}"
+    data-nether-cta-animate
+    data-nether-cta-card
+    data-nether-cta-role="aside"
+    data-nether-hero-role="card"
+    aria-label="{{ 'sections.nether_cta.aside.collection' | t: title: cta_collection.title | escape }}"
+  >
+    {%- liquid
+      assign collection_image = cta_collection.featured_image
+      if collection_image == blank
+        assign collection_image = cta_collection.image
+      endif
+      assign promo_cta = aside_cta_label
+      if promo_cta == blank
+        assign promo_cta = 'sections.nether_cta.aside.shop_collection' | t
+      endif
+    -%}
+    {%- render 'card',
+      type: 'category',
+      style: 'editorial',
+      heading: cta_collection.title,
+      description: cta_collection.description | strip_html | truncate: 120,
+      image: collection_image,
+      cta_label: promo_cta,
+      cta_link: cta_collection.url,
+      cta_style: 'primary',
+      link: cta_collection.url,
+      hover: 'lift,shadow',
+      radius: 'lg',
+      shadow: 'lg'
+    -%}
+  </aside>
+{%- endif -%}

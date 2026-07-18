@@ -1,0 +1,939 @@
+{{ 'component-hero.css' | asset_url | stylesheet_tag }}
+{{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
+{{ 'component-form.css' | asset_url | stylesheet_tag }}
+{{ 'component-newsletter-showcase.css' | asset_url | stylesheet_tag }}
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-icon.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-typography.css' | asset_url | stylesheet_tag }}
+{{ 'component-card-premium.css' | asset_url | stylesheet_tag }}
+{{ 'component-shadow.css' | asset_url | stylesheet_tag }}
+{{ 'component-radius.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-hero.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-newsletter-showcase.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.nether_enable_glass -%}
+  {{ 'component-glass.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if section.settings.nether_enable_gradient -%}
+  {{ 'component-gradient.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- liquid
+  assign nether_layout = section.settings.nether_layout | default: 'centered_signup'
+  assign nether_content_width = section.settings.nether_content_width | default: 'medium'
+  assign nether_content_position = section.settings.nether_content_position | default: 'middle-center'
+
+  assign uses_hero_shell = false
+  assign uses_section_media = false
+
+  case nether_layout
+    when 'editorial_newsletter'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'editorial'
+    when 'split_layout', 'image_with_signup'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'split'
+    when 'background_image', 'background_video'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'overlay'
+    when 'minimal_layout'
+      assign uses_hero_shell = true
+      assign nether_hero_layout = 'minimal'
+    when 'magazine_layout'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'editorial'
+    when 'vip_membership'
+      assign uses_hero_shell = true
+      assign nether_hero_layout = 'card'
+    when 'early_access_waitlist'
+      assign uses_hero_shell = true
+      assign nether_hero_layout = 'classic'
+  endcase
+
+  case section.settings.nether_animation_speed
+    when 'slow'
+      assign nether_animation_duration = 0.8
+    when 'fast'
+      assign nether_animation_duration = 0.3
+    else
+      assign nether_animation_duration = 0.5
+  endcase
+
+  assign enable_glass = section.settings.nether_enable_glass
+  assign enable_gradient = section.settings.nether_enable_gradient
+  if nether_layout == 'vip_membership'
+    assign enable_glass = true
+  endif
+  if nether_layout == 'background_image' or nether_layout == 'background_video'
+    assign enable_gradient = true
+  endif
+
+  assign nether_class_list = 'nether-newsletter nether-hero'
+  assign nether_class_list = nether_class_list | append: ' nether-newsletter--layout-' | append: nether_layout
+  if uses_hero_shell
+    assign nether_class_list = nether_class_list | append: ' nether-hero--layout-' | append: nether_hero_layout
+  endif
+  assign nether_class_list = nether_class_list | append: ' nether-hero--width-' | append: nether_content_width
+  assign nether_class_list = nether_class_list | append: ' nether-hero--position-' | append: nether_content_position
+  assign nether_class_list = nether_class_list | append: ' nether-hero--desktop-' | append: section.settings.nether_layout_desktop
+  assign nether_class_list = nether_class_list | append: ' nether-hero--tablet-' | append: section.settings.nether_layout_tablet
+  assign nether_class_list = nether_class_list | append: ' nether-hero--mobile-' | append: section.settings.nether_layout_mobile
+
+  if enable_glass
+    assign nether_class_list = nether_class_list | append: ' nether-hero--glass-enabled nether-newsletter--glass-enabled'
+  endif
+
+  if enable_gradient
+    assign nether_class_list = nether_class_list | append: ' nether-hero--gradient-enabled'
+  endif
+
+  if section.settings.nether_media_position == 'right'
+    assign nether_class_list = nether_class_list | append: ' nether-hero--split-media-right'
+  endif
+
+  if section.settings.nether_enable_floating_card
+    assign nether_class_list = nether_class_list | append: ' nether-newsletter--floating-enabled'
+  endif
+
+  case section.settings.nether_layout_tablet
+    when 'stacked'
+      assign nether_class_list = nether_class_list | append: ' nether-newsletter--tablet-stacked'
+    when 'centered'
+      assign nether_class_list = nether_class_list | append: ' nether-newsletter--tablet-centered'
+  endcase
+
+  case section.settings.nether_layout_mobile
+    when 'stacked'
+      assign nether_class_list = nether_class_list | append: ' nether-newsletter--mobile-stacked'
+    when 'centered'
+      assign nether_class_list = nether_class_list | append: ' nether-newsletter--mobile-centered'
+    when 'minimal'
+      assign nether_class_list = nether_class_list | append: ' nether-newsletter--mobile-minimal'
+  endcase
+
+  assign overlay_classes = 'nether-hero__overlay'
+  if enable_gradient
+    case section.settings.nether_gradient_style
+      when 'dramatic'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-dramatic'
+      when 'vignette'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-vignette'
+      when 'fade-down'
+        assign overlay_classes = overlay_classes | append: ' grad-linear-fade-down'
+      else
+        assign overlay_classes = overlay_classes | append: ' grad-hero-brand'
+    endcase
+  endif
+
+  assign heading_tag = 'h2'
+  if section.settings.nether_heading_level == 'h3'
+    assign heading_tag = 'h3'
+  endif
+
+  assign needs_deferred_media = false
+  if section.settings.nether_newsletter_media_type == 'video' or nether_layout == 'background_video'
+    assign needs_deferred_media = true
+  endif
+  for block in section.blocks
+    if block.type == 'video'
+      assign needs_deferred_media = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if needs_deferred_media -%}
+  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .nether-newsletter {
+    --nether-newsletter-overlay-opacity: {{ section.settings.nether_overlay_opacity | divided_by: 100.0 }};
+    --nether-newsletter-transition-duration: {{ nether_animation_duration }}s;
+    --nether-hero-overlay-opacity: {{ section.settings.nether_overlay_opacity | divided_by: 100.0 }};
+    --nether-hero-transition-duration: {{ nether_animation_duration }}s;
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  {%- if uses_section_media and section.settings.nether_newsletter_image_desktop != blank -%}
+    #NetherNewsletter-{{ section.id }} .nether-hero__media::before {
+      padding-bottom: {{ 1 | divided_by: section.settings.nether_newsletter_image_desktop.aspect_ratio | times: 100 }}%;
+      content: '';
+      display: block;
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+{%- if section.settings.nether_show_divider_top -%}
+  {%- render 'nether-newsletter-divider', section: section, position: 'top' -%}
+{%- endif -%}
+
+<nether-newsletter
+  id="NetherNewsletter-{{ section.id }}"
+  class="{{ nether_class_list }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient"
+  data-section-id="{{ section.id }}"
+  data-nether-motion="newsletter"
+  data-newsletter-layout="{{ nether_layout }}"
+  data-nether-newsletter-layout="{{ nether_layout }}"
+  {% if section.settings.nether_enable_parallax or section.settings.nether_enable_form_reveal %}data-nether-motion-plugins="scrollTrigger"{% endif %}
+  data-animation-style="{{ section.settings.nether_animation_style }}"
+  data-animation-duration="{{ nether_animation_duration }}"
+  data-enable-parallax="{{ section.settings.nether_enable_parallax }}"
+  data-form-reveal="{{ section.settings.nether_enable_form_reveal }}"
+  data-hover-reveal="{{ section.settings.nether_enable_hover_reveal }}"
+  {% if section.settings.nether_enable_floating_card %}data-floating-enabled="true"{% endif %}
+  role="region"
+  aria-label="{{ section.settings.nether_aria_label | default: 'Newsletter signup' | escape }}"
+>
+  <div class="nether-newsletter__inner nether-hero__inner">
+    {%- if uses_section_media -%}
+      {%- render 'nether-hero-media', section: section, adapter: 'newsletter' -%}
+
+      {%- if section.settings.nether_enable_image_overlay or enable_gradient -%}
+        <div class="{{ overlay_classes }}" data-nether-hero-overlay data-nether-newsletter-overlay aria-hidden="true"></div>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if uses_hero_shell -%}
+      {%- render 'nether-newsletter-content', section: section, heading_tag: heading_tag -%}
+    {%- else -%}
+      <div class="nether-newsletter__body page-width" data-nether-newsletter-content data-nether-hero-content>
+        <div class="nether-newsletter__blocks nether-hero__blocks nether-hero__blocks--align-{{ section.settings.nether_content_alignment | default: 'center' }}">
+          {%- for block in section.blocks -%}
+            {%- unless block.type == 'email_field' or block.type == 'name_field' or block.type == 'consent_checkbox' -%}
+              {%- render 'nether-newsletter-block',
+                block: block,
+                section: section,
+                heading_tag: heading_tag
+              -%}
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</nether-newsletter>
+
+{%- if section.settings.nether_show_divider_bottom -%}
+  {%- render 'nether-newsletter-divider', section: section, position: 'bottom' -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Nether Newsletter",
+  "tag": "section",
+  "class": "section section-nether-newsletter",
+  "max_blocks": 24,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Nether Newsletter & lead generation framework"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout",
+      "label": "Layout",
+      "default": "centered_signup",
+      "options": [
+        { "value": "editorial_newsletter", "label": "Editorial newsletter" },
+        { "value": "centered_signup", "label": "Centered signup" },
+        { "value": "split_layout", "label": "Split layout" },
+        { "value": "image_with_signup", "label": "Image with signup" },
+        { "value": "background_image", "label": "Background image" },
+        { "value": "background_video", "label": "Background video" },
+        { "value": "minimal_layout", "label": "Minimal layout" },
+        { "value": "magazine_layout", "label": "Magazine layout" },
+        { "value": "vip_membership", "label": "VIP membership" },
+        { "value": "early_access_waitlist", "label": "Early access / waitlist" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_content_width",
+      "label": "Content width",
+      "default": "medium",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "full", "label": "Full" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_media_position",
+      "label": "Media position",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_content_position",
+      "label": "Content position",
+      "default": "middle-center",
+      "options": [
+        { "value": "top-left", "label": "Top left" },
+        { "value": "top-center", "label": "Top center" },
+        { "value": "top-right", "label": "Top right" },
+        { "value": "middle-left", "label": "Middle left" },
+        { "value": "middle-center", "label": "Middle center" },
+        { "value": "middle-right", "label": "Middle right" },
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-center", "label": "Bottom center" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_content_alignment",
+      "label": "Content alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_heading_level",
+      "label": "Primary heading level",
+      "default": "h2",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "nether_aria_label",
+      "label": "Accessibility label",
+      "default": "Newsletter signup"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section media"
+    },
+    {
+      "type": "select",
+      "id": "nether_newsletter_media_type",
+      "label": "Media type",
+      "default": "image",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "nether_newsletter_image_desktop",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "nether_newsletter_image_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "video",
+      "id": "nether_newsletter_video",
+      "label": "Shopify-hosted video"
+    },
+    {
+      "type": "video_url",
+      "id": "nether_newsletter_video_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "External video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "nether_newsletter_poster_image",
+      "label": "Poster image"
+    },
+    {
+      "type": "text",
+      "id": "nether_newsletter_video_description",
+      "label": "Video description"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_newsletter_video_loop",
+      "default": true,
+      "label": "Loop video"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_newsletter_enable_blur",
+      "default": false,
+      "label": "Background blur"
+    },
+    {
+      "type": "header",
+      "content": "Visual features"
+    },
+    {
+      "type": "range",
+      "id": "nether_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_image_overlay",
+      "default": true,
+      "label": "Enable image overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_glass",
+      "default": false,
+      "label": "Enable glass panel"
+    },
+    {
+      "type": "select",
+      "id": "nether_glass_style",
+      "label": "Glass style",
+      "default": "medium",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "heavy", "label": "Heavy" },
+        { "value": "frosted", "label": "Frosted" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_gradient",
+      "default": false,
+      "label": "Enable gradient panel"
+    },
+    {
+      "type": "select",
+      "id": "nether_gradient_style",
+      "label": "Gradient style",
+      "default": "brand",
+      "options": [
+        { "value": "brand", "label": "Brand" },
+        { "value": "dramatic", "label": "Dramatic" },
+        { "value": "vignette", "label": "Vignette" },
+        { "value": "fade-down", "label": "Fade down" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_floating_card",
+      "default": false,
+      "label": "Floating card"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_divider_top",
+      "default": false,
+      "label": "Top divider"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_divider_bottom",
+      "default": false,
+      "label": "Bottom divider"
+    },
+    {
+      "type": "select",
+      "id": "nether_divider_style",
+      "label": "Divider style",
+      "default": "line",
+      "options": [
+        { "value": "line", "label": "Line" },
+        { "value": "gradient", "label": "Gradient" },
+        { "value": "wave", "label": "Wave" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_style",
+      "label": "Animation style",
+      "default": "stagger",
+      "options": [
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide", "label": "Slide" },
+        { "value": "scale", "label": "Scale" },
+        { "value": "stagger", "label": "Stagger" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_speed",
+      "label": "Animation speed",
+      "default": "medium",
+      "options": [
+        { "value": "slow", "label": "Slow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "fast", "label": "Fast" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_form_reveal",
+      "default": true,
+      "label": "Form reveal animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_hover_reveal",
+      "default": true,
+      "label": "Trust badge hover reveal"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_parallax",
+      "default": false,
+      "label": "Enable parallax",
+      "info": "Subtle media parallax on scroll. Respects reduced motion preferences."
+    },
+    {
+      "type": "header",
+      "content": "Responsive layouts"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_desktop",
+      "label": "Desktop layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "editorial", "label": "Editorial emphasis" },
+        { "value": "compact", "label": "Compact" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_tablet",
+      "label": "Tablet layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_mobile",
+      "label": "Mobile layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "settings": [{ "type": "text", "id": "text", "label": "Text" }]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Subscribe to our newsletter" },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "default": "h1",
+          "options": [
+            { "value": "h2", "label": "Small" },
+            { "value": "h1", "label": "Medium" },
+            { "value": "h0", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "settings": [
+        { "type": "inline_richtext", "id": "subheading", "label": "Subheading" },
+        {
+          "type": "select",
+          "id": "subheading_size",
+          "label": "Subheading size",
+          "default": "h3",
+          "options": [
+            { "value": "h4", "label": "Small" },
+            { "value": "h3", "label": "Medium" },
+            { "value": "h2", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Rich text",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text" },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "default": "body",
+          "options": [
+            { "value": "body", "label": "Body" },
+            { "value": "subtitle", "label": "Subtitle" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video" },
+        { "type": "video_url", "id": "video_url", "accept": ["youtube", "vimeo"], "label": "External video URL" },
+        { "type": "image_picker", "id": "poster_image", "label": "Poster image" }
+      ]
+    },
+    {
+      "type": "newsletter_form",
+      "name": "Newsletter form",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "capture_mode",
+          "label": "Capture mode",
+          "default": "newsletter",
+          "options": [
+            { "value": "newsletter", "label": "Newsletter signup" },
+            { "value": "lead_capture", "label": "Lead capture" },
+            { "value": "vip", "label": "VIP signup" },
+            { "value": "waitlist", "label": "Waitlist" },
+            { "value": "discount", "label": "Discount signup" }
+          ]
+        },
+        { "type": "text", "id": "contact_tags", "label": "Customer tags", "default": "newsletter" },
+        { "type": "text", "id": "capture_note", "label": "Hidden capture note" },
+        {
+          "type": "select",
+          "id": "form_layout",
+          "label": "Form layout",
+          "default": "stacked",
+          "options": [
+            { "value": "stacked", "label": "Stacked" },
+            { "value": "inline", "label": "Inline" }
+          ]
+        },
+        { "type": "checkbox", "id": "show_name_field", "default": false, "label": "Show name field" },
+        { "type": "checkbox", "id": "name_required", "default": false, "label": "Name required" },
+        { "type": "text", "id": "name_label", "label": "Name label" },
+        { "type": "text", "id": "email_label", "label": "Email label" },
+        { "type": "checkbox", "id": "show_consent_checkbox", "default": true, "label": "Show consent checkbox" },
+        { "type": "checkbox", "id": "consent_required", "default": false, "label": "Consent required" },
+        { "type": "text", "id": "consent_label", "label": "Consent label" },
+        {
+          "type": "select",
+          "id": "field_size",
+          "label": "Field size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        },
+        { "type": "text", "id": "button_label", "label": "Submit button label" },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Submit button style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        },
+        { "type": "text", "id": "secondary_button_label", "label": "Secondary button label" },
+        { "type": "url", "id": "secondary_button_link", "label": "Secondary button link" },
+        {
+          "type": "select",
+          "id": "secondary_button_style",
+          "label": "Secondary button style",
+          "default": "secondary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        { "type": "richtext", "id": "privacy_message", "label": "Privacy message" },
+        { "type": "checkbox", "id": "show_success_state", "default": true, "label": "Show success state" },
+        { "type": "text", "id": "success_message", "label": "Success message" },
+        {
+          "type": "select",
+          "id": "integration_provider",
+          "label": "Integration provider",
+          "default": "shopify",
+          "options": [
+            { "value": "shopify", "label": "Shopify customers" },
+            { "value": "klaviyo", "label": "Klaviyo (future-ready)" },
+            { "value": "mailchimp", "label": "Mailchimp (future-ready)" },
+            { "value": "omnisend", "label": "Omnisend (future-ready)" },
+            { "value": "custom", "label": "Custom (future-ready)" }
+          ]
+        },
+        { "type": "text", "id": "integration_list_id", "label": "Integration list ID" }
+      ]
+    },
+    {
+      "type": "email_field",
+      "name": "Email field",
+      "limit": 1,
+      "settings": [{ "type": "text", "id": "label", "label": "Label override" }]
+    },
+    {
+      "type": "name_field",
+      "name": "Name field",
+      "limit": 1,
+      "settings": [{ "type": "text", "id": "label", "label": "Label override" }]
+    },
+    {
+      "type": "consent_checkbox",
+      "name": "Consent checkbox",
+      "limit": 1,
+      "settings": [{ "type": "text", "id": "label", "label": "Label override" }]
+    },
+    {
+      "type": "primary_button",
+      "name": "Primary button",
+      "settings": [
+        { "type": "text", "id": "button_label", "label": "Button label" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        { "type": "checkbox", "id": "render_outside_form", "default": false, "label": "Render outside form" },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "secondary_button",
+      "name": "Secondary button",
+      "settings": [
+        { "type": "text", "id": "button_label", "label": "Button label" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        { "type": "checkbox", "id": "render_outside_form", "default": true, "label": "Render outside form" },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "secondary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "trust_badge",
+      "name": "Trust badge",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "image_picker", "id": "badge_1_image", "label": "Badge 1 image" },
+        { "type": "text", "id": "badge_1_label", "label": "Badge 1 label" },
+        { "type": "image_picker", "id": "badge_2_image", "label": "Badge 2 image" },
+        { "type": "text", "id": "badge_2_label", "label": "Badge 2 label" },
+        { "type": "image_picker", "id": "badge_3_image", "label": "Badge 3 image" },
+        { "type": "text", "id": "badge_3_label", "label": "Badge 3 label" },
+        { "type": "image_picker", "id": "badge_4_image", "label": "Badge 4 image" },
+        { "type": "text", "id": "badge_4_label", "label": "Badge 4 label" }
+      ]
+    },
+    {
+      "type": "statistic",
+      "name": "Statistic",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value" },
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": [
+        {
+          "type": "select",
+          "id": "divider_style",
+          "label": "Divider style",
+          "default": "line",
+          "options": [
+            { "value": "line", "label": "Line" },
+            { "value": "gradient", "label": "Gradient" },
+            { "value": "space", "label": "Space" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "custom_html",
+      "name": "Custom HTML",
+      "settings": [{ "type": "html", "id": "html", "label": "HTML" }]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nether Newsletter",
+      "blocks": [
+        { "type": "eyebrow" },
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "newsletter_form" },
+        { "type": "trust_badge" }
+      ]
+    },
+    {
+      "name": "Nether VIP membership",
+      "settings": {
+        "nether_layout": "vip_membership",
+        "nether_enable_glass": true,
+        "nether_enable_floating_card": true
+      },
+      "blocks": [
+        { "type": "eyebrow" },
+        { "type": "heading" },
+        { "type": "subheading" },
+        { "type": "newsletter_form", "settings": { "capture_mode": "vip", "show_name_field": true } },
+        { "type": "trust_badge" }
+      ]
+    },
+    {
+      "name": "Nether early access waitlist",
+      "settings": {
+        "nether_layout": "early_access_waitlist",
+        "nether_enable_gradient": true
+      },
+      "blocks": [
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "newsletter_form", "settings": { "capture_mode": "waitlist" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

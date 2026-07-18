@@ -1,0 +1,23 @@
+{% comment %}
+  Optional section divider for Nether Premium Testimonials Framework.
+
+  Accepts:
+  - section: {Object} Testimonials section (required)
+  - position: {String} top or bottom (required)
+
+  Usage:
+  {% render 'nether-testimonials-divider', section: section, position: 'bottom' %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-testimonials__divider nether-testimonials__divider--{{ divider_position }} nether-testimonials__divider--{{ divider_style }}"
+  aria-hidden="true"
+  role="presentation"
+  data-nether-testimonials-divider
+  data-nether-testimonials-role="divider"
+></div>

@@ -1,0 +1,245 @@
+{% comment %}
+  Nether Premium Bundles — shared body (header, grid, summary, empty, extensions).
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - products: {Array} Product list (optional — blank triggers empty unless blocks provide products)
+  - products_limit: {Number}
+  - product_count: {Number}
+  - strategy: {String}
+  - strategy_label: {String}
+  - show_empty: {Boolean} force empty module
+  - empty_context: {String}
+  - compact: {Boolean}
+  - include_product: {Object} Optional current/seed product prepended as required
+  - use_product_blocks: {Boolean} Prefer bundle_product blocks as source
+{% endcomment %}
+
+{%- liquid
+  assign limit = products_limit | default: section.settings.nether_products_to_show | default: 4
+  assign force_empty = show_empty | default: false
+  assign is_compact = compact | default: false
+  assign from_blocks = use_product_blocks | default: false
+
+  assign resolved_count = product_count | default: 0
+  assign total_price = 0
+  assign compare_total = 0
+
+  if from_blocks
+    assign resolved_count = 0
+    for block in section.blocks
+      if block.type == 'bundle_product' and block.settings.product != blank
+        assign resolved_count = resolved_count | plus: 1
+      endif
+    endfor
+    if include_product != blank
+      assign resolved_count = resolved_count | plus: 1
+    endif
+  elsif products != blank
+    if resolved_count == 0
+      assign resolved_count = products.size
+      if resolved_count > limit
+        assign resolved_count = limit
+      endif
+    endif
+  endif
+
+  if include_product != blank and from_blocks == false and products != blank
+    assign has_seed = false
+    for p in products limit: limit
+      if p.id == include_product.id
+        assign has_seed = true
+        break
+      endif
+    endfor
+    unless has_seed
+      assign resolved_count = resolved_count | plus: 1
+    endunless
+  endif
+-%}
+
+{% render 'nether-bundles-header',
+  section: section,
+  strategy_label: strategy_label
+%}
+
+{%- if force_empty or resolved_count == 0 -%}
+  {% render 'nether-bundles-empty', section: section, context: empty_context %}
+{%- else -%}
+  <div class="nether-bundles__layout" data-nether-bundles-layout>
+    <div class="nether-bundles__pack" data-nether-bundles-pack>
+      {%- liquid
+        assign skip_card_product_styles = false
+        assign card_index = 0
+        assign columns_desktop = section.settings.nether_columns_desktop | default: 3
+        assign columns_mobile = section.settings.nether_columns_mobile | default: '1'
+      -%}
+
+      <ul
+        id="NetherBundlesGrid-{{ section.id }}"
+        class="nether-bundles__grid grid product-grid grid--{{ columns_desktop }}-col-desktop grid--{{ columns_mobile }}-col-tablet-down contains-card contains-card--product{% if is_compact %} nether-bundles__grid--compact{% endif %}"
+        role="list"
+        aria-label="{{ 'sections.nether_bundles.grid.label' | t }}"
+        data-nether-bundles-module="grid"
+        data-nether-bundles-grid
+      >
+        {%- if include_product != blank -%}
+          {%- assign card_index = card_index | plus: 1 -%}
+          {%- liquid
+            assign seed_variant = include_product.selected_or_first_available_variant
+            assign total_price = total_price | plus: seed_variant.price
+            if seed_variant.compare_at_price > seed_variant.price
+              assign compare_total = compare_total | plus: seed_variant.compare_at_price
+            else
+              assign compare_total = compare_total | plus: seed_variant.price
+            endif
+          -%}
+          <li
+            id="NetherBundlesItem-{{ section.id }}-{{ card_index }}"
+            class="nether-bundles__item grid__item"
+            data-nether-bundles-item-wrap
+            data-nether-bundles-animate
+          >
+            {% render 'nether-bundles-cards',
+              card_product: include_product,
+              section: section,
+              skip_styles: skip_card_product_styles,
+              lazy_load: false,
+              index: card_index,
+              required: true,
+              quantity: 1,
+              compact: is_compact
+            %}
+          </li>
+          {%- assign skip_card_product_styles = true -%}
+        {%- endif -%}
+
+        {%- if from_blocks -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'bundle_product' and block.settings.product != blank -%}
+              {%- if card_index >= limit -%}
+                {%- break -%}
+              {%- endif -%}
+              {%- assign card_index = card_index | plus: 1 -%}
+              {%- liquid
+                assign pack_product = block.settings.product
+                assign pack_variant = pack_product.selected_or_first_available_variant
+                assign pack_qty = block.settings.quantity | default: 1
+                if pack_qty < 1
+                  assign pack_qty = 1
+                endif
+                assign line_price = pack_variant.price | times: pack_qty
+                assign total_price = total_price | plus: line_price
+                if pack_variant.compare_at_price > pack_variant.price
+                  assign line_compare = pack_variant.compare_at_price | times: pack_qty
+                else
+                  assign line_compare = line_price
+                endif
+                assign compare_total = compare_total | plus: line_compare
+                assign pack_required = block.settings.required | default: false
+                assign lazy_load = true
+                if card_index <= columns_desktop
+                  assign lazy_load = false
+                endif
+              -%}
+              <li
+                id="NetherBundlesItem-{{ section.id }}-{{ card_index }}"
+                class="nether-bundles__item grid__item"
+                data-nether-bundles-item-wrap
+                data-nether-bundles-animate
+                {{ block.shopify_attributes }}
+              >
+                {% render 'nether-bundles-cards',
+                  card_product: pack_product,
+                  section: section,
+                  skip_styles: skip_card_product_styles,
+                  lazy_load: lazy_load,
+                  index: card_index,
+                  required: pack_required,
+                  quantity: pack_qty,
+                  compact: is_compact
+                %}
+              </li>
+              {%- assign skip_card_product_styles = true -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- elsif products != blank -%}
+          {%- liquid
+            assign default_required = false
+            if strategy == 'product_pack' or strategy == 'gift_set' or strategy == 'curated' or strategy == 'volume_discount'
+              assign default_required = true
+            endif
+          -%}
+          {%- for pack_product in products limit: limit -%}
+            {%- unless include_product != blank and pack_product.id == include_product.id -%}
+              {%- if card_index >= limit -%}
+                {%- break -%}
+              {%- endif -%}
+              {%- assign card_index = card_index | plus: 1 -%}
+              {%- liquid
+                assign pack_variant = pack_product.selected_or_first_available_variant
+                assign total_price = total_price | plus: pack_variant.price
+                if pack_variant.compare_at_price > pack_variant.price
+                  assign compare_total = compare_total | plus: pack_variant.compare_at_price
+                else
+                  assign compare_total = compare_total | plus: pack_variant.price
+                endif
+                assign lazy_load = true
+                if card_index <= columns_desktop
+                  assign lazy_load = false
+                endif
+              -%}
+              <li
+                id="NetherBundlesItem-{{ section.id }}-{{ card_index }}"
+                class="nether-bundles__item grid__item"
+                data-nether-bundles-item-wrap
+                data-nether-bundles-animate
+              >
+                {% render 'nether-bundles-cards',
+                  card_product: pack_product,
+                  section: section,
+                  skip_styles: skip_card_product_styles,
+                  lazy_load: lazy_load,
+                  index: card_index,
+                  required: default_required,
+                  quantity: 1,
+                  compact: is_compact
+                %}
+              </li>
+              {%- assign skip_card_product_styles = true -%}
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+    </div>
+
+    {%- liquid
+      assign savings = 0
+      if compare_total > total_price
+        assign savings = compare_total | minus: total_price
+      endif
+      if section.settings.nether_display_discount_percent > 0
+        assign discount_pct = section.settings.nether_display_discount_percent
+        assign savings = total_price | times: discount_pct | divided_by: 100
+        assign compare_total = total_price
+        assign total_price = total_price | minus: savings
+      endif
+    -%}
+
+    {% render 'nether-bundles-summary',
+      section: section,
+      product_count: card_index,
+      total_price: total_price,
+      compare_total: compare_total,
+      savings: savings
+    %}
+  </div>
+
+  {% render 'nether-bundles-drawer', section: section %}
+{%- endif -%}
+
+{%- for block in section.blocks -%}
+  {%- unless block.type == 'bundle_product' -%}
+    {% render 'nether-bundles-block', block: block, section: section %}
+  {%- endunless -%}
+{%- endfor -%}

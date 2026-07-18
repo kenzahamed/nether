@@ -1,0 +1,63 @@
+{% doc %}
+  Nether Motion Engine configuration bridge.
+
+  Outputs merchant Theme Editor settings as JSON for `assets/nether-motion.js`.
+  Infrastructure only — does not animate sections.
+
+  @example
+  {% render 'nether-motion-config' %}
+{% enddoc %}
+
+{%- liquid
+  assign nm_enabled = settings.nether_motion_enabled
+  if nm_enabled == nil
+    assign nm_enabled = true
+  endif
+
+  assign nm_style = settings.nether_motion_style
+  if nm_style == blank
+    assign nm_style = 'minimal'
+  endif
+
+  assign nm_intensity = settings.nether_motion_intensity
+  if nm_intensity == nil
+    assign nm_intensity = 50
+  endif
+
+  assign nm_speed = settings.nether_motion_speed
+  if nm_speed == nil
+    assign nm_speed = 100
+  endif
+
+  assign nm_respect = settings.nether_motion_respect_reduced
+  if nm_respect == nil
+    assign nm_respect = true
+  endif
+
+  assign nm_force = settings.nether_motion_force_reduced
+  if nm_force == nil
+    assign nm_force = false
+  endif
+
+  assign nm_mobile = settings.nether_motion_mobile
+  if nm_mobile == nil
+    assign nm_mobile = true
+  endif
+
+  assign nm_desktop = settings.nether_motion_desktop
+  if nm_desktop == nil
+    assign nm_desktop = true
+  endif
+-%}
+<script type="application/json" id="nether-motion-config">
+  {
+    "enabled": {{ nm_enabled | json }},
+    "style": {{ nm_style | json }},
+    "intensity": {{ nm_intensity | json }},
+    "speed": {{ nm_speed | json }},
+    "respectReducedMotion": {{ nm_respect | json }},
+    "forceReducedMotion": {{ nm_force | json }},
+    "mobile": {{ nm_mobile | json }},
+    "desktop": {{ nm_desktop | json }}
+  }
+</script>

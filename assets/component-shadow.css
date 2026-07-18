@@ -1,0 +1,464 @@
+/* =============================================================================
+ * Nether Premium Shadow System
+ * Extends Dawn's shadow architecture — do not duplicate base.css rules.
+ * Levels: none, xs, sm, md, lg, xl, floating, modal, dropdown
+ * Utilities: normal, hover, focus, active, inset
+ * Merchant control: --shadow-intensity (default: 1)
+ * ============================================================================= */
+
+:root {
+  /* ── Global intensity multiplier (wire to theme settings in future) ─────────── */
+  /* Cross-system convention: --{system}-intensity | --{system}-scale for merchant control */
+  --shadow-intensity: 1;
+
+  /* ── Level: Extra Small ────────────────────────────────────────────────────── */
+  --shadow-xs-x: 0;
+  --shadow-xs-y: 0.1rem;
+  --shadow-xs-blur: 0.2rem;
+  --shadow-xs-spread: 0;
+  --shadow-xs-opacity: calc(0.04 * var(--shadow-intensity));
+
+  /* ── Level: Small (aligns with .card--shadow-sm) ───────────────────────────── */
+  --shadow-sm-x: 0;
+  --shadow-sm-y: 0.2rem;
+  --shadow-sm-blur: 0.4rem;
+  --shadow-sm-spread: 0;
+  --shadow-sm-opacity: calc(0.06 * var(--shadow-intensity));
+
+  /* ── Level: Medium ─────────────────────────────────────────────────────────── */
+  --shadow-md-x: 0;
+  --shadow-md-y: 0.4rem;
+  --shadow-md-blur: 0.8rem;
+  --shadow-md-spread: 0;
+  --shadow-md-opacity: calc(0.1 * var(--shadow-intensity));
+
+  /* ── Level: Large (aligns with .card--shadow-lg) ───────────────────────────── */
+  --shadow-lg-x: 0;
+  --shadow-lg-y: 0.8rem;
+  --shadow-lg-blur: 2rem;
+  --shadow-lg-spread: 0;
+  --shadow-lg-opacity: calc(0.16 * var(--shadow-intensity));
+
+  /* ── Level: Extra Large ────────────────────────────────────────────────────── */
+  --shadow-xl-x: 0;
+  --shadow-xl-y: 1.2rem;
+  --shadow-xl-blur: 3rem;
+  --shadow-xl-spread: -0.2rem;
+  --shadow-xl-opacity: calc(0.2 * var(--shadow-intensity));
+
+  /* ── Level: Floating ───────────────────────────────────────────────────────── */
+  --shadow-floating-x: 0;
+  --shadow-floating-y: 1.6rem;
+  --shadow-floating-blur: 3.2rem;
+  --shadow-floating-spread: -0.4rem;
+  --shadow-floating-opacity: calc(0.22 * var(--shadow-intensity));
+
+  /* ── Composed shadow values ────────────────────────────────────────────────── */
+  --shadow-level-none: none;
+
+  --shadow-level-xs: var(--shadow-xs-x) var(--shadow-xs-y) var(--shadow-xs-blur) var(--shadow-xs-spread)
+    rgba(var(--color-shadow), var(--shadow-xs-opacity));
+
+  --shadow-level-sm: var(--shadow-sm-x) var(--shadow-sm-y) var(--shadow-sm-blur) var(--shadow-sm-spread)
+    rgba(var(--color-shadow), var(--shadow-sm-opacity));
+
+  --shadow-level-md: var(--shadow-md-x) var(--shadow-md-y) var(--shadow-md-blur) var(--shadow-md-spread)
+    rgba(var(--color-shadow), var(--shadow-md-opacity));
+
+  --shadow-level-lg: var(--shadow-lg-x) var(--shadow-lg-y) var(--shadow-lg-blur) var(--shadow-lg-spread)
+    rgba(var(--color-shadow), var(--shadow-lg-opacity));
+
+  --shadow-level-xl: var(--shadow-xl-x) var(--shadow-xl-y) var(--shadow-xl-blur) var(--shadow-xl-spread)
+    rgba(var(--color-shadow), var(--shadow-xl-opacity));
+
+  --shadow-level-floating: var(--shadow-floating-x) var(--shadow-floating-y) var(--shadow-floating-blur)
+    var(--shadow-floating-spread) rgba(var(--color-shadow), var(--shadow-floating-opacity));
+
+  /* Modal & dropdown reuse Dawn popup tokens with intensity scaling */
+  --shadow-level-modal: var(--popup-shadow-horizontal-offset, 0) var(--popup-shadow-vertical-offset, 4px)
+    var(--popup-shadow-blur-radius, 5px) rgba(var(--color-shadow), calc(var(--popup-shadow-opacity, 0.1) * var(--shadow-intensity)));
+
+  --shadow-level-dropdown: var(--popup-shadow-horizontal-offset, 0) calc(var(--popup-shadow-vertical-offset, 4px) * 0.5)
+    calc(var(--popup-shadow-blur-radius, 5px) * 0.85) rgba(var(--color-shadow), calc(var(--popup-shadow-opacity, 0.1) * 0.85 * var(--shadow-intensity)));
+
+  /* ── Inset levels ──────────────────────────────────────────────────────────── */
+  --shadow-inset-sm: inset 0 0.1rem 0.2rem rgba(var(--color-shadow), calc(0.05 * var(--shadow-intensity)));
+  --shadow-inset-md: inset 0 0.2rem 0.4rem rgba(var(--color-shadow), calc(0.08 * var(--shadow-intensity)));
+  --shadow-inset-lg: inset 0 0.4rem 0.8rem rgba(var(--color-shadow), calc(0.12 * var(--shadow-intensity)));
+}
+
+/* ── Dawn variable bridge (for ::before / ::after shadow pseudo-elements) ───── */
+
+.shadow-vars-none {
+  --shadow-horizontal-offset: 0;
+  --shadow-vertical-offset: 0;
+  --shadow-blur-radius: 0;
+  --shadow-opacity: 0;
+  --shadow-visible: 0;
+}
+
+.shadow-vars-xs {
+  --shadow-horizontal-offset: var(--shadow-xs-x);
+  --shadow-vertical-offset: var(--shadow-xs-y);
+  --shadow-blur-radius: var(--shadow-xs-blur);
+  --shadow-opacity: var(--shadow-xs-opacity);
+  --shadow-visible: 1;
+}
+
+.shadow-vars-sm {
+  --shadow-horizontal-offset: var(--shadow-sm-x);
+  --shadow-vertical-offset: var(--shadow-sm-y);
+  --shadow-blur-radius: var(--shadow-sm-blur);
+  --shadow-opacity: var(--shadow-sm-opacity);
+  --shadow-visible: 1;
+}
+
+.shadow-vars-md {
+  --shadow-horizontal-offset: var(--shadow-md-x);
+  --shadow-vertical-offset: var(--shadow-md-y);
+  --shadow-blur-radius: var(--shadow-md-blur);
+  --shadow-opacity: var(--shadow-md-opacity);
+  --shadow-visible: 1;
+}
+
+.shadow-vars-lg {
+  --shadow-horizontal-offset: var(--shadow-lg-x);
+  --shadow-vertical-offset: var(--shadow-lg-y);
+  --shadow-blur-radius: var(--shadow-lg-blur);
+  --shadow-opacity: var(--shadow-lg-opacity);
+  --shadow-visible: 1;
+}
+
+.shadow-vars-xl {
+  --shadow-horizontal-offset: var(--shadow-xl-x);
+  --shadow-vertical-offset: var(--shadow-xl-y);
+  --shadow-blur-radius: var(--shadow-xl-blur);
+  --shadow-opacity: var(--shadow-xl-opacity);
+  --shadow-visible: 1;
+}
+
+.shadow-vars-floating {
+  --shadow-horizontal-offset: var(--shadow-floating-x);
+  --shadow-vertical-offset: var(--shadow-floating-y);
+  --shadow-blur-radius: var(--shadow-floating-blur);
+  --shadow-opacity: var(--shadow-floating-opacity);
+  --shadow-visible: 1;
+}
+
+/* ── Category context bridges (reuse Dawn component tokens) ────────────────── */
+
+.shadow-context-button {
+  --shadow-horizontal-offset: var(--buttons-shadow-horizontal-offset);
+  --shadow-vertical-offset: var(--buttons-shadow-vertical-offset);
+  --shadow-blur-radius: var(--buttons-shadow-blur-radius);
+  --shadow-opacity: calc(var(--buttons-shadow-opacity) * var(--shadow-intensity));
+  --shadow-visible: var(--buttons-shadow-visible);
+}
+
+.shadow-context-input,
+.shadow-context-field {
+  --shadow-horizontal-offset: var(--inputs-shadow-horizontal-offset);
+  --shadow-vertical-offset: var(--inputs-shadow-vertical-offset);
+  --shadow-blur-radius: var(--inputs-shadow-blur-radius);
+  --shadow-opacity: calc(var(--inputs-shadow-opacity) * var(--shadow-intensity));
+}
+
+.shadow-context-product-card {
+  --shadow-horizontal-offset: var(--product-card-shadow-horizontal-offset);
+  --shadow-vertical-offset: var(--product-card-shadow-vertical-offset);
+  --shadow-blur-radius: var(--product-card-shadow-blur-radius);
+  --shadow-opacity: calc(var(--product-card-shadow-opacity) * var(--shadow-intensity));
+  --shadow-visible: var(--product-card-shadow-visible);
+}
+
+.shadow-context-collection-card {
+  --shadow-horizontal-offset: var(--collection-card-shadow-horizontal-offset);
+  --shadow-vertical-offset: var(--collection-card-shadow-vertical-offset);
+  --shadow-blur-radius: var(--collection-card-shadow-blur-radius);
+  --shadow-opacity: calc(var(--collection-card-shadow-opacity) * var(--shadow-intensity));
+  --shadow-visible: var(--collection-card-shadow-visible);
+}
+
+.shadow-context-media,
+.shadow-context-image {
+  --shadow-horizontal-offset: var(--media-shadow-horizontal-offset);
+  --shadow-vertical-offset: var(--media-shadow-vertical-offset);
+  --shadow-blur-radius: var(--media-shadow-blur-radius);
+  --shadow-opacity: calc(var(--media-shadow-opacity) * var(--shadow-intensity));
+  --shadow-visible: var(--media-shadow-visible);
+}
+
+.shadow-context-modal,
+.shadow-context-popover {
+  box-shadow: var(--shadow-level-modal);
+}
+
+.shadow-context-drawer {
+  filter: drop-shadow(
+    var(--drawer-shadow-horizontal-offset) var(--drawer-shadow-vertical-offset) var(--drawer-shadow-blur-radius)
+      rgba(var(--color-shadow), calc(var(--drawer-shadow-opacity) * var(--shadow-intensity))
+  );
+}
+
+.shadow-context-dropdown,
+.shadow-context-tooltip {
+  box-shadow: var(--shadow-level-dropdown);
+}
+
+/* ── Direct box-shadow utilities ───────────────────────────────────────────── */
+
+.shadow-none {
+  box-shadow: var(--shadow-level-none);
+}
+
+.shadow-xs {
+  box-shadow: var(--shadow-level-xs);
+}
+
+.shadow-sm {
+  box-shadow: var(--shadow-level-sm);
+}
+
+.shadow-md {
+  box-shadow: var(--shadow-level-md);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-level-lg);
+}
+
+.shadow-xl {
+  box-shadow: var(--shadow-level-xl);
+}
+
+.shadow-floating {
+  box-shadow: var(--shadow-level-floating);
+}
+
+.shadow-modal {
+  box-shadow: var(--shadow-level-modal);
+}
+
+.shadow-dropdown {
+  box-shadow: var(--shadow-level-dropdown);
+}
+
+/* ── Inset utilities ─────────────────────────────────────────────────────────── */
+
+.shadow-inset-sm {
+  box-shadow: var(--shadow-inset-sm);
+}
+
+.shadow-inset-md {
+  box-shadow: var(--shadow-inset-md);
+}
+
+.shadow-inset-lg {
+  box-shadow: var(--shadow-inset-lg);
+}
+
+/* ── Transition helper ───────────────────────────────────────────────────────── */
+
+.shadow-transition {
+  transition: box-shadow var(--duration-short) ease;
+}
+
+@media screen and (min-width: 750px) {
+  .shadow-transition {
+    transition-duration: var(--duration-medium);
+  }
+}
+
+/* ── Hover utilities ─────────────────────────────────────────────────────────── */
+
+@media (hover: hover) and (pointer: fine) {
+  .shadow-hover-xs:hover {
+    box-shadow: var(--shadow-level-xs);
+  }
+
+  .shadow-hover-sm:hover {
+    box-shadow: var(--shadow-level-sm);
+  }
+
+  .shadow-hover-md:hover {
+    box-shadow: var(--shadow-level-md);
+  }
+
+  .shadow-hover-lg:hover {
+    box-shadow: var(--shadow-level-lg);
+  }
+
+  .shadow-hover-xl:hover {
+    box-shadow: var(--shadow-level-xl);
+  }
+
+  .shadow-hover-floating:hover {
+    box-shadow: var(--shadow-level-floating);
+  }
+
+  .shadow-hover-none:hover {
+    box-shadow: var(--shadow-level-none);
+  }
+
+  /* Variable bridge hover — for Dawn pseudo-element components */
+  .shadow-hover-vars-sm:hover {
+    --shadow-vertical-offset: var(--shadow-sm-y);
+    --shadow-blur-radius: var(--shadow-sm-blur);
+    --shadow-opacity: var(--shadow-sm-opacity);
+  }
+
+  .shadow-hover-vars-md:hover {
+    --shadow-vertical-offset: var(--shadow-md-y);
+    --shadow-blur-radius: var(--shadow-md-blur);
+    --shadow-opacity: var(--shadow-md-opacity);
+  }
+
+  .shadow-hover-vars-lg:hover {
+    --shadow-vertical-offset: var(--shadow-lg-y);
+    --shadow-blur-radius: var(--shadow-lg-blur);
+    --shadow-opacity: var(--shadow-lg-opacity);
+  }
+
+  .shadow-hover-vars-floating:hover {
+    --shadow-horizontal-offset: var(--shadow-floating-x);
+    --shadow-vertical-offset: var(--shadow-floating-y);
+    --shadow-blur-radius: var(--shadow-floating-blur);
+    --shadow-opacity: var(--shadow-floating-opacity);
+  }
+}
+
+/* ── Active utilities ────────────────────────────────────────────────────────── */
+
+.shadow-active-sm:active {
+  box-shadow: var(--shadow-level-sm);
+}
+
+.shadow-active-md:active {
+  box-shadow: var(--shadow-level-md);
+}
+
+.shadow-active-inset-sm:active {
+  box-shadow: var(--shadow-inset-sm);
+}
+
+/* ── Focus utilities (supplementary — never replace Dawn focus rings) ────────── */
+
+.shadow-focus-sm:focus-visible {
+  box-shadow: var(--shadow-level-sm);
+}
+
+.shadow-focus-md:focus-visible {
+  box-shadow: var(--shadow-level-md);
+}
+
+.shadow-focus-dropdown:focus-visible {
+  box-shadow: var(--shadow-level-dropdown);
+}
+
+/* Pair with Dawn focus on interactive elements */
+.button.shadow-focus-sm:focus-visible,
+.button.shadow-focus-md:focus-visible {
+  box-shadow: var(--focused-base-box-shadow);
+}
+
+.field.shadow-focus-sm:focus-within::before,
+.select.shadow-focus-sm:focus-within::before {
+  box-shadow: var(--inputs-shadow-horizontal-offset) var(--inputs-shadow-vertical-offset)
+    var(--inputs-shadow-blur-radius) rgba(var(--color-shadow), var(--inputs-shadow-opacity)),
+    var(--shadow-level-sm);
+}
+
+/* ── Card system bridge (extends .card--shadow-* in component-card-premium.css) */
+
+.card--shadow-xs.card--card::after,
+.card--shadow-xs.card--standard .card__inner::after {
+  --shadow-horizontal-offset: var(--shadow-xs-x);
+  --shadow-vertical-offset: var(--shadow-xs-y);
+  --shadow-blur-radius: var(--shadow-xs-blur);
+  --shadow-opacity: var(--shadow-xs-opacity);
+}
+
+.card--shadow-md.card--card::after,
+.card--shadow-md.card--standard .card__inner::after {
+  --shadow-horizontal-offset: var(--shadow-md-x);
+  --shadow-vertical-offset: var(--shadow-md-y);
+  --shadow-blur-radius: var(--shadow-md-blur);
+  --shadow-opacity: var(--shadow-md-opacity);
+}
+
+.card--shadow-xl.card--card::after,
+.card--shadow-xl.card--standard .card__inner::after {
+  --shadow-horizontal-offset: var(--shadow-xl-x);
+  --shadow-vertical-offset: var(--shadow-xl-y);
+  --shadow-blur-radius: var(--shadow-xl-blur);
+  --shadow-opacity: var(--shadow-xl-opacity);
+}
+
+.card--shadow-floating.card--card::after,
+.card--shadow-floating.card--standard .card__inner::after {
+  --shadow-horizontal-offset: var(--shadow-floating-x);
+  --shadow-vertical-offset: var(--shadow-floating-y);
+  --shadow-blur-radius: var(--shadow-floating-blur);
+  --shadow-opacity: var(--shadow-floating-opacity);
+}
+
+/* ── Button system bridge ──────────────────────────────────────────────────── */
+
+.button.shadow-vars-sm,
+.button.shadow-vars-md,
+.button.shadow-vars-lg {
+  --shadow-opacity: calc(var(--shadow-opacity) * var(--shadow-intensity));
+}
+
+/* ── Badge system bridge (subtle elevation) ──────────────────────────────────── */
+
+.badge.shadow-xs,
+.badge.shadow-sm {
+  box-shadow: var(--shadow-level-xs);
+}
+
+/* ── Form field bridge ───────────────────────────────────────────────────────── */
+
+.field.shadow-vars-input::before,
+.select.shadow-vars-input::before,
+.quantity.shadow-vars-input::before {
+  box-shadow: var(--inputs-shadow-horizontal-offset) var(--inputs-shadow-vertical-offset)
+    var(--inputs-shadow-blur-radius) rgba(var(--color-shadow), calc(var(--inputs-shadow-opacity) * var(--shadow-intensity)));
+}
+
+/* ── Accessibility ───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .shadow-transition {
+    transition: none;
+  }
+
+  .shadow-hover-xs:hover,
+  .shadow-hover-sm:hover,
+  .shadow-hover-md:hover,
+  .shadow-hover-lg:hover,
+  .shadow-hover-xl:hover,
+  .shadow-hover-floating:hover,
+  .shadow-hover-none:hover {
+    box-shadow: inherit;
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .shadow-xs,
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg,
+  .shadow-xl,
+  .shadow-floating,
+  .shadow-modal,
+  .shadow-dropdown,
+  .shadow-hover-xs:hover,
+  .shadow-hover-sm:hover,
+  .shadow-hover-md:hover,
+  .shadow-hover-lg:hover,
+  .shadow-hover-xl:hover,
+  .shadow-hover-floating:hover {
+    box-shadow: none;
+  }
+}

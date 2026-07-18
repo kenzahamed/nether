@@ -1,0 +1,42 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Estimated Delivery messaging.
+  Merchant-authored delivery/shipping guidance card.
+  Does not calculate runtime ETAs — Shopify shipping remains source of truth.
+
+  Accepts:
+  - heading: {String}
+  - text: {String}
+  - icon: {String} (default: stopwatch)
+  - visible: {Boolean} When false, remains hidden
+  - class: {String}
+  - attributes: {String}
+{% endcomment %}
+
+{%- liquid
+  assign estimate_heading = heading | default: 'sections.nether_commerce.delivery.label' | t
+  assign estimate_text = text
+  if estimate_text == blank
+    assign estimate_text = 'sections.nether_commerce.delivery.placeholder' | t
+  endif
+  assign show_estimate = visible
+  if show_estimate == nil
+    assign show_estimate = true
+  endif
+-%}
+
+<div
+  class="nether-commerce__estimated-delivery{% if class != blank %} {{ class }}{% endif %}"
+  data-nether-commerce-module="estimated-delivery"
+  data-nether-delivery-estimate-placeholder
+  data-nether-commerce-animate
+  {% unless show_estimate %}hidden{% endunless %}
+  {% if attributes != blank %}{{ attributes }}{% endif %}
+>
+  {% render 'nether-commerce-info-card',
+    heading: estimate_heading,
+    text: estimate_text,
+    icon: icon | default: 'stopwatch',
+    style: style | default: 'card',
+    animate: false
+  %}
+</div>

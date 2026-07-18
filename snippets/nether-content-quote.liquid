@@ -1,0 +1,33 @@
+{% comment %}
+  Renders Nether Premium Content quote block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+
+  Usage:
+  {% render 'nether-content-quote', block: block %}
+{% endcomment %}
+
+{%- if block.settings.quote != blank -%}
+  <figure
+    class="nether-content__quote"
+    data-nether-content-animate
+    data-nether-hero-animate
+    data-nether-hero-role="quote"
+    {{ block.shopify_attributes }}
+  >
+    <blockquote class="nether-content__quote-text type-body-lg">
+      {{ block.settings.quote }}
+    </blockquote>
+    {%- if block.settings.author != blank -%}
+      <figcaption class="nether-content__quote-author type-caption">
+        {%- if block.settings.author_title != blank -%}
+          <cite class="nether-content__quote-cite">{{ block.settings.author | escape }}</cite>
+          <span class="nether-content__quote-title">{{ block.settings.author_title | escape }}</span>
+        {%- else -%}
+          <cite class="nether-content__quote-cite">{{ block.settings.author | escape }}</cite>
+        {%- endif -%}
+      </figcaption>
+    {%- endif -%}
+  </figure>
+{%- endif -%}

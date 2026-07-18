@@ -1,0 +1,150 @@
+{% comment %}
+  Central dispatcher for Nether Premium FAQ section blocks.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - section: {Object} FAQ section (required)
+  - heading_tag: {String} Primary heading element (default: h2)
+  - context: {String} 'header', 'shell', 'list', or 'sidebar' (optional)
+
+  Usage:
+  {% render 'nether-faq-block', block: block, section: section, heading_tag: heading_tag %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign subheading_element = 'h3'
+  if heading_element == 'h3'
+    assign subheading_element = 'h4'
+  endif
+  assign motion_attr = 'data-nether-faq-animate'
+  assign block_context = context | default: 'list'
+-%}
+
+{%- case block.type -%}
+  {%- when '@app' -%}
+    <div class="nether-faq__app-block" {{ motion_attr }} data-nether-faq-role="app" {{ block.shopify_attributes }}>
+      {% render block %}
+    </div>
+
+  {%- when 'eyebrow' -%}
+    {%- if block.settings.text != blank -%}
+      <p class="nether-faq__eyebrow type-overline" {{ motion_attr }} data-nether-faq-role="eyebrow" {{ block.shopify_attributes }}>
+        {{- block.settings.text | escape -}}
+      </p>
+    {%- endif -%}
+
+  {%- when 'heading' -%}
+    {%- if block.settings.heading != blank -%}
+      <{{ heading_element }}
+        class="nether-faq__heading inline-richtext {{ block.settings.heading_size }}"
+        {{ motion_attr }}
+        data-nether-faq-role="heading"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.heading -}}
+      </{{ heading_element }}>
+    {%- endif -%}
+
+  {%- when 'subheading' -%}
+    {%- if block.settings.subheading != blank -%}
+      <{{ subheading_element }}
+        class="nether-faq__subheading inline-richtext {{ block.settings.subheading_size }}"
+        {{ motion_attr }}
+        data-nether-faq-role="subheading"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.subheading -}}
+      </{{ subheading_element }}>
+    {%- endif -%}
+
+  {%- when 'text' -%}
+    {%- if block.settings.text != blank -%}
+      <div class="nether-faq__text rte {{ block.settings.text_style }}" {{ motion_attr }} data-nether-faq-role="text" {{ block.shopify_attributes }}>
+        {{ block.settings.text }}
+      </div>
+    {%- endif -%}
+
+  {%- when 'icon' -%}
+    {%- if block.settings.icon != blank and block.settings.icon != 'none' -%}
+      <div class="nether-faq__icon-block" {{ motion_attr }} data-nether-faq-icon data-nether-faq-role="icon" {{ block.shopify_attributes }}>
+        {%- render 'icon', icon: block.settings.icon, size: block.settings.icon_size, color: block.settings.icon_color -%}
+      </div>
+    {%- endif -%}
+
+  {%- when 'image' -%}
+    {%- render 'nether-content-image', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'video' -%}
+    {%- render 'nether-content-video', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'button' -%}
+    {%- if block.settings.button_label != blank -%}
+      <div class="nether-faq__button-block" {{ motion_attr }} data-nether-faq-role="button" {{ block.shopify_attributes }}>
+        {%- render 'button',
+          label: block.settings.button_label,
+          link: block.settings.button_link,
+          style: block.settings.button_style,
+          size: block.settings.button_size,
+          disabled: block.settings.button_link == blank
+        -%}
+      </div>
+    {%- endif -%}
+
+  {%- when 'buttons' -%}
+    {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
+      <div class="nether-faq__buttons" {{ motion_attr }} data-nether-faq-role="buttons" {{ block.shopify_attributes }}>
+        {%- if block.settings.button_label_1 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_1,
+            link: block.settings.button_link_1,
+            style: block.settings.button_style_1,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_1 == blank
+          -%}
+        {%- endif -%}
+        {%- if block.settings.button_label_2 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_2,
+            link: block.settings.button_link_2,
+            style: block.settings.button_style_2,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_2 == blank
+          -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  {%- when 'divider' -%}
+    <div
+      class="nether-faq__block-divider nether-faq__block-divider--{{ block.settings.divider_style | default: 'line' }}"
+      {{ motion_attr }}
+      data-nether-faq-divider
+      data-nether-faq-role="divider"
+      aria-hidden="true"
+      role="presentation"
+      {{ block.shopify_attributes }}
+    ></div>
+
+  {%- when 'callout_card', 'tip', 'warning' -%}
+    {%- render 'nether-faq-callout', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'contact_cta', 'support_cta' -%}
+    {%- if block_context != 'header' -%}
+      {%- render 'nether-faq-cta', block: block, motion_attr: motion_attr -%}
+    {%- endif -%}
+
+  {%- when 'custom_html' -%}
+    {%- render 'nether-content-custom-html', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'category' -%}
+    {%- if block_context == 'list' or block_context == 'shell' -%}
+      {%- render 'nether-faq-category', block: block, section: section, motion_attr: motion_attr -%}
+    {%- endif -%}
+
+  {%- when 'related_question' -%}
+    {%- render 'nether-faq-related', block: block, section: section, motion_attr: motion_attr -%}
+
+  {%- when 'helpful_link' -%}
+    {%- render 'nether-faq-links', block: block, motion_attr: motion_attr -%}
+{%- endcase -%}

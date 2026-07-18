@@ -1,0 +1,36 @@
+{% comment %}
+  Nether Premium Quick View — trust strip chrome.
+  Extends shared Commerce Enhancements trust component.
+  Merchant copy from Theme Editor; complements Product Page trust modules inside product-info.
+
+  Accepts:
+  - section: {Object} Header section (required)
+{% endcomment %}
+
+{%- liquid
+  assign show_trust = section.settings.nether_quick_view_show_trust
+  if show_trust == nil
+    assign show_trust = true
+  endif
+  assign trust_heading = section.settings.nether_quick_view_trust_heading
+  assign trust_text = section.settings.nether_quick_view_trust_text
+-%}
+
+{%- if show_trust -%}
+  <aside
+    class="nether-quick-view__trust shadow-xs radius-md"
+    data-nether-quick-view-module="trust"
+    data-nether-quick-view-trust
+    {% if trust_heading == blank and trust_text == blank %}hidden{% endif %}
+  >
+    {% render 'nether-commerce-trust',
+      heading: trust_heading,
+      layout: 'stack',
+      icon_1: 'lock',
+      heading_1: trust_text | default: 'sections.nether_quick_view.trust.default' | t,
+      text_1: '',
+      class: 'nether-quick-view__trust-shared',
+      animate: false
+    %}
+  </aside>
+{%- endif -%}

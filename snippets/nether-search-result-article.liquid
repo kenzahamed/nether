@@ -1,0 +1,29 @@
+{% comment %}
+  Renders a Nether Premium predictive search article card.
+
+  Accepts:
+  - article: {Object} Article resource
+  - index: {Number} Loop index for unique ids
+  - variant: {String} desktop | mobile — unique id suffix (default: desktop)
+
+  Usage:
+  {% render 'nether-search-result-article', article: article, index: forloop.index %}
+{% endcomment %}
+
+{%- liquid
+  assign id_variant = variant | default: 'desktop'
+-%}
+
+<li
+  id="predictive-search-option-article-{{ id_variant }}-{{ index }}"
+  class="nether-search-result nether-search-result--article predictive-search__list-item"
+  role="option"
+  aria-selected="false"
+>
+  <a href="{{ article.url }}" class="nether-search-result__link predictive-search__item link link--text" tabindex="-1">
+    <div class="nether-search-result__content predictive-search__item-content predictive-search__item-content--centered">
+      <p class="nether-search-result__title predictive-search__item-heading h5">{{ article.title | escape }}</p>
+      <span class="nether-search-result__meta caption-with-letter-spacing">{{ 'sections.header.search_drawer.article' | t }}</span>
+    </div>
+  </a>
+</li>

@@ -1,0 +1,44 @@
+{% comment %}
+  Renders Nether Premium FAQ section header content.
+
+  Accepts:
+  - section: {Object} FAQ section (required)
+  - heading_tag: {String} Primary heading element (default: h2)
+
+  Usage:
+  {% render 'nether-faq-content', section: section, heading_tag: heading_tag %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign alignment = section.settings.nether_content_alignment | default: 'left'
+  assign has_header_blocks = false
+
+  for block in section.blocks
+    case block.type
+      when 'eyebrow', 'heading', 'subheading', 'text', 'buttons'
+        assign has_header_blocks = true
+    endcase
+  endfor
+-%}
+
+{%- if has_header_blocks -%}
+  <div class="nether-faq__header page-width" data-nether-faq-header>
+    <div
+      class="nether-faq__header-inner nether-faq__header-inner--align-{{ alignment }}"
+      data-nether-faq-content-panel
+    >
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'eyebrow', 'heading', 'subheading', 'text', 'buttons', '@app' -%}
+            {%- render 'nether-faq-block',
+              block: block,
+              section: section,
+              heading_tag: heading_element,
+              context: 'header'
+            -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}

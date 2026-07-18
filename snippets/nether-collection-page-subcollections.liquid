@@ -1,0 +1,41 @@
+{% comment %}
+  Subcollections module for Nether Premium Collection Page.
+  Renders linked child collections as premium collection cards.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- liquid
+  assign subcollection_handles = block.settings.collection_list
+  assign has_subcollections = false
+  if subcollection_handles != blank and subcollection_handles.size > 0
+    assign has_subcollections = true
+  endif
+-%}
+
+{%- if has_subcollections -%}
+  <div
+    class="nether-collection-page__module nether-collection-page__module--subcollections"
+    data-nether-collection-page-module="subcollections"
+    data-nether-collection-page-animate
+    {{ block.shopify_attributes }}
+  >
+    {%- if block.settings.heading != blank -%}
+      <h2 class="nether-collection-page__module-heading type-heading-sm">{{ block.settings.heading }}</h2>
+    {%- endif -%}
+
+    <ul class="nether-collection-page__subcollections-grid" role="list">
+      {%- for subcollection in subcollection_handles -%}
+        <li class="nether-collection-page__subcollections-item" data-nether-collection-page-animate>
+          {% render 'card-collection',
+            card_collection: subcollection,
+            media_aspect_ratio: block.settings.image_ratio,
+            columns: 3
+          %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}

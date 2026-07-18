@@ -1,0 +1,85 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Trust & Security list.
+
+  Accepts:
+  - heading: {String} Optional region label
+  - layout: {String} stack | row | grid (default: stack)
+  - heading_1..4, text_1..4, icon_1..4: Trust items
+  - class: {String}
+  - attributes: {String}
+  - animate: {Boolean}
+{% endcomment %}
+
+{%- liquid
+  assign trust_layout = layout | default: 'stack'
+  assign enable_animate = animate
+  if enable_animate == nil
+    assign enable_animate = true
+  endif
+  assign trust_items = 0
+  if heading_1 != blank
+    assign trust_items = trust_items | plus: 1
+  endif
+  if heading_2 != blank
+    assign trust_items = trust_items | plus: 1
+  endif
+  if heading_3 != blank
+    assign trust_items = trust_items | plus: 1
+  endif
+  if heading_4 != blank
+    assign trust_items = trust_items | plus: 1
+  endif
+  assign region_label = heading | default: 'sections.nether_commerce.trust.label' | t
+-%}
+
+{%- if trust_items > 0 -%}
+  <div
+    class="nether-commerce__trust nether-commerce__trust--{{ trust_layout }}{% if class != blank %} {{ class }}{% endif %}"
+    data-nether-commerce-module="trust"
+    {% if enable_animate %}data-nether-commerce-animate{% endif %}
+    role="region"
+    aria-label="{{ region_label | escape }}"
+    {% if attributes != blank %}{{ attributes }}{% endif %}
+  >
+    {%- if heading != blank -%}
+      <p class="nether-commerce__trust-title type-overline caption-with-letter-spacing">{{ heading }}</p>
+    {%- endif -%}
+    <ul class="nether-commerce__trust-list" role="list">
+      {%- for i in (1..4) -%}
+        {%- liquid
+          case i
+            when 1
+              assign trust_icon = icon_1 | default: 'lock'
+              assign trust_heading = heading_1
+              assign trust_text = text_1
+            when 2
+              assign trust_icon = icon_2 | default: 'check_mark'
+              assign trust_heading = heading_2
+              assign trust_text = text_2
+            when 3
+              assign trust_icon = icon_3 | default: 'truck'
+              assign trust_heading = heading_3
+              assign trust_text = text_3
+            when 4
+              assign trust_icon = icon_4 | default: 'none'
+              assign trust_heading = heading_4
+              assign trust_text = text_4
+          endcase
+        -%}
+        {%- if trust_heading != blank -%}
+          <li class="nether-commerce__trust-item" data-nether-commerce-animate>
+            {%- if trust_icon != blank and trust_icon != 'none' -%}
+              {% render 'nether-commerce-icon', icon: trust_icon, size: 'sm', decorative: true %}
+            {%- endif -%}
+            <div class="nether-commerce__trust-copy">
+              <p class="nether-commerce__trust-heading type-body-sm">{{ trust_heading }}</p>
+              {%- if trust_text != blank -%}
+                <p class="nether-commerce__trust-text type-body-sm">{{ trust_text }}</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}

@@ -1,0 +1,11 @@
+{% comment %}
+  Loads Nether Wishlist framework assets when needed outside the header shell.
+  Safe to render multiple times — browsers cache deferred scripts/styles.
+
+  Usage:
+  {% render 'nether-wishlist-assets' %}
+{% endcomment %}
+
+{{ 'component-wishlist.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'nether-commerce-interaction.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-wishlist.js' | asset_url }}" defer="defer"></script>

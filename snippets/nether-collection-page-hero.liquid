@@ -1,0 +1,94 @@
+{% comment %}
+  Collection hero module for Nether Premium Collection Page Banner.
+  Extends Dawn main-collection-banner with Nether presentation and blocks.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - collection: {Object} Collection object (required)
+{% endcomment %}
+
+{%- liquid
+  assign hero_layout = section.settings.nether_hero_layout | default: 'classic'
+  assign show_image = section.settings.show_collection_image
+  assign show_description = section.settings.show_collection_description
+  assign description_style = section.settings.nether_description_style | default: 'inline'
+  assign has_image = false
+  if show_image and collection.image
+    assign has_image = true
+  endif
+
+  assign heading_override = false
+  for block in section.blocks
+    if block.type == 'heading'
+      assign heading_override = true
+      break
+    endif
+  endfor
+-%}
+
+<div
+  class="nether-collection-page__hero nether-collection-page__hero--{{ hero_layout }}{% if has_image %} nether-collection-page__hero--with-image{% endif %}"
+  data-nether-collection-page-hero
+  data-nether-collection-page-animate
+>
+  <div class="nether-collection-page__hero-inner page-width">
+    <div class="nether-collection-page__hero-content">
+      {%- for block in section.blocks -%}
+        {%- unless block.type == 'heading' -%}
+          {%- if block.type == 'eyebrow' or block.type == 'subheading' or block.type == 'text' or block.type == 'buttons' or block.type == 'stat' or block.type == 'category_highlight' or block.type == '@app' -%}
+            {% render 'nether-collection-page-block', block: block, section: section, heading_tag: 'h1', zone: 'hero' %}
+          {%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+
+      {%- unless heading_override -%}
+        <h1 class="nether-collection-page__hero-title collection-hero__title" data-nether-collection-page-animate>
+          <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+          {{- collection.title | escape -}}
+        </h1>
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'heading' -%}
+            {% render 'nether-collection-page-block', block: block, section: section, heading_tag: 'h1', zone: 'hero' %}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endunless -%}
+
+      {%- if show_description and collection.description != blank and description_style == 'inline' -%}
+        <div class="nether-collection-page__hero-description collection-hero__description rte" data-nether-collection-page-animate>
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if has_image -%}
+      <div class="nether-collection-page__hero-media collection-hero__image-container media gradient" data-nether-collection-page-animate>
+        <img
+          srcset="
+            {%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
+            {%- if collection.image.width >= 360 -%}{{ collection.image | image_url: width: 360 }} 360w,{%- endif -%}
+            {%- if collection.image.width >= 535 -%}{{ collection.image | image_url: width: 535 }} 535w,{%- endif -%}
+            {%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
+            {%- if collection.image.width >= 1070 -%}{{ collection.image | image_url: width: 1070 }} 1070w,{%- endif -%}
+            {%- if collection.image.width >= 1500 -%}{{ collection.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+            {{ collection.image | image_url }} {{ collection.image.width }}w
+          "
+          src="{{ collection.image | image_url: width: 750 }}"
+          sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
+          alt="{{ collection.image.alt | default: collection.title | escape }}"
+          width="{{ collection.image.width }}"
+          height="{{ collection.image.height }}"
+          {% unless section.index == 1 %}loading="lazy"{% else %}fetchpriority="high"{% endunless %}
+        >
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- if show_description and collection.description != blank and description_style == 'card' -%}
+    <div class="page-width">
+      <div class="nether-collection-page__hero-description-card rte" data-nether-collection-page-animate>
+        {{ collection.description }}
+      </div>
+    </div>
+  {%- endif -%}
+</div>

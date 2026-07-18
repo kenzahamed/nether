@@ -1,0 +1,63 @@
+{% comment %}
+  Nether Premium Bundles — section header module.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - block: {Object} Optional block override for heading/eyebrow
+  - strategy_label: {String} Optional strategy badge label
+{% endcomment %}
+
+{%- liquid
+  assign heading = section.settings.nether_heading
+  assign subheading = section.settings.nether_subheading
+  assign eyebrow = section.settings.nether_eyebrow
+
+  if block != blank
+    if block.settings.heading != blank
+      assign heading = block.settings.heading
+    elsif block.settings.label != blank
+      assign heading = block.settings.label
+    endif
+    if block.settings.subheading != blank
+      assign subheading = block.settings.subheading
+    elsif block.settings.text != blank
+      assign subheading = block.settings.text
+    endif
+    if block.settings.eyebrow != blank
+      assign eyebrow = block.settings.eyebrow
+    endif
+  endif
+
+  if heading == blank
+    assign heading = 'sections.nether_bundles.heading' | t
+  endif
+
+  assign heading_tag = 'h2'
+  if section.settings.nether_heading_level == 'h3'
+    assign heading_tag = 'h3'
+  endif
+-%}
+
+<header
+  class="nether-bundles__module nether-bundles__header"
+  data-nether-bundles-module="header"
+  data-nether-bundles-animate
+>
+  <div class="nether-bundles__header-copy">
+    {%- if eyebrow != blank -%}
+      <p class="nether-bundles__eyebrow type-overline">{{ eyebrow }}</p>
+    {%- endif -%}
+    <{{ heading_tag }} class="nether-bundles__heading type-display-sm">
+      {{ heading }}
+    </{{ heading_tag }}>
+    {%- if subheading != blank -%}
+      <p class="nether-bundles__subheading type-body">{{ subheading }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if strategy_label != blank and section.settings.nether_show_strategy_badge -%}
+    <div class="nether-bundles__header-badge">
+      {% render 'badge', type: 'custom', label: strategy_label, style: 'soft', size: 'small' %}
+    </div>
+  {%- endif -%}
+</header>

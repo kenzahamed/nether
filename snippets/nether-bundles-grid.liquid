@@ -1,0 +1,59 @@
+{% comment %}
+  Nether Premium Bundles — grid layout module.
+  Reuses Dawn product-grid + card-product via nether-bundles-cards.
+  Prefer nether-bundles-body for full pack pipelines; this module supports simple product lists.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - products: {Array} Product list (required)
+  - products_limit: {Number} Max products to show
+  - compact: {Boolean}
+  - required_default: {Boolean}
+{% endcomment %}
+
+{%- liquid
+  assign limit = products_limit | default: section.settings.nether_products_to_show | default: 4
+  assign columns_desktop = section.settings.nether_columns_desktop | default: 3
+  assign columns_mobile = section.settings.nether_columns_mobile | default: '1'
+  assign skip_card_product_styles = false
+  assign card_index = 0
+  assign is_compact = compact | default: false
+  assign is_required_default = required_default | default: false
+-%}
+
+<ul
+  id="NetherBundlesGrid-{{ section.id }}"
+  class="nether-bundles__grid grid product-grid grid--{{ columns_desktop }}-col-desktop grid--{{ columns_mobile }}-col-tablet-down contains-card contains-card--product{% if is_compact %} nether-bundles__grid--compact{% endif %}"
+  role="list"
+  aria-label="{{ 'sections.nether_bundles.grid.label' | t }}"
+  data-nether-bundles-module="grid"
+  data-nether-bundles-grid
+>
+  {%- for pack_product in products limit: limit -%}
+    {%- assign card_index = card_index | plus: 1 -%}
+    {%- liquid
+      assign lazy_load = true
+      if card_index <= columns_desktop
+        assign lazy_load = false
+      endif
+    -%}
+    <li
+      id="NetherBundlesItem-{{ section.id }}-{{ card_index }}"
+      class="nether-bundles__item grid__item"
+      data-nether-bundles-item-wrap
+      data-nether-bundles-animate
+    >
+      {% render 'nether-bundles-cards',
+        card_product: pack_product,
+        section: section,
+        skip_styles: skip_card_product_styles,
+        lazy_load: lazy_load,
+        index: card_index,
+        required: is_required_default,
+        quantity: 1,
+        compact: is_compact
+      %}
+    </li>
+    {%- assign skip_card_product_styles = true -%}
+  {%- endfor -%}
+</ul>

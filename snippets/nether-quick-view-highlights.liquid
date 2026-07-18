@@ -1,0 +1,29 @@
+{% comment %}
+  Nether Premium Quick View — product highlights chrome (optional merchant list).
+  Complements Product Page highlights inside lazy-loaded product-info.
+
+  Accepts:
+  - section: {Object} Header section (required)
+{% endcomment %}
+
+{%- liquid
+  assign show_highlights = section.settings.nether_quick_view_show_highlights
+  if show_highlights == nil
+    assign show_highlights = false
+  endif
+  assign highlights_text = section.settings.nether_quick_view_highlights
+-%}
+
+{%- if show_highlights and highlights_text != blank -%}
+  <div
+    class="nether-quick-view__highlights"
+    data-nether-quick-view-module="highlights"
+  >
+    <p class="nether-quick-view__highlights-heading type-overline caption-with-letter-spacing">
+      {{ 'sections.nether_quick_view.highlights.heading' | t }}
+    </p>
+    <div class="nether-quick-view__highlights-body type-body-sm rte">
+      {{ highlights_text }}
+    </div>
+  </div>
+{%- endif -%}

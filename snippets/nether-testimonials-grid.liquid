@@ -1,0 +1,212 @@
+{% comment %}
+  Renders Nether Premium Testimonials grid for card/social-proof layouts.
+
+  Accepts:
+  - section: {Object} Testimonials section (required)
+  - layout: {String} Active testimonials layout (required)
+  - show_slider: {Boolean} Enable Dawn slider-component wrapper (optional)
+  - is_magazine: {Boolean} Magazine featured-first layout (optional)
+
+  Usage:
+  {% render 'nether-testimonials-grid', section: section, layout: nether_layout, show_slider: show_slider %}
+{% endcomment %}
+
+{%- liquid
+  assign active_layout = layout | default: section.settings.nether_layout
+  assign is_magazine_layout = is_magazine | default: false
+  assign nether_columns_desktop = section.settings.nether_columns_desktop | default: 3
+  assign item_count = 0
+
+  for block in section.blocks
+    assign include_block = false
+
+    case active_layout
+      when 'grid_testimonials', 'carousel_testimonials', 'magazine'
+        if block.type == 'customer_testimonial' or block.type == 'video_testimonial'
+          assign include_block = true
+        endif
+      when 'video_testimonials'
+        if block.type == 'video_testimonial' or block.type == 'customer_testimonial'
+          assign include_block = true
+        endif
+      when 'brand_logos'
+        if block.type == 'brand_logo'
+          assign include_block = true
+        endif
+      when 'statistics'
+        if block.type == 'statistic'
+          assign include_block = true
+        endif
+      when 'awards'
+        if block.type == 'award' or block.type == 'certification'
+          assign include_block = true
+        endif
+      when 'press_mentions'
+        if block.type == 'press_mention'
+          assign include_block = true
+        endif
+    endcase
+
+    if include_block
+      assign item_count = item_count | plus: 1
+    endif
+  endfor
+
+  assign grid_label_key = 'sections.nether_testimonials.grid.label'
+  case active_layout
+    when 'brand_logos'
+      assign grid_label_key = 'sections.nether_testimonials.logos.label'
+    when 'statistics'
+      assign grid_label_key = 'sections.nether_testimonials.stats.label'
+    when 'awards'
+      assign grid_label_key = 'sections.nether_testimonials.awards.label'
+    when 'press_mentions'
+      assign grid_label_key = 'sections.nether_testimonials.press.label'
+  endcase
+
+  assign grid_classes = 'nether-testimonials__grid'
+  if show_slider
+    assign grid_classes = grid_classes | append: ' slider slider--desktop grid--peek'
+  endif
+-%}
+
+{%- if item_count > 0 -%}
+  {%- if show_slider -%}
+    <slider-component
+      class="nether-testimonials__slider slider-mobile-gutter{% if section.settings.nether_full_width %} slider-component-full-width{% endif %}"
+      data-nether-testimonials-carousel
+    >
+  {%- endif -%}
+
+  <ul
+    id="NetherTestimonialsGrid-{{ section.id }}"
+    class="{{ grid_classes }}"
+    role="list"
+    aria-label="{{ grid_label_key | t }}"
+    data-nether-testimonials-grid
+    data-item-count="{{ item_count }}"
+  >
+    {%- assign card_index = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign include_block = false
+
+        case active_layout
+          when 'grid_testimonials', 'carousel_testimonials', 'magazine'
+            if block.type == 'customer_testimonial' or block.type == 'video_testimonial'
+              assign include_block = true
+            endif
+          when 'video_testimonials'
+            if block.type == 'video_testimonial' or block.type == 'customer_testimonial'
+              assign include_block = true
+            endif
+          when 'brand_logos'
+            if block.type == 'brand_logo'
+              assign include_block = true
+            endif
+          when 'statistics'
+            if block.type == 'statistic'
+              assign include_block = true
+            endif
+          when 'awards'
+            if block.type == 'award' or block.type == 'certification'
+              assign include_block = true
+            endif
+          when 'press_mentions'
+            if block.type == 'press_mention'
+              assign include_block = true
+            endif
+        endcase
+      -%}
+
+      {%- unless include_block -%}
+        {%- continue -%}
+      {%- endunless -%}
+
+      {%- assign card_index = card_index | plus: 1 -%}
+      {%- liquid
+        assign is_featured = false
+        if is_magazine_layout and card_index == 1
+          assign is_featured = true
+        endif
+
+        assign lazy_load = true
+        if card_index <= nether_columns_desktop
+          assign lazy_load = false
+        endif
+
+        assign item_classes = 'nether-testimonials__item'
+        if show_slider
+          assign item_classes = item_classes | append: ' slider__slide'
+        endif
+        if is_featured
+          assign item_classes = item_classes | append: ' nether-testimonials__item--featured'
+        endif
+      -%}
+
+      <li
+        id="NetherTestimonialsSlide-{{ section.id }}-{{ card_index }}"
+        class="{{ item_classes }}"
+        data-nether-testimonials-item
+      >
+        {%- case block.type -%}
+          {%- when 'customer_testimonial', 'video_testimonial' -%}
+            {%- render 'nether-testimonials-card',
+              block: block,
+              section: section,
+              columns: nether_columns_desktop,
+              lazy_load: lazy_load,
+              is_featured: is_featured,
+              card_index: card_index
+            -%}
+          {%- when 'brand_logo' -%}
+            {%- render 'nether-testimonials-logo', block: block -%}
+          {%- when 'statistic' -%}
+            {%- render 'nether-testimonials-stat', block: block -%}
+          {%- when 'award', 'certification' -%}
+            {%- render 'nether-testimonials-award', block: block -%}
+          {%- when 'press_mention' -%}
+            {%- render 'nether-testimonials-press', block: block -%}
+          {%- when 'trust_badge' -%}
+            {%- render 'nether-testimonials-trust', block: block -%}
+        {%- endcase -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  {%- if show_slider -%}
+      <div class="slider-buttons no-js-hidden" data-nether-testimonials-nav>
+        <button
+          type="button"
+          class="slider-button slider-button--prev"
+          name="previous"
+          aria-label="{{ 'general.slider.previous_slide' | t }}"
+          aria-controls="NetherTestimonialsGrid-{{ section.id }}"
+          data-nether-testimonials-nav-control
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </button>
+        <div class="slider-counter caption">
+          <span class="slider-counter--current">1</span>
+          <span aria-hidden="true"> / </span>
+          <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+          <span class="slider-counter--total">{{ item_count }}</span>
+        </div>
+        <button
+          type="button"
+          class="slider-button slider-button--next"
+          name="next"
+          aria-label="{{ 'general.slider.next_slide' | t }}"
+          aria-controls="NetherTestimonialsGrid-{{ section.id }}"
+          data-nether-testimonials-nav-control
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+    </slider-component>
+  {%- endif -%}
+{%- endif -%}

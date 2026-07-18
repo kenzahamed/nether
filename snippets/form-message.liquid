@@ -1,0 +1,61 @@
+{% comment %}
+  Renders a Nether Premium form validation or helper message.
+
+  Extends Dawn's .form__message — existing form messages remain unchanged.
+
+  Accepts:
+  - message: {String} Message text (required)
+  - type: {String} helper | error | success | warning (default: helper)
+  - id: {String} HTML id for aria-describedby pairing
+  - large: {Boolean} Use large message size (default: false)
+  - class: {String} Additional CSS classes
+  - shopify_attributes: {String} Theme Editor block attributes
+
+  Usage:
+  {% render 'form-message', message: 'Enter a valid email address.', type: 'error', id: 'Email-error' %}
+{% endcomment %}
+
+{%- liquid
+  assign message_type = type | default: 'helper'
+  assign message_classes = 'form__message form-field__message form-field__message--' | append: message_type
+
+  if large
+    assign message_classes = message_classes | append: ' form__message--large'
+  endif
+
+  if class != blank
+    assign message_classes = message_classes | append: ' ' | append: class
+  endif
+
+  case message_type
+    when 'error'
+      assign message_icon = 'error'
+      assign message_role = 'alert'
+    when 'success'
+      assign message_icon = 'success'
+      assign message_role = 'status'
+    when 'warning'
+      assign message_icon = 'warning'
+      assign message_role = 'alert'
+    else
+      assign message_icon = 'info'
+      assign message_role = ''
+  endcase
+-%}
+
+{%- if message != blank -%}
+  <p
+    {% if id != blank %}id="{{ id }}"{% endif %}
+    class="{{ message_classes }}"
+    {% if message_role != blank %}role="{{ message_role }}"{% endif %}
+    {{ shopify_attributes }}
+  >
+    {%- if message_type != 'helper' -%}
+      <span class="svg-wrapper" aria-hidden="true">
+        {%- assign icon_file = message_icon | prepend: 'icon-' | append: '.svg' -%}
+        {{- icon_file | inline_asset_content -}}
+      </span>
+    {%- endif -%}
+    <span>{{ message | escape }}</span>
+  </p>
+{%- endif -%}

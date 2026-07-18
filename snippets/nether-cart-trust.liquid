@@ -1,0 +1,61 @@
+{% comment %}
+  Nether Premium Cart — trust and secure checkout messaging.
+  Extends shared Commerce Enhancements trust + secure-checkout components.
+  Reuses Nether Icon system.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - block: {Object} Block object (optional)
+{% endcomment %}
+
+{%- liquid
+  assign trust_heading = section.settings.nether_trust_heading
+  assign trust_text = section.settings.nether_trust_text
+  assign secure_text = section.settings.nether_secure_checkout_text
+  assign trust_icon = section.settings.nether_trust_icon | default: 'lock'
+
+  if block
+    assign trust_heading = block.settings.heading | default: trust_heading
+    assign trust_text = block.settings.text | default: trust_text
+    assign secure_text = block.settings.secure_text | default: secure_text
+    assign trust_icon = block.settings.icon | default: trust_icon
+  endif
+
+  assign show_trust = false
+  if section.settings.nether_enable_trust
+    assign show_trust = true
+  endif
+  if block
+    assign show_trust = true
+  endif
+-%}
+
+{%- if show_trust -%}
+  {%- if trust_heading != blank or secure_text != blank -%}
+  <div
+    class="nether-cart__module nether-cart__module--trust nether-cart__trust"
+    data-nether-cart-module="trust"
+    data-nether-cart-animate
+    role="region"
+    aria-label="{{ 'sections.nether_cart.trust.label' | t }}"
+    {% if block %}{{ block.shopify_attributes }}{% endif %}
+  >
+    {%- if trust_heading != blank -%}
+      {% render 'nether-commerce-trust',
+        heading: '',
+        layout: 'stack',
+        icon_1: trust_icon,
+        heading_1: trust_heading,
+        text_1: trust_text,
+        class: 'nether-cart__trust-shared',
+        animate: false
+      %}
+    {%- endif -%}
+    {% render 'nether-commerce-secure-checkout',
+      text: secure_text,
+      icon: 'lock',
+      class: 'nether-cart__secure-message'
+    %}
+  </div>
+  {%- endif -%}
+{%- endif -%}

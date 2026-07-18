@@ -1,0 +1,239 @@
+{% comment %}
+  Nether Premium Bundles — embedded host for PDP / Cart / Quick View / showcases.
+  Reuses the Bundles section modules without replacing Dawn commerce roots.
+
+  Accepts:
+  - section: {Object} Host section (required)
+  - block: {Object} Optional block for headings / product_list / strategy
+  - product: {Object} Seed / current product (optional)
+  - context: {String} product | cart | quick_view | section (default: section)
+  - compact: {Boolean}
+{% endcomment %}
+
+{% render 'nether-bundles-assets' %}
+
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-icon.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-typography.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign embed_context = context | default: 'section'
+  assign is_compact = compact | default: false
+  if embed_context == 'quick_view' or embed_context == 'cart'
+    assign is_compact = true
+  endif
+
+  assign strategy = section.settings.nether_strategy | default: 'complete_the_look'
+  if block != blank and block.settings.strategy != blank
+    assign strategy = block.settings.strategy
+  endif
+
+  assign products_limit = section.settings.nether_products_to_show | default: 4
+  if block != blank and block.settings.product_list_limit != blank
+    assign products_limit = block.settings.product_list_limit
+  endif
+
+  assign include_current = section.settings.nether_include_current_product | default: true
+  if block != blank and block.settings.include_current_product != nil
+    assign include_current = block.settings.include_current_product
+  endif
+
+  assign seed_product = product
+  if seed_product == blank and section.settings.product != blank
+    assign seed_product = section.settings.product
+  endif
+  if seed_product == blank and cart.items.first
+    assign seed_product = cart.items.first.product
+  endif
+
+  assign uses_api = false
+  if strategy == 'frequently_bought' or strategy == 'complete_the_look'
+    assign uses_api = true
+  endif
+
+  assign is_future = false
+  if strategy == 'build_your_own' or strategy == 'subscription' or strategy == 'ai' or strategy == 'dynamic_merchandising'
+    assign is_future = true
+  endif
+
+  assign use_product_blocks = false
+  if strategy == 'curated' or strategy == 'product_pack' or strategy == 'gift_set' or strategy == 'volume_discount' or strategy == 'mix_match'
+    for b in section.blocks
+      if b.type == 'bundle_product' and b.settings.product != blank
+        assign use_product_blocks = true
+        break
+      endif
+    endfor
+  endif
+
+  assign source_products = nil
+  if block != blank and block.settings.products != blank
+    assign source_products = block.settings.products
+  elsif section.settings.product_list != blank
+    assign source_products = section.settings.product_list
+  elsif section.settings.collection != blank
+    assign source_products = section.settings.collection.products
+  endif
+
+  case strategy
+    when 'frequently_bought'
+      assign strategy_label = 'sections.nether_bundles.strategies.frequently_bought' | t
+    when 'complete_the_look'
+      assign strategy_label = 'sections.nether_bundles.strategies.complete_the_look' | t
+    when 'product_pack'
+      assign strategy_label = 'sections.nether_bundles.strategies.product_pack' | t
+    when 'volume_discount'
+      assign strategy_label = 'sections.nether_bundles.strategies.volume_discount' | t
+    when 'mix_match'
+      assign strategy_label = 'sections.nether_bundles.strategies.mix_match' | t
+    when 'curated'
+      assign strategy_label = 'sections.nether_bundles.strategies.curated' | t
+    when 'gift_set'
+      assign strategy_label = 'sections.nether_bundles.strategies.gift_set' | t
+    else
+      assign strategy_label = 'sections.nether_bundles.strategies.generic' | t
+  endcase
+
+  assign include_product = nil
+  if include_current and seed_product != blank
+    assign include_product = seed_product
+  endif
+
+  case section.settings.nether_animation_speed
+    when 'slow'
+      assign nether_animation_duration = 0.8
+    when 'fast'
+      assign nether_animation_duration = 0.3
+    else
+      assign nether_animation_duration = 0.5
+  endcase
+
+  assign nether_class_list = 'nether-bundles nether-bundles--embedded nether-bundles--context-' | append: embed_context
+  assign nether_class_list = nether_class_list | append: ' nether-bundles--strategy-' | append: strategy
+  if is_compact
+    assign nether_class_list = nether_class_list | append: ' nether-bundles--compact'
+  endif
+-%}
+
+{%- if uses_api and seed_product != blank -%}
+  {%- liquid
+    assign recommendation_url = routes.product_recommendations_url | append: '?limit=' | append: products_limit | append: '&intent=complementary'
+  -%}
+  <product-recommendations
+    class="nether-bundles__api complementary-products"
+    data-url="{{ recommendation_url }}"
+    data-section-id="{{ section.id }}"
+    data-product-id="{{ seed_product.id }}"
+  >
+    <nether-bundles
+      id="NetherBundlesEmbed-{{ section.id }}-{{ block.id | default: embed_context }}"
+      class="{{ nether_class_list }}"
+      data-nether-motion="bundles"
+      data-section-id="{{ section.id }}"
+      data-animation-style="{{ section.settings.nether_animation_style | default: 'stagger' }}"
+      data-animation-duration="{{ nether_animation_duration }}"
+      data-nether-motion-plugins="scrollTrigger"
+      data-bundle-strategy="{{ strategy }}"
+      data-layout="{{ section.settings.nether_layout | default: 'split' }}"
+      data-money-format="{{ shop.money_format | escape }}"
+      data-currency-code="{{ cart.currency.iso_code }}"
+      data-display-discount-percent="{{ section.settings.nether_display_discount_percent | default: 0 }}"
+      data-include-properties="true"
+      data-success-message="{{ 'sections.nether_bundles.actions.success' | t | escape }}"
+      data-error-empty="{{ 'sections.nether_bundles.errors.empty' | t | escape }}"
+      data-error-generic="{{ 'sections.nether_bundles.errors.generic' | t | escape }}"
+      role="region"
+      aria-label="{{ strategy_label | escape }}"
+      {% if block != blank %}{{ block.shopify_attributes }}{% endif %}
+    >
+      <div class="nether-bundles__inner">
+        {%- if recommendations.performed and recommendations.products_count > 0 -%}
+          {% render 'nether-bundles-body',
+            section: section,
+            products: recommendations.products,
+            products_limit: products_limit,
+            product_count: recommendations.products_count,
+            strategy: strategy,
+            strategy_label: strategy_label,
+            compact: is_compact,
+            include_product: include_product
+          %}
+        {%- elsif request.design_mode -%}
+          {% render 'nether-bundles-body',
+            section: section,
+            products: nil,
+            strategy: strategy,
+            strategy_label: strategy_label,
+            show_empty: true,
+            empty_context: 'design',
+            compact: is_compact
+          %}
+        {%- else -%}
+          {% render 'nether-bundles-body',
+            section: section,
+            products: nil,
+            strategy: strategy,
+            strategy_label: strategy_label,
+            show_empty: true,
+            empty_context: 'api',
+            compact: is_compact
+          %}
+        {%- endif -%}
+      </div>
+    </nether-bundles>
+  </product-recommendations>
+
+{%- elsif is_future -%}
+  <nether-bundles
+    id="NetherBundlesEmbed-{{ section.id }}-{{ block.id | default: embed_context }}"
+    class="{{ nether_class_list }}"
+    data-nether-motion="bundles"
+    data-section-id="{{ section.id }}"
+    data-bundle-strategy="{{ strategy }}"
+    role="region"
+    aria-label="{{ strategy_label | escape }}"
+    {% if block != blank %}{{ block.shopify_attributes }}{% endif %}
+  >
+    <div class="nether-bundles__inner">
+      {% render 'nether-bundles-header', section: section, block: block, strategy_label: strategy_label %}
+      {% render 'nether-bundles-extensions', type: strategy, section: section, block: block %}
+    </div>
+  </nether-bundles>
+
+{%- else -%}
+  <nether-bundles
+    id="NetherBundlesEmbed-{{ section.id }}-{{ block.id | default: embed_context }}"
+    class="{{ nether_class_list }}"
+    data-nether-motion="bundles"
+    data-section-id="{{ section.id }}"
+    data-animation-style="{{ section.settings.nether_animation_style | default: 'stagger' }}"
+    data-animation-duration="{{ nether_animation_duration }}"
+    data-nether-motion-plugins="scrollTrigger"
+    data-bundle-strategy="{{ strategy }}"
+    data-layout="{{ section.settings.nether_layout | default: 'split' }}"
+    data-money-format="{{ shop.money_format | escape }}"
+    data-currency-code="{{ cart.currency.iso_code }}"
+    data-display-discount-percent="{{ section.settings.nether_display_discount_percent | default: 0 }}"
+    data-include-properties="true"
+    data-success-message="{{ 'sections.nether_bundles.actions.success' | t | escape }}"
+    data-error-empty="{{ 'sections.nether_bundles.errors.empty' | t | escape }}"
+    data-error-generic="{{ 'sections.nether_bundles.errors.generic' | t | escape }}"
+    role="region"
+    aria-label="{{ strategy_label | escape }}"
+    {% if block != blank %}{{ block.shopify_attributes }}{% endif %}
+  >
+    <div class="nether-bundles__inner">
+      {% render 'nether-bundles-body',
+        section: section,
+        products: source_products,
+        products_limit: products_limit,
+        strategy: strategy,
+        strategy_label: strategy_label,
+        compact: is_compact,
+        include_product: include_product,
+        use_product_blocks: use_product_blocks
+      %}
+    </div>
+  </nether-bundles>
+{%- endif -%}

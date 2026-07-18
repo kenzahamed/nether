@@ -1,0 +1,27 @@
+{% comment %}
+  Future-ready countdown placeholder for Nether Premium Banner.
+  Hidden until countdown functionality is implemented.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+
+  Usage:
+  {% render 'nether-banner-countdown', block: block %}
+{% endcomment %}
+
+<div
+  class="nether-banner__countdown"
+  data-nether-banner-countdown
+  data-nether-hero-animate
+  data-nether-hero-role="countdown"
+  hidden
+  aria-hidden="true"
+  {{ block.shopify_attributes }}
+>
+  <p class="nether-banner__countdown-label type-label">
+    {{- block.settings.label | default: 'Countdown' | escape -}}
+  </p>
+  <div class="nether-banner__countdown-slot" data-nether-banner-countdown-slot>
+    {%- comment -%} Future: wire countdown timer module here {%- endcomment -%}
+  </div>
+</div>

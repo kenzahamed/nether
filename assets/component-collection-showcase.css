@@ -1,0 +1,769 @@
+/* =============================================================================
+ * Nether Premium Collection Showcase Framework
+ * Extends Dawn collection-list / card-collection — scoped to .nether-collection
+ * Reuses: Card Premium, Typography, Button, Badge, Glass, Gradient, Shadow, Radius
+ * ============================================================================= */
+
+.nether-collection {
+  --nether-collection-gap: 2.4rem;
+  --nether-collection-columns-desktop: 3;
+  --nether-collection-columns-tablet: 2;
+  --nether-collection-columns-mobile: 1;
+  --nether-collection-overlay-opacity: 0.35;
+  --nether-collection-transition-duration: 0.5s;
+  display: block;
+  position: relative;
+}
+
+.nether-collection__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+/* ── Section header ────────────────────────────────────────────────────────── */
+
+.nether-collection__header {
+  margin-bottom: 0;
+}
+
+.nether-collection__header-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 72rem;
+}
+
+.nether-collection__header-inner--align-center {
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.nether-collection__header-inner--align-right {
+  margin-inline-start: auto;
+  text-align: right;
+  align-items: flex-end;
+}
+
+.nether-collection__eyebrow {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.62);
+}
+
+.nether-collection__heading {
+  margin: 0;
+}
+
+.nether-collection__subheading {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-collection__text {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-collection__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nether-collection__view-all {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6rem;
+}
+
+/* ── Grid system ───────────────────────────────────────────────────────────── */
+
+.nether-collection__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--nether-collection-columns-mobile), minmax(0, 1fr));
+  gap: var(--nether-collection-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nether-collection__item {
+  min-width: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-collection__grid {
+    grid-template-columns: repeat(var(--nether-collection-columns-tablet), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-collection__grid {
+    grid-template-columns: repeat(var(--nether-collection-columns-desktop), minmax(0, 1fr));
+  }
+}
+
+/* ── Layout: Editorial grid ────────────────────────────────────────────────── */
+
+.nether-collection--layout-editorial_grid .nether-collection__item:nth-child(3n + 1) {
+  grid-column: span 1;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-collection--layout-editorial_grid .nether-collection__item:nth-child(4n + 1) {
+    grid-column: span 2;
+  }
+
+  .nether-collection--desktop-editorial .nether-collection__item:nth-child(odd) .nether-collection-card__heading {
+    font-size: calc(var(--font-heading-scale) * 2.8rem);
+  }
+}
+
+/* ── Layout: Luxury grid ───────────────────────────────────────────────────── */
+
+.nether-collection--layout-luxury_grid .nether-collection-card__inner {
+  box-shadow: 0 1.6rem 4rem rgba(var(--color-shadow), 0.08);
+}
+
+.nether-collection--layout-luxury_grid .nether-collection-card__content {
+  padding: 2.4rem;
+}
+
+/* ── Layout: Masonry grid ──────────────────────────────────────────────────── */
+
+@media screen and (min-width: 750px) {
+  .nether-collection--layout-masonry_grid .nether-collection__grid {
+    grid-auto-rows: 8px;
+  }
+
+  .nether-collection--layout-masonry_grid .nether-collection__item:nth-child(6n + 1) {
+    grid-row: span 34;
+  }
+
+  .nether-collection--layout-masonry_grid .nether-collection__item:nth-child(6n + 2) {
+    grid-row: span 28;
+  }
+
+  .nether-collection--layout-masonry_grid .nether-collection__item:nth-child(6n + 3) {
+    grid-row: span 32;
+  }
+
+  .nether-collection--layout-masonry_grid .nether-collection__item:nth-child(6n + 4) {
+    grid-row: span 26;
+  }
+
+  .nether-collection--layout-masonry_grid .nether-collection__item:nth-child(6n + 5) {
+    grid-row: span 30;
+  }
+
+  .nether-collection--layout-masonry_grid .nether-collection__item:nth-child(6n + 6) {
+    grid-row: span 28;
+  }
+
+  .nether-collection--layout-masonry_grid .nether-collection-card,
+  .nether-collection--layout-masonry_grid .nether-collection-card__link,
+  .nether-collection--layout-masonry_grid .nether-collection-card__inner {
+    height: 100%;
+  }
+}
+
+/* ── Layout: Magazine ──────────────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-collection--layout-magazine .nether-collection__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .nether-collection--layout-magazine .nether-collection__item--featured {
+    grid-column: span 7;
+    grid-row: span 2;
+  }
+
+  .nether-collection--layout-magazine .nether-collection__item:not(.nether-collection__item--featured) {
+    grid-column: span 5;
+  }
+
+  .nether-collection--layout-magazine .nether-collection__item:nth-child(3) {
+    grid-column: span 5;
+  }
+
+  .nether-collection--layout-magazine .nether-collection__item:nth-child(4) {
+    grid-column: span 7;
+  }
+}
+
+/* ── Layout: Split collection ──────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-collection--layout-split_collection .nether-collection__grid {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: stretch;
+  }
+
+  .nether-collection--layout-split_collection .nether-collection__item--featured {
+    grid-row: span 2;
+  }
+
+  .nether-collection--layout-split_collection .nether-collection__item:not(.nether-collection__item--featured) {
+    grid-column: 2;
+  }
+}
+
+/* ── Layout: Card layout ───────────────────────────────────────────────────── */
+
+.nether-collection--layout-card_layout .nether-collection-card__inner {
+  background: rgb(var(--color-background));
+  border-radius: var(--text-boxes-radius, 1rem);
+  overflow: hidden;
+}
+
+.nether-collection--layout-card_layout .nether-collection-card__content {
+  position: relative;
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  margin-top: -2rem;
+  margin-inline: 1.6rem;
+  padding: 1.6rem;
+  border-radius: calc(var(--text-boxes-radius, 1rem) * 0.75);
+  box-shadow: 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.08);
+}
+
+/* ── Layout: Minimal grid ──────────────────────────────────────────────────── */
+
+.nether-collection--layout-minimal_grid .nether-collection-card__overlay,
+.nether-collection--layout-minimal_grid .nether-collection-card__glass-panel {
+  display: none;
+}
+
+.nether-collection--layout-minimal_grid .nether-collection-card__content {
+  position: relative;
+  padding: 1.2rem 0 0;
+  color: rgb(var(--color-foreground));
+}
+
+.nether-collection--layout-minimal_grid .nether-collection-card__inner {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ── Layout: Horizontal scroll ─────────────────────────────────────────────── */
+
+.nether-collection--layout-horizontal_scroll .nether-collection__grid--horizontal {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--page-width-margin, 1.5rem);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 0.8rem;
+}
+
+.nether-collection--layout-horizontal_scroll .nether-collection__item {
+  flex: 0 0 min(78vw, 32rem);
+  scroll-snap-align: start;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-collection--layout-horizontal_scroll .nether-collection__item {
+    flex-basis: min(42vw, 36rem);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-collection--layout-horizontal_scroll .nether-collection__item {
+    flex-basis: calc((100% - (var(--nether-collection-gap) * (var(--nether-collection-columns-desktop) - 1))) / var(--nether-collection-columns-desktop));
+  }
+}
+
+/* ── Layout: Carousel ready ────────────────────────────────────────────────── */
+
+.nether-collection--layout-carousel .nether-collection__slider {
+  position: relative;
+}
+
+.nether-collection--layout-carousel .nether-collection__grid {
+  display: flex;
+  flex-wrap: inherit;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nether-collection--layout-carousel .nether-collection__item {
+  flex: 0 0 calc((100% - (var(--nether-collection-gap) * (var(--nether-collection-columns-mobile) - 1))) / var(--nether-collection-columns-mobile));
+  scroll-snap-align: start;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-collection--layout-carousel .nether-collection__item {
+    flex-basis: calc((100% - (var(--nether-collection-gap) * (var(--nether-collection-columns-tablet) - 1))) / var(--nether-collection-columns-tablet));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-collection--layout-carousel .nether-collection__item {
+    flex-basis: calc((100% - (var(--nether-collection-gap) * (var(--nether-collection-columns-desktop) - 1))) / var(--nether-collection-columns-desktop));
+  }
+}
+
+/* ── Responsive layout modifiers ───────────────────────────────────────────── */
+
+@media screen and (max-width: 989px) {
+  .nether-collection--tablet-stacked .nether-collection__grid,
+  .nether-collection--tablet-centered .nether-collection__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-collection--tablet-centered .nether-collection__header-inner {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-collection--mobile-stacked .nether-collection__grid,
+  .nether-collection--mobile-centered .nether-collection__grid,
+  .nether-collection--mobile-minimal .nether-collection__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-collection--mobile-centered .nether-collection__header-inner {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  .nether-collection--mobile-minimal .nether-collection-card__description,
+  .nether-collection--mobile-minimal .nether-collection-card__stats,
+  .nether-collection--mobile-minimal .nether-collection-card__cta {
+    display: none;
+  }
+}
+
+.nether-collection--desktop-compact .nether-collection__inner {
+  gap: 2.4rem;
+}
+
+.nether-collection--full-width .nether-collection__inner {
+  max-width: none;
+}
+
+/* ── Collection card ───────────────────────────────────────────────────────── */
+
+.nether-collection-card {
+  position: relative;
+  height: 100%;
+}
+
+.nether-collection-card__link {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  border-radius: inherit;
+}
+
+.nether-collection-card__link:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.55);
+  outline-offset: 0.3rem;
+}
+
+.nether-collection-card__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--text-boxes-radius, 1rem);
+  border: 0;
+}
+
+.nether-collection-card__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.nether-collection-card__media-inner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nether-collection-card__media img,
+.nether-collection-card__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nether-collection-card__video--iframe {
+  border: 0;
+}
+
+.nether-collection-card__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--nether-collection-overlay-opacity);
+  background: rgba(var(--color-shadow), 0.45);
+  z-index: 1;
+}
+
+.nether-collection-card__glass-panel {
+  position: absolute;
+  inset: auto 1.2rem 1.2rem;
+  height: 40%;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: calc(var(--text-boxes-radius, 1rem) * 0.75);
+}
+
+.nether-collection-card__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 2rem;
+  color: rgb(var(--color-background));
+  transition: transform var(--nether-collection-transition-duration) ease, opacity var(--nether-collection-transition-duration) ease;
+}
+
+.nether-collection-card--position-top-left .nether-collection-card__content {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.nether-collection-card--position-top-center .nether-collection-card__content {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+}
+
+.nether-collection-card--position-top-right .nether-collection-card__content {
+  justify-content: flex-start;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.nether-collection-card--position-middle-left .nether-collection-card__content {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.nether-collection-card--position-middle-center .nether-collection-card__content {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.nether-collection-card--position-middle-right .nether-collection-card__content {
+  justify-content: center;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.nether-collection-card--position-bottom-left .nether-collection-card__content {
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.nether-collection-card--position-bottom-center .nether-collection-card__content {
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+}
+
+.nether-collection-card--position-bottom-right .nether-collection-card__content {
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.nether-collection-card--align-center .nether-collection-card__information {
+  text-align: center;
+}
+
+.nether-collection-card--align-right .nether-collection-card__information {
+  text-align: right;
+}
+
+.nether-collection-card__label {
+  margin: 0;
+  color: rgba(var(--color-background), 0.78);
+}
+
+.nether-collection-card__badge {
+  margin-bottom: 0.4rem;
+}
+
+.nether-collection-card__heading {
+  margin: 0;
+  color: inherit;
+}
+
+.nether-collection-card__description {
+  margin: 0;
+  color: rgba(var(--color-background), 0.86);
+}
+
+.nether-collection-card__description p {
+  margin: 0;
+}
+
+.nether-collection-card__count {
+  margin: 0;
+  color: rgba(var(--color-background), 0.72);
+}
+
+.nether-collection-card__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 1.6rem;
+}
+
+.nether-collection-card__stat-value {
+  margin: 0;
+}
+
+.nether-collection-card__stat-label {
+  margin: 0.2rem 0 0;
+  color: rgba(var(--color-background), 0.72);
+}
+
+.nether-collection-card__cta {
+  margin-top: auto;
+  padding-top: 0.8rem;
+}
+
+.nether-collection-card__cta-text {
+  pointer-events: none;
+  color: inherit;
+}
+
+/* ── Card sizes ────────────────────────────────────────────────────────────── */
+
+.nether-collection-card--size-small .nether-collection-card__content {
+  padding: 1.4rem;
+}
+
+.nether-collection-card--size-small .nether-collection-card__heading {
+  font-size: calc(var(--font-heading-scale) * 1.6rem);
+}
+
+.nether-collection-card--size-large .nether-collection-card__content {
+  padding: 3.2rem;
+}
+
+.nether-collection-card--size-large .nether-collection-card__heading {
+  font-size: calc(var(--font-heading-scale) * 3.2rem);
+}
+
+.nether-collection-card--size-editorial .nether-collection-card__heading {
+  font-family: var(--font-heading-family);
+  letter-spacing: calc(var(--font-heading-scale) * 0.04rem);
+}
+
+/* ── Floating cards ────────────────────────────────────────────────────────── */
+
+.nether-collection--floating-enabled .nether-collection-card--floating {
+  transform: translateY(0);
+  transition: transform var(--nether-collection-transition-duration) ease;
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .nether-collection--floating-enabled .nether-collection-card--floating:hover {
+    transform: translateY(-0.6rem);
+  }
+}
+
+/* ── Hover reveal ──────────────────────────────────────────────────────────── */
+
+.nether-collection-card--hover-reveal .nether-collection-card__description,
+.nether-collection-card--hover-reveal .nether-collection-card__stats,
+.nether-collection-card--hover-reveal .nether-collection-card__cta {
+  opacity: 0;
+  transform: translateY(1.2rem);
+  transition: opacity var(--nether-collection-transition-duration) ease, transform var(--nether-collection-transition-duration) ease;
+}
+
+.nether-collection-card--hover-reveal:hover .nether-collection-card__description,
+.nether-collection-card--hover-reveal:hover .nether-collection-card__stats,
+.nether-collection-card--hover-reveal:hover .nether-collection-card__cta,
+.nether-collection-card--hover-reveal:focus-within .nether-collection-card__description,
+.nether-collection-card--hover-reveal:focus-within .nether-collection-card__stats,
+.nether-collection-card--hover-reveal:focus-within .nether-collection-card__cta,
+.nether-collection-card--motion-reduced .nether-collection-card__description,
+.nether-collection-card--motion-reduced .nether-collection-card__stats,
+.nether-collection-card--motion-reduced .nether-collection-card__cta {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Category highlight ────────────────────────────────────────────────────── */
+
+.nether-collection__highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-bottom: 2.4rem;
+}
+
+.nether-collection-highlight {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.2rem 1.6rem;
+  border-radius: var(--text-boxes-radius, 1rem);
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+.nether-collection-highlight__media {
+  flex: 0 0 5.6rem;
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.nether-collection-highlight__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nether-collection-highlight__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.nether-collection-highlight__eyebrow,
+.nether-collection-highlight__title,
+.nether-collection-highlight__text {
+  margin: 0;
+}
+
+.nether-collection-highlight__link {
+  margin-top: 0.4rem;
+}
+
+/* ── Section dividers ──────────────────────────────────────────────────────── */
+
+.nether-collection__divider {
+  width: 100%;
+  pointer-events: none;
+}
+
+.nether-collection__divider--line {
+  height: 0.1rem;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-collection__divider--gradient {
+  height: 0.2rem;
+  background: linear-gradient(90deg, transparent, rgba(var(--color-foreground), 0.2), transparent);
+}
+
+.nether-collection__divider--wave {
+  height: 1.6rem;
+  background: linear-gradient(180deg, transparent, rgba(var(--color-foreground), 0.06));
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath fill='%23000' d='M0 20 Q300 40 600 20 T1200 20 V40 H0Z'/%3E%3C/svg%3E");
+  mask-size: cover;
+}
+
+.nether-collection__divider--top {
+  margin-bottom: 2.4rem;
+}
+
+.nether-collection__divider--bottom {
+  margin-top: 2.4rem;
+}
+
+/* ── Motion Framework (Phase 5.3.9) — pending / ready / reduced-motion ─────── */
+
+.nether-collection:not([data-nether-motion-ready='true']) [data-nether-collection-animate] {
+  opacity: 1;
+}
+
+nether-collection[data-nether-motion-pending='true'] .nether-collection__header [data-nether-collection-animate],
+nether-collection[data-nether-motion-pending='true'] [data-nether-collection-item],
+nether-collection[data-nether-motion-pending='true'] [data-nether-collection-nav-control],
+nether-collection[data-nether-motion-pending='true'] .nether-collection__view-all,
+nether-collection[data-nether-motion-pending='true'] .nether-collection-highlight {
+  opacity: 0;
+}
+
+nether-collection[data-nether-motion-ready='true'] .nether-collection__header [data-nether-collection-animate],
+nether-collection[data-nether-motion-ready='true'] [data-nether-collection-item],
+nether-collection[data-nether-motion-ready='true'] [data-nether-collection-card],
+nether-collection[data-nether-motion-ready='true'] [data-nether-collection-media],
+nether-collection[data-nether-motion-ready='true'] [data-nether-collection-badge],
+nether-collection[data-nether-motion-ready='true'] [data-nether-collection-title],
+nether-collection[data-nether-motion-ready='true'] [data-nether-collection-description],
+nether-collection[data-nether-motion-ready='true'] [data-nether-collection-cta] {
+  will-change: transform, opacity;
+}
+
+nether-collection[data-nether-motion-ready='true'] .nether-collection__buttons .button,
+nether-collection[data-nether-motion-ready='true'] .nether-collection__view-all .button,
+nether-collection[data-nether-motion-ready='true'] [data-nether-collection-nav-control] {
+  will-change: transform;
+}
+
+nether-collection[data-nether-motion-ready='true'].nether-collection--floating-enabled .nether-collection-card--floating .nether-collection-card__inner {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-collection-card__content,
+  .nether-collection-card--hover-reveal .nether-collection-card__description,
+  .nether-collection-card--hover-reveal .nether-collection-card__stats,
+  .nether-collection-card--hover-reveal .nether-collection-card__cta,
+  .nether-collection--floating-enabled .nether-collection-card--floating {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  nether-collection[data-nether-motion-pending='true'] .nether-collection__header [data-nether-collection-animate],
+  nether-collection[data-nether-motion-pending='true'] [data-nether-collection-item],
+  nether-collection[data-nether-motion-pending='true'] [data-nether-collection-nav-control],
+  nether-collection[data-nether-motion-pending='true'] .nether-collection__view-all,
+  nether-collection[data-nether-motion-pending='true'] .nether-collection-highlight {
+    opacity: 1;
+  }
+
+  nether-collection[data-nether-motion-ready='true'] .nether-collection__header [data-nether-collection-animate],
+  nether-collection[data-nether-motion-ready='true'] [data-nether-collection-item],
+  nether-collection[data-nether-motion-ready='true'] [data-nether-collection-card],
+  nether-collection[data-nether-motion-ready='true'] [data-nether-collection-media],
+  nether-collection[data-nether-motion-ready='true'] [data-nether-collection-badge],
+  nether-collection[data-nether-motion-ready='true'] [data-nether-collection-title],
+  nether-collection[data-nether-motion-ready='true'] [data-nether-collection-description],
+  nether-collection[data-nether-motion-ready='true'] [data-nether-collection-cta],
+  nether-collection[data-nether-motion-ready='true'] .nether-collection__buttons .button,
+  nether-collection[data-nether-motion-ready='true'] .nether-collection__view-all .button,
+  nether-collection[data-nether-motion-ready='true'] [data-nether-collection-nav-control] {
+    will-change: auto;
+  }
+}
+
+/* ── Placeholder state ─────────────────────────────────────────────────────── */
+
+.nether-collection-card--placeholder .nether-collection-card__content {
+  position: relative;
+  color: rgb(var(--color-foreground));
+  padding: 1.6rem;
+}
+
+.nether-collection__grid--placeholder .nether-collection-card__content {
+  position: relative;
+  color: rgb(var(--color-foreground));
+}

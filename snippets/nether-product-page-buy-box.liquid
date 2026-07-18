@@ -1,0 +1,44 @@
+{% comment %}
+  Nether Premium Product Page — Product information buy box shell.
+  Composes commerce modules in Theme Editor block order.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - product: {Object} Product object (required)
+  - product_form_id: {String} Product form ID (required)
+{% endcomment %}
+
+<div
+  class="nether-product-page__buy-box grid__item product__info-wrapper{% if settings.page_width > 1400 and section.settings.media_size == 'small' %} product__info-wrapper--extra-padding{% endif %}"
+  data-nether-product-page-buy-box
+>
+  <section
+    id="ProductInfo-{{ section.id }}"
+    class="nether-product-page__info product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}{% if section.settings.nether_enable_glass %} nether-product-page__info--glass glass-card-light shadow-md radius-lg{% endif %}"
+  >
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign render_in_buy_box = true
+        if block.type == 'related_products' and block.settings.placement == 'full_width'
+          assign render_in_buy_box = false
+        endif
+        if block.type == 'merchant_content' and block.settings.full_width
+          assign render_in_buy_box = false
+        endif
+      -%}
+      {%- if render_in_buy_box -%}
+        {% render 'nether-product-page-block',
+          block: block,
+          section: section,
+          product: product,
+          product_form_id: product_form_id
+        %}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <a href="{{ product.url }}" class="link product__view-details animate-arrow quick-add-hidden">
+      {{ 'products.product.view_full_details' | t }}
+      {{- 'icon-arrow.svg' | inline_asset_content -}}
+    </a>
+  </section>
+</div>

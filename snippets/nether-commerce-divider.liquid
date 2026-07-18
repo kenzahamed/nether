@@ -1,0 +1,17 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — commerce divider.
+
+  Accepts:
+  - style: {String} line | space | fade (default: line)
+  - class: {String} Extra classes
+  - attributes: {String} Extra HTML attributes
+{% endcomment %}
+
+{%- assign divider_style = style | default: 'line' -%}
+
+<hr
+  class="nether-commerce__divider nether-commerce__divider--{{ divider_style }}{% if class != blank %} {{ class }}{% endif %}"
+  data-nether-commerce-module="divider"
+  aria-hidden="true"
+  {% if attributes != blank %}{{ attributes }}{% endif %}
+>

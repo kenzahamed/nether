@@ -1,0 +1,41 @@
+{% comment %}
+  Renders a Nether Premium CTA promotion card block.
+  Reuses the Nether Premium Card System.
+
+  Accepts:
+  - block: {Object} Promotion card block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-cta-promotion-card', block: block, motion_attr: motion_attr %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-cta-animate'
+-%}
+
+<div
+  class="nether-cta__promotion-card"
+  {{ motion_attribute }}
+  data-nether-cta-card
+  data-nether-cta-role="card"
+  data-nether-hero-role="card"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'card',
+    type: 'content',
+    style: block.settings.card_style,
+    heading: block.settings.heading,
+    caption: block.settings.caption,
+    description: block.settings.description,
+    image: block.settings.image,
+    cta_label: block.settings.cta_label,
+    cta_link: block.settings.cta_link,
+    cta_style: block.settings.cta_style,
+    icon: block.settings.icon,
+    hover: block.settings.hover_effects,
+    radius: block.settings.card_radius,
+    shadow: block.settings.card_shadow,
+    link: block.settings.link
+  -%}
+</div>

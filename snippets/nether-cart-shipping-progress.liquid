@@ -1,0 +1,43 @@
+{% comment %}
+  Nether Premium Cart — free shipping progress bar.
+  Extends shared Commerce Enhancements shipping-progress component.
+  Uses Shopify cart.total_price — does not replace shipping rates.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - context: {String} drawer | page (default: page)
+{% endcomment %}
+
+{%- liquid
+  assign cart_context = context | default: 'page'
+  assign threshold = 0
+  assign enable_progress = false
+
+  if section and section.settings
+    assign threshold = section.settings.nether_free_shipping_threshold | default: 0
+    assign enable_progress = section.settings.nether_enable_shipping_progress
+  endif
+
+  unless enable_progress
+    assign enable_progress = false
+  endunless
+
+  if threshold <= 0
+    assign enable_progress = false
+  endif
+-%}
+
+{%- if enable_progress and cart != empty -%}
+  <div
+    class="nether-cart__module nether-cart__module--shipping-progress nether-cart__shipping-progress nether-cart__shipping-progress--{{ cart_context }}"
+    data-nether-cart-module="shipping-progress"
+    data-nether-cart-animate
+  >
+    {% render 'nether-commerce-shipping-progress',
+      threshold: threshold,
+      enable: true,
+      context: cart_context,
+      class: 'nether-cart__shipping-progress-inner'
+    %}
+  </div>
+{%- endif -%}

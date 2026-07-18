@@ -1,0 +1,41 @@
+{% comment %}
+  Nether Premium Bundles — mobile / overlay summary drawer.
+
+  Accepts:
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- if section.settings.nether_enable_drawer -%}
+  <nether-bundles-drawer
+    id="NetherBundlesDrawer-{{ section.id }}"
+    class="nether-bundles-drawer"
+    data-nether-bundles-drawer
+    data-section-id="{{ section.id }}"
+    hidden
+  >
+    <div class="nether-bundles-drawer__overlay" data-nether-bundles-drawer-overlay aria-hidden="true"></div>
+    <div
+      class="nether-bundles-drawer__panel{% if section.settings.nether_enable_glass %} glass-card-light{% endif %}"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="NetherBundlesDrawerTitle-{{ section.id }}"
+      data-nether-bundles-drawer-panel
+      tabindex="-1"
+    >
+      <div class="nether-bundles-drawer__header">
+        <h2 id="NetherBundlesDrawerTitle-{{ section.id }}" class="nether-bundles-drawer__title type-heading-sm">
+          {{ 'sections.nether_bundles.drawer.title' | t }}
+        </h2>
+        <button
+          type="button"
+          class="nether-bundles-drawer__close"
+          data-nether-bundles-drawer-close
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          {% render 'icon', icon: 'close', size: 'sm', decorative: true %}
+        </button>
+      </div>
+      <div class="nether-bundles-drawer__body" data-nether-bundles-drawer-body></div>
+    </div>
+  </nether-bundles-drawer>
+{%- endif -%}

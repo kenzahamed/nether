@@ -1,0 +1,919 @@
+{%- liquid
+  assign section_uid = section.id
+  assign desktop_scroll_vh = section.settings.scroll_duration | default: 400
+  assign mobile_scroll_vh = section.settings.scroll_duration | default: 400
+  assign background_color = section.settings.bg_color | default: '#000000'
+  assign frame_prefix = section.settings.frame_prefix | default: 'ezgif-frame-'
+  assign total_frames = section.settings.total_frames | default: 300
+  assign frame_extension = section.settings.frame_extension | default: 'webp'
+  assign zero_padding = section.settings.zero_padding | default: 3
+  assign has_frames = false
+
+  if total_frames > 0 and frame_prefix != blank and frame_extension != blank
+    assign has_frames = true
+  endif
+
+  assign sample_frame_name = frame_prefix | append: '001.' | append: frame_extension
+-%}
+
+<style>
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__track {
+    position: relative;
+    width: 100%;
+    height: {{ mobile_scroll_vh }}vh;
+    --scrub-height-mobile: {{ mobile_scroll_vh }}vh;
+    --scrub-height-desktop: {{ desktop_scroll_vh }}vh;
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__track {
+      height: {{ desktop_scroll_vh }}vh;
+    }
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__layout {
+    width: 100%;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__viewport {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    max-width: 100%;
+    overflow: hidden;
+    background-color: {{ background_color }};
+    isolation: isolate;
+    will-change: transform;
+  }
+
+  #shopify-section-{{ section_uid }} #scrub-canvas-{{ section_uid }} {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__overlay-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__overlay-layer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.45) 0%,
+      rgba(0, 0, 0, 0.08) 40%,
+      rgba(0, 0, 0, 0.08) 60%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+    pointer-events: none;
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    opacity: 0;
+    transform: translateY(40px);
+    will-change: opacity, transform;
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__overlay--left {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__overlay--center {
+    align-items: center;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__overlay--right {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__overlay-inner {
+    position: relative;
+    z-index: 1;
+    max-width: min(42rem, 92vw);
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__headline {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__subheading {
+    margin: 0;
+    font-size: clamp(1rem, 2.2vw, 1.375rem);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    color: rgba(255, 255, 255, 0.88);
+    text-shadow: 0 1px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.9375rem;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__overlay {
+      opacity: 1;
+      transform: none;
+    }
+
+    #shopify-section-{{ section_uid }} .scrub-{{ section_uid }}__overlay:not(:first-child) {
+      display: none;
+    }
+  }
+</style>
+
+<div
+  id="scrub-track-{{ section_uid }}"
+  class="scrub-{{ section_uid }}__track"
+  data-scrub-track="{{ section_uid }}"
+  data-nether-motion
+  data-nether-motion-plugins="scrollTrigger"
+>
+  <div
+    id="scrub-layout-{{ section_uid }}"
+    class="scrub-{{ section_uid }}__layout"
+    data-scrub-layout="{{ section_uid }}"
+  >
+    <div
+      id="scrub-viewport-{{ section_uid }}"
+      class="scrub-{{ section_uid }}__viewport"
+      data-scrub-viewport="{{ section_uid }}"
+    >
+      {%- if has_frames -%}
+        <canvas
+          id="scrub-canvas-{{ section_uid }}"
+          class="scrub-{{ section_uid }}__canvas"
+          data-scrub-canvas="{{ section_uid }}"
+          width="1080"
+          height="1080"
+          aria-hidden="true"
+        ></canvas>
+      {%- else -%}
+        <div
+          id="scrub-placeholder-{{ section_uid }}"
+          class="scrub-{{ section_uid }}__placeholder"
+          data-scrub-placeholder="{{ section_uid }}"
+        >
+          Set Total Frames and ensure frame images exist in the theme assets folder.
+        </div>
+      {%- endif -%}
+
+      <div class="scrub-{{ section_uid }}__overlay-layer">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'headline' -%}
+            {%- liquid
+              assign overlay_alignment = block.settings.alignment | default: 'center'
+              assign overlay_trigger = block.settings.trigger_scroll_percent | default: 0
+            -%}
+            <div
+              class="scrub-{{ section_uid }}__overlay scrub-{{ section_uid }}__overlay--{{ overlay_alignment }}"
+              data-scrub-overlay="{{ section_uid }}"
+              data-trigger="{{ overlay_trigger }}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="scrub-{{ section_uid }}__overlay-inner">
+                {%- if block.settings.headline != blank -%}
+                  <h2 class="scrub-{{ section_uid }}__headline">{{ block.settings.headline | escape }}</h2>
+                {%- endif -%}
+                {%- if block.settings.subheading != blank -%}
+                  <p class="scrub-{{ section_uid }}__subheading">{{ block.settings.subheading | escape }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const SECTION_ID = {{ section_uid | json }};
+    const SECTION_SELECTOR = '#shopify-section-' + SECTION_ID;
+    const LOG_PREFIX = '[CanvasScrollScrub ' + SECTION_ID + ']';
+    const DEBUG = false;
+    const FRAME_PREFIX = {{ frame_prefix | json }};
+    const TOTAL_FRAMES = {{ total_frames | json }};
+    const FRAME_EXTENSION = {{ frame_extension | json }};
+    const ZERO_PADDING = {{ zero_padding | json }};
+    const SAMPLE_ASSET_URL = {{ sample_frame_name | asset_url | json }};
+
+    function buildImageSources() {
+      const sources = [];
+      const total = Math.max(0, parseInt(TOTAL_FRAMES, 10) || 0);
+      const padding = Math.max(1, parseInt(ZERO_PADDING, 10) || 3);
+      const prefix = FRAME_PREFIX || 'ezgif-frame-';
+      const extension = (FRAME_EXTENSION || 'jpg').replace(/^\./, '');
+      const sampleUrl = SAMPLE_ASSET_URL || '';
+      const assetsBase = sampleUrl.substring(0, sampleUrl.lastIndexOf('/') + 1);
+      const queryIndex = sampleUrl.indexOf('?');
+      const cacheQuery = queryIndex >= 0 ? sampleUrl.substring(queryIndex) : '';
+
+      if (!assetsBase || !total) return sources;
+
+      for (let i = 1; i <= total; i += 1) {
+        const padded = String(i).padStart(padding, '0');
+        sources.push(assetsBase + prefix + padded + '.' + extension + cacheQuery);
+      }
+
+      return sources;
+    }
+
+    const imageSources = buildImageSources();
+
+    let scrollTriggerInstance = null;
+    let timelineInstance = null;
+    let timelineBuilt = false;
+    let frames = [];
+    let framesReady = false;
+    let canvasContext = null;
+    let canvasElement = null;
+    let pendingFrameIndex = -1;
+    let lastRenderedFrameIndex = -1;
+    let renderRafId = null;
+    let coverDrawCache = null;
+    const SUPPORTS_IMAGE_BITMAP = typeof createImageBitmap === 'function';
+
+    function log() {
+      if (!DEBUG) return;
+      const args = Array.prototype.slice.call(arguments);
+      console.log.apply(console, [LOG_PREFIX].concat(args));
+    }
+
+    function destroyInstances() {
+      log('destroyInstances()');
+      timelineBuilt = false;
+      framesReady = false;
+      releaseFrames();
+      frames = [];
+      canvasContext = null;
+      canvasElement = null;
+      pendingFrameIndex = -1;
+      lastRenderedFrameIndex = -1;
+      coverDrawCache = null;
+
+      if (renderRafId !== null) {
+        cancelAnimationFrame(renderRafId);
+        renderRafId = null;
+      }
+
+      if (timelineInstance) {
+        timelineInstance.kill();
+        timelineInstance = null;
+      }
+
+      if (scrollTriggerInstance) {
+        scrollTriggerInstance.kill();
+        scrollTriggerInstance = null;
+      }
+    }
+
+    function releaseFrames() {
+      for (let i = 0; i < frames.length; i += 1) {
+        const frame = frames[i];
+        if (typeof ImageBitmap !== 'undefined' && frame instanceof ImageBitmap) {
+          frame.close();
+        }
+      }
+    }
+
+    function getFrameDimensions(frame) {
+      if (!frame) return { width: 0, height: 0 };
+
+      if (typeof ImageBitmap !== 'undefined' && frame instanceof ImageBitmap) {
+        return { width: frame.width, height: frame.height };
+      }
+
+      return { width: frame.naturalWidth, height: frame.naturalHeight };
+    }
+
+    function isFrameDrawable(frame) {
+      if (!frame) return false;
+
+      if (typeof ImageBitmap !== 'undefined' && frame instanceof ImageBitmap) {
+        return frame.width > 0 && frame.height > 0;
+      }
+
+      return frame.complete && frame.naturalWidth > 0;
+    }
+
+    function getCoverDrawParams(canvas, frame) {
+      const cw = canvas.width;
+      const ch = canvas.height;
+      const dims = getFrameDimensions(frame);
+      const iw = dims.width;
+      const ih = dims.height;
+
+      if (
+        coverDrawCache &&
+        coverDrawCache.cw === cw &&
+        coverDrawCache.ch === ch &&
+        coverDrawCache.iw === iw &&
+        coverDrawCache.ih === ih
+      ) {
+        return coverDrawCache;
+      }
+
+      const scale = Math.max(cw / iw, ch / ih);
+      const drawWidth = iw * scale;
+      const drawHeight = ih * scale;
+
+      coverDrawCache = {
+        cw: cw,
+        ch: ch,
+        iw: iw,
+        ih: ih,
+        offsetX: (cw - drawWidth) * 0.5,
+        offsetY: (ch - drawHeight) * 0.5,
+        drawWidth: drawWidth,
+        drawHeight: drawHeight,
+      };
+
+      return coverDrawCache;
+    }
+
+    function drawCoverFrame(canvas, ctx, frame) {
+      if (!canvas || !ctx || !isFrameDrawable(frame)) return;
+
+      const params = getCoverDrawParams(canvas, frame);
+      ctx.drawImage(frame, params.offsetX, params.offsetY, params.drawWidth, params.drawHeight);
+    }
+
+    function getLoadedFrame(index) {
+      if (frames[index]) return frames[index];
+
+      for (let i = index; i >= 0; i -= 1) {
+        if (frames[i]) return frames[i];
+      }
+
+      for (let i = index + 1; i < frames.length; i += 1) {
+        if (frames[i]) return frames[i];
+      }
+
+      return null;
+    }
+
+    function clampFrameIndex(frameIndex) {
+      return Math.min(Math.max(Math.round(frameIndex), 0), frames.length - 1);
+    }
+
+    function drawFrameAtIndex(index) {
+      if (!canvasElement || !canvasContext || !frames.length) return false;
+
+      const frameImage = frames[index] || getLoadedFrame(index);
+      if (!frameImage) return false;
+
+      lastRenderedFrameIndex = index;
+      drawCoverFrame(canvasElement, canvasContext, frameImage);
+      return true;
+    }
+
+    function renderFrameIndex(canvas, frameIndex, force) {
+      if (!canvas || !canvasContext || !frames.length) return;
+
+      const clampedIndex = clampFrameIndex(frameIndex);
+
+      if (!force && clampedIndex === lastRenderedFrameIndex) return;
+
+      canvasElement = canvas;
+      if (force) lastRenderedFrameIndex = -1;
+      drawFrameAtIndex(clampedIndex);
+    }
+
+    function scheduleFrameRender(frameIndex) {
+      const clampedIndex = clampFrameIndex(frameIndex);
+
+      if (clampedIndex === lastRenderedFrameIndex) return;
+
+      pendingFrameIndex = clampedIndex;
+
+      if (renderRafId !== null) return;
+
+      renderRafId = requestAnimationFrame(function () {
+        renderRafId = null;
+
+        if (pendingFrameIndex === lastRenderedFrameIndex) return;
+
+        drawFrameAtIndex(pendingFrameIndex);
+      });
+    }
+
+    function initCanvasContext(canvas) {
+      if (!canvas) return null;
+
+      const ctx = canvas.getContext('2d', {
+        alpha: false,
+        desynchronized: true,
+        willReadFrequently: false,
+      });
+
+      if (!ctx) return null;
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      return ctx;
+    }
+
+    function loadFrameImage(source, index) {
+      return new Promise(function (resolve) {
+        const image = new Image();
+        image.decoding = 'async';
+
+        image.onload = function () {
+          if (SUPPORTS_IMAGE_BITMAP) {
+            createImageBitmap(image)
+              .then(function (bitmap) {
+                frames[index] = bitmap;
+                resolve(bitmap);
+              })
+              .catch(function () {
+                frames[index] = image;
+                resolve(image);
+              });
+            return;
+          }
+
+          frames[index] = image;
+          resolve(image);
+        };
+
+        image.onerror = function () {
+          log('Failed to load frame', index, source);
+          resolve(null);
+        };
+
+        image.src = source;
+      });
+    }
+
+    function preloadFrames() {
+      log('preloadFrames() — imageSources.length:', imageSources.length);
+
+      if (!imageSources.length) {
+        log('preloadFrames() aborted — no animation frames configured');
+        return Promise.reject(new Error('No frame images configured'));
+      }
+
+      framesReady = false;
+      frames = new Array(imageSources.length);
+
+      return Promise.all(
+        imageSources.map(function (source, index) {
+          return loadFrameImage(source, index);
+        })
+      ).then(function () {
+          const loadedCount = frames.filter(Boolean).length;
+          log('preloadFrames() complete — loaded', loadedCount, 'of', imageSources.length, 'frames');
+
+          if (!loadedCount) {
+            return Promise.reject(new Error('No frame images loaded'));
+          }
+
+          framesReady = true;
+          return loadedCount;
+        });
+    }
+
+    function buildTimeline(track, layout, canvas, overlays) {
+      if (timelineBuilt) {
+        log('buildTimeline() skipped — already initialized');
+        return true;
+      }
+
+      if (!framesReady || !frames.length) {
+        log('buildTimeline() waiting — frames not ready');
+        return false;
+      }
+
+      log('buildTimeline() starting — frames:', frames.length, 'overlays:', overlays.length);
+
+      try {
+        canvasElement = canvas;
+        canvasContext = initCanvasContext(canvas);
+        lastRenderedFrameIndex = -1;
+        renderFrameIndex(canvas, 0, true);
+
+        gsap.set(overlays, { opacity: 0, y: 40 });
+
+        const playback = { frame: 0 };
+        const lastFrameIndex = frames.length - 1;
+
+        timelineInstance = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            trigger: track,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: true,
+            pin: layout,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onRefresh: function () {
+              log('ScrollTrigger refreshed');
+            },
+          },
+        });
+
+        scrollTriggerInstance = timelineInstance.scrollTrigger;
+        log('ScrollTrigger created — start:', scrollTriggerInstance.start, 'end:', scrollTriggerInstance.end);
+
+        timelineInstance.to(
+          playback,
+          {
+            frame: lastFrameIndex,
+            duration: 1,
+            ease: 'none',
+            onUpdate: function () {
+              scheduleFrameRender(playback.frame);
+            },
+          },
+          0
+        );
+
+        const sortedOverlays = overlays
+          .slice()
+          .sort(function (a, b) {
+            return parseFloat(a.getAttribute('data-trigger') || '0') - parseFloat(b.getAttribute('data-trigger') || '0');
+          });
+
+        sortedOverlays.forEach(function (overlay, index) {
+          const triggerPercent = parseFloat(overlay.getAttribute('data-trigger') || '0');
+          const position = Math.min(Math.max(triggerPercent / 100, 0), 1);
+          const transitionDuration = 0.08;
+
+          log('Overlay', index, 'trigger at', triggerPercent + '%', 'timeline position', position);
+
+          if (index > 0) {
+            const previousOverlay = sortedOverlays[index - 1];
+            timelineInstance.to(
+              previousOverlay,
+              {
+                opacity: 0,
+                y: -30,
+                duration: transitionDuration,
+                ease: 'power2.inOut',
+              },
+              position
+            );
+          }
+
+          timelineInstance.fromTo(
+            overlay,
+            { opacity: 0, y: 40 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: transitionDuration,
+              ease: 'power2.out',
+            },
+            position
+          );
+        });
+
+        timelineBuilt = true;
+        ScrollTrigger.refresh();
+        log('buildTimeline() complete');
+        return true;
+      } catch (error) {
+        log('buildTimeline() error:', error);
+        return false;
+      }
+    }
+
+    function tryInitTimeline(source) {
+      log('tryInitTimeline() from:', source);
+
+      const root = document.querySelector(SECTION_SELECTOR);
+      if (!root) {
+        log('Root element not found:', SECTION_SELECTOR);
+        return;
+      }
+
+      const track = root.querySelector('[data-scrub-track="' + SECTION_ID + '"]');
+      const layout = root.querySelector('[data-scrub-layout="' + SECTION_ID + '"]');
+      const canvas = root.querySelector('[data-scrub-canvas="' + SECTION_ID + '"]');
+
+      if (!track || !layout) {
+        log('Missing track or layout element');
+        return;
+      }
+
+      if (!canvas) {
+        log('No canvas element — placeholder mode');
+        return;
+      }
+
+      if (!imageSources.length) {
+        log('No imageSources configured — aborting init');
+        return;
+      }
+
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+        log('GSAP unavailable — typeof gsap:', typeof gsap, 'typeof ScrollTrigger:', typeof ScrollTrigger);
+        return;
+      }
+
+      if (timelineBuilt) return;
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const overlays = gsap.utils.toArray(root.querySelectorAll('[data-scrub-overlay="' + SECTION_ID + '"]'));
+
+      if (!framesReady) {
+        log('tryInitTimeline() waiting — preload not complete');
+        return;
+      }
+
+      if (prefersReducedMotion) {
+        log('prefers-reduced-motion active — showing static frame and overlays');
+        canvasElement = canvas;
+        canvasContext = initCanvasContext(canvas);
+        if (frames.length) {
+          lastRenderedFrameIndex = -1;
+          renderFrameIndex(canvas, 0, true);
+        }
+        if (overlays.length) {
+          gsap.set(overlays, { opacity: 1, y: 0 });
+        }
+        return;
+      }
+
+      buildTimeline(track, layout, canvas, overlays);
+    }
+
+    function initCanvasScrollScrub() {
+      log('initCanvasScrollScrub()');
+      destroyInstances();
+
+      const root = document.querySelector(SECTION_SELECTOR);
+      const canvas = root ? root.querySelector('[data-scrub-canvas="' + SECTION_ID + '"]') : null;
+
+      if (!canvas) {
+        log('initCanvasScrollScrub() — no canvas to initialize');
+        return;
+      }
+
+      if (!imageSources.length) {
+        log('initCanvasScrollScrub() — imageSources is empty, skipping preload');
+        return;
+      }
+
+      preloadFrames()
+        .then(function () {
+          tryInitTimeline('frames-loaded');
+        })
+        .catch(function (error) {
+          log('Frame preload failed:', error);
+        });
+
+      window.addEventListener(
+        'load',
+        function () {
+          log('Event: window load');
+          if (framesReady) {
+            tryInitTimeline('window.load');
+          }
+        },
+        { once: true }
+      );
+
+      setTimeout(function () {
+        log('Event: 1s timeout fallback');
+        if (framesReady) {
+          tryInitTimeline('1s-timeout');
+        }
+      }, 1000);
+    }
+
+    function boot() {
+      log('boot() — document.readyState:', document.readyState);
+      log('boot() — imageSources.length:', imageSources.length);
+
+      function start() {
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+          log('boot() — GSAP unavailable after NetherMotion.load');
+          return;
+        }
+
+        try {
+          initCanvasScrollScrub();
+        } catch (error) {
+          log('boot() uncaught error:', error);
+        }
+      }
+
+      if (window.NetherMotion && typeof window.NetherMotion.load === 'function') {
+        window.NetherMotion.load(['scrollTrigger']).then(start);
+        return;
+      }
+
+      start();
+    }
+
+    if (document.readyState === 'loading') {
+      log('Waiting for DOMContentLoaded');
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
+
+    document.addEventListener('shopify:section:load', function (event) {
+      if (event.detail.sectionId === SECTION_ID) {
+        log('shopify:section:load');
+        boot();
+      }
+    });
+
+    document.addEventListener('shopify:section:unload', function (event) {
+      if (event.detail.sectionId === SECTION_ID) {
+        log('shopify:section:unload');
+        destroyInstances();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Canvas Scroll Scrub",
+  "tag": "section",
+  "class": "section-canvas-scroll-scrub",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Frames load automatically from theme assets using the prefix, total count, extension, and zero padding below (e.g. ezgif-frame-001.webp)."
+    },
+    {
+      "type": "text",
+      "id": "frame_prefix",
+      "label": "Frame filename prefix",
+      "default": "ezgif-frame-"
+    },
+    {
+      "type": "number",
+      "id": "total_frames",
+      "label": "Total frames",
+      "default": 300
+    },
+    {
+      "type": "text",
+      "id": "frame_extension",
+      "label": "File extension",
+      "default": "webp"
+    },
+    {
+      "type": "range",
+      "id": "zero_padding",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Zero padding",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "scroll_duration",
+      "min": 100,
+      "max": 800,
+      "step": 25,
+      "unit": "vh",
+      "label": "Scroll duration",
+      "default": 400
+    },
+    {
+      "type": "number",
+      "id": "scrub_smoothing",
+      "label": "Scrub smoothing",
+      "default": 2.5
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "headline",
+      "name": "Headline Overlay",
+      "settings": [
+        {
+          "type": "text",
+          "id": "headline",
+          "label": "Headline text",
+          "default": "Headline"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading text",
+          "default": "Subheading"
+        },
+        {
+          "type": "range",
+          "id": "trigger_scroll_percent",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Trigger scroll percentage",
+          "default": 50
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "default": "center",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Canvas Scroll Scrub",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "headline",
+          "settings": {
+            "headline": "Designed to move",
+            "subheading": "Scroll to explore every frame.",
+            "trigger_scroll_percent": 20,
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "headline",
+          "settings": {
+            "headline": "Built for detail",
+            "subheading": "Every angle, perfectly captured.",
+            "trigger_scroll_percent": 55,
+            "alignment": "left"
+          }
+        },
+        {
+          "type": "headline",
+          "settings": {
+            "headline": "Ready when you are",
+            "subheading": "Experience it in motion.",
+            "trigger_scroll_percent": 85,
+            "alignment": "center"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,35 @@
+{% comment %}
+  Renders Nether Premium Footer social links.
+
+  Accepts:
+  - block: {Object} Theme Editor block (optional)
+  - heading: {String} Optional heading override
+  - heading_tag: {String} Heading element tag (default: h2)
+  - class: {String} Additional classes on wrapper
+  - show_heading: {Boolean} Show heading (default: true when block provided)
+
+  Usage:
+  {% render 'nether-footer-social', block: block %}
+  {% render 'nether-footer-social', class: 'footer__list-social' %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign block_heading = heading
+  if block_heading == blank and block != blank
+    assign block_heading = block.settings.heading
+  endif
+  assign should_show_heading = show_heading | default: true, allow_false: true
+-%}
+
+<div class="nether-footer__social{% if class != blank %} {{ class }}{% endif %}">
+  {%- if should_show_heading and block_heading != blank -%}
+    <{{ heading_element }} class="footer-block__heading inline-richtext nether-footer__heading" id="FooterSocialHeading-{{ block.id | default: section.id }}">
+      {{- block_heading -}}
+    </{{ heading_element }}>
+  {%- endif -%}
+
+  <div role="navigation" aria-label="{{ 'sections.nether_footer.social.aria_label' | t }}">
+    {%- render 'social-icons', class: 'footer__list-social nether-footer__social-list' -%}
+  </div>
+</div>

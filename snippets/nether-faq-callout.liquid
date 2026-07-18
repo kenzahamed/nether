@@ -1,0 +1,54 @@
+{% comment %}
+  Renders Nether Premium FAQ callout, tip, or warning panels.
+
+  Accepts:
+  - block: {Object} callout_card, tip, or warning block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-faq-callout', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-faq-animate'
+  assign callout_type = block.type
+  assign callout_style = block.settings.callout_style | default: 'default'
+
+  case callout_type
+    when 'tip'
+      assign callout_classes = 'nether-faq__callout nether-faq__callout--tip'
+      assign default_icon = 'check_mark'
+    when 'warning'
+      assign callout_classes = 'nether-faq__callout nether-faq__callout--warning'
+      assign default_icon = 'fire'
+    else
+      assign callout_classes = 'nether-faq__callout nether-faq__callout--card'
+      assign default_icon = 'chat_bubble'
+  endcase
+
+  assign callout_classes = callout_classes | append: ' nether-faq__callout--' | append: callout_style
+  assign icon_name = block.settings.icon | default: default_icon
+-%}
+
+{%- if block.settings.heading != blank or block.settings.text != blank -%}
+  <aside
+    class="{{ callout_classes }}"
+    {{ motion_attribute }}
+    data-nether-faq-callout
+    {{ block.shopify_attributes }}
+  >
+    {%- if icon_name != 'none' -%}
+      <span class="nether-faq__callout-icon svg-wrapper" aria-hidden="true">
+        {%- render 'icon-accordion', icon: icon_name -%}
+      </span>
+    {%- endif -%}
+    <div class="nether-faq__callout-body">
+      {%- if block.settings.heading != blank -%}
+        <p class="nether-faq__callout-heading">{{ block.settings.heading | escape }}</p>
+      {%- endif -%}
+      {%- if block.settings.text != blank -%}
+        <div class="nether-faq__callout-text rte">{{ block.settings.text }}</div>
+      {%- endif -%}
+    </div>
+  </aside>
+{%- endif -%}

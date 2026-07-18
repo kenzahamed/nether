@@ -1,0 +1,535 @@
+/* =============================================================================
+ * Nether Premium Content Framework
+ * Extends component-hero.css — load hero styles first. Content-only modifiers.
+ * Reuses Glass, Gradient, Shadow, Radius, Typography design token systems.
+ * ============================================================================= */
+
+nether-content {
+  display: block;
+  position: relative;
+}
+
+.nether-content {
+  --nether-content-min-height: auto;
+  --nether-content-gap: 2.4rem;
+  --nether-content-row-gap: 2rem;
+  --nether-content-columns-desktop: 3;
+  --nether-content-columns-tablet: 2;
+  --nether-content-columns-mobile: 1;
+  --nether-hero-min-height: var(--nether-content-min-height);
+  --nether-hero-content-padding: 2.4rem;
+  --nether-hero-gap: var(--nether-content-gap);
+}
+
+/* ── Content typography (extends hero block styles) ─────────────────────────── */
+
+.nether-content__eyebrow,
+.nether-content__heading,
+.nether-content__subheading,
+.nether-content__text {
+  margin: 0;
+}
+
+.nether-content__text {
+  max-width: 56rem;
+}
+
+.nether-content__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+.nether-hero__blocks--align-center .nether-content__buttons,
+.nether-content__grid-header--align-center .nether-content__buttons {
+  justify-content: center;
+}
+
+.nether-hero__blocks--align-right .nether-content__buttons,
+.nether-content__grid-header--align-right .nether-content__buttons {
+  justify-content: flex-end;
+}
+
+/* ── Quote ──────────────────────────────────────────────────────────────────── */
+
+.nether-content__quote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.nether-content__quote-text {
+  margin: 0;
+  font-style: italic;
+}
+
+.nether-content__quote-author {
+  margin: 1.2rem 0 0;
+}
+
+.nether-content__quote-cite {
+  font-style: normal;
+  font-weight: 600;
+}
+
+.nether-content__quote-title {
+  display: block;
+  margin-top: 0.2rem;
+  opacity: 0.75;
+}
+
+/* ── Icon list ──────────────────────────────────────────────────────────────── */
+
+.nether-content__icon-list {
+  display: grid;
+  gap: 1.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+.nether-content__icon-list--cols-2 {
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.nether-content__icon-list--cols-3 {
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+.nether-content__icon-list--cols-4 {
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+}
+
+.nether-content__icon-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.nether-content__icon-list-icon {
+  flex-shrink: 0;
+}
+
+.nether-content__icon-list-label {
+  margin: 0;
+}
+
+.nether-content__icon-list-text {
+  margin: 0.4rem 0 0;
+}
+
+/* ── Inline media blocks ────────────────────────────────────────────────────── */
+
+.nether-content__image-block,
+.nether-content__video-block {
+  width: 100%;
+}
+
+.nether-content__image-block img,
+.nether-content__video-block video,
+.nether-content__video-block iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-level-md, 1.2rem);
+}
+
+.nether-content__image-block--square img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.nether-content__image-block--portrait img {
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.nether-content__image-caption {
+  margin-top: 0.8rem;
+}
+
+.nether-content__deferred-video {
+  border-radius: var(--radius-level-md, 1.2rem);
+  overflow: hidden;
+}
+
+/* ── Block divider ──────────────────────────────────────────────────────────── */
+
+.nether-content__block-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-content__block-divider--gradient {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--color-foreground), 0.25),
+    transparent
+  );
+}
+
+.nether-content__block-divider--space {
+  height: 2.4rem;
+  background: transparent;
+}
+
+/* ── Floating panel ─────────────────────────────────────────────────────────── */
+
+.nether-content__panel--floating {
+  box-shadow: var(--shadow-lg, 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.14));
+}
+
+.nether-content--floating-card .nether-hero__content-shell {
+  align-items: flex-end;
+  padding-bottom: 3.2rem;
+}
+
+.nether-content--floating-card .nether-hero__content {
+  max-width: min(48rem, 92%);
+}
+
+/* ── Section dividers ───────────────────────────────────────────────────────── */
+
+.nether-content__divider {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  pointer-events: none;
+}
+
+.nether-content__divider--top {
+  margin-bottom: -1px;
+}
+
+.nether-content__divider--bottom {
+  margin-top: -1px;
+}
+
+.nether-content__divider--line {
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-content__divider--gradient {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--color-foreground), 0.2),
+    transparent
+  );
+}
+
+.nether-content__divider--wave {
+  height: 3.2rem;
+  background: rgb(var(--color-background));
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+/* ── Layout: Brand story ────────────────────────────────────────────────────── */
+
+.nether-content--layout-brand_story .nether-hero__inner {
+  grid-template-columns: 1.1fr 0.9fr;
+}
+
+.nether-content--layout-brand_story .nether-content__heading {
+  max-width: 16ch;
+}
+
+.nether-content--layout-brand_story .nether-content__text {
+  max-width: 42rem;
+}
+
+/* ── Layout: Magazine ─────────────────────────────────────────────────────────── */
+
+.nether-content--layout-magazine .nether-hero__content {
+  max-width: min(76rem, 94%);
+}
+
+.nether-content--layout-magazine .nether-content__heading {
+  max-width: 14ch;
+  font-size: clamp(3.2rem, 5vw, 6.4rem);
+  line-height: 1.04;
+}
+
+.nether-content--layout-magazine .nether-content__text {
+  columns: 2;
+  column-gap: 3.2rem;
+}
+
+/* ── Layout: Minimal (stacked, no hero height) ────────────────────────────────── */
+
+.nether-content--layout-minimal {
+  --nether-content-min-height: auto;
+  --nether-hero-content-padding: 1.6rem;
+}
+
+.nether-content--layout-minimal .nether-hero__media {
+  min-height: 32rem;
+}
+
+.nether-content--stacked {
+  --nether-content-min-height: auto;
+}
+
+.nether-content--stacked .nether-hero__inner {
+  display: block;
+}
+
+.nether-content--stacked .nether-hero__media {
+  min-height: 28rem;
+}
+
+/* ── Row-based layouts ───────────────────────────────────────────────────────── */
+
+.nether-content__grid-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nether-content-gap);
+}
+
+.nether-content__grid-header {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--nether-content-gap) * 0.75);
+}
+
+.nether-content__grid-header--align-center {
+  align-items: center;
+  text-align: center;
+}
+
+.nether-content__grid-header--align-right {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.nether-content__rows {
+  display: grid;
+  gap: var(--nether-content-row-gap);
+}
+
+.nether-content__rows--multi_column,
+.nether-content__rows--feature_grid {
+  grid-template-columns: repeat(var(--nether-content-columns-mobile), minmax(0, 1fr));
+}
+
+.nether-content__rows--alternating_story,
+.nether-content__rows--timeline {
+  grid-template-columns: 1fr;
+}
+
+.nether-content__row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.nether-content__row-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  height: 100%;
+  padding: 2rem;
+  border-radius: var(--radius-level-md, 1.2rem);
+  background: rgba(var(--color-background), 0.92);
+  box-shadow: var(--shadow-sm, 0 0.2rem 0.8rem rgba(var(--color-shadow), 0.08));
+}
+
+.nether-content__row-card--glass {
+  padding: 2.4rem;
+  border-radius: var(--radius-level-lg, 1.6rem);
+}
+
+.nether-content--glass-enabled .nether-content__row-card {
+  background: transparent;
+}
+
+.nether-content__row-media img,
+.nether-content__row-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-level-sm, 0.8rem);
+  object-fit: cover;
+}
+
+.nether-content__row-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: var(--radius-level-md, 1.2rem);
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+.nether-content__row-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Alternating story ──────────────────────────────────────────────────────── */
+
+.nether-content__rows--alternating_story .nether-content__row-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-content__rows--alternating_story .nether-content__row-card {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+
+  .nether-content__row--reversed .nether-content__row-media {
+    order: 2;
+  }
+}
+
+/* ── Timeline ───────────────────────────────────────────────────────────────── */
+
+.nether-content__rows--timeline {
+  position: relative;
+  padding-left: 2.4rem;
+}
+
+.nether-content__rows--timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0.8rem;
+  width: 2px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-content__row--timeline {
+  position: relative;
+  padding-left: 1.6rem;
+}
+
+.nether-content__timeline-marker {
+  position: absolute;
+  left: -2.4rem;
+  top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nether-content__timeline-dot {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background: rgb(var(--color-foreground));
+  box-shadow: 0 0 0 4px rgba(var(--color-background), 1);
+}
+
+.nether-content__timeline-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+/* ── Feature grid emphasis ──────────────────────────────────────────────────── */
+
+.nether-content__rows--feature_grid .nether-content__row-card {
+  text-align: center;
+  align-items: center;
+}
+
+.nether-content__rows--feature_grid .nether-content__row-copy {
+  align-items: center;
+}
+
+/* ── Card slot ──────────────────────────────────────────────────────────────── */
+
+.nether-content__card-slot {
+  width: 100%;
+}
+
+/* ── Responsive columns ───────────────────────────────────────────────────────── */
+
+@media screen and (min-width: 750px) {
+  .nether-content__rows--multi_column,
+  .nether-content__rows--feature_grid {
+    grid-template-columns: repeat(var(--nether-content-columns-tablet), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-content__rows--multi_column,
+  .nether-content__rows--feature_grid {
+    grid-template-columns: repeat(var(--nether-content-columns-desktop), minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-content--layout-magazine .nether-content__text {
+    columns: 1;
+  }
+
+  .nether-content__rows--timeline {
+    padding-left: 1.6rem;
+  }
+
+  .nether-content__timeline-marker {
+    left: -1.6rem;
+  }
+
+  .nether-content__timeline-label {
+    writing-mode: horizontal-tb;
+    transform: none;
+  }
+}
+
+/* ── Motion hooks (Phase 5.3.3 — Content Motion) ─────────────────────────────── */
+
+nether-content[data-nether-motion-pending='true'] [data-nether-content-animate],
+nether-content[data-nether-motion-pending='true'] [data-nether-hero-animate],
+nether-content[data-nether-motion-pending='true'] [data-nether-hero-overlay],
+nether-content[data-nether-motion-pending='true'] .nether-hero__media-inner {
+  opacity: 0;
+}
+
+nether-content[data-nether-motion-ready='true'] [data-nether-content-animate],
+nether-content[data-nether-motion-ready='true'] [data-nether-hero-animate],
+nether-content[data-nether-motion-ready='true'] [data-nether-hero-media],
+nether-content[data-nether-motion-ready='true'] [data-nether-hero-overlay] {
+  will-change: transform, opacity;
+}
+
+nether-content[data-nether-motion-ready='true'] .nether-content__buttons .button,
+nether-content[data-nether-motion-ready='true'] .nether-content__card-slot,
+nether-content[data-nether-motion-ready='true'] .nether-content__row-card,
+nether-content[data-nether-motion-ready='true'] .nether-content__icon-list-item {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  nether-content[data-nether-motion-pending='true'] [data-nether-content-animate],
+  nether-content[data-nether-motion-pending='true'] [data-nether-hero-animate],
+  nether-content[data-nether-motion-pending='true'] [data-nether-hero-overlay],
+  nether-content[data-nether-motion-pending='true'] .nether-hero__media-inner {
+    opacity: 1;
+  }
+
+  nether-content[data-nether-motion-ready='true'] [data-nether-content-animate],
+  nether-content[data-nether-motion-ready='true'] [data-nether-hero-animate],
+  nether-content[data-nether-motion-ready='true'] [data-nether-hero-media],
+  nether-content[data-nether-motion-ready='true'] [data-nether-hero-overlay],
+  nether-content[data-nether-motion-ready='true'] .nether-content__buttons .button,
+  nether-content[data-nether-motion-ready='true'] .nether-content__card-slot,
+  nether-content[data-nether-motion-ready='true'] .nether-content__row-card,
+  nether-content[data-nether-motion-ready='true'] .nether-content__icon-list-item {
+    will-change: auto;
+  }
+}

@@ -1,0 +1,159 @@
+{% comment %}
+  Nether Mega Menu — Panel content for a single top-level menu item.
+  Extends Dawn mega-menu panel structure with multi-column layout and blocks.
+
+  Accepts:
+  - link: {Object} Top-level menu link
+  - link_index: {Number} Menu item index
+  - section: {Object} Header section
+{% endcomment %}
+
+{%- liquid
+  assign layout_type = section.settings.nether_mega_layout_type | default: 'auto'
+  assign column_count = section.settings.nether_mega_column_count | default: 4
+  assign has_blocks = false
+  assign block_count = 0
+  assign menu_item_key = link.handle | downcase
+  assign menu_item_title = link.title | downcase
+
+  for block in section.blocks
+    unless block.type == '@app'
+      assign block_menu = block.settings.menu_item | downcase | strip
+      if block_menu == menu_item_key or block_menu == menu_item_title
+        assign has_blocks = true
+        assign block_count = block_count | plus: 1
+      endif
+    endunless
+  endfor
+
+  assign nav_column_count = link.links.size
+  if nav_column_count == 0
+    assign nav_column_count = 1
+  endif
+
+  assign total_columns = nav_column_count | plus: block_count
+  if layout_type == 'auto'
+  if total_columns > column_count
+      assign effective_columns = column_count
+    else
+      assign effective_columns = total_columns
+    endif
+  else
+    assign effective_columns = layout_type | plus: 0
+  endif
+
+  if effective_columns < 2
+    assign effective_columns = 2
+  endif
+  if effective_columns > 5
+    assign effective_columns = 5
+  endif
+
+  assign use_condensed = false
+  if link.levels == 1 and has_blocks == false
+    assign use_condensed = true
+  endif
+-%}
+
+<div
+  class="nether-mega-menu__panel-inner page-width"
+  data-nether-mega-columns="{{ effective_columns }}"
+  data-nether-mega-menu-item="{{ link.handle }}"
+>
+  <div
+    class="nether-mega-menu__grid{% if use_condensed %} nether-mega-menu__grid--condensed{% endif %}"
+    style="--nether-mega-columns: {{ effective_columns }};"
+    role="group"
+    aria-label="{{ link.title | escape }}"
+  >
+    {%- comment -%} Default navigation column from menu links {%- endcomment -%}
+    {%- unless has_blocks -%}
+      <ul
+        class="mega-menu__list nether-mega-menu__list{% if use_condensed %} mega-menu__list--condensed{% endif %}"
+        role="list"
+        data-nether-mega-reveal
+      >
+        {%- for childlink in link.links -%}
+          <li class="nether-mega-menu__list-cell" data-nether-mega-column="nav-{{ forloop.index }}">
+            <a
+              id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+              href="{{ childlink.url }}"
+              class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+              {% if childlink.current %}aria-current="page"{% endif %}
+            >
+              {{ childlink.title | escape }}
+            </a>
+            {%- if childlink.links != blank -%}
+              <ul class="list-unstyled nether-mega-menu__sublinks" role="list">
+                {%- for grandchildlink in childlink.links -%}
+                  <li>
+                    <a
+                      id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                      href="{{ grandchildlink.url }}"
+                      class="mega-menu__link link nether-mega-menu__sublink{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                      {% if grandchildlink.current %}aria-current="page"{% endif %}
+                    >
+                      {{ grandchildlink.title | escape }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      {%- comment -%} Rich layout: nav links block + configured blocks {%- endcomment -%}
+      <div class="nether-mega-menu__columns">
+        {%- assign rendered_nav = false -%}
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign block_menu = block.settings.menu_item | downcase | strip
+            assign block_matches = false
+            if block_menu == menu_item_key or block_menu == menu_item_title
+              assign block_matches = true
+            endif
+          -%}
+          {%- if block_matches -%}
+            {%- if block.type == 'mega_menu_nav_links' and rendered_nav == false -%}
+              {%- assign rendered_nav = true -%}
+              {%- render 'nether-mega-menu-block',
+                block: block,
+                link: link,
+                section: section,
+                column_index: forloop.index
+              -%}
+            {%- elsif block.type != 'mega_menu_nav_links' -%}
+              {%- render 'nether-mega-menu-block',
+                block: block,
+                link: link,
+                section: section,
+                column_index: forloop.index
+              -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if rendered_nav == false and link.links != blank -%}
+          <div class="nether-mega-menu__nav-column" data-nether-mega-reveal>
+            <ul class="nether-mega-menu__link-list list-unstyled" role="list">
+              {%- for childlink in link.links -%}
+                <li>
+                  <a
+                    href="{{ childlink.url }}"
+                    class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+                    {% if childlink.current %}aria-current="page"{% endif %}
+                  >
+                    {{ childlink.title | escape }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+  </div>
+
+  {%- render 'nether-mega-menu-footer', section: section -%}
+</div>

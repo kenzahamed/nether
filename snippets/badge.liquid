@@ -1,0 +1,281 @@
+{% comment %}
+  Renders a Nether Premium Badge.
+
+  Extends Dawn's .badge — existing price, card, and gift card badges remain unchanged.
+
+  Accepts:
+  - label: {String} Badge text (overrides type default)
+  - type: {String} sale | new | bestseller | featured | limited_edition | low_stock |
+           out_of_stock | discount_percentage | free_shipping | premium | organic |
+           handmade | exclusive | trending | coming_soon | pre_order | custom (default: custom)
+  - style: {String} solid | outline | soft | pill | rounded | minimal (default: solid)
+  - size: {String} small | medium | large (default: medium)
+  - status: {String} success | warning | error | info | neutral (optional utility variant)
+  - color_scheme: {String} Dawn color scheme id, e.g. 'scheme-4' (optional — type provides defaults)
+  - icon_leading: {String} Leading icon name — Nether Icon System convention, e.g. 'discount'
+  - icon_trailing: {String} Trailing icon name
+  - show_icon: {Boolean} Render type default icon when no icon_leading set (default: true for mapped types)
+  - uppercase: {Boolean} Uppercase label text (default: true)
+  - responsive: {Boolean} Scale size at breakpoints (default: false)
+  - discount_percent: {Number} Discount value for discount_percentage type
+  - role: {String} ARIA role — status | note (optional, auto for stock types)
+  - id: {String} HTML id attribute
+  - class: {String} Additional CSS classes
+  - attributes: {String} Additional HTML attributes
+  - shopify_attributes: {String} Block shopify_attributes for Theme Editor
+
+  Usage:
+  {% render 'badge', type: 'sale' %}
+
+  {% render 'badge', type: 'new', style: 'soft', size: 'small' %}
+
+  {% render 'badge',
+    type: 'discount_percentage',
+    discount_percent: 20,
+    style: 'pill',
+    color_scheme: settings.sale_badge_color_scheme
+  %}
+
+  {% render 'badge',
+    label: 'Handcrafted in Italy',
+    type: 'custom',
+    style: 'outline',
+    icon_leading: 'leaf'
+  %}
+
+  {% render 'badge', label: 'In stock', status: 'success', style: 'soft' %}
+{% endcomment %}
+
+{%- liquid
+  assign badge_type = type | default: 'custom'
+  assign badge_style = style | default: 'solid'
+  assign badge_size = size | default: 'medium'
+  assign is_uppercase = uppercase | default: true, allow_false: true
+  assign is_responsive = responsive | default: false, allow_false: true
+  assign show_type_icon = show_icon | default: true, allow_false: true
+
+  assign badge_classes = 'badge'
+
+  case badge_style
+    when 'solid'
+      assign badge_classes = badge_classes | append: ' badge--solid'
+    when 'outline'
+      assign badge_classes = badge_classes | append: ' badge--outline'
+    when 'soft'
+      assign badge_classes = badge_classes | append: ' badge--soft'
+    when 'pill'
+      assign badge_classes = badge_classes | append: ' badge--pill'
+    when 'rounded'
+      assign badge_classes = badge_classes | append: ' badge--rounded'
+    when 'minimal'
+      assign badge_classes = badge_classes | append: ' badge--minimal'
+  endcase
+
+  case badge_size
+    when 'small'
+      assign badge_classes = badge_classes | append: ' badge--small'
+    when 'large'
+      assign badge_classes = badge_classes | append: ' badge--large'
+    when 'medium'
+      assign badge_classes = badge_classes | append: ' badge--medium'
+  endcase
+
+  if is_responsive
+    assign badge_classes = badge_classes | append: ' badge--responsive'
+  endif
+
+  if is_uppercase
+    assign badge_classes = badge_classes | append: ' badge--uppercase'
+  else
+    assign badge_classes = badge_classes | append: ' badge--normal-case'
+  endif
+
+  assign badge_classes = badge_classes | append: ' badge--type-' | append: badge_type
+
+  if status != blank
+    assign badge_classes = badge_classes | append: ' badge--status-' | append: status
+  endif
+
+  assign resolved_color_scheme = color_scheme
+  assign resolved_icon_leading = icon_leading
+  assign resolved_label = label
+  assign badge_role = role
+
+  case badge_type
+    when 'sale'
+      if resolved_label == blank
+        assign resolved_label = 'products.product.on_sale' | t
+      endif
+      if resolved_color_scheme == blank
+        assign resolved_color_scheme = settings.sale_badge_color_scheme
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'discount'
+      endif
+    when 'new'
+      if resolved_label == blank
+        assign resolved_label = 'New'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'star'
+      endif
+    when 'bestseller'
+      if resolved_label == blank
+        assign resolved_label = 'Bestseller'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'star'
+      endif
+    when 'featured'
+      if resolved_label == blank
+        assign resolved_label = 'Featured'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'star'
+      endif
+    when 'limited_edition'
+      if resolved_label == blank
+        assign resolved_label = 'Limited Edition'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'stopwatch'
+      endif
+    when 'low_stock'
+      if resolved_label == blank
+        assign resolved_label = 'Low Stock'
+      endif
+      if status == blank
+        assign badge_classes = badge_classes | append: ' badge--status-warning'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'inventory_status'
+      endif
+      if badge_role == blank
+        assign badge_role = 'status'
+      endif
+    when 'out_of_stock'
+      if resolved_label == blank
+        assign resolved_label = 'products.product.sold_out' | t
+      endif
+      if resolved_color_scheme == blank
+        assign resolved_color_scheme = settings.sold_out_badge_color_scheme
+      endif
+      if status == blank
+        assign badge_classes = badge_classes | append: ' badge--status-neutral'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'unavailable'
+      endif
+      if badge_role == blank
+        assign badge_role = 'status'
+      endif
+    when 'discount_percentage'
+      if resolved_label == blank and discount_percent != blank
+        assign resolved_label = '-' | append: discount_percent | append: '%'
+      elsif resolved_label == blank
+        assign resolved_label = 'Sale'
+      endif
+      if resolved_color_scheme == blank
+        assign resolved_color_scheme = settings.sale_badge_color_scheme
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'discount'
+      endif
+    when 'free_shipping'
+      if resolved_label == blank
+        assign resolved_label = 'Free Shipping'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'truck'
+      endif
+    when 'premium'
+      if resolved_label == blank
+        assign resolved_label = 'Premium'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'lock'
+      endif
+    when 'organic'
+      if resolved_label == blank
+        assign resolved_label = 'Organic'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'leaf'
+      endif
+    when 'handmade'
+      if resolved_label == blank
+        assign resolved_label = 'Handmade'
+      endif
+    when 'exclusive'
+      if resolved_label == blank
+        assign resolved_label = 'Exclusive'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'padlock'
+      endif
+    when 'trending'
+      if resolved_label == blank
+        assign resolved_label = 'Trending'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'fire'
+      endif
+    when 'coming_soon'
+      if resolved_label == blank
+        assign resolved_label = 'Coming Soon'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'stopwatch'
+      endif
+    when 'pre_order'
+      if resolved_label == blank
+        assign resolved_label = 'Pre-Order'
+      endif
+      if resolved_icon_leading == blank and show_type_icon
+        assign resolved_icon_leading = 'box'
+      endif
+    when 'custom'
+      assign show_type_icon = false
+  endcase
+
+  if resolved_color_scheme != blank
+    assign badge_classes = badge_classes | append: ' color-' | append: resolved_color_scheme
+  endif
+
+  if class != blank
+    assign badge_classes = badge_classes | append: ' ' | append: class
+  endif
+
+  assign icon_size = 'sm'
+  if badge_size == 'large'
+    assign icon_size = 'md'
+  endif
+-%}
+
+{%- if resolved_label != blank or resolved_icon_leading != blank or icon_trailing != blank -%}
+  <span
+    {% if id != blank %}id="{{ id }}"{% endif %}
+    class="{{ badge_classes }}"
+    {% if badge_role != blank %}role="{{ badge_role }}"{% endif %}
+    {{ shopify_attributes }}
+    {{ attributes }}
+  >
+    <span class="badge__inner">
+      {%- if resolved_icon_leading != blank and resolved_icon_leading != 'none' -%}
+        <span class="badge__icon badge__icon--leading" aria-hidden="true">
+          {% render 'icon', icon: resolved_icon_leading, size: icon_size, wrapper: true, use_svg_wrapper: true %}
+        </span>
+      {%- endif -%}
+
+      {%- if resolved_label != blank -%}
+        <span class="badge__label">{{ resolved_label | escape }}</span>
+      {%- endif -%}
+
+      {%- if icon_trailing != blank and icon_trailing != 'none' -%}
+        <span class="badge__icon badge__icon--trailing" aria-hidden="true">
+          {% render 'icon', icon: icon_trailing, size: icon_size, wrapper: true, use_svg_wrapper: true %}
+        </span>
+      {%- endif -%}
+    </span>
+  </span>
+{%- endif -%}

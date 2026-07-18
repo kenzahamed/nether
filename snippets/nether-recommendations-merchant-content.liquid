@@ -1,0 +1,25 @@
+{% comment %}
+  Nether Premium Recommendations — merchant content module.
+
+  Accepts:
+  - block: {Object} Block object (required)
+{% endcomment %}
+
+<div
+  class="nether-recommendations__module nether-recommendations__merchant-content"
+  data-nether-recommendations-module="merchant"
+  data-nether-recommendations-animate
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.heading != blank -%}
+    <h2 class="nether-recommendations__merchant-heading type-heading-sm">{{ block.settings.heading }}</h2>
+  {%- endif -%}
+
+  {%- if block.settings.page != blank and block.settings.page.content != blank -%}
+    <div class="nether-recommendations__merchant-text rte type-body">{{ block.settings.page.content }}</div>
+  {%- elsif block.settings.content != blank -%}
+    <div class="nether-recommendations__merchant-text rte type-body">{{ block.settings.content }}</div>
+  {%- elsif block.settings.text != blank -%}
+    <div class="nether-recommendations__merchant-text rte type-body">{{ block.settings.text }}</div>
+  {%- endif -%}
+</div>

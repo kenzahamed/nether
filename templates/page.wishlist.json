@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "main": {
+      "type": "nether-wishlist-page",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "nether_layout": "grid",
+        "nether_wishlist_show_count": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      },
+      "blocks": {
+        "recently": {
+          "type": "recently_wishlisted_placeholder",
+          "settings": {}
+        },
+        "sharing": {
+          "type": "sharing_placeholder",
+          "settings": {}
+        },
+        "sync": {
+          "type": "sync_placeholder",
+          "settings": {}
+        }
+      },
+      "block_order": ["recently", "sharing", "sync"]
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,60 @@
+{% comment %}
+  Nether Premium Compare — page/drawer block dispatcher.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- case block.type -%}
+  {%- when 'toolbar' -%}
+    {% render 'nether-compare-toolbar', section: section, context: 'page' %}
+
+  {%- when 'empty' -%}
+    {% render 'nether-compare-empty', section: section, context: 'page' %}
+
+  {%- when 'attributes' -%}
+    {% render 'nether-compare-attributes', block: block, section: section %}
+
+  {%- when 'recently_compared_placeholder' -%}
+    {% render 'nether-compare-extensions', block: block, section: section, type: 'recently' %}
+
+  {%- when 'sharing_placeholder' -%}
+    {% render 'nether-compare-extensions', block: block, section: section, type: 'sharing' %}
+
+  {%- when 'sync_placeholder' -%}
+    {% render 'nether-compare-extensions', block: block, section: section, type: 'sync' %}
+
+  {%- when 'account_placeholder' -%}
+    {% render 'nether-compare-extensions', block: block, section: section, type: 'account' %}
+
+  {%- when 'guest_placeholder' -%}
+    {% render 'nether-compare-extensions', block: block, section: section, type: 'guest' %}
+
+  {%- when 'apps_placeholder' -%}
+    {% render 'nether-compare-extensions', block: block, section: section, type: 'apps' %}
+
+  {%- when 'analytics_placeholder' -%}
+    {% render 'nether-compare-extensions', block: block, section: section, type: 'analytics' %}
+
+  {%- when 'notifications_placeholder' -%}
+    {% render 'nether-compare-extensions', block: block, section: section, type: 'notifications' %}
+
+  {%- when 'recommendations_placeholder' -%}
+    {% render 'nether-compare-extensions', block: block, section: section, type: 'recommendations' %}
+    {% render 'nether-recommendations-extensions', block: block, section: section, type: 'for_you' %}
+
+  {%- when 'merchant_content' -%}
+    <div
+      class="nether-compare__module nether-compare__merchant-content"
+      data-nether-compare-animate
+      {{ block.shopify_attributes }}
+    >
+      {%- if block.settings.heading != blank -%}
+        <h2 class="nether-compare__merchant-heading type-heading-sm">{{ block.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if block.settings.text != blank -%}
+        <div class="nether-compare__merchant-text rte type-body">{{ block.settings.text }}</div>
+      {%- endif -%}
+    </div>
+{%- endcase -%}

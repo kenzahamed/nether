@@ -1,0 +1,49 @@
+{% comment %}
+  Renders Nether Premium Hero content shell.
+
+  Accepts:
+  - section: {Object} Hero section (required)
+  - heading_tag: {String} Primary heading element (default: h1)
+
+  Usage:
+  {% render 'nether-hero-content', section: section, heading_tag: heading_tag %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h1'
+  assign alignment = section.settings.nether_content_alignment | default: 'center'
+  assign panel_classes = 'nether-hero__panel color-' | append: section.settings.color_scheme | append: ' gradient'
+
+  if section.settings.nether_enable_glass
+    case section.settings.nether_glass_style
+      when 'light'
+        assign panel_classes = panel_classes | append: ' nether-hero__panel--glass glass-hero-light'
+      when 'heavy'
+        assign panel_classes = panel_classes | append: ' nether-hero__panel--glass glass-hero-heavy'
+      when 'frosted'
+        assign panel_classes = panel_classes | append: ' nether-hero__panel--glass glass-hero-frosted'
+      else
+        assign panel_classes = panel_classes | append: ' nether-hero__panel--glass glass-hero-medium'
+    endcase
+  endif
+
+  if section.settings.nether_hero_layout == 'card'
+    assign panel_classes = panel_classes | append: ' nether-hero__panel--card'
+  endif
+-%}
+
+<div class="nether-hero__content-shell page-width">
+  <div class="nether-hero__content" data-nether-hero-content>
+    <div class="{{ panel_classes }}" data-nether-hero-panel>
+      <div class="nether-hero__blocks nether-hero__blocks--align-{{ alignment }}">
+        {%- for block in section.blocks -%}
+          {%- render 'nether-hero-block',
+            block: block,
+            section: section,
+            heading_tag: heading_element
+          -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>

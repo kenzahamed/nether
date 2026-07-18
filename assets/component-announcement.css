@@ -1,0 +1,293 @@
+/* =============================================================================
+ * Nether Premium Announcement Bar System
+ * Extends Dawn announcement-bar / slideshow architecture.
+ * ============================================================================= */
+
+nether-announcement-bar {
+  display: block;
+}
+
+nether-announcement-bar[hidden] {
+  display: none;
+}
+
+.nether-announcement {
+  --nether-announcement-border-color: color-mix(in srgb, var(--nether-announcement-text) 18%, transparent);
+  background: var(--nether-announcement-bg);
+  color: var(--nether-announcement-text);
+  min-height: var(--nether-announcement-height);
+  padding-block: var(--nether-announcement-padding-y);
+  border-bottom: var(--nether-announcement-border-width) solid var(--nether-announcement-border-color);
+  position: relative;
+}
+
+.nether-announcement.gradient {
+  background: var(--nether-announcement-bg);
+}
+
+.nether-announcement__grid {
+  min-height: calc(var(--nether-announcement-height) - (var(--nether-announcement-padding-y) * 2));
+  gap: 1.2rem;
+  position: relative;
+}
+
+.nether-announcement__content,
+.nether-announcement__carousel {
+  min-width: 0;
+  width: 100%;
+}
+
+.nether-announcement__content {
+  display: flex;
+  align-items: center;
+}
+
+.nether-announcement__slider {
+  width: 100%;
+  gap: 0.4rem;
+}
+
+.nether-announcement__slider .slider {
+  align-items: center;
+  margin-bottom: 0;
+  min-height: calc(var(--nether-announcement-height) - (var(--nether-announcement-padding-y) * 2));
+}
+
+.nether-announcement__slider .slider__slide {
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.nether-announcement__slider--navigation-hidden .slider-button {
+  display: none;
+}
+
+.nether-announcement .slider-button {
+  color: currentColor;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: var(--radius-circle);
+  transition:
+    background-color var(--duration-short) ease,
+    color var(--duration-short) ease,
+    transform var(--duration-short) ease;
+}
+
+.nether-announcement .slider-button:not([disabled]):hover {
+  background-color: color-mix(in srgb, currentColor 10%, transparent);
+  color: currentColor;
+}
+
+.nether-announcement__item,
+.nether-announcement__item-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  width: 100%;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.nether-announcement__item-link:hover {
+  color: inherit;
+}
+
+.nether-announcement__message-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.nether-announcement__message {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  font-size: var(--nether-announcement-font-size);
+  line-height: var(--type-leading-normal);
+  letter-spacing: var(--type-tracking-normal);
+}
+
+.nether-announcement__message span {
+  overflow-wrap: anywhere;
+}
+
+.nether-announcement__message .icon-arrow {
+  width: 1.3rem;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.nether-announcement__icon {
+  display: inline-flex;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.nether-announcement__separator {
+  display: inline-block;
+  width: 0.1rem;
+  height: 1.8rem;
+  background-color: currentColor;
+  opacity: var(--nether-announcement-divider-opacity);
+  flex-shrink: 0;
+}
+
+.nether-announcement__cta-wrap {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.nether-announcement__cta {
+  min-height: 3.2rem;
+  min-width: auto;
+  padding-inline: 1.6rem;
+}
+
+.nether-announcement__close {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: 1.2rem;
+  transform: translateY(-50%);
+}
+
+.nether-announcement__close.button {
+  min-width: 3.2rem;
+  min-height: 3.2rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  color: inherit;
+}
+
+.nether-announcement--has-close .nether-announcement__grid {
+  padding-right: 4rem;
+}
+
+.nether-announcement--layout-left .nether-announcement__content,
+.nether-announcement--layout-left .nether-announcement__item,
+.nether-announcement--layout-left .nether-announcement__item-link {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.nether-announcement--layout-split .nether-announcement__item,
+.nether-announcement--layout-split .nether-announcement__item-link,
+.nether-announcement--layout-text_cta .nether-announcement__item,
+.nether-announcement--layout-text_cta .nether-announcement__item-link {
+  justify-content: space-between;
+}
+
+.nether-announcement--layout-icon_text .nether-announcement__item,
+.nether-announcement--layout-icon_text .nether-announcement__item-link {
+  justify-content: center;
+}
+
+.nether-announcement--type-heading .nether-announcement__message {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: var(--type-tracking-tight);
+}
+
+.nether-announcement--type-caption .nether-announcement__message {
+  font-size: max(1.1rem, calc(var(--nether-announcement-font-size) - 0.2rem));
+  letter-spacing: var(--type-tracking-wide);
+}
+
+.nether-announcement--type-overline .nether-announcement__message {
+  font-size: max(1rem, calc(var(--nether-announcement-font-size) - 0.3rem));
+  letter-spacing: var(--type-tracking-wider);
+  text-transform: uppercase;
+}
+
+.nether-announcement--divider .localization-wrapper {
+  border-left: 0.1rem solid var(--nether-announcement-border-color);
+  padding-left: 1.2rem;
+}
+
+@media screen and (max-width: 989px) {
+  .nether-announcement__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-announcement__grid .list-social,
+  .nether-announcement__grid .localization-wrapper {
+    display: none;
+  }
+
+  .nether-announcement--layout-split .nether-announcement__item,
+  .nether-announcement--layout-split .nether-announcement__item-link,
+  .nether-announcement--layout-text_cta .nether-announcement__item,
+  .nether-announcement--layout-text_cta .nether-announcement__item-link {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-announcement {
+    --nether-announcement-height: auto;
+    padding-inline: 0;
+  }
+
+  .nether-announcement__slider {
+    gap: 0;
+  }
+
+  .nether-announcement .slider-button {
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+
+  .nether-announcement__item,
+  .nether-announcement__item-link {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    text-align: center;
+  }
+
+  .nether-announcement__message {
+    font-size: max(1.2rem, calc(var(--nether-announcement-font-size) - 0.1rem));
+  }
+
+  .nether-announcement__cta {
+    min-height: 3rem;
+    padding-inline: 1.2rem;
+  }
+
+  .nether-announcement--has-close .nether-announcement__grid {
+    padding-right: 3.4rem;
+  }
+
+  .nether-announcement__close {
+    right: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-announcement .slider-button,
+  .nether-announcement__cta {
+    transition: none;
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .nether-announcement {
+    border-bottom: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .nether-announcement__separator {
+    background-color: CanvasText;
+  }
+}

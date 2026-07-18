@@ -1,0 +1,103 @@
+{% comment %}
+  Renders a Nether Premium checkbox or radio button.
+
+  Extends Dawn checkbox/radio patterns — existing variant picker and recipient
+  form inputs remain unchanged.
+
+  Accepts:
+  - type: {String} checkbox | radio (default: checkbox)
+  - name: {String} Input name attribute
+  - id: {String} Input id (required for label association)
+  - value: {String} Input value
+  - label: {String} Choice label text
+  - checked: {Boolean} Checked state (default: false)
+  - disabled: {Boolean} Disabled state (default: false)
+  - required: {Boolean} Required field (default: false)
+  - state: {String} success | error | warning (optional)
+  - inline: {Boolean} Inline layout (default: false)
+  - helper_text: {String} Helper text below choice
+  - error_message: {String} Error validation message
+  - class: {String} Additional CSS classes
+  - attributes: {String} Additional input HTML attributes
+  - shopify_attributes: {String} Theme Editor block attributes
+
+  Usage:
+  {% render 'form-choice',
+    type: 'checkbox',
+    id: 'agree-terms',
+    name: 'agree_terms',
+    label: 'I agree to the terms',
+    required: true
+  %}
+
+  {% render 'form-choice',
+    type: 'radio',
+    id: 'shipping-standard',
+    name: 'shipping_method',
+    value: 'standard',
+    label: 'Standard shipping',
+    checked: true,
+    inline: true
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign choice_type = type | default: 'checkbox'
+  assign is_checked = checked | default: false, allow_false: true
+  assign is_disabled = disabled | default: false, allow_false: true
+  assign is_required = required | default: false, allow_false: true
+  assign is_inline = inline | default: false, allow_false: true
+
+  assign choice_classes = 'form-choice form-choice--' | append: choice_type
+  if is_inline
+    assign choice_classes = choice_classes | append: ' form-choice--inline'
+  endif
+
+  if state == 'success'
+    assign choice_classes = choice_classes | append: ' form-choice--success'
+  elsif state == 'error' or error_message != blank
+    assign choice_classes = choice_classes | append: ' form-choice--error'
+  elsif state == 'warning'
+    assign choice_classes = choice_classes | append: ' form-choice--warning'
+  endif
+
+  if class != blank
+    assign choice_classes = choice_classes | append: ' ' | append: class
+  endif
+
+  assign error_id = id | append: '-error'
+-%}
+
+<div class="{{ choice_classes }}" {{ shopify_attributes }}>
+  <input
+    type="{{ choice_type }}"
+    class="form-choice__input"
+    {% if id != blank %}id="{{ id }}"{% endif %}
+    {% if name != blank %}name="{{ name }}"{% endif %}
+    {% if value != blank %}value="{{ value | escape }}"{% endif %}
+    {% if is_checked %}checked{% endif %}
+    {% if is_disabled %}disabled{% endif %}
+    {% if is_required %}required aria-required="true"{% endif %}
+    {% if error_message != blank or state == 'error' %}aria-invalid="true"{% endif %}
+    {{ attributes }}
+  >
+
+  <label class="form-choice__label" {% if id != blank %}for="{{ id }}"{% endif %}>
+    <span class="form-choice__control" aria-hidden="true">
+      {%- if choice_type == 'checkbox' -%}
+        <span class="svg-wrapper">
+          {{- 'icon-checkmark.svg' | inline_asset_content -}}
+        </span>
+      {%- endif -%}
+    </span>
+    <span class="form-choice__text type-body-sm">{{ label | escape }}</span>
+  </label>
+</div>
+
+{%- if helper_text != blank -%}
+  <p class="form-field__helper type-caption">{{ helper_text | escape }}</p>
+{%- endif -%}
+
+{%- if error_message != blank -%}
+  {% render 'form-message', message: error_message, type: 'error', id: error_id %}
+{%- endif -%}

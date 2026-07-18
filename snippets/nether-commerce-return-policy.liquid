@@ -1,0 +1,16 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Return Policy.
+
+  Accepts:
+  - heading, text, icon, style, class, attributes, rte
+{% endcomment %}
+
+{% render 'nether-commerce-info-card',
+  heading: heading,
+  text: text,
+  rte: rte,
+  icon: icon | default: 'return',
+  style: style | default: 'card',
+  class: class,
+  attributes: attributes
+%}

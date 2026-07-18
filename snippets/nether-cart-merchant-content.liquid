@@ -1,0 +1,27 @@
+{% comment %}
+  Nether Premium Cart — merchant content area.
+
+  Accepts:
+  - block: {Object} Block object (required)
+{% endcomment %}
+
+{%- if block.settings.content != blank or block.settings.page.content != blank -%}
+  <div
+    class="nether-cart__module nether-cart__module--merchant-content nether-cart__merchant-content"
+    data-nether-cart-module="merchant-content"
+    data-nether-cart-animate
+    {{ block.shopify_attributes }}
+  >
+    {%- if block.settings.heading != blank -%}
+      <h2 class="nether-cart__module-heading type-heading-sm">{{ block.settings.heading }}</h2>
+    {%- endif -%}
+    <div class="nether-cart__merchant-content-body rte type-body">
+      {%- if block.settings.page.content != blank -%}
+        {{ block.settings.page.content }}
+      {%- else -%}
+        {{ block.settings.content }}
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+

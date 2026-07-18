@@ -1,0 +1,71 @@
+{% comment %}
+  Renders Nether Premium Header navigation.
+
+  Reuses Dawn header-drawer, header-dropdown-menu, and header-mega-menu snippets.
+  Supports split navigation layout via nether_split_nav.
+
+  Accepts:
+  - nether_split_nav: {Boolean} Split menu around centered logo
+  - menu_half: {String} left | right | all (default: all)
+
+  Usage:
+  {% render 'nether-header-navigation' %}
+  {% render 'nether-header-navigation', nether_split_nav: true, menu_half: 'left' %}
+{% endcomment %}
+
+{%- liquid
+  assign nav_half = menu_half | default: 'all'
+  assign menu_links = section.settings.menu.links
+  assign link_count = menu_links.size
+  assign split_index = link_count | divided_by: 2.0 | ceil
+-%}
+
+{%- if nav_half == 'all' or nav_half == 'left' -%}
+  {%- if section.settings.menu != blank -%}
+    {%- render 'header-drawer' -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if section.settings.menu != blank -%}
+  {%- if nether_split_nav and nav_half != 'all' -%}
+  <nav
+    class="header__inline-menu nether-header__nav nether-header__nav--{{ nav_half }}"
+    aria-label="{{ 'sections.header.menu' | t }}"
+  >
+    <ul class="list-menu list-menu--inline" role="list">
+      {%- for link in menu_links -%}
+        {%- if nav_half == 'left' and forloop.index > split_index -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if nav_half == 'right' and forloop.index <= split_index -%}
+          {%- continue -%}
+        {%- endif -%}
+        <li>
+          <a
+            id="HeaderMenu-{{ link.handle }}-{{ nav_half }}"
+            href="{{ link.url }}"
+            class="header__menu-item list-menu__item link link--text focus-inset"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span{% if link.current %} class="header__active-menu-item"{% endif %}>
+              {{- link.title | escape -}}
+            </span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+  {%- elsif nav_half == 'all' -%}
+    {%- if section.settings.menu_type_desktop == 'dropdown' -%}
+      {%- render 'header-dropdown-menu' -%}
+    {%- elsif section.settings.menu_type_desktop != 'drawer' -%}
+      {%- if section.settings.nether_enable_mega_menu -%}
+        {%- render 'nether-mega-menu' -%}
+      {%- else -%}
+        {%- render 'header-mega-menu' -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}

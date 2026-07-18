@@ -1,0 +1,32 @@
+{% comment %}
+  Nether Premium Cart — Bundles module.
+  Fulfills bundles_placeholder with the Bundles Commerce Framework.
+  Reuses Cart Framework host — does not replace cart drawer / cart.js.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- liquid
+  assign seed_product = nil
+  if cart.items.first
+    assign seed_product = cart.items.first.product
+  endif
+-%}
+
+<div
+  class="nether-cart__module nether-cart__module--bundles nether-cart__bundles"
+  data-nether-cart-module="bundles"
+  data-nether-cart-animate
+  data-nether-bundles-placeholder
+  {{ block.shopify_attributes }}
+>
+  {% render 'nether-bundles-embedded',
+    section: section,
+    block: block,
+    product: seed_product,
+    context: 'cart',
+    compact: true
+  %}
+</div>

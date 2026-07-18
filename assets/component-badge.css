@@ -1,0 +1,315 @@
+/* =============================================================================
+ * Nether Premium Badge System
+ * Extends Dawn's .badge component — do not duplicate base.css rules.
+ * Types: sale, new, bestseller, featured, limited_edition, low_stock,
+ *        out_of_stock, discount_percentage, free_shipping, premium, organic,
+ *        handmade, exclusive, trending, coming_soon, pre_order, custom
+ * Styles: solid, outline, soft, pill, rounded, minimal
+ * Sizes: small, medium (default), large
+ * ============================================================================= */
+
+:root {
+  --badge-size-sm-font: 1rem;
+  --badge-size-sm-padding-y: 0.3rem;
+  --badge-size-sm-padding-x: 0.9rem;
+  --badge-size-md-font: 1.2rem;
+  --badge-size-md-padding-y: 0.5rem;
+  --badge-size-md-padding-x: 1.3rem;
+  --badge-size-lg-font: 1.4rem;
+  --badge-size-lg-padding-y: 0.6rem;
+  --badge-size-lg-padding-x: 1.6rem;
+  --badge-icon-gap-sm: 0.3rem;
+  --badge-icon-gap-md: var(--icon-gap-sm);
+  --badge-icon-gap-lg: 0.5rem;
+  --badge-icon-size-sm: 1.2rem;
+  --badge-icon-size-md: 1.4rem;
+  --badge-icon-size-lg: 1.6rem;
+  --badge-pill-radius: var(--radius-pill, 10rem);
+  --badge-rounded-radius: var(--radius-sm, 0.4rem);
+  --badge-soft-alpha: 0.12;
+  --badge-minimal-alpha: 0.7;
+}
+
+/* ── Inner layout ──────────────────────────────────────────────────────────── */
+
+.badge__inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--badge-icon-gap-md);
+  vertical-align: middle;
+}
+
+.badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--badge-icon-size-md);
+  height: var(--badge-icon-size-md);
+  line-height: 0;
+}
+
+.badge__icon .icon-wrap,
+.badge__icon .svg-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.badge__label {
+  line-height: 1;
+}
+
+/* ── Sizes ─────────────────────────────────────────────────────────────────── */
+
+.badge--small {
+  font-size: var(--badge-size-sm-font);
+  padding: var(--badge-size-sm-padding-y) var(--badge-size-sm-padding-x);
+}
+
+.badge--small .badge__inner {
+  gap: var(--badge-icon-gap-sm);
+}
+
+.badge--small .badge__icon {
+  width: var(--badge-icon-size-sm);
+  height: var(--badge-icon-size-sm);
+}
+
+.badge--medium {
+  font-size: var(--badge-size-md-font);
+  padding: var(--badge-size-md-padding-y) var(--badge-size-md-padding-x);
+}
+
+.badge--large {
+  font-size: var(--badge-size-lg-font);
+  padding: var(--badge-size-lg-padding-y) var(--badge-size-lg-padding-x);
+}
+
+.badge--large .badge__inner {
+  gap: var(--badge-icon-gap-lg);
+}
+
+.badge--large .badge__icon {
+  width: var(--badge-icon-size-lg);
+  height: var(--badge-icon-size-lg);
+}
+
+/* ── Responsive sizing ─────────────────────────────────────────────────────── */
+
+.badge--responsive.badge--large {
+  font-size: var(--badge-size-sm-font);
+  padding: var(--badge-size-sm-padding-y) var(--badge-size-sm-padding-x);
+}
+
+.badge--responsive.badge--large .badge__icon {
+  width: var(--badge-icon-size-sm);
+  height: var(--badge-icon-size-sm);
+}
+
+@media screen and (min-width: 750px) {
+  .badge--responsive.badge--large {
+    font-size: var(--badge-size-lg-font);
+    padding: var(--badge-size-lg-padding-y) var(--badge-size-lg-padding-x);
+  }
+
+  .badge--responsive.badge--large .badge__icon {
+    width: var(--badge-icon-size-lg);
+    height: var(--badge-icon-size-lg);
+  }
+}
+
+.badge--responsive.badge--medium {
+  font-size: var(--badge-size-sm-font);
+  padding: var(--badge-size-sm-padding-y) var(--badge-size-sm-padding-x);
+}
+
+@media screen and (min-width: 750px) {
+  .badge--responsive.badge--medium {
+    font-size: var(--badge-size-md-font);
+    padding: var(--badge-size-md-padding-y) var(--badge-size-md-padding-x);
+  }
+}
+
+/* ── Text casing ─────────────────────────────────────────────────────────────── */
+
+.badge--uppercase {
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+}
+
+.badge--normal-case {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+/* ── Style: Solid (explicit default) ─────────────────────────────────────────── */
+
+.badge--solid {
+  /* Inherits Dawn .badge fill from color scheme tokens */
+}
+
+/* ── Style: Outline ──────────────────────────────────────────────────────────── */
+
+.badge--outline {
+  background-color: transparent;
+  border-color: rgba(var(--color-badge-border), var(--alpha-badge-border));
+  color: rgb(var(--color-badge-foreground));
+}
+
+.badge--outline.badge--status-success,
+.badge--outline.badge--status-warning,
+.badge--outline.badge--status-error,
+.badge--outline.badge--status-info,
+.badge--outline.badge--status-neutral {
+  background-color: transparent;
+}
+
+/* ── Style: Soft ─────────────────────────────────────────────────────────────── */
+
+.badge--soft {
+  background-color: rgba(var(--color-badge-foreground), var(--badge-soft-alpha));
+  border-color: transparent;
+  color: rgb(var(--color-badge-foreground));
+}
+
+.badge--soft.badge--status-success {
+  background-color: rgba(var(--color-button), var(--badge-soft-alpha));
+  color: rgb(var(--color-button));
+}
+
+.badge--soft.badge--status-warning {
+  background-color: rgba(var(--color-foreground), var(--badge-soft-alpha));
+}
+
+.badge--soft.badge--status-error {
+  background-color: rgba(var(--color-foreground), 0.16);
+}
+
+.badge--soft.badge--status-info {
+  background-color: rgba(var(--color-link), var(--badge-soft-alpha));
+  color: rgb(var(--color-link));
+}
+
+/* ── Style: Pill ─────────────────────────────────────────────────────────────── */
+
+.badge--pill {
+  border-radius: var(--badge-pill-radius);
+}
+
+/* ── Style: Rounded ──────────────────────────────────────────────────────────── */
+
+.badge--rounded {
+  border-radius: var(--badge-rounded-radius);
+}
+
+/* ── Style: Minimal ──────────────────────────────────────────────────────────── */
+
+.badge--minimal {
+  background-color: transparent;
+  border-color: transparent;
+  color: rgba(var(--color-badge-foreground), var(--badge-minimal-alpha));
+  padding: 0;
+}
+
+.badge--minimal.badge--status-success {
+  color: rgb(var(--color-button));
+}
+
+.badge--minimal.badge--status-info {
+  color: rgb(var(--color-link));
+}
+
+.badge--minimal.badge--status-warning,
+.badge--minimal.badge--status-error,
+.badge--minimal.badge--status-neutral {
+  color: rgba(var(--color-foreground), var(--badge-minimal-alpha));
+}
+
+/* ── Status variants (design token overrides) ────────────────────────────────── */
+
+.badge--status-success {
+  --color-badge-background: var(--color-button);
+  --color-badge-foreground: var(--color-button-text);
+  --color-badge-border: var(--color-button);
+}
+
+.badge--status-warning {
+  --color-badge-background: var(--color-foreground);
+  --color-badge-foreground: var(--color-background);
+  --color-badge-border: var(--color-foreground);
+}
+
+.badge--status-error {
+  --color-badge-background: var(--color-foreground);
+  --color-badge-foreground: var(--color-background);
+  --color-badge-border: var(--color-foreground);
+}
+
+.badge--status-info {
+  --color-badge-background: var(--color-link);
+  --color-badge-foreground: var(--color-background);
+  --color-badge-border: var(--color-link);
+}
+
+.badge--status-neutral {
+  /* Uses scheme badge tokens from .color-* — no override */
+}
+
+/* ── Badge group utilities ───────────────────────────────────────────────────── */
+
+.badge-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.badge-group--stack {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.badge-group--end {
+  justify-content: flex-end;
+}
+
+.badge-group--center {
+  justify-content: center;
+}
+
+/* ── Card / price composition (extends existing layouts) ─────────────────────── */
+
+.card__badge .badge,
+.price .badge {
+  vertical-align: middle;
+}
+
+.card__badge .badge-group {
+  gap: 0.4rem;
+}
+
+/* ── Accessibility ───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .badge {
+    transition: none;
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .badge {
+    border: 1px solid CanvasText;
+  }
+
+  .badge--minimal {
+    border-color: transparent;
+    text-decoration: underline;
+  }
+
+  .badge--soft,
+  .badge--outline {
+    background-color: Canvas;
+    color: CanvasText;
+  }
+}

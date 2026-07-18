@@ -1,0 +1,28 @@
+{% comment %}
+  Lightbox-ready architecture for Nether Premium Media cards.
+  Provides data attributes and accessible trigger markup for future modal integration.
+
+  Accepts:
+  - block: {Object} Media block (required)
+  - media_image: {Object} Primary image for lightbox source (optional)
+
+  Usage:
+  {% render 'nether-media-lightbox', block: block, media_image: desktop_image %}
+{% endcomment %}
+
+{%- liquid
+  assign lightbox_image = media_image | default: block.settings.image_desktop
+  assign lightbox_enabled = block.settings.enable_lightbox
+  assign lightbox_title = block.settings.title | default: lightbox_image.alt
+-%}
+
+{%- if lightbox_enabled and lightbox_image != blank -%}
+  <button
+    type="button"
+    class="nether-media-card__lightbox-trigger visually-hidden"
+    data-nether-media-lightbox
+    data-nether-media-src="{{ lightbox_image | image_url: width: 3000 }}"
+    data-nether-media-alt="{{ lightbox_title | escape }}"
+    aria-label="{{ 'sections.nether_media.lightbox.open' | t: title: lightbox_title }}"
+  ></button>
+{%- endif -%}

@@ -1,0 +1,32 @@
+{% comment %}
+  Renders helpful links for the Nether FAQ Framework.
+
+  Accepts:
+  - block: {Object} helpful_link block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-faq-links', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-faq-animate'
+  assign link_label = block.settings.label | default: block.settings.text
+  assign link_url = block.settings.link
+  assign link_icon = block.settings.icon | default: 'arrow'
+-%}
+
+{%- if link_label != blank -%}
+  <li class="nether-faq__link-item" {{ motion_attribute }} {{ block.shopify_attributes }}>
+    <a
+      class="nether-faq__helpful-link link"
+      {% if link_url != blank %}href="{{ link_url }}"{% else %}href="#" role="link" aria-disabled="true"{% endif %}
+      {% if block.settings.open_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+    >
+      {%- if link_icon != 'none' -%}
+        {%- render 'icon', icon: link_icon, size: 'sm', class: 'nether-faq__link-icon' -%}
+      {%- endif -%}
+      <span>{{ link_label | escape }}</span>
+    </a>
+  </li>
+{%- endif -%}

@@ -1,0 +1,140 @@
+{% comment %}
+  Renders a Nether Premium Footer newsletter signup.
+
+  Accepts:
+  - block: {Object} Theme Editor block (optional)
+  - section: {Object} Footer section (required)
+  - heading: {String} Heading override
+  - subtext: {String} Optional subtext
+  - heading_tag: {String} Heading element tag (default: h2)
+  - form_id: {String} Form id override
+  - class: {String} Additional classes
+  - use_premium_button: {Boolean} Use Button System submit (default: true)
+
+  Usage:
+  {% render 'nether-footer-newsletter', section: section, block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign newsletter_heading = heading
+  assign newsletter_subtext = subtext
+  assign premium_button = use_premium_button | default: true, allow_false: true
+
+  if newsletter_heading == blank and block != blank
+    assign newsletter_heading = block.settings.heading
+  endif
+  if newsletter_heading == blank
+    assign newsletter_heading = section.settings.newsletter_heading
+  endif
+
+  if newsletter_subtext == blank and block != blank
+    assign newsletter_subtext = block.settings.subtext
+  endif
+
+  assign contact_form_id = form_id | default: 'ContactFooter'
+  if block != blank
+    assign contact_form_id = 'ContactFooter-' | append: block.id
+  endif
+
+  assign email_field_id = 'NewsletterForm--' | append: section.id
+  if block != blank
+    assign email_field_id = email_field_id | append: '-' | append: block.id
+  endif
+
+  assign submit_id = 'Subscribe-' | append: section.id
+  if block != blank
+    assign submit_id = submit_id | append: '-' | append: block.id
+  endif
+-%}
+
+<div class="footer-block__newsletter nether-footer__newsletter{% if class != blank %} {{ class }}{% endif %}">
+  {%- if newsletter_heading != blank -%}
+    <{{ heading_element }} class="footer-block__heading inline-richtext nether-footer__heading" id="FooterNewsletterHeading-{{ block.id | default: section.id }}">
+      {{- newsletter_heading -}}
+    </{{ heading_element }}>
+  {%- endif -%}
+
+  {%- if newsletter_subtext != blank -%}
+    <div class="nether-footer__newsletter-text rte">{{ newsletter_subtext }}</div>
+  {%- endif -%}
+
+  {%- form 'customer', id: contact_form_id, class: 'footer__newsletter newsletter-form nether-footer__newsletter-form' -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <div class="newsletter-form__field-wrapper nether-footer__newsletter-field">
+      <div class="field nether-form-field nether-form-field--medium">
+        <input
+          id="{{ email_field_id }}"
+          type="email"
+          name="contact[email]"
+          class="field__input"
+          value="{{ form.email }}"
+          aria-required="true"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="email"
+          {% if form.errors %}
+            autofocus
+            aria-invalid="true"
+            aria-describedby="{{ contact_form_id }}-error"
+          {% elsif form.posted_successfully? %}
+            aria-describedby="{{ contact_form_id }}-success"
+          {% endif %}
+          placeholder="{{ 'newsletter.label' | t }}"
+          required
+        >
+        <label class="field__label" for="{{ email_field_id }}">
+          {{ 'newsletter.label' | t }}
+        </label>
+        {%- unless premium_button -%}
+          <button
+            type="submit"
+            class="newsletter-form__button field__button"
+            name="commit"
+            id="{{ submit_id }}"
+            aria-label="{{ 'newsletter.button_label' | t }}"
+          >
+            <span class="svg-wrapper">
+              {{- 'icon-arrow.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        {%- endunless -%}
+      </div>
+
+      {%- if form.errors -%}
+        {%- render 'form-message',
+          message: form.errors.translated_fields.email | capitalize | append: ' ' | append: form.errors.messages.email,
+          type: 'error',
+          id: contact_form_id | append: '-error'
+        -%}
+      {%- endif -%}
+    </div>
+
+    {%- if premium_button -%}
+      <div class="nether-footer__newsletter-actions">
+        {%- render 'button',
+          label: 'newsletter.button_label' | t,
+          type: 'submit',
+          style: 'primary',
+          size: 'medium',
+          id: submit_id,
+          attributes: 'name="commit"'
+        -%}
+      </div>
+    {%- endif -%}
+
+    {%- if form.posted_successfully? -%}
+      <h3
+        class="newsletter-form__message newsletter-form__message--success form__message"
+        id="{{ contact_form_id }}-success"
+        tabindex="-1"
+        autofocus
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-success.svg' | inline_asset_content -}}
+        </span>
+        {{- 'newsletter.success' | t }}
+      </h3>
+    {%- endif -%}
+  {%- endform -%}
+</div>

@@ -1,0 +1,45 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Merchant Announcement Block.
+  Commerce-scoped notice (not a rewrite of the header Announcement System).
+
+  Accepts:
+  - heading: {String}
+  - text: {String}
+  - icon: {String} (default: info)
+  - notice_style: {String} soft | outline | solid | minimal
+  - class: {String}
+  - attributes: {String}
+  - rte: {Boolean}
+{% endcomment %}
+
+{%- liquid
+  assign announce_style = notice_style | default: 'outline'
+  assign has_content = false
+  if heading != blank or text != blank
+    assign has_content = true
+  endif
+-%}
+
+{%- if has_content -%}
+  <aside
+    class="nether-commerce__notice nether-commerce__notice--announcement nether-commerce__notice--{{ announce_style }}{% if class != blank %} {{ class }}{% endif %}"
+    data-nether-commerce-module="announcement"
+    data-nether-commerce-animate
+    role="status"
+    {% if attributes != blank %}{{ attributes }}{% endif %}
+  >
+    {% render 'nether-commerce-icon', icon: icon | default: 'info', size: 'sm', decorative: true %}
+    <div class="nether-commerce__notice-copy">
+      {%- if heading != blank -%}
+        <p class="nether-commerce__notice-heading type-body-sm">{{ heading }}</p>
+      {%- endif -%}
+      {%- if text != blank -%}
+        {%- if rte -%}
+          <div class="nether-commerce__notice-text rte type-body-sm">{{ text }}</div>
+        {%- else -%}
+          <p class="nether-commerce__notice-text type-body-sm">{{ text }}</p>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </aside>
+{%- endif -%}

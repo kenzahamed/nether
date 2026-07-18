@@ -1,0 +1,97 @@
+{% comment %}
+  Renders a Nether Premium Media before/after comparison block.
+
+  Accepts:
+  - block: {Object} Before/after block (required)
+  - section: {Object} Media section (required)
+
+  Usage:
+  {% render 'nether-media-before-after', block: block, section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign before_image = block.settings.before_image
+  assign after_image = block.settings.after_image
+  assign before_label = block.settings.before_label | default: 'sections.nether_media.before_after.before' | t
+  assign after_label = block.settings.after_label | default: 'sections.nether_media.before_after.after' | t
+  assign widths = '375, 550, 750, 1100, 1500, 2000'
+  assign sizes = '(min-width: 990px) 80rem, 100vw'
+-%}
+
+<figure
+  class="nether-media-before-after"
+  data-nether-media-before-after
+  data-nether-media-animate
+  data-nether-media-role="before-after"
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.title != blank -%}
+    <figcaption class="nether-media-before-after__title type-heading-md">{{ block.settings.title | escape }}</figcaption>
+  {%- endif -%}
+
+  <div
+    class="nether-media-before-after__container ratio global-media-settings"
+    style="--ratio-percent: 66.666%;"
+    role="group"
+    aria-label="{{ 'sections.nether_media.before_after.label' | t }}"
+  >
+    <div class="nether-media-before-after__images">
+      {%- if before_image != blank -%}
+        <div class="nether-media-before-after__image nether-media-before-after__image--before">
+          {{
+            before_image
+            | image_url: width: 2000
+            | image_tag:
+              widths: widths,
+              sizes: sizes,
+              alt: before_label,
+              class: 'nether-media-before-after__img',
+              loading: 'lazy'
+          }}
+          <span class="nether-media-before-after__badge type-overline">{{ before_label | escape }}</span>
+        </div>
+      {%- else -%}
+        <div class="nether-media-before-after__image nether-media-before-after__image--before">
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          <span class="nether-media-before-after__badge type-overline">{{ before_label | escape }}</span>
+        </div>
+      {%- endif -%}
+
+      {%- if after_image != blank -%}
+        <div class="nether-media-before-after__image nether-media-before-after__image--after" data-nether-media-after>
+          {{
+            after_image
+            | image_url: width: 2000
+            | image_tag:
+              widths: widths,
+              sizes: sizes,
+              alt: after_label,
+              class: 'nether-media-before-after__img',
+              loading: 'lazy'
+          }}
+          <span class="nether-media-before-after__badge type-overline">{{ after_label | escape }}</span>
+        </div>
+      {%- else -%}
+        <div class="nether-media-before-after__image nether-media-before-after__image--after" data-nether-media-after>
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          <span class="nether-media-before-after__badge type-overline">{{ after_label | escape }}</span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <input
+      type="range"
+      class="nether-media-before-after__slider"
+      min="0"
+      max="100"
+      value="50"
+      aria-label="{{ 'sections.nether_media.before_after.slider' | t }}"
+      data-nether-media-before-after-slider
+    >
+    <div class="nether-media-before-after__handle" aria-hidden="true" data-nether-media-before-after-handle data-nether-media-role="ba-handle"></div>
+  </div>
+
+  {%- if block.settings.description != blank -%}
+    <p class="nether-media-before-after__description type-body-sm" data-nether-media-caption>{{ block.settings.description | escape }}</p>
+  {%- endif -%}
+</figure>

@@ -1,0 +1,18 @@
+{% comment %}
+  Optional section divider for Nether Premium Product Page Commerce Framework.
+
+  Accepts:
+  - section: {Object} Product page section (required)
+  - position: {String} top or bottom (required)
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-product-page__divider nether-product-page__divider--{{ divider_position }} nether-product-page__divider--{{ divider_style }}"
+  aria-hidden="true"
+  role="presentation"
+></div>

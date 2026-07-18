@@ -1,0 +1,80 @@
+{% comment %}
+  Renders a Nether Premium Footer contact details block.
+
+  Accepts:
+  - block: {Object} Theme Editor block
+  - heading_tag: {String} Heading element tag (default: h2)
+
+  Usage:
+  {% render 'nether-footer-contact', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign show_icons = block.settings.show_icons | default: true
+-%}
+
+{%- if block.settings.heading != blank -%}
+  <{{ heading_element }} class="footer-block__heading inline-richtext nether-footer__heading" id="FooterContactHeading-{{ block.id }}">
+    {{- block.settings.heading -}}
+  </{{ heading_element }}>
+{%- endif -%}
+
+<div class="footer-block__details-content nether-footer__contact" role="group" aria-labelledby="FooterContactHeading-{{ block.id }}">
+  <ul class="list-unstyled nether-footer__contact-list" role="list">
+    {%- if block.settings.phone != blank -%}
+      <li class="nether-footer__contact-item">
+        {%- if show_icons -%}
+          <span class="nether-footer__contact-icon">
+            {%- render 'icon', icon: 'chat-bubble', size: 'sm' -%}
+          </span>
+        {%- endif -%}
+        <a href="tel:{{ block.settings.phone | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}" class="link link--text nether-footer__contact-link">
+          <span class="visually-hidden">{{ 'sections.nether_footer.contact.phone' | t }}: </span>
+          {{ block.settings.phone | escape }}
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if block.settings.email != blank -%}
+      <li class="nether-footer__contact-item">
+        {%- if show_icons -%}
+          <span class="nether-footer__contact-icon">
+            {%- render 'icon', icon: 'share', size: 'sm' -%}
+          </span>
+        {%- endif -%}
+        <a href="mailto:{{ block.settings.email | escape }}" class="link link--text nether-footer__contact-link">
+          <span class="visually-hidden">{{ 'sections.nether_footer.contact.email' | t }}: </span>
+          {{ block.settings.email | escape }}
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if block.settings.address != blank -%}
+      <li class="nether-footer__contact-item nether-footer__contact-item--address">
+        {%- if show_icons -%}
+          <span class="nether-footer__contact-icon">
+            {%- render 'icon', icon: 'map-pin', size: 'sm' -%}
+          </span>
+        {%- endif -%}
+        <address class="nether-footer__address rte">
+          {{ block.settings.address }}
+        </address>
+      </li>
+    {%- endif -%}
+
+    {%- if block.settings.hours != blank -%}
+      <li class="nether-footer__contact-item nether-footer__contact-item--hours">
+        {%- if show_icons -%}
+          <span class="nether-footer__contact-icon">
+            {%- render 'icon', icon: 'stopwatch', size: 'sm' -%}
+          </span>
+        {%- endif -%}
+        <div class="nether-footer__hours rte">
+          <span class="visually-hidden">{{ 'sections.nether_footer.contact.hours' | t }}: </span>
+          {{ block.settings.hours }}
+        </div>
+      </li>
+    {%- endif -%}
+  </ul>
+</div>

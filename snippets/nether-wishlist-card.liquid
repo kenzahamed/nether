@@ -1,0 +1,44 @@
+{% comment %}
+  Nether Premium Wishlist — item card template shell.
+  Client-side renderer clones [data-nether-wishlist-card-template] content.
+
+  Accepts:
+  - context: {String} drawer | page (default: drawer)
+
+  Usage:
+  {% render 'nether-wishlist-card', context: 'drawer' %}
+{% endcomment %}
+
+{%- assign wishlist_context = context | default: 'drawer' -%}
+
+<template data-nether-wishlist-card-template data-context="{{ wishlist_context }}">
+  <article
+    class="nether-wishlist-card nether-wishlist-card--{{ wishlist_context }} shadow-sm radius-md"
+    data-nether-wishlist-card
+    data-nether-wishlist-animate
+  >
+    <a class="nether-wishlist-card__media" data-nether-wishlist-card-link href="#" tabindex="-1" aria-hidden="true">
+      <img
+        class="nether-wishlist-card__image"
+        data-nether-wishlist-card-image
+        src=""
+        alt=""
+        width="120"
+        height="120"
+        loading="lazy"
+      >
+    </a>
+
+    <div class="nether-wishlist-card__body">
+      <p class="nether-wishlist-card__vendor type-overline caption-with-letter-spacing" data-nether-wishlist-card-vendor hidden></p>
+      <h3 class="nether-wishlist-card__title type-heading-xs">
+        <a class="full-unstyled-link" data-nether-wishlist-card-title-link href="#">
+          <span data-nether-wishlist-card-title></span>
+        </a>
+      </h3>
+      <div class="nether-wishlist-card__price" data-nether-wishlist-card-price></div>
+      <p class="nether-wishlist-card__availability type-body-sm" data-nether-wishlist-card-availability hidden></p>
+      {% render 'nether-wishlist-actions', context: wishlist_context %}
+    </div>
+  </article>
+</template>

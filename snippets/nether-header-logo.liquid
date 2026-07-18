@@ -1,0 +1,57 @@
+{% comment %}
+  Renders the Nether Premium Header logo.
+
+  Accepts:
+  - logo_position: {String} Dawn-compatible logo position
+  - logo_width: {Number} Logo width override
+  - class: {String} Additional classes on heading wrapper
+
+  Usage:
+  {% render 'nether-header-logo', logo_position: effective_logo_position, logo_width: section.settings.nether_logo_width %}
+{% endcomment %}
+
+{%- liquid
+  assign nether_logo_width = logo_width | default: settings.logo_width
+  if nether_logo_width == blank or nether_logo_width == 0
+    assign nether_logo_width = settings.logo_width
+  endif
+-%}
+
+{%- if request.page_type == 'index' -%}
+  <h1 class="header__heading{% if class != blank %} {{ class }}{% endif %}">
+{%- else -%}
+  <div class="header__heading{% if class != blank %} {{ class }}{% endif %}">
+{%- endif -%}
+  <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+    {%- if settings.logo != blank -%}
+      <div class="header__heading-logo-wrapper">
+        {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+        {%- assign logo_height = nether_logo_width | divided_by: settings.logo.aspect_ratio -%}
+        {%- if logo_position == 'middle-center' -%}
+          {% capture sizes %}(min-width: 750px) {{ nether_logo_width }}px, 50vw{% endcapture %}
+        {%- else -%}
+          {% capture sizes %}(max-width: {{ nether_logo_width | times: 2 }}px) 50vw, {{ nether_logo_width }}px{% endcapture %}
+        {%- endif -%}
+        {% capture widths %}{{ nether_logo_width }}, {{ nether_logo_width | times: 1.5 | round }}, {{ nether_logo_width | times: 2 }}{% endcapture %}
+        {{
+          settings.logo
+          | image_url: width: 600
+          | image_tag:
+            class: 'header__heading-logo motion-reduce',
+            widths: widths,
+            height: logo_height,
+            width: nether_logo_width,
+            alt: logo_alt,
+            sizes: sizes,
+            preload: true
+        }}
+      </div>
+    {%- else -%}
+      <span class="h2">{{ shop.name }}</span>
+    {%- endif -%}
+  </a>
+{%- if request.page_type == 'index' -%}
+  </h1>
+{%- else -%}
+  </div>
+{%- endif -%}

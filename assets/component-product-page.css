@@ -1,0 +1,307 @@
+/**
+ * Nether Premium Product Page Commerce Framework
+ * Extends Dawn section-main-product — scoped to .nether-product-page
+ * Reuses: Button, Typography, Badge, Card Premium, Glass, Shadow, Radius
+ */
+
+.nether-product-page {
+  --nether-product-page-gap: 2.4rem;
+  --nether-product-page-module-gap: 1.6rem;
+  --nether-product-page-sticky-height: 7.2rem;
+  --nether-product-page-transition-duration: 0.5s;
+}
+
+.nether-product-page__layout {
+  gap: var(--nether-product-page-gap);
+}
+
+.nether-product-page__module {
+  margin-bottom: var(--nether-product-page-module-gap);
+}
+
+.nether-product-page__module:last-child {
+  margin-bottom: 0;
+}
+
+.nether-product-page__info {
+  padding: 0;
+}
+
+.nether-product-page__info--glass {
+  padding: 2rem;
+}
+
+.nether-product-page__badges,
+.nether-product-page__trust-list,
+.nether-product-page__highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nether-product-page__trust-list {
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.nether-product-page__trust-item,
+.nether-product-page__highlight-item,
+.nether-product-page__info-card-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.nether-product-page__trust-copy,
+.nether-product-page__info-card-copy {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.nether-product-page__info-heading {
+  margin: 0;
+  font-weight: 600;
+}
+
+.nether-product-page__module-heading {
+  margin: 0 0 1.2rem;
+}
+
+.nether-product-page__spec-list {
+  margin: 0;
+}
+
+.nether-product-page__spec-row {
+  display: grid;
+  grid-template-columns: minmax(10rem, 35%) 1fr;
+  gap: 1.2rem;
+  padding: 0.8rem 0;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-product-page__spec-row:last-child {
+  border-bottom: 0;
+}
+
+.nether-product-page__spec-row dt {
+  margin: 0;
+  font-weight: 600;
+}
+
+.nether-product-page__spec-row dd {
+  margin: 0;
+}
+
+.nether-product-page__spec-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nether-product-page__spec-table th,
+.nether-product-page__spec-table td {
+  padding: 0.8rem 0;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  text-align: left;
+  vertical-align: top;
+}
+
+.nether-product-page__spec-table th {
+  width: 35%;
+  font-weight: 600;
+}
+
+.nether-product-page__extension {
+  opacity: 0.72;
+}
+
+.nether-product-page__extension-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.2rem;
+  border: 0.1rem dashed rgba(var(--color-foreground), 0.18);
+  border-radius: var(--radius-md, 0.8rem);
+}
+
+.nether-product-page__extension-text {
+  margin: 0;
+}
+
+.nether-product-page__module--full-width {
+  width: 100%;
+  margin-top: calc(var(--nether-product-page-gap) * 1.5);
+}
+
+.nether-product-page__related-inner {
+  padding-top: 1.6rem;
+}
+
+.nether-product-page__sticky-summary {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  transform: translateY(110%);
+  transition: transform var(--nether-product-page-transition-duration) ease, opacity 0.3s ease;
+  background: rgba(var(--color-background), 0.96);
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  box-shadow: 0 -0.8rem 2.4rem rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.nether-product-page__sticky-summary.is-visible {
+  transform: translateY(0);
+}
+
+.nether-product-page__sticky-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.2rem;
+  min-height: var(--nether-product-page-sticky-height);
+  padding: 1rem 0;
+}
+
+.nether-product-page__sticky-media img {
+  width: 4.8rem;
+  height: 4.8rem;
+  object-fit: cover;
+  border-radius: var(--radius-sm, 0.4rem);
+}
+
+.nether-product-page__sticky-title {
+  margin: 0 0 0.2rem;
+  font-weight: 600;
+}
+
+.nether-product-page__sticky-price {
+  margin: 0;
+}
+
+.nether-product-page__divider--line {
+  height: 0.1rem;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-product-page__divider--fade {
+  height: 4rem;
+  background: linear-gradient(to bottom, transparent, rgba(var(--color-foreground), 0.06));
+}
+
+/* Layout modifiers */
+.nether-product-page--layout-classic .nether-product-page__layout {
+  align-items: start;
+}
+
+.nether-product-page--layout-split .nether-product-page__buy-box {
+  align-self: center;
+}
+
+.nether-product-page--layout-minimal .nether-product-page__info--glass {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.nether-product-page--layout-editorial .nether-product-page__module--title h1 {
+  font-size: clamp(2.8rem, 4vw, 4.8rem);
+  line-height: 1.05;
+}
+
+.nether-product-page--layout-sticky_atc .nether-product-page__buy-box .product__column-sticky {
+  top: calc(var(--header-height, 8rem) + 1.6rem);
+}
+
+/* Accordion styles */
+.nether-product-page__accordion--minimal .summary__title {
+  padding-block: 0.4rem;
+}
+
+.nether-product-page__accordion--editorial .accordion__content {
+  padding-top: 1.2rem;
+}
+
+/* Responsive */
+.nether-product-page--desktop-wide .page-width {
+  max-width: min(100%, 160rem);
+}
+
+.nether-product-page--tablet-stacked .nether-product-page__layout {
+  grid-template-columns: 1fr;
+}
+
+.nether-product-page--mobile-centered .nether-product-page__info {
+  text-align: center;
+}
+
+.nether-product-page--mobile-centered .nether-product-page__badges,
+.nether-product-page--mobile-centered .nether-product-page__highlights {
+  justify-content: center;
+}
+
+@media screen and (max-width: 749px) {
+  .nether-product-page__sticky-inner {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      'media copy'
+      'actions actions';
+  }
+
+  .nether-product-page__sticky-media {
+    grid-area: media;
+  }
+
+  .nether-product-page__sticky-copy {
+    grid-area: copy;
+  }
+
+  .nether-product-page__sticky-actions {
+    grid-area: actions;
+  }
+
+  .nether-product-page__sticky-actions .button {
+    width: 100%;
+  }
+
+  .nether-product-page--mobile-stacked .nether-product-page__spec-row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-product-page--layout-sticky_atc .nether-product-page__sticky-summary {
+    top: auto;
+    bottom: 2rem;
+    left: 50%;
+    right: auto;
+    width: min(72rem, calc(100% - 4rem));
+    transform: translate(-50%, 140%);
+    border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+    border-radius: var(--radius-lg, 1.2rem);
+  }
+
+  .nether-product-page--layout-sticky_atc .nether-product-page__sticky-summary.is-visible {
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Dawn bridge — preserve native product grid behavior */
+.nether-product-page .product__media-wrapper,
+.nether-product-page .product__info-wrapper {
+  width: 100%;
+}
+
+.nether-product-page .product-form__submit,
+.nether-product-page .shopify-payment-button {
+  width: 100%;
+}
+
+.nether-product-page [data-nether-motion-ready='reduced'] [data-nether-product-page-animate] {
+  opacity: 1 !important;
+  transform: none !important;
+}

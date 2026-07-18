@@ -1,0 +1,94 @@
+{% comment %}
+  Nether Premium Recommendations — future extension points (architecture only).
+
+  Accepts:
+  - block: {Object} Block object (optional)
+  - section: {Object} Section object (optional)
+  - type: {String} Extension type override when block is absent
+
+  Usage:
+  {% render 'nether-recommendations-extensions', type: 'recently_viewed' %}
+{% endcomment %}
+
+{%- liquid
+  assign extension_type = type
+  if block != blank
+    assign extension_type = block.type | default: extension_type
+  endif
+  assign extension_type = extension_type | default: 'generic'
+  assign extension_type = extension_type | replace: '_placeholder', '' | replace: 'recommendations_', ''
+
+  case extension_type
+    when 'frequently_bought', 'fbt'
+      assign extension_data = 'data-nether-recommendations-fbt-placeholder'
+      assign extension_icon = 'box'
+      assign default_label = 'sections.nether_recommendations.extensions.frequently_bought' | t
+    when 'recently_viewed', 'recently'
+      assign extension_data = 'data-nether-recommendations-recently-viewed-placeholder'
+      assign extension_icon = 'stopwatch'
+      assign default_label = 'sections.nether_recommendations.extensions.recently_viewed' | t
+    when 'recently_purchased'
+      assign extension_data = 'data-nether-recommendations-recently-purchased-placeholder'
+      assign extension_icon = 'cart'
+      assign default_label = 'sections.nether_recommendations.extensions.recently_purchased' | t
+    when 'for_you', 'personalized', 'recommended_for_you'
+      assign extension_data = 'data-nether-recommendations-for-you-placeholder'
+      assign extension_icon = 'silhouette'
+      assign default_label = 'sections.nether_recommendations.extensions.for_you' | t
+    when 'ai', 'ai_recommendations'
+      assign extension_data = 'data-nether-recommendations-ai-placeholder'
+      assign extension_icon = 'star'
+      assign default_label = 'sections.nether_recommendations.extensions.ai' | t
+    when 'personalization'
+      assign extension_data = 'data-nether-recommendations-personalization-placeholder'
+      assign extension_icon = 'silhouette'
+      assign default_label = 'sections.nether_recommendations.extensions.personalization' | t
+    when 'analytics'
+      assign extension_data = 'data-nether-recommendations-analytics-placeholder'
+      assign extension_icon = 'info'
+      assign default_label = 'sections.nether_recommendations.extensions.analytics' | t
+    when 'merchandising', 'merchandising_rules'
+      assign extension_data = 'data-nether-recommendations-merchandising-placeholder'
+      assign extension_icon = 'box'
+      assign default_label = 'sections.nether_recommendations.extensions.merchandising' | t
+    when 'ab_testing', 'ab'
+      assign extension_data = 'data-nether-recommendations-ab-placeholder'
+      assign extension_icon = 'clipboard'
+      assign default_label = 'sections.nether_recommendations.extensions.ab_testing' | t
+    when 'filters'
+      assign extension_data = 'data-nether-recommendations-filters-placeholder'
+      assign extension_icon = 'filter'
+      assign default_label = 'sections.nether_recommendations.extensions.filters' | t
+    when 'collection_card', 'collection_cards'
+      assign extension_data = 'data-nether-recommendations-collection-cards-placeholder'
+      assign extension_icon = 'box'
+      assign default_label = 'sections.nether_recommendations.extensions.collection_cards' | t
+    else
+      assign extension_data = 'data-nether-recommendations-extension-placeholder'
+      assign extension_icon = 'info'
+      assign default_label = 'sections.nether_recommendations.extensions.generic' | t
+  endcase
+
+  assign extension_label = default_label
+  if block != blank and block.settings.label != blank
+    assign extension_label = block.settings.label
+  elsif block != blank and block.settings.heading != blank
+    assign extension_label = block.settings.heading
+  endif
+-%}
+
+<div
+  class="nether-recommendations__module nether-recommendations__extension nether-recommendations__extension--{{ extension_type }}"
+  data-nether-recommendations-module="extension"
+  data-nether-recommendations-animate
+  {{ extension_data }}
+  {% if block != blank %}{{ block.shopify_attributes }}{% endif %}
+>
+  <div class="nether-recommendations__extension-inner" role="group" aria-label="{{ extension_label | escape }}">
+    {% render 'icon', icon: extension_icon, size: 'sm', decorative: false, label: extension_label %}
+    <span class="nether-recommendations__extension-label type-body-sm">{{ extension_label }}</span>
+    {%- if block != blank and block.settings.text != blank -%}
+      <p class="nether-recommendations__extension-text type-body-sm">{{ block.settings.text }}</p>
+    {%- endif -%}
+  </div>
+</div>

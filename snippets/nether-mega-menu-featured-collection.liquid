@@ -1,0 +1,54 @@
+{% comment %}
+  Nether Mega Menu — Featured Collection block.
+  Reuses card-collection snippet and collection image.
+
+  Accepts:
+  - block: {Object} Section block
+  - section: {Object} Header section
+{% endcomment %}
+
+{%- liquid
+  assign featured_collection = block.settings.collection
+  assign show_card = section.settings.nether_mega_enable_collection_cards
+-%}
+
+<div class="nether-mega-menu__featured-collection" data-nether-mega-reveal>
+  {%- if block.settings.heading != blank -%}
+    <p class="nether-mega-menu__column-heading h4">{{ block.settings.heading | escape }}</p>
+  {%- endif -%}
+
+  {%- if featured_collection != blank -%}
+    {%- if show_card -%}
+      <div class="nether-mega-menu__card-shell" data-nether-mega-image-reveal>
+        {%- render 'card-collection',
+          card_collection: featured_collection,
+          media_aspect_ratio: block.settings.image_ratio,
+          columns: 1,
+          extend_height: false
+        -%}
+      </div>
+    {%- else -%}
+      <a href="{{ featured_collection.url }}" class="nether-mega-menu__media-link" data-nether-mega-image-reveal>
+        {%- if featured_collection.featured_image != blank -%}
+          <div class="nether-mega-menu__media media media--hover-effect">
+            {{
+              featured_collection.featured_image
+              | image_url: width: 600
+              | image_tag:
+                loading: 'lazy',
+                widths: '200, 300, 400, 600',
+                sizes: '(min-width: 990px) 280px, 50vw',
+                alt: featured_collection.featured_image.alt | default: featured_collection.title
+            }}
+          </div>
+        {%- endif -%}
+        <span class="nether-mega-menu__media-caption h5">{{ featured_collection.title | escape }}</span>
+        {%- if block.settings.caption != blank -%}
+          <span class="nether-mega-menu__media-subcaption">{{ block.settings.caption | escape }}</span>
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+  {%- elsif request.design_mode -%}
+    <p class="nether-mega-menu__placeholder">{{ 'sections.header.nether_mega_menu.collection_placeholder' | t }}</p>
+  {%- endif -%}
+</div>

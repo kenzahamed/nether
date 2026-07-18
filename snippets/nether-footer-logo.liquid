@@ -1,0 +1,47 @@
+{% comment %}
+  Renders the Nether Premium Footer logo.
+
+  Accepts:
+  - image: {Object} Custom logo image (optional — falls back to settings.logo)
+  - image_width: {Number} Logo width in px
+  - link: {String} Logo link URL (default: routes.root_url)
+  - class: {String} Additional classes on wrapper
+  - shopify_attributes: {String} Theme Editor block attributes
+
+  Usage:
+  {% render 'nether-footer-logo', image_width: 120 %}
+{% endcomment %}
+
+{%- liquid
+  assign logo_image = image | default: settings.logo
+  assign logo_width = image_width | default: 120
+  if logo_width == 0
+    assign logo_width = settings.logo_width
+  endif
+  assign logo_link = link | default: routes.root_url
+  assign logo_alt = logo_image.alt | default: shop.name | escape
+-%}
+
+<div class="nether-footer__logo{% if class != blank %} {{ class }}{% endif %}"{% if shopify_attributes != blank %} {{ shopify_attributes }}{% endif %}>
+  <a href="{{ logo_link }}" class="nether-footer__logo-link link focus-inset">
+    {%- if logo_image != blank -%}
+      {%- assign logo_height = logo_width | divided_by: logo_image.aspect_ratio -%}
+      {%- capture widths -%}{{ logo_width }}, {{ logo_width | times: 1.5 | round }}, {{ logo_width | times: 2 }}{%- endcapture -%}
+      {%- capture logo_sizes -%}(max-width: 749px) 50vw, {{ logo_width }}px{%- endcapture -%}
+      {{
+        logo_image
+        | image_url: width: 600
+        | image_tag:
+          class: 'nether-footer__logo-image motion-reduce',
+          widths: widths,
+          height: logo_height,
+          width: logo_width,
+          alt: logo_alt,
+          loading: 'lazy',
+          sizes: logo_sizes
+      }}
+    {%- else -%}
+      <span class="h3 nether-footer__logo-text">{{ shop.name }}</span>
+    {%- endif -%}
+  </a>
+</div>

@@ -1,0 +1,172 @@
+{% comment %}
+  Renders an optional promotional card in the Nether Premium Product grid.
+
+  Accepts:
+  - block: {Object} Promotional card block (required)
+  - section: {Object} Product section (required)
+  - columns: {Number} Grid columns for image sizes (optional)
+  - lazy_load: {Boolean} Lazy load images (default: true)
+  - card_index: {Number} Card index for layout modifiers (optional)
+
+  Usage:
+  {% render 'nether-product-promotional-card', block: block, section: section, columns: columns %}
+{% endcomment %}
+
+{%- liquid
+  assign columns_count = columns | default: section.settings.nether_columns_desktop | default: 3
+  assign is_lazy = lazy_load | default: true
+  assign card_index_num = card_index | default: 1
+  assign content_position = section.settings.nether_content_position | default: 'bottom-left'
+  assign enable_glass = section.settings.nether_enable_glass
+  assign enable_gradient = section.settings.nether_enable_gradient
+  assign show_overlay = section.settings.nether_enable_overlay
+
+  assign card_title = block.settings.heading
+  assign card_url = block.settings.link
+  assign cta_label = block.settings.cta_label
+  assign cta_style = block.settings.cta_style | default: 'primary'
+
+  assign card_classes = 'nether-product-card nether-product-card--promotional'
+  assign card_classes = card_classes | append: ' nether-product-card--position-' | append: content_position
+  if enable_glass
+    assign card_classes = card_classes | append: ' nether-product-card--glass'
+  endif
+  if enable_gradient
+    assign card_classes = card_classes | append: ' nether-product-card--gradient'
+  endif
+  assign card_classes = card_classes | append: ' nether-product-card--index-' | append: card_index_num
+
+  assign overlay_classes = 'nether-product-card__overlay'
+  if enable_gradient
+    case section.settings.nether_gradient_style
+      when 'dramatic'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-dramatic'
+      when 'vignette'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-vignette'
+      when 'fade-down'
+        assign overlay_classes = overlay_classes | append: ' grad-linear-fade-down'
+      else
+        assign overlay_classes = overlay_classes | append: ' grad-hero-brand'
+    endcase
+  endif
+
+  if card_title != blank
+    assign aria_label = block.settings.aria_label | default: card_title
+  else
+    assign aria_label = 'sections.nether_product.promotional.placeholder_label' | t
+  endif
+
+  assign promo_sizes = '(min-width: 990px) calc((100vw - 10rem) / ' | append: columns_count | append: '), calc(100vw - 3rem)'
+-%}
+
+<article
+  class="{{ card_classes }}"
+  data-nether-product-animate
+  data-nether-product-card
+  data-nether-product-promotional
+  {{ block.shopify_attributes }}
+>
+  <a
+    class="nether-product-card__link full-unstyled-link"
+    {% if card_url != blank %}
+      href="{{ card_url }}"
+      aria-label="{{ aria_label | escape }}"
+    {% else %}
+      role="link"
+      aria-disabled="true"
+      aria-label="{{ aria_label | escape }}"
+    {% endif %}
+  >
+    <div class="nether-product-card__inner card card--card card--media card--premium-editorial">
+      {%- if block.settings.image != blank -%}
+        <div
+          class="nether-product-card__media ratio"
+          style="--ratio-percent: 125%;"
+          data-nether-product-media
+        >
+          <div class="nether-product-card__media-inner media media--transparent">
+            {{
+              block.settings.image
+              | image_url: width: 1500
+              | image_tag:
+                widths: '165, 330, 535, 750, 1000, 1500',
+                sizes: promo_sizes,
+                alt: block.settings.image.alt | default: card_title,
+                loading: is_lazy,
+                class: 'motion-reduce'
+            }}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="nether-product-card__media ratio" style="--ratio-percent: 125%;">
+          <div class="nether-product-card__media-inner media media--transparent">
+            {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if show_overlay or enable_gradient -%}
+        <div class="{{ overlay_classes }}" aria-hidden="true" data-nether-product-overlay></div>
+      {%- endif -%}
+
+      {%- if enable_glass -%}
+        <div
+          class="nether-product-card__glass-panel glass-card-light"
+          aria-hidden="true"
+          data-nether-product-decorative
+        ></div>
+      {%- endif -%}
+
+      <div class="nether-product-card__content" data-nether-product-card-content>
+        {%- if block.settings.eyebrow != blank -%}
+          <p class="nether-product-card__label type-overline" data-nether-product-role="eyebrow">{{ block.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if block.settings.badge_label != blank -%}
+          <div class="nether-product-card__badge" data-nether-product-badge data-nether-product-role="badge">
+            {% render 'badge', label: block.settings.badge_label, type: block.settings.badge_type, style: 'soft', size: 'small' %}
+          </div>
+        {%- endif -%}
+
+        <div class="nether-product-card__information">
+          {%- if card_title != blank -%}
+            <h3
+              class="nether-product-card__heading type-heading-md"
+              data-nether-product-title
+              data-nether-product-role="heading"
+            >
+              {{ card_title | escape }}
+            </h3>
+          {%- endif -%}
+
+          {%- if block.settings.text != blank -%}
+            <div
+              class="nether-product-card__description rte type-body-sm"
+              data-nether-product-description
+              data-nether-product-role="intro"
+            >
+              {{ block.settings.text }}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if cta_label != blank -%}
+          <div class="nether-product-card__cta" data-nether-product-cta data-nether-product-role="buttons">
+            {%- liquid
+              assign cta_classes = 'nether-product-card__cta-text button'
+              case cta_style
+                when 'primary'
+                  assign cta_classes = cta_classes | append: ' button--primary'
+                when 'secondary'
+                  assign cta_classes = cta_classes | append: ' button--secondary'
+                else
+                  assign cta_classes = cta_classes | append: ' button--text button--arrow'
+              endcase
+            -%}
+            <span class="{{ cta_classes }}">{{ cta_label | escape }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </a>
+</article>

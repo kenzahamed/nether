@@ -1,0 +1,50 @@
+{% comment %}
+  Renders a grouped set of form choices with accessible legend.
+
+  Accepts:
+  - legend: {String} Fieldset legend text
+  - inline: {Boolean} Inline choice layout (default: false)
+  - required: {Boolean} Marks group as required in legend (default: false)
+  - class: {String} Additional CSS classes
+  - shopify_attributes: {String} Theme Editor block attributes
+
+  Wrap choice snippets inside this block using capture or section markup.
+
+  Usage:
+  {% capture shipping_choices %}
+    {% render 'form-choice', type: 'radio', id: 'ship-1', name: 'shipping', value: '1', label: 'Standard', inline: true %}
+    {% render 'form-choice', type: 'radio', id: 'ship-2', name: 'shipping', value: '2', label: 'Express', inline: true %}
+  {% endcapture %}
+
+  {% render 'form-fieldset', legend: 'Shipping method', content: shipping_choices, inline: true %}
+{% endcomment %}
+
+{%- liquid
+  assign is_inline = inline | default: false, allow_false: true
+  assign is_required = required | default: false, allow_false: true
+
+  assign fieldset_classes = 'form-fieldset'
+  if class != blank
+    assign fieldset_classes = fieldset_classes | append: ' ' | append: class
+  endif
+
+  assign choices_classes = 'form-fieldset__choices'
+  if is_inline
+    assign choices_classes = choices_classes | append: ' form-fieldset__choices--inline'
+  endif
+-%}
+
+<fieldset class="{{ fieldset_classes }}" {{ shopify_attributes }}>
+  {%- if legend != blank -%}
+    <legend class="form-fieldset__legend form__label type-body-sm">
+      {{ legend | escape }}
+      {%- if is_required -%}
+        <span class="form-field__required" aria-hidden="true">*</span>
+      {%- endif -%}
+    </legend>
+  {%- endif -%}
+
+  <div class="{{ choices_classes }}">
+    {{ content }}
+  </div>
+</fieldset>

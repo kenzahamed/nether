@@ -1,0 +1,39 @@
+{% comment %}
+  Nether Premium Compare — attributes helper note / extension surface.
+  Attribute values are captured on compare buttons and rendered in the table by JS.
+
+  Accepts:
+  - block: {Object} Block object (optional)
+  - section: {Object} Section object (optional)
+
+  Usage:
+  {% render 'nether-compare-attributes', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign attributes_label = 'sections.nether_compare.attributes.module_label' | t
+  if block != blank and block.settings.label != blank
+    assign attributes_label = block.settings.label
+  elsif block != blank and block.settings.heading != blank
+    assign attributes_label = block.settings.heading
+  endif
+-%}
+
+<div
+  class="nether-compare__module nether-compare__attributes"
+  data-nether-compare-module="attributes"
+  data-nether-compare-animate
+  {% if block != blank %}{{ block.shopify_attributes }}{% endif %}
+>
+  <div class="nether-compare__attributes-inner" role="group" aria-label="{{ attributes_label | escape }}">
+    {% render 'icon', icon: 'info', size: 'sm', decorative: false, label: attributes_label %}
+    <span class="nether-compare__attributes-label type-body-sm">{{ attributes_label }}</span>
+    {%- if block != blank and block.settings.text != blank -%}
+      <p class="nether-compare__attributes-text type-body-sm">{{ block.settings.text }}</p>
+    {%- else -%}
+      <p class="nether-compare__attributes-text type-body-sm">
+        {{ 'sections.nether_compare.attributes.module_text' | t }}
+      </p>
+    {%- endif -%}
+  </div>
+</div>

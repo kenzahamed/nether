@@ -1,0 +1,132 @@
+{% comment %}
+  Layout-aware FAQ list renderer for the Nether Premium FAQ Framework.
+  Extends Dawn collapsible-content accordion patterns.
+
+  Accepts:
+  - section: {Object} FAQ section (required)
+  - layout: {String} Active FAQ layout (optional)
+  - context: {String} 'body' or 'shell' (optional)
+
+  Usage:
+  {% render 'nether-faq-list', section: section, layout: nether_layout %}
+{% endcomment %}
+
+{%- liquid
+  assign active_layout = layout | default: section.settings.nether_layout
+  assign list_context = context | default: 'body'
+  assign item_index = 0
+  assign featured_assigned = false
+  assign pending_question = nil
+  assign list_block_types = 'faq_item,question,answer,category,callout_card,tip,warning,icon,image,video,button,divider,custom_html,@app' | split: ','
+  assign sidebar_block_types = 'related_question,helpful_link,contact_cta,support_cta' | split: ','
+  assign inline_support_types = 'related_question,helpful_link,contact_cta,support_cta' | split: ','
+  assign has_sidebar_blocks = false
+  assign has_faq_items = false
+
+  for block in section.blocks
+    if list_block_types contains block.type
+      if block.type == 'faq_item' or block.type == 'question'
+        assign has_faq_items = true
+      endif
+    endif
+    if sidebar_block_types contains block.type
+      assign has_sidebar_blocks = true
+    endif
+  endfor
+
+  assign list_classes = 'nether-faq__list'
+  assign list_classes = list_classes | append: ' nether-faq__list--layout-' | append: active_layout
+
+  case active_layout
+    when 'two_column_faq', 'categorized_faq', 'help_center', 'knowledge_base', 'support_center'
+      assign uses_sidebar = true
+    else
+      assign uses_sidebar = false
+  endcase
+
+  if uses_sidebar == false
+    assign has_sidebar_blocks = false
+  endif
+-%}
+
+{%- if has_faq_items or list_context == 'shell' -%}
+  <div class="nether-faq__body{% if uses_sidebar and has_sidebar_blocks %} nether-faq__body--with-sidebar{% endif %}">
+    {%- if uses_sidebar and section.settings.nether_enable_category_nav -%}
+      {%- render 'nether-faq-nav', section: section -%}
+    {%- endif -%}
+
+    <div
+      id="NetherFaqList-{{ section.id }}"
+      class="{{ list_classes }}"
+      role="list"
+      aria-label="{{ 'sections.nether_faq.list.label' | t }}"
+      data-nether-faq-list
+    >
+      {%- for block in section.blocks -%}
+        {%- unless list_block_types contains block.type -%}
+          {%- continue -%}
+        {%- endunless -%}
+
+        {%- case block.type -%}
+          {%- when 'faq_item' -%}
+            {%- assign item_index = item_index | plus: 1 -%}
+            {%- liquid
+              assign is_featured = false
+              if active_layout == 'magazine' and featured_assigned == false
+                assign is_featured = true
+                assign featured_assigned = true
+              endif
+            -%}
+            {%- render 'nether-faq-item',
+              block: block,
+              section: section,
+              item_index: item_index,
+              is_featured: is_featured
+            -%}
+
+          {%- when 'question' -%}
+            {%- assign pending_question = block -%}
+
+          {%- when 'answer' -%}
+            {%- if pending_question != nil -%}
+              {%- assign item_index = item_index | plus: 1 -%}
+              {%- liquid
+                assign is_featured = false
+                if active_layout == 'magazine' and featured_assigned == false
+                  assign is_featured = true
+                  assign featured_assigned = true
+                endif
+              -%}
+              {%- render 'nether-faq-item',
+                block: pending_question,
+                answer_block: block,
+                section: section,
+                item_index: item_index,
+                is_featured: is_featured
+              -%}
+              {%- assign pending_question = nil -%}
+            {%- endif -%}
+
+          {%- else -%}
+            {%- render 'nether-faq-block',
+              block: block,
+              section: section,
+              context: 'list'
+            -%}
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {%- unless uses_sidebar and has_sidebar_blocks -%}
+        {%- for block in section.blocks -%}
+          {%- if inline_support_types contains block.type -%}
+            {%- render 'nether-faq-block', block: block, section: section, context: 'list' -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endunless -%}
+    </div>
+
+    {%- if uses_sidebar and has_sidebar_blocks -%}
+      {%- render 'nether-faq-sidebar', section: section -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

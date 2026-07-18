@@ -1,0 +1,24 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — commerce icon wrapper.
+  Reuses the Nether Icon System with commerce-oriented defaults.
+
+  Accepts:
+  - icon: {String} Icon name (default: lock)
+  - size: {String} xs | sm | md | lg (default: sm)
+  - decorative: {Boolean} (default: true)
+  - label: {String} Accessible label when not decorative
+  - class: {String} Extra classes
+{% endcomment %}
+
+{%- liquid
+  assign commerce_icon = icon | default: 'lock'
+  assign commerce_size = size | default: 'sm'
+  assign is_decorative = decorative
+  if is_decorative == nil
+    assign is_decorative = true
+  endif
+-%}
+
+<span class="nether-commerce__icon{% if class != blank %} {{ class }}{% endif %}" data-nether-commerce-icon="{{ commerce_icon }}">
+  {% render 'icon', icon: commerce_icon, size: commerce_size, decorative: is_decorative, label: label %}
+</span>

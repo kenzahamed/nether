@@ -1,0 +1,42 @@
+{% comment %}
+  Nether Premium Product Page — Product highlights module.
+
+  Accepts:
+  - block: {Object} Block object (required)
+{% endcomment %}
+
+{%- liquid
+  assign has_highlights = false
+  for i in (1..6)
+    assign highlight_key = 'highlight_' | append: i
+    if block.settings[highlight_key] != blank
+      assign has_highlights = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if has_highlights -%}
+  <div
+    class="nether-product-page__module nether-product-page__module--highlights"
+    data-nether-product-page-module="highlights"
+    data-nether-product-page-animate
+    {{ block.shopify_attributes }}
+  >
+    {%- if block.settings.heading != blank -%}
+      <h2 class="nether-product-page__module-heading type-heading-sm">{{ block.settings.heading }}</h2>
+    {%- endif -%}
+    <ul class="nether-product-page__highlights" role="list">
+      {%- for i in (1..6) -%}
+        {%- assign highlight_key = 'highlight_' | append: i -%}
+        {%- assign highlight_text = block.settings[highlight_key] -%}
+        {%- if highlight_text != blank -%}
+          <li class="nether-product-page__highlight-item">
+            {% render 'icon', icon: 'check_mark', size: 'sm', decorative: true %}
+            <span class="type-body-sm">{{ highlight_text }}</span>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}

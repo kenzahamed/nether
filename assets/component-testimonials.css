@@ -1,0 +1,504 @@
+/* =============================================================================
+ * Nether Premium Testimonials & Social Proof Framework
+ * Extends component-hero.css and component-collection-showcase patterns.
+ * Reuses: Card Premium, Typography, Button, Badge, Glass, Gradient, Shadow, Radius
+ * ============================================================================= */
+
+nether-testimonials {
+  display: block;
+  position: relative;
+}
+
+.nether-testimonials {
+  --nether-testimonials-gap: 2.4rem;
+  --nether-testimonials-columns-desktop: 3;
+  --nether-testimonials-columns-tablet: 2;
+  --nether-testimonials-columns-mobile: 1;
+  --nether-testimonials-overlay-opacity: 0.35;
+  --nether-testimonials-transition-duration: 0.5s;
+  --nether-hero-overlay-opacity: var(--nether-testimonials-overlay-opacity);
+  --nether-hero-transition-duration: var(--nether-testimonials-transition-duration);
+  --nether-hero-min-height: auto;
+}
+
+.nether-testimonials__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+/* ── Section header ────────────────────────────────────────────────────────── */
+
+.nether-testimonials__header-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 72rem;
+}
+
+.nether-testimonials__header-inner--align-center {
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.nether-testimonials__header-inner--align-right {
+  margin-inline-start: auto;
+  text-align: right;
+  align-items: flex-end;
+}
+
+.nether-testimonials__eyebrow,
+.nether-testimonials__heading,
+.nether-testimonials__subheading,
+.nether-testimonials__text {
+  margin: 0;
+}
+
+.nether-testimonials__text {
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-testimonials__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nether-testimonials__header-inner--align-center .nether-testimonials__buttons {
+  justify-content: center;
+}
+
+.nether-testimonials__header-inner--align-right .nether-testimonials__buttons {
+  justify-content: flex-end;
+}
+
+/* ── Shell / editorial panel ───────────────────────────────────────────────── */
+
+.nether-testimonials__panel--floating {
+  transform: translateY(-1.6rem);
+}
+
+.nether-testimonials__shell-card {
+  width: 100%;
+}
+
+.nether-testimonials__author {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.nether-testimonials__author-avatar,
+.nether-testimonials-card__avatar-image {
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nether-testimonials__author-name,
+.nether-testimonials__author-role,
+.nether-testimonials__author-company {
+  margin: 0;
+}
+
+.nether-testimonials__author-role,
+.nether-testimonials__author-company {
+  opacity: 0.75;
+}
+
+.nether-testimonials__block-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-testimonials__block-divider--gradient {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(var(--color-foreground), 0.28), transparent);
+}
+
+.nether-testimonials__block-divider--space {
+  height: 2.4rem;
+  background: transparent;
+}
+
+/* ── Grid system ───────────────────────────────────────────────────────────── */
+
+.nether-testimonials__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--nether-testimonials-columns-mobile), minmax(0, 1fr));
+  gap: var(--nether-testimonials-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nether-testimonials__item {
+  min-width: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-testimonials__grid {
+    grid-template-columns: repeat(var(--nether-testimonials-columns-tablet), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-testimonials__grid {
+    grid-template-columns: repeat(var(--nether-testimonials-columns-desktop), minmax(0, 1fr));
+  }
+}
+
+/* ── Testimonial cards ─────────────────────────────────────────────────────── */
+
+.nether-testimonials-card__inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  padding: 2.4rem;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  background: rgba(var(--color-background), 0.92);
+  transition: transform var(--nether-testimonials-transition-duration) ease,
+    box-shadow var(--nether-testimonials-transition-duration) ease;
+}
+
+.nether-testimonials-card--glass .nether-testimonials-card__inner {
+  background: rgba(var(--color-background), 0.55);
+  backdrop-filter: blur(1.2rem);
+}
+
+.nether-testimonials-card--gradient .nether-testimonials-card__inner {
+  background: linear-gradient(
+    145deg,
+    rgba(var(--color-background), 0.96),
+    rgba(var(--color-foreground), 0.06)
+  );
+}
+
+.nether-testimonials-card--floating .nether-testimonials-card__inner {
+  box-shadow: 0 1.6rem 4rem rgba(var(--color-shadow), 0.1);
+}
+
+.nether-testimonials-card--style-editorial .nether-testimonials-card__quote {
+  font-size: calc(var(--font-heading-scale) * 2.2rem);
+  line-height: 1.35;
+}
+
+.nether-testimonials-card--style-minimal .nether-testimonials-card__inner {
+  padding: 1.6rem 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.nether-testimonials-card--align-center .nether-testimonials-card__content,
+.nether-testimonials-card--align-center .nether-testimonials-card__footer {
+  text-align: center;
+}
+
+.nether-testimonials-card--align-center .nether-testimonials-card__avatar {
+  margin-inline: auto;
+}
+
+.nether-testimonials-card__quote {
+  margin: 0;
+  position: relative;
+}
+
+.nether-testimonials-card__quote-mark {
+  display: block;
+  font-size: 3.2rem;
+  line-height: 1;
+  opacity: 0.2;
+  margin-bottom: 0.4rem;
+}
+
+.nether-testimonials-card__footer {
+  margin-top: auto;
+}
+
+.nether-testimonials-card__author {
+  font-style: normal;
+}
+
+.nether-testimonials-card__role,
+.nether-testimonials-card__company {
+  margin: 0.2rem 0 0;
+  opacity: 0.72;
+}
+
+.nether-testimonials-card--hover-reveal .nether-testimonials-card__content {
+  transform: translateY(1rem);
+  opacity: 0.92;
+}
+
+.nether-testimonials-card__media {
+  border-radius: var(--radius-level-md, 1.2rem);
+  overflow: hidden;
+}
+
+/* ── Layout: Magazine ──────────────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-testimonials--layout-magazine .nether-testimonials__item--featured {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .nether-testimonials--layout-magazine .nether-testimonials__item--featured .nether-testimonials-card__quote {
+    font-size: calc(var(--font-heading-scale) * 2.4rem);
+  }
+}
+
+/* ── Layout: Editorial ─────────────────────────────────────────────────────── */
+
+.nether-testimonials--layout-editorial_testimonials .nether-testimonials__content {
+  max-width: 64rem;
+}
+
+.nether-testimonials--layout-minimal .nether-hero__panel {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* ── Brand logos wall ──────────────────────────────────────────────────────── */
+
+.nether-testimonials--layout-brand_logos .nether-testimonials__grid {
+  align-items: center;
+}
+
+.nether-testimonials__logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  padding: 1.6rem;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  border-radius: var(--radius-level-md, 1.2rem);
+  background: rgba(var(--color-background), 0.9);
+}
+
+.nether-testimonials__logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+}
+
+.nether-testimonials__logo-image {
+  max-width: 14rem;
+  max-height: 5.6rem;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.72;
+  transition: opacity var(--nether-testimonials-transition-duration) ease,
+    filter var(--nether-testimonials-transition-duration) ease;
+}
+
+.nether-testimonials__logo-item:hover .nether-testimonials__logo-image,
+.nether-testimonials__logo-item:focus-within .nether-testimonials__logo-image {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+/* ── Statistics ─────────────────────────────────────────────────────────────── */
+
+.nether-testimonials--layout-statistics .nether-testimonials__stat {
+  text-align: center;
+  padding: 2.4rem 1.6rem;
+  border-radius: var(--radius-level-md, 1.2rem);
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+.nether-testimonials__stat-value,
+.nether-testimonials__stat-label {
+  margin: 0;
+}
+
+.nether-testimonials__stat-label {
+  margin-top: 0.8rem;
+  opacity: 0.72;
+}
+
+/* ── Awards & press ────────────────────────────────────────────────────────── */
+
+.nether-testimonials__award,
+.nether-testimonials__press {
+  height: 100%;
+  padding: 2rem;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  border-radius: var(--radius-level-md, 1.2rem);
+  background: rgba(var(--color-background), 0.94);
+}
+
+.nether-testimonials__award-image img,
+.nether-testimonials__press-logo img {
+  max-width: 12rem;
+  max-height: 5.6rem;
+  object-fit: contain;
+}
+
+.nether-testimonials__award-title,
+.nether-testimonials__press-quote,
+.nether-testimonials__press-publication {
+  margin: 0;
+}
+
+.nether-testimonials__press-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.nether-testimonials__press-quote {
+  margin-top: 1.2rem;
+  font-style: italic;
+}
+
+.nether-testimonials__trust-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  padding: 1.6rem;
+}
+
+/* ── Section dividers ────────────────────────────────────────────────────────── */
+
+.nether-testimonials__divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-testimonials__divider--gradient {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(var(--color-foreground), 0.28), transparent);
+}
+
+.nether-testimonials__divider--wave {
+  height: 2.4rem;
+  background: transparent;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath fill='black' d='M0 20 Q300 0 600 20 T1200 20 V40 H0Z'/%3E%3C/svg%3E");
+  mask-size: cover;
+  background-color: rgba(var(--color-foreground), 0.08);
+}
+
+/* ── Responsive layout modifiers ─────────────────────────────────────────────── */
+
+@media screen and (max-width: 749px) {
+  .nether-testimonials--mobile-stacked .nether-testimonials__grid,
+  .nether-testimonials--mobile-centered .nether-testimonials__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-testimonials--mobile-centered .nether-testimonials__header-inner,
+  .nether-testimonials--mobile-centered .nether-testimonials-card--align-left .nether-testimonials-card__content {
+    text-align: center;
+    align-items: center;
+  }
+
+  .nether-testimonials--mobile-minimal .nether-testimonials-card__inner {
+    padding: 1.6rem 0;
+    border: 0;
+    background: transparent;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .nether-testimonials--tablet-stacked .nether-testimonials__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-testimonials--tablet-centered .nether-testimonials__header-inner {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-testimonials-card__inner,
+  .nether-testimonials__logo-image {
+    transition: none;
+  }
+
+  .nether-testimonials-card--hover-reveal .nether-testimonials-card__content {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.nether-testimonials-card--motion-reduced .nether-testimonials-card__content {
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* ── Motion hooks (Hero Motion standard — additive Testimonials selectors) ──── */
+
+nether-testimonials[data-nether-motion-pending='true'] .nether-testimonials__header [data-nether-testimonials-animate],
+nether-testimonials[data-nether-motion-pending='true'] [data-nether-testimonials-shell] [data-nether-testimonials-animate],
+nether-testimonials[data-nether-motion-pending='true'] .nether-testimonials__item,
+nether-testimonials[data-nether-motion-pending='true'] [data-nether-testimonials-logo],
+nether-testimonials[data-nether-motion-pending='true'] [data-nether-testimonials-nav-control] {
+  opacity: 0;
+}
+
+nether-testimonials[data-nether-motion-ready='true'] .nether-testimonials__header [data-nether-testimonials-animate],
+nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-shell] [data-nether-testimonials-animate],
+nether-testimonials[data-nether-motion-ready='true'] .nether-testimonials__item,
+nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-card],
+nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-logo],
+nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-avatar],
+nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-quote],
+nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-rating] {
+  will-change: transform, opacity;
+}
+
+nether-testimonials[data-nether-motion-ready='true'] .nether-testimonials__buttons .button,
+nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-nav-control] {
+  will-change: transform;
+}
+
+/* Avoid CSS transform fighting GSAP hover on floating cards while motion is active */
+nether-testimonials[data-nether-motion-ready='true'].nether-testimonials--floating-enabled .nether-testimonials-card--floating .nether-testimonials-card__inner,
+nether-testimonials[data-nether-motion-ready='true'].nether-testimonials--floating-enabled .nether-testimonials__panel--floating {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  nether-testimonials[data-nether-motion-pending='true'] .nether-testimonials__header [data-nether-testimonials-animate],
+  nether-testimonials[data-nether-motion-pending='true'] [data-nether-testimonials-shell] [data-nether-testimonials-animate],
+  nether-testimonials[data-nether-motion-pending='true'] .nether-testimonials__item,
+  nether-testimonials[data-nether-motion-pending='true'] [data-nether-testimonials-logo],
+  nether-testimonials[data-nether-motion-pending='true'] [data-nether-testimonials-nav-control] {
+    opacity: 1;
+  }
+
+  nether-testimonials[data-nether-motion-ready='true'] .nether-testimonials__header [data-nether-testimonials-animate],
+  nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-shell] [data-nether-testimonials-animate],
+  nether-testimonials[data-nether-motion-ready='true'] .nether-testimonials__item,
+  nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-card],
+  nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-logo],
+  nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-avatar],
+  nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-quote],
+  nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-rating],
+  nether-testimonials[data-nether-motion-ready='true'] .nether-testimonials__buttons .button,
+  nether-testimonials[data-nether-motion-ready='true'] [data-nether-testimonials-nav-control] {
+    will-change: auto;
+  }
+
+  .nether-testimonials-card--floating .nether-testimonials-card__inner,
+  .nether-testimonials__panel--floating {
+    transition: none;
+  }
+}

@@ -1,0 +1,1003 @@
+/* =============================================================================
+ * Nether Premium Glass Effects System
+ * Extends Dawn / Nether background architecture — do not duplicate base.css or
+ * replace existing .card--premium-glass rules in component-card-premium.css.
+ * Styles: light, medium, heavy, frosted, dark, colored
+ * Features: blur, transparency, borders, shadows, layered, overlay
+ * Categories: card, button, badge, form, drawer, popup, hero, nav, product-card
+ * Merchant control: --glass-blur-intensity, --glass-opacity-intensity,
+ *                   --glass-border-intensity, --glass-bg-intensity
+ * ============================================================================= */
+
+:root {
+  /* ── Global merchant multipliers (wire to theme settings in future) ─────────── */
+  --glass-blur-intensity: 1;
+  --glass-opacity-intensity: 1;
+  --glass-border-intensity: 1;
+  --glass-bg-intensity: 1;
+
+  /* ── Base blur tokens ──────────────────────────────────────────────────────── */
+  --glass-blur-light: calc(0.6rem * var(--glass-blur-intensity));
+  --glass-blur-medium: calc(1.2rem * var(--glass-blur-intensity));
+  --glass-blur-heavy: calc(2rem * var(--glass-blur-intensity));
+  --glass-blur-frosted: calc(2.4rem * var(--glass-blur-intensity));
+
+  /* ── Background opacity tokens ─────────────────────────────────────────────── */
+  --glass-bg-opacity-light: calc(0.35 * var(--glass-bg-intensity) * var(--glass-opacity-intensity));
+  --glass-bg-opacity-medium: calc(0.55 * var(--glass-bg-intensity) * var(--glass-opacity-intensity));
+  --glass-bg-opacity-heavy: calc(0.72 * var(--glass-bg-intensity) * var(--glass-opacity-intensity));
+  --glass-bg-opacity-frosted: calc(0.48 * var(--glass-bg-intensity) * var(--glass-opacity-intensity));
+  --glass-bg-opacity-dark: calc(0.55 * var(--glass-bg-intensity) * var(--glass-opacity-intensity));
+  --glass-bg-opacity-colored: calc(0.45 * var(--glass-bg-intensity) * var(--glass-opacity-intensity));
+  --glass-bg-opacity-overlay: calc(0.4 * var(--glass-bg-intensity) * var(--glass-opacity-intensity));
+
+  /* ── Border opacity tokens ─────────────────────────────────────────────────── */
+  --glass-border-opacity-light: calc(0.1 * var(--glass-border-intensity));
+  --glass-border-opacity-medium: calc(0.14 * var(--glass-border-intensity));
+  --glass-border-opacity-heavy: calc(0.2 * var(--glass-border-intensity));
+  --glass-border-opacity-frosted: calc(0.16 * var(--glass-border-intensity));
+  --glass-border-opacity-dark: calc(0.22 * var(--glass-border-intensity));
+  --glass-border-opacity-colored: calc(0.18 * var(--glass-border-intensity));
+
+  /* ── Tint tokens (reuse Dawn color channels) ───────────────────────────────── */
+  --glass-tint-light: var(--color-background);
+  --glass-tint-dark: var(--color-foreground);
+  --glass-tint-colored: var(--color-button);
+  --glass-text-on-light: var(--color-foreground);
+  --glass-text-on-dark: var(--color-background);
+
+  /* ── Glass shadow tokens (compose with Shadow System when present) ─────────── */
+  --glass-shadow-light: 0 0.2rem 0.8rem rgba(var(--color-shadow), calc(0.06 * var(--shadow-intensity, 1)));
+  --glass-shadow-medium: 0 0.4rem 1.6rem rgba(var(--color-shadow), calc(0.1 * var(--shadow-intensity, 1)));
+  --glass-shadow-heavy: 0 0.8rem 2.4rem rgba(var(--color-shadow), calc(0.14 * var(--shadow-intensity, 1)));
+  --glass-shadow-inset: inset 0 0.1rem 0.2rem rgba(var(--color-background), 0.35);
+
+  /* ── Shared surface recipe (overridden per style utility) ──────────────────── */
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-medium);
+  --glass-border-opacity: var(--glass-border-opacity-medium);
+  --glass-tint: var(--glass-tint-light);
+  --glass-shadow: var(--glass-shadow-medium);
+}
+
+/* ── Shared glass surface (applied by style + category utilities) ────────────── */
+
+.glass-surface {
+  background-color: rgba(var(--glass-tint), var(--glass-bg-opacity));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-surface--dark {
+  color: rgb(var(--glass-text-on-dark));
+  border-color: rgba(var(--color-background), var(--glass-border-opacity));
+}
+
+.glass-surface--borderless {
+  border-color: transparent;
+}
+
+.glass-surface--shadowless {
+  box-shadow: none;
+}
+
+/* ── Glass styles ────────────────────────────────────────────────────────────── */
+
+.glass-light {
+  --glass-blur: var(--glass-blur-light);
+  --glass-bg-opacity: var(--glass-bg-opacity-light);
+  --glass-border-opacity: var(--glass-border-opacity-light);
+  --glass-tint: var(--glass-tint-light);
+  --glass-shadow: var(--glass-shadow-light);
+  background-color: rgba(var(--glass-tint), var(--glass-bg-opacity));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-medium {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-medium);
+  --glass-border-opacity: var(--glass-border-opacity-medium);
+  --glass-tint: var(--glass-tint-light);
+  --glass-shadow: var(--glass-shadow-medium);
+  background-color: rgba(var(--glass-tint), var(--glass-bg-opacity));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-heavy {
+  --glass-blur: var(--glass-blur-heavy);
+  --glass-bg-opacity: var(--glass-bg-opacity-heavy);
+  --glass-border-opacity: var(--glass-border-opacity-heavy);
+  --glass-tint: var(--glass-tint-light);
+  --glass-shadow: var(--glass-shadow-heavy);
+  background-color: rgba(var(--glass-tint), var(--glass-bg-opacity));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-frosted {
+  --glass-blur: var(--glass-blur-frosted);
+  --glass-bg-opacity: var(--glass-bg-opacity-frosted);
+  --glass-border-opacity: var(--glass-border-opacity-frosted);
+  --glass-tint: var(--glass-tint-light);
+  --glass-shadow: var(--glass-shadow-medium), var(--glass-shadow-inset);
+  background-color: rgba(var(--glass-tint), var(--glass-bg-opacity));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  box-shadow: var(--glass-shadow);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-dark {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-dark);
+  --glass-border-opacity: var(--glass-border-opacity-dark);
+  --glass-tint: var(--glass-tint-dark);
+  --glass-shadow: var(--glass-shadow-medium);
+  background-color: rgba(var(--glass-tint), var(--glass-bg-opacity));
+  border: 0.1rem solid rgba(var(--color-background), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  color: rgb(var(--glass-text-on-dark));
+}
+
+.glass-colored {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-colored);
+  --glass-border-opacity: var(--glass-border-opacity-colored);
+  --glass-tint: var(--glass-tint-colored);
+  --glass-shadow: var(--glass-shadow-medium);
+  background-color: rgba(var(--glass-tint), var(--glass-bg-opacity));
+  border: 0.1rem solid rgba(var(--color-button), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  color: rgb(var(--color-button-text));
+}
+
+/* ── Feature utilities ───────────────────────────────────────────────────────── */
+
+.glass-border {
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity, var(--glass-border-opacity-medium)));
+}
+
+.glass-border-dark {
+  border: 0.1rem solid rgba(var(--color-background), var(--glass-border-opacity, var(--glass-border-opacity-dark)));
+}
+
+.glass-shadow {
+  box-shadow: var(--glass-shadow, var(--glass-shadow-medium));
+}
+
+.glass-shadow-light {
+  box-shadow: var(--glass-shadow-light);
+}
+
+.glass-shadow-heavy {
+  box-shadow: var(--glass-shadow-heavy);
+}
+
+.glass-shadow-inset {
+  box-shadow: var(--glass-shadow-inset);
+}
+
+.glass-blur-only {
+  background-color: transparent;
+  -webkit-backdrop-filter: blur(var(--glass-blur, var(--glass-blur-medium)));
+  backdrop-filter: blur(var(--glass-blur, var(--glass-blur-medium)));
+}
+
+.glass-layered {
+  isolation: isolate;
+  position: relative;
+}
+
+.glass-layered::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: rgba(var(--glass-tint, var(--glass-tint-light)), calc(var(--glass-bg-opacity, var(--glass-bg-opacity-medium)) * 0.55));
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur, var(--glass-blur-medium)) * 0.65));
+  backdrop-filter: blur(calc(var(--glass-blur, var(--glass-blur-medium)) * 0.65));
+  pointer-events: none;
+}
+
+.glass-overlay {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-overlay);
+  --glass-border-opacity: var(--glass-border-opacity-light);
+  --glass-tint: var(--glass-tint-light);
+  background-color: rgba(var(--glass-tint), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border: 0;
+  box-shadow: none;
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-overlay--dark {
+  --glass-tint: var(--glass-tint-dark);
+  --glass-bg-opacity: var(--glass-bg-opacity-dark);
+  background-color: rgba(var(--glass-tint), var(--glass-bg-opacity));
+  color: rgb(var(--glass-text-on-dark));
+}
+
+.glass-text-contrast {
+  color: rgb(var(--glass-text-on-light));
+  text-shadow: 0 0.1rem 0.2rem rgba(var(--color-shadow), 0.12);
+}
+
+.glass-text-contrast--on-dark {
+  color: rgb(var(--glass-text-on-dark));
+  text-shadow: 0 0.1rem 0.2rem rgba(var(--color-shadow), 0.35);
+}
+
+/* ── Category utilities: Cards ───────────────────────────────────────────────── */
+
+.glass-card-light.card--card,
+.glass-card-light.card--standard .card__inner,
+.card.glass-card-light,
+.card--standard.glass-card-light .card__inner {
+  --glass-blur: var(--glass-blur-light);
+  --glass-bg-opacity: var(--glass-bg-opacity-light);
+  --glass-border-opacity: var(--glass-border-opacity-light);
+  background: rgba(var(--color-background), var(--glass-bg-opacity));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass-card-medium.card--card,
+.glass-card-medium.card--standard .card__inner,
+.card.glass-card-medium,
+.card--standard.glass-card-medium .card__inner {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-medium);
+  --glass-border-opacity: var(--glass-border-opacity-medium);
+  background: rgba(var(--color-background), var(--glass-bg-opacity));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass-card-heavy.card--card,
+.glass-card-heavy.card--standard .card__inner,
+.card.glass-card-heavy,
+.card--standard.glass-card-heavy .card__inner {
+  --glass-blur: var(--glass-blur-heavy);
+  --glass-bg-opacity: var(--glass-bg-opacity-heavy);
+  --glass-border-opacity: var(--glass-border-opacity-heavy);
+  background: rgba(var(--color-background), var(--glass-bg-opacity));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass-card-frosted.card--card,
+.glass-card-frosted.card--standard .card__inner,
+.card.glass-card-frosted,
+.card--standard.glass-card-frosted .card__inner {
+  --glass-blur: var(--glass-blur-frosted);
+  --glass-bg-opacity: var(--glass-bg-opacity-frosted);
+  --glass-border-opacity: var(--glass-border-opacity-frosted);
+  background: rgba(var(--color-background), var(--glass-bg-opacity));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+}
+
+.glass-card-dark.card--card,
+.glass-card-dark.card--standard .card__inner,
+.card.glass-card-dark,
+.card--standard.glass-card-dark .card__inner {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-dark);
+  --glass-border-opacity: var(--glass-border-opacity-dark);
+  background: rgba(var(--color-foreground), var(--glass-bg-opacity));
+  border-color: rgba(var(--color-background), var(--glass-border-opacity));
+  color: rgb(var(--glass-text-on-dark));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass-card-colored.card--card,
+.glass-card-colored.card--standard .card__inner,
+.card.glass-card-colored,
+.card--standard.glass-card-colored .card__inner {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-colored);
+  --glass-border-opacity: var(--glass-border-opacity-colored);
+  background: rgba(var(--color-button), var(--glass-bg-opacity));
+  border-color: rgba(var(--color-button), var(--glass-border-opacity));
+  color: rgb(var(--color-button-text));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+/* ── Category utilities: Buttons ─────────────────────────────────────────────── */
+
+.glass-button-light,
+.glass-button-medium,
+.glass-button-heavy,
+.glass-button-frosted,
+.glass-button-dark,
+.glass-button-colored {
+  --alpha-button-background: 0;
+  position: relative;
+  isolation: isolate;
+}
+
+.glass-button-light {
+  --glass-blur: var(--glass-blur-light);
+  --glass-bg-opacity: var(--glass-bg-opacity-light);
+  --glass-border-opacity: var(--glass-border-opacity-light);
+  color: rgb(var(--glass-text-on-light));
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass-button-medium {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-medium);
+  --glass-border-opacity: var(--glass-border-opacity-medium);
+  color: rgb(var(--glass-text-on-light));
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass-button-heavy {
+  --glass-blur: var(--glass-blur-heavy);
+  --glass-bg-opacity: var(--glass-bg-opacity-heavy);
+  color: rgb(var(--glass-text-on-light));
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass-button-frosted {
+  --glass-blur: var(--glass-blur-frosted);
+  --glass-bg-opacity: var(--glass-bg-opacity-frosted);
+  color: rgb(var(--glass-text-on-light));
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+}
+
+.glass-button-dark {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-dark);
+  color: rgb(var(--glass-text-on-dark));
+  background-color: rgba(var(--color-foreground), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass-button-colored {
+  --glass-blur: var(--glass-blur-medium);
+  --glass-bg-opacity: var(--glass-bg-opacity-colored);
+  color: rgb(var(--color-button-text));
+  background-color: rgba(var(--color-button), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.button.glass-button-light:not([disabled]):not([aria-disabled='true']):hover,
+.button.glass-button-medium:not([disabled]):not([aria-disabled='true']):hover,
+.button.glass-button-heavy:not([disabled]):not([aria-disabled='true']):hover,
+.button.glass-button-frosted:not([disabled]):not([aria-disabled='true']):hover {
+  --glass-bg-opacity: calc(var(--glass-bg-opacity) + 0.08);
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity));
+}
+
+.button.glass-button-dark:not([disabled]):not([aria-disabled='true']):hover {
+  --glass-bg-opacity: calc(var(--glass-bg-opacity) + 0.08);
+  background-color: rgba(var(--color-foreground), var(--glass-bg-opacity));
+}
+
+/* ── Category utilities: Badges ──────────────────────────────────────────────── */
+
+.glass-badge-light,
+.glass-badge-medium,
+.glass-badge-frosted,
+.glass-badge-dark,
+.glass-badge-colored {
+  border-style: solid;
+  border-width: 0.1rem;
+}
+
+.glass-badge-light {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-light));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity-light));
+  color: rgb(var(--glass-text-on-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  backdrop-filter: blur(var(--glass-blur-light));
+}
+
+.glass-badge-medium {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-medium));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity-medium));
+  color: rgb(var(--glass-text-on-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+.glass-badge-frosted {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-frosted));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity-frosted));
+  color: rgb(var(--glass-text-on-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+}
+
+.glass-badge-dark {
+  background-color: rgba(var(--color-foreground), var(--glass-bg-opacity-dark));
+  border-color: rgba(var(--color-background), var(--glass-border-opacity-dark));
+  color: rgb(var(--glass-text-on-dark));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+.glass-badge-colored {
+  background-color: rgba(var(--color-button), var(--glass-bg-opacity-colored));
+  border-color: rgba(var(--color-button), var(--glass-border-opacity-colored));
+  color: rgb(var(--color-button-text));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+/* ── Category utilities: Forms ───────────────────────────────────────────────── */
+
+.glass-form-light,
+.glass-form-medium,
+.glass-form-frosted {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+.glass-form-light {
+  --glass-bg-opacity: var(--glass-bg-opacity-light);
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  backdrop-filter: blur(var(--glass-blur-light));
+}
+
+.glass-form-medium .field__input,
+.glass-form-medium .select__select,
+.glass-form-light .field__input,
+.glass-form-light .select__select,
+.glass-form-frosted .field__input,
+.glass-form-frosted .select__select {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  backdrop-filter: blur(var(--glass-blur-light));
+}
+
+.glass-form-frosted {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-frosted));
+  -webkit-backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+}
+
+/* ── Category utilities: Drawers ─────────────────────────────────────────────── */
+
+.glass-drawer-light,
+.glass-drawer-medium,
+.glass-drawer-heavy,
+.glass-drawer-frosted,
+.glass-drawer-dark {
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+.glass-drawer-light {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  backdrop-filter: blur(var(--glass-blur-light));
+}
+
+.glass-drawer-medium {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-medium));
+}
+
+.glass-drawer-heavy {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-heavy));
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  backdrop-filter: blur(var(--glass-blur-heavy));
+}
+
+.glass-drawer-frosted {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-frosted));
+  -webkit-backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+}
+
+.glass-drawer-dark {
+  background-color: rgba(var(--color-foreground), var(--glass-bg-opacity-dark));
+  color: rgb(var(--glass-text-on-dark));
+}
+
+/* ── Category utilities: Popups / Modals ─────────────────────────────────────── */
+
+.glass-popup-light,
+.glass-popup-medium,
+.glass-popup-heavy,
+.glass-popup-frosted,
+.glass-popup-dark,
+.glass-modal-light,
+.glass-modal-medium,
+.glass-modal-heavy,
+.glass-modal-frosted,
+.glass-modal-dark {
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-medium));
+  box-shadow: var(--glass-shadow-medium);
+}
+
+.glass-popup-light,
+.glass-modal-light {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  backdrop-filter: blur(var(--glass-blur-light));
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-popup-medium,
+.glass-modal-medium {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-popup-heavy,
+.glass-modal-heavy {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-heavy));
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  backdrop-filter: blur(var(--glass-blur-heavy));
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-popup-frosted,
+.glass-modal-frosted {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-frosted));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity-frosted));
+  -webkit-backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-popup-dark,
+.glass-modal-dark {
+  background-color: rgba(var(--color-foreground), var(--glass-bg-opacity-dark));
+  border-color: rgba(var(--color-background), var(--glass-border-opacity-dark));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  color: rgb(var(--glass-text-on-dark));
+}
+
+/* ── Category utilities: Hero content ────────────────────────────────────────── */
+
+.glass-hero-light,
+.glass-hero-medium,
+.glass-hero-heavy,
+.glass-hero-frosted,
+.glass-hero-dark,
+.glass-hero-colored {
+  display: inline-block;
+  max-width: 100%;
+  padding: 2rem 2.4rem;
+  border-radius: var(--radius-md, 0.8rem);
+}
+
+.glass-hero-light {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-light));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  backdrop-filter: blur(var(--glass-blur-light));
+  box-shadow: var(--glass-shadow-light);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-hero-medium {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-medium));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  box-shadow: var(--glass-shadow-medium);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-hero-heavy {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-heavy));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-heavy));
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  backdrop-filter: blur(var(--glass-blur-heavy));
+  box-shadow: var(--glass-shadow-heavy);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-hero-frosted {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-frosted));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-frosted));
+  -webkit-backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  box-shadow: var(--glass-shadow-medium), var(--glass-shadow-inset);
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-hero-dark {
+  background-color: rgba(var(--color-foreground), var(--glass-bg-opacity-dark));
+  border: 0.1rem solid rgba(var(--color-background), var(--glass-border-opacity-dark));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  box-shadow: var(--glass-shadow-medium);
+  color: rgb(var(--glass-text-on-dark));
+}
+
+.glass-hero-colored {
+  background-color: rgba(var(--color-button), var(--glass-bg-opacity-colored));
+  border: 0.1rem solid rgba(var(--color-button), var(--glass-border-opacity-colored));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  box-shadow: var(--glass-shadow-medium);
+  color: rgb(var(--color-button-text));
+}
+
+@media screen and (min-width: 750px) {
+  .glass-hero-light,
+  .glass-hero-medium,
+  .glass-hero-heavy,
+  .glass-hero-frosted,
+  .glass-hero-dark,
+  .glass-hero-colored {
+    padding: 2.8rem 3.2rem;
+  }
+}
+
+/* ── Category utilities: Navigation ──────────────────────────────────────────── */
+
+.glass-nav-light,
+.glass-nav-medium,
+.glass-nav-frosted,
+.glass-nav-dark {
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+.glass-nav-light {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  backdrop-filter: blur(var(--glass-blur-light));
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-light));
+}
+
+.glass-nav-medium {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-medium));
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-medium));
+}
+
+.glass-nav-frosted {
+  background-color: rgba(var(--color-background), var(--glass-bg-opacity-frosted));
+  -webkit-backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-frosted));
+}
+
+.glass-nav-dark {
+  background-color: rgba(var(--color-foreground), var(--glass-bg-opacity-dark));
+  color: rgb(var(--glass-text-on-dark));
+  border-bottom: 0.1rem solid rgba(var(--color-background), var(--glass-border-opacity-dark));
+}
+
+/* ── Category utilities: Product Cards ───────────────────────────────────────── */
+
+.glass-product-card-light.product-card-wrapper .card,
+.glass-product-card-light.contains-card--product,
+.product-card-wrapper.glass-product-card-light .card {
+  background: rgba(var(--color-background), var(--glass-bg-opacity-light));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  backdrop-filter: blur(var(--glass-blur-light));
+}
+
+.glass-product-card-medium.product-card-wrapper .card,
+.glass-product-card-medium.contains-card--product,
+.product-card-wrapper.glass-product-card-medium .card {
+  background: rgba(var(--color-background), var(--glass-bg-opacity-medium));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+.glass-product-card-frosted.product-card-wrapper .card,
+.glass-product-card-frosted.contains-card--product,
+.product-card-wrapper.glass-product-card-frosted .card {
+  background: rgba(var(--color-background), var(--glass-bg-opacity-frosted));
+  border-color: rgba(var(--color-foreground), var(--glass-border-opacity-frosted));
+  -webkit-backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur-frosted)) saturate(1.2);
+}
+
+.glass-product-card-dark.product-card-wrapper .card,
+.glass-product-card-dark.contains-card--product,
+.product-card-wrapper.glass-product-card-dark .card {
+  background: rgba(var(--color-foreground), var(--glass-bg-opacity-dark));
+  border-color: rgba(var(--color-background), var(--glass-border-opacity-dark));
+  color: rgb(var(--glass-text-on-dark));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+/* ── Card system bridge (extends .card--premium-glass — does not replace it) ─── */
+
+.card--premium-glass.glass-light.card--card,
+.card--premium-glass.glass-light.card--standard .card__inner {
+  --glass-blur: var(--glass-blur-light);
+  --glass-bg-opacity: var(--glass-bg-opacity-light);
+  background: rgba(var(--color-background), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.card--premium-glass.glass-heavy.card--card,
+.card--premium-glass.glass-heavy.card--standard .card__inner {
+  --glass-blur: var(--glass-blur-heavy);
+  --glass-bg-opacity: var(--glass-bg-opacity-heavy);
+  background: rgba(var(--color-background), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.card--premium-glass.glass-frosted.card--card,
+.card--premium-glass.glass-frosted.card--standard .card__inner {
+  --glass-blur: var(--glass-blur-frosted);
+  --glass-bg-opacity: var(--glass-bg-opacity-frosted);
+  background: rgba(var(--color-background), var(--glass-bg-opacity));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+}
+
+.card--premium-glass.glass-dark.card--card,
+.card--premium-glass.glass-dark.card--standard .card__inner {
+  background: rgba(var(--color-foreground), var(--glass-bg-opacity-dark));
+  border-color: rgba(var(--color-background), var(--glass-border-opacity-dark));
+  color: rgb(var(--glass-text-on-dark));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+/* ── Radius + Shadow composition helpers ─────────────────────────────────────── */
+
+.glass-light.radius-md,
+.glass-medium.radius-md,
+.glass-heavy.radius-md,
+.glass-frosted.radius-md,
+.glass-dark.radius-md,
+.glass-colored.radius-md,
+.glass-hero-light,
+.glass-hero-medium,
+.glass-hero-heavy,
+.glass-hero-frosted,
+.glass-hero-dark,
+.glass-hero-colored {
+  overflow: hidden;
+}
+
+.glass-with-shadow-sm {
+  box-shadow: var(--shadow-level-sm);
+}
+
+.glass-with-shadow-md {
+  box-shadow: var(--shadow-level-md);
+}
+
+.glass-with-shadow-lg {
+  box-shadow: var(--shadow-level-lg);
+}
+
+/* ── Accessibility ───────────────────────────────────────────────────────────── */
+
+.glass-readable {
+  color: rgb(var(--glass-text-on-light));
+}
+
+.glass-readable--on-dark {
+  color: rgb(var(--glass-text-on-dark));
+}
+
+.glass-readable .glass-text-contrast,
+.glass-readable h1,
+.glass-readable h2,
+.glass-readable h3,
+.glass-readable p,
+.glass-readable a,
+.glass-readable .button__label {
+  color: inherit;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-light,
+  .glass-medium,
+  .glass-heavy,
+  .glass-frosted,
+  .glass-dark,
+  .glass-colored,
+  .glass-overlay,
+  .glass-overlay--dark,
+  .glass-blur-only,
+  .glass-card-light.card--card,
+  .glass-card-light.card--standard .card__inner,
+  .glass-card-medium.card--card,
+  .glass-card-medium.card--standard .card__inner,
+  .glass-card-heavy.card--card,
+  .glass-card-heavy.card--standard .card__inner,
+  .glass-card-frosted.card--card,
+  .glass-card-frosted.card--standard .card__inner,
+  .glass-card-dark.card--card,
+  .glass-card-dark.card--standard .card__inner,
+  .glass-card-colored.card--card,
+  .glass-card-colored.card--standard .card__inner,
+  .glass-button-light,
+  .glass-button-medium,
+  .glass-button-heavy,
+  .glass-button-frosted,
+  .glass-button-dark,
+  .glass-button-colored,
+  .glass-badge-light,
+  .glass-badge-medium,
+  .glass-badge-frosted,
+  .glass-badge-dark,
+  .glass-badge-colored,
+  .glass-form-light,
+  .glass-form-medium,
+  .glass-form-frosted,
+  .glass-drawer-light,
+  .glass-drawer-medium,
+  .glass-drawer-heavy,
+  .glass-drawer-frosted,
+  .glass-drawer-dark,
+  .glass-popup-light,
+  .glass-popup-medium,
+  .glass-popup-heavy,
+  .glass-popup-frosted,
+  .glass-popup-dark,
+  .glass-modal-light,
+  .glass-modal-medium,
+  .glass-modal-heavy,
+  .glass-modal-frosted,
+  .glass-modal-dark,
+  .glass-hero-light,
+  .glass-hero-medium,
+  .glass-hero-heavy,
+  .glass-hero-frosted,
+  .glass-hero-dark,
+  .glass-hero-colored,
+  .glass-nav-light,
+  .glass-nav-medium,
+  .glass-nav-frosted,
+  .glass-nav-dark,
+  .glass-product-card-light.product-card-wrapper .card,
+  .glass-product-card-medium.product-card-wrapper .card,
+  .glass-product-card-frosted.product-card-wrapper .card,
+  .glass-product-card-dark.product-card-wrapper .card,
+  .glass-layered::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .glass-light,
+  .glass-medium,
+  .glass-heavy,
+  .glass-frosted,
+  .glass-hero-light,
+  .glass-hero-medium,
+  .glass-hero-heavy,
+  .glass-hero-frosted,
+  .glass-nav-light,
+  .glass-nav-medium,
+  .glass-nav-frosted,
+  .glass-popup-light,
+  .glass-popup-medium,
+  .glass-popup-heavy,
+  .glass-popup-frosted,
+  .glass-modal-light,
+  .glass-modal-medium,
+  .glass-modal-heavy,
+  .glass-modal-frosted {
+    background-color: rgb(var(--color-background));
+  }
+
+  .glass-dark,
+  .glass-hero-dark,
+  .glass-nav-dark,
+  .glass-popup-dark,
+  .glass-modal-dark,
+  .glass-drawer-dark,
+  .glass-overlay--dark {
+    background-color: rgb(var(--color-foreground));
+    color: rgb(var(--glass-text-on-dark));
+  }
+
+  .glass-colored,
+  .glass-hero-colored {
+    background-color: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .glass-light,
+  .glass-medium,
+  .glass-heavy,
+  .glass-frosted,
+  .glass-dark,
+  .glass-colored,
+  .glass-overlay,
+  .glass-overlay--dark,
+  .glass-hero-light,
+  .glass-hero-medium,
+  .glass-hero-heavy,
+  .glass-hero-frosted,
+  .glass-hero-dark,
+  .glass-hero-colored,
+  .glass-nav-light,
+  .glass-nav-medium,
+  .glass-nav-frosted,
+  .glass-nav-dark,
+  .glass-popup-light,
+  .glass-popup-medium,
+  .glass-popup-heavy,
+  .glass-popup-frosted,
+  .glass-popup-dark,
+  .glass-modal-light,
+  .glass-modal-medium,
+  .glass-modal-heavy,
+  .glass-modal-frosted,
+  .glass-modal-dark,
+  .glass-drawer-light,
+  .glass-drawer-medium,
+  .glass-drawer-heavy,
+  .glass-drawer-frosted,
+  .glass-drawer-dark,
+  .glass-button-light,
+  .glass-button-medium,
+  .glass-button-heavy,
+  .glass-button-frosted,
+  .glass-button-dark,
+  .glass-button-colored,
+  .glass-badge-light,
+  .glass-badge-medium,
+  .glass-badge-frosted,
+  .glass-badge-dark,
+  .glass-badge-colored {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: 1px solid CanvasText;
+    background-color: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .glass-layered::before {
+    display: none;
+  }
+}

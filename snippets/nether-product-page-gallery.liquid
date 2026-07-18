@@ -1,0 +1,19 @@
+{% comment %}
+  Nether Premium Product Page — Media Gallery module.
+  Wraps Dawn product-media-gallery without replacing native commerce behavior.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - product: {Object} Product object (required)
+  - variant_images: {Array} Variant-attached images (required)
+{% endcomment %}
+
+<div
+  class="nether-product-page__module nether-product-page__module--gallery"
+  data-nether-product-page-module="gallery"
+  data-nether-product-page-animate
+>
+  <div class="nether-product-page__gallery-inner grid__item product__media-wrapper">
+    {% render 'product-media-gallery', variant_images: variant_images %}
+  </div>
+</div>

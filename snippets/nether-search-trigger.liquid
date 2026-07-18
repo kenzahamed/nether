@@ -1,0 +1,43 @@
+{% comment %}
+  Renders the Nether Premium Search Drawer trigger button.
+
+  Accepts:
+  - label: {String} Accessible label override (optional)
+  - desktop: {Boolean} Show on desktop (default: true)
+  - mobile: {Boolean} Show on mobile (default: true)
+
+  Usage:
+  {% render 'nether-search-trigger' %}
+{% endcomment %}
+
+{%- liquid
+  assign trigger_label = label | default: 'general.search.search' | t
+  assign show_desktop = desktop
+  assign show_mobile = mobile
+  if show_desktop == nil
+    assign show_desktop = section.settings.nether_search_desktop
+  endif
+  if show_mobile == nil
+    assign show_mobile = section.settings.nether_search_mobile
+  endif
+
+  assign trigger_classes = 'header__icon header__icon--search nether-header__action nether-search-drawer__trigger link focus-inset'
+  unless show_desktop
+    assign trigger_classes = trigger_classes | append: ' small-hide medium-hide'
+  endunless
+  unless show_mobile
+    assign trigger_classes = trigger_classes | append: ' large-up-hide'
+  endunless
+-%}
+
+<button
+  type="button"
+  class="{{ trigger_classes }}"
+  aria-haspopup="dialog"
+  aria-controls="nether-search-drawer"
+  aria-expanded="false"
+  data-nether-search-open
+  data-prevent-hide
+>
+  {% render 'icon', icon: 'search', size: 'md', decorative: false, label: trigger_label %}
+</button>

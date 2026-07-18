@@ -1,0 +1,174 @@
+{% comment %}
+  Nether Premium Cart — quantity controls module.
+  Preserves Dawn <quantity-input>, <quantity-popover>, and <cart-remove-button>.
+
+  Accepts:
+  - item: {Object} Cart line item (required)
+  - context: {String} drawer | page (required)
+  - line_index: {Number} Line index (required)
+  - quantity_input_id: {String} Input id (required)
+  - remove_button_id: {String} Remove button wrapper id (required)
+  - error_id: {String} Error container id (required)
+  - has_qty_rules: {Boolean}
+  - has_vol_pricing: {Boolean}
+  - can_update_quantity: {Boolean}
+  - can_remove: {Boolean}
+{% endcomment %}
+
+<quantity-popover>
+  <div class="cart-item__quantity-wrapper quantity-popover-wrapper nether-cart__quantity">
+    {%- if context == 'page' -%}
+      <label class="visually-hidden" for="{{ quantity_input_id }}">
+        {{ 'products.product.quantity.label' | t }}
+      </label>
+    {%- endif -%}
+    <div class="quantity-popover-container{% if has_qty_rules or has_vol_pricing %} quantity-popover-container--hover{% endif %}">
+      {%- if context == 'page' and has_qty_rules or has_vol_pricing -%}
+        <button
+          type="button"
+          aria-expanded="false"
+          class="quantity-popover__info-button quantity-popover__info-button--icon-only button button--tertiary small-hide medium-hide"
+        >
+          {{- 'icon-info.svg' | inline_asset_content -}}
+        </button>
+      {%- endif -%}
+      <quantity-input class="quantity cart-quantity" data-nether-cart-quantity>
+        <button class="quantity__button" name="minus" type="button" {% if can_update_quantity == false %}disabled{% endif %}>
+          <span class="visually-hidden">
+            {{- 'products.product.quantity.decrease' | t: product: item.product.title | escape -}}
+          </span>
+          <span class="svg-wrapper">{{- 'icon-minus.svg' | inline_asset_content -}}</span>
+        </button>
+        <input
+          class="quantity__input"
+          type="number"
+          data-quantity-variant-id="{{ item.variant.id }}"
+          data-quantity-line-key="{{ item.key }}"
+          name="updates[]"
+          value="{{ item.quantity }}"
+          {% # theme-check-disable %}
+          data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}"
+          min="0"
+          data-min="{{ item.variant.quantity_rule.min }}"
+          {% if item.variant.quantity_rule.max != null %}
+            max="{{ item.variant.quantity_rule.max }}"
+          {% endif %}
+          step="{{ item.variant.quantity_rule.increment }}"
+          {% # theme-check-enable %}
+          aria-label="{{ 'products.product.quantity.input_label' | t: product: item.product.title | escape }}"
+          id="{{ quantity_input_id }}"
+          data-index="{{ line_index }}"
+          {% if can_update_quantity == false %}disabled{% endif %}
+        >
+        <button class="quantity__button" name="plus" type="button" {% if can_update_quantity == false %}disabled{% endif %}>
+          <span class="visually-hidden">
+            {{- 'products.product.quantity.increase' | t: product: item.product.title | escape -}}
+          </span>
+          <span class="svg-wrapper">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+        </button>
+      </quantity-input>
+    </div>
+    <cart-remove-button
+      id="{{ remove_button_id }}"
+      data-index="{{ line_index }}"
+      {% if can_remove == false %}class="hidden"{% endif %}
+    >
+      {%- if context == 'drawer' -%}
+        <button
+          type="button"
+          class="button button--tertiary cart-remove-button"
+          aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}"
+          data-variant-id="{{ item.variant.id }}"
+          {% if can_remove == false %}class="hidden"{% endif %}
+        >
+          <span class="svg-wrapper">{{- 'icon-remove.svg' | inline_asset_content -}}</span>
+        </button>
+      {%- else -%}
+        <a
+          href="{{ item.url_to_remove }}"
+          class="button button--tertiary"
+          aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}"
+        >
+          <span class="svg-wrapper">{{- 'icon-remove.svg' | inline_asset_content -}}</span>
+        </a>
+      {%- endif -%}
+    </cart-remove-button>
+  </div>
+
+  {%- if has_qty_rules or has_vol_pricing -%}
+    <button
+      type="button"
+      class="quantity-popover__info-button quantity-popover__info-button--icon-with-label button button--tertiary{% if context == 'page' %} large-up-hide{% endif %}"
+      aria-expanded="false"
+    >
+      <span class="svg-wrapper">{{- 'icon-info.svg' | inline_asset_content -}}</span>
+      <span>
+        {%- if has_vol_pricing -%}
+          {{ 'products.product.volume_pricing.note' | t }}
+        {%- else -%}
+          {{ 'products.product.quantity.note' | t }}
+        {%- endif -%}
+      </span>
+    </button>
+  {%- endif -%}
+
+  {%- if has_vol_pricing or has_qty_rules -%}
+    <div class="cart-items__info global-settings-popup quantity-popover__info" tabindex="-1" hidden>
+      {%- if has_qty_rules == false -%}
+        <span class="volume-pricing-label caption">{{ 'products.product.volume_pricing.title' | t }}</span>
+      {%- endif -%}
+      <div class="quantity__rules caption">
+        {%- if item.variant.quantity_rule.increment > 1 -%}
+          <span class="divider">
+            {{- 'products.product.quantity.multiples_of' | t: quantity: item.variant.quantity_rule.increment -}}
+          </span>
+        {%- endif -%}
+        {%- if item.variant.quantity_rule.min > 1 -%}
+          <span class="divider">
+            {{- 'products.product.quantity.min_of' | t: quantity: item.variant.quantity_rule.min -}}
+          </span>
+        {%- endif -%}
+        {%- if item.variant.quantity_rule.max != null -%}
+          <span class="divider">
+            {{- 'products.product.quantity.max_of' | t: quantity: item.variant.quantity_rule.max -}}
+          </span>
+        {%- endif -%}
+      </div>
+      <button class="button-close button button--tertiary{% if context == 'page' %} large-up-hide{% endif %}" type="button" aria-label="{{ 'accessibility.close' | t }}">
+        <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+      </button>
+      {%- if item.variant.quantity_price_breaks.size > 0 -%}
+        <volume-pricing class="parent-display">
+          <ul class="list-unstyled">
+            <li>
+              <span>{{ item.variant.quantity_rule.min }}+</span>
+              {%- if context == 'page' -%}
+                {%- assign price = item.variant.price | money_with_currency -%}
+                <span> {{ 'sections.quick_order_list.each' | t: money: price }}</span>
+              {%- else -%}
+                <span>{{ item.variant.price | money_with_currency }}/ea</span>
+              {%- endif -%}
+            </li>
+            {%- for price_break in item.variant.quantity_price_breaks -%}
+              <li>
+                <span>{{ price_break.minimum_quantity -}}<span aria-hidden="true">+</span></span>
+                {%- if context == 'page' -%}
+                  {%- assign price = price_break.price | money_with_currency -%}
+                  <span> {{ 'sections.quick_order_list.each' | t: money: price }}</span>
+                {%- else -%}
+                  <span>{{ price_break.price | money_with_currency }}/ea</span>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </volume-pricing>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div id="{{ error_id }}" class="cart-item__error" role="alert">
+    <small class="cart-item__error-text"></small>
+    <span class="svg-wrapper">{{- 'icon-error.svg' | inline_asset_content -}}</span>
+  </div>
+</quantity-popover>
+

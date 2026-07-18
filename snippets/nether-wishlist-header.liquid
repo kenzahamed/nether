@@ -1,0 +1,24 @@
+{% comment %}
+  Nether Premium Wishlist — page header module.
+
+  Accepts:
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- liquid
+  assign heading = section.settings.nether_wishlist_heading
+  if heading == blank
+    assign heading = 'sections.nether_wishlist.title' | t
+  endif
+  assign subheading = section.settings.nether_wishlist_subheading
+-%}
+
+<header class="nether-wishlist__header" data-nether-wishlist-animate>
+  <div class="nether-wishlist__header-copy">
+    <h1 class="nether-wishlist__heading type-display-sm">{{ heading }}</h1>
+    {%- if subheading != blank -%}
+      <p class="nether-wishlist__subheading type-body">{{ subheading }}</p>
+    {%- endif -%}
+  </div>
+  {% render 'nether-wishlist-toolbar', section: section, context: 'page' %}
+</header>

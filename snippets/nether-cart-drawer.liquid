@@ -1,0 +1,175 @@
+{% comment %}
+  Nether Premium Cart Drawer — extends Dawn cart-drawer without replacing native commerce.
+
+  Accepts:
+  - section: {Object} Section object (optional — uses defaults when omitted)
+{% endcomment %}
+
+{%- liquid
+  assign drawer_section = section
+
+  assign nether_enable_glass = false
+  assign nether_enable_shipping_progress = true
+  assign nether_enable_trust = true
+  assign nether_enable_gift_wrap = false
+  assign nether_enable_notes = true
+  assign nether_free_shipping_threshold = 10000
+  assign nether_drawer_style = 'standard'
+  assign nether_animation_style = 'slide'
+  assign nether_animation_speed = 'normal'
+  assign nether_drawer_heading = 'sections.cart.title' | t
+  assign nether_drawer_aria_label = 'sections.cart.title' | t
+
+  if drawer_section.settings
+    assign nether_enable_glass = drawer_section.settings.nether_enable_glass
+    assign nether_enable_shipping_progress = drawer_section.settings.nether_enable_shipping_progress
+    assign nether_enable_trust = drawer_section.settings.nether_enable_trust
+    assign nether_enable_gift_wrap = drawer_section.settings.nether_enable_gift_wrap
+    assign nether_enable_notes = drawer_section.settings.nether_enable_notes
+    assign nether_free_shipping_threshold = drawer_section.settings.nether_free_shipping_threshold
+    assign nether_drawer_style = drawer_section.settings.nether_drawer_style | default: nether_drawer_style
+    assign nether_animation_style = drawer_section.settings.nether_animation_style | default: nether_animation_style
+    assign nether_animation_speed = drawer_section.settings.nether_animation_speed | default: nether_animation_speed
+    if drawer_section.settings.nether_drawer_heading != blank
+      assign nether_drawer_heading = drawer_section.settings.nether_drawer_heading
+    endif
+    if drawer_section.settings.nether_drawer_aria_label != blank
+      assign nether_drawer_aria_label = drawer_section.settings.nether_drawer_aria_label
+    endif
+  endif
+
+  case nether_animation_speed
+    when 'slow'
+      assign nether_animation_duration = 0.8
+    when 'fast'
+      assign nether_animation_duration = 0.3
+    else
+      assign nether_animation_duration = 0.5
+  endcase
+
+  assign nether_section_id = drawer_section.id | default: 'cart-drawer'
+-%}
+
+{{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-cart-framework.css' | asset_url | stylesheet_tag }}
+{% render 'nether-commerce-assets' %}
+
+{%- if drawer_section.settings.nether_enable_glass -%}
+  {{ 'component-glass.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-cart-framework.js' | asset_url }}" defer="defer"></script>
+
+<style>
+  .drawer {
+    visibility: hidden;
+  }
+</style>
+
+<nether-cart-drawer
+  class="nether-cart-drawer nether-cart-drawer--style-{{ nether_drawer_style }}"
+  data-nether-motion="cart-drawer"
+  data-section-id="{{ nether_section_id }}"
+  data-animation-style="{{ nether_animation_style }}"
+  data-animation-duration="{{ nether_animation_duration }}"
+  data-drawer-style="{{ nether_drawer_style }}"
+  {% if nether_enable_glass %}data-enable-glass="true"{% endif %}
+>
+  <cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">
+    <div id="CartDrawer" class="cart-drawer">
+      <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
+      <div
+        class="drawer__inner gradient color-{{ settings.cart_color_scheme }} nether-cart-drawer__inner{% if nether_enable_glass %} nether-cart-drawer__inner--glass{% endif %}"
+        role="dialog"
+        aria-modal="true"
+        aria-label="{{ nether_drawer_aria_label }}"
+        tabindex="-1"
+      >
+        {%- if cart == empty -%}
+          <div class="drawer__inner-empty nether-cart-drawer__empty-shell">
+            <div class="cart-drawer__warnings center{% if settings.cart_drawer_collection != blank %} cart-drawer__warnings--has-collection{% endif %}">
+              <div class="cart-drawer__empty-content">
+                <button
+                  class="drawer__close"
+                  type="button"
+                  onclick="this.closest('cart-drawer').close()"
+                  aria-label="{{ 'accessibility.close' | t }}"
+                >
+                  <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+                </button>
+                {% render 'nether-cart-empty', section: drawer_section, context: 'drawer' %}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="drawer__header nether-cart-drawer__header" data-nether-cart-animate>
+          <h2 class="drawer__heading type-heading-sm">
+            {{ nether_drawer_heading }}
+            {%- if cart.item_count > 0 -%}
+              <span class="nether-cart-drawer__count" aria-hidden="true">({{ cart.item_count }})</span>
+            {%- endif -%}
+          </h2>
+          <button
+            class="drawer__close"
+            type="button"
+            onclick="this.closest('cart-drawer').close()"
+            aria-label="{{ 'accessibility.close' | t }}"
+          >
+            <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+          </button>
+        </div>
+
+        <cart-drawer-items
+          view-event-payload="{{ cart | standard_event_data: 'view', context: 'dialog' | escape }}"
+          view-event-trigger="manual"
+          {% if cart == empty %}class=" is-empty"{% endif %}
+        >
+          <form action="{{ routes.cart_url }}" id="CartDrawer-Form" class="cart__contents cart-drawer__form" method="post">
+            <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
+              {%- if cart != empty -%}
+                {% render 'nether-cart-shipping-progress', section: drawer_section, context: 'drawer' %}
+                <div class="drawer__cart-items-wrapper nether-cart-drawer__items">
+                  <table class="cart-items" role="table">
+                    <thead role="rowgroup">
+                      <tr role="row">
+                        <th id="CartDrawer-ColumnProductImage" role="columnheader">
+                          <span class="visually-hidden">{{ 'sections.cart.headings.image' | t }}</span>
+                        </th>
+                        <th id="CartDrawer-ColumnProduct" class="caption-with-letter-spacing" scope="col" role="columnheader">
+                          {{ 'sections.cart.headings.product' | t }}
+                        </th>
+                        <th id="CartDrawer-ColumnTotal" class="right caption-with-letter-spacing" scope="col" role="columnheader">
+                          {{ 'sections.cart.headings.total' | t }}
+                        </th>
+                        <th id="CartDrawer-ColumnQuantity" role="columnheader">
+                          <span class="visually-hidden">{{ 'sections.cart.headings.quantity' | t }}</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody role="rowgroup">
+                      {%- for item in cart.items -%}
+                        {% render 'nether-cart-line-item', item: item, context: 'drawer' %}
+                      {%- endfor -%}
+                    </tbody>
+                  </table>
+                </div>
+              {%- endif -%}
+              <p id="CartDrawer-LiveRegionText" class="visually-hidden" role="status"></p>
+              <p id="CartDrawer-LineItemStatus" class="visually-hidden" aria-hidden="true" role="status">
+                {{ 'accessibility.loading' | t }}
+              </p>
+            </div>
+            <div id="CartDrawer-CartErrors" role="alert"></div>
+          </form>
+        </cart-drawer-items>
+
+        {% render 'nether-cart-drawer-footer', section: drawer_section %}
+      </div>
+    </div>
+  </cart-drawer>
+</nether-cart-drawer>
+

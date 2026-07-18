@@ -1,0 +1,31 @@
+{% comment %}
+  Empty collection state for Nether Premium Collection Page.
+  Preserves Dawn empty collection messaging and filter reset link.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - collection: {Object} Collection object (required)
+{% endcomment %}
+
+<div
+  class="collection collection--empty page-width nether-collection-page__empty"
+  id="product-grid"
+  data-id="{{ section.id }}"
+  data-nether-collection-page-empty
+  data-nether-collection-page-animate
+>
+  <div class="loading-overlay gradient"></div>
+  <div class="title-wrapper center nether-collection-page__empty-inner">
+    <h2 class="title title--primary nether-collection-page__empty-title">
+      {{ 'sections.nether_collection_page.empty.title' | t }}
+      <br>
+      {{
+        'sections.collection_template.use_fewer_filters_html'
+        | t: link: collection.url, class: 'underlined-link link'
+      }}
+    </h2>
+    {%- if section.settings.nether_empty_message != blank -%}
+      <p class="nether-collection-page__empty-message type-body">{{ section.settings.nether_empty_message }}</p>
+    {%- endif -%}
+  </div>
+</div>

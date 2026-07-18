@@ -1,0 +1,247 @@
+{% comment %}
+  Renders a Nether Premium Collection card.
+
+  Accepts:
+  - block: {Object} Collection block (required)
+  - section: {Object} Collection section (required)
+  - columns: {Number} Grid columns for image sizes (optional)
+  - lazy_load: {Boolean} Lazy load images (default: true)
+  - is_featured: {Boolean} Featured card in split/magazine layouts (default: false)
+  - card_index: {Number} Card index for layout modifiers (optional)
+
+  Usage:
+  {% render 'nether-collection-card', block: block, section: section, columns: columns %}
+{% endcomment %}
+
+{%- liquid
+  assign card_collection = block.settings.collection
+  assign columns_count = columns | default: section.settings.nether_columns_desktop | default: 3
+  assign is_lazy = lazy_load | default: true
+  assign is_featured_card = is_featured | default: false
+  assign card_index_num = card_index | default: 1
+
+  assign card_style = section.settings.nether_card_style | default: 'medium'
+  assign content_position = section.settings.nether_content_position | default: 'bottom-left'
+  assign content_alignment = section.settings.nether_content_alignment | default: 'left'
+  assign show_overlay = section.settings.nether_enable_overlay
+  assign enable_glass = section.settings.nether_enable_glass
+  assign enable_gradient = section.settings.nether_enable_gradient
+  assign hover_effect = section.settings.nether_hover_effect | default: 'zoom'
+  assign show_product_count = section.settings.nether_show_product_count
+
+  assign premium_style = 'default'
+  case card_style
+    when 'editorial'
+      assign premium_style = 'editorial'
+    when 'glass'
+      assign premium_style = 'glass'
+    when 'minimal'
+      assign premium_style = 'minimal'
+    when 'gradient'
+      assign premium_style = 'default'
+  endcase
+
+  assign card_size_class = ''
+  case card_style
+    when 'small'
+      assign card_size_class = 'nether-collection-card--size-small'
+    when 'large'
+      assign card_size_class = 'nether-collection-card--size-large'
+    when 'editorial'
+      assign card_size_class = 'nether-collection-card--size-editorial'
+  endcase
+
+  assign hover_classes = ''
+  case hover_effect
+    when 'lift'
+      assign hover_classes = 'card-hover-lift'
+    when 'scale'
+      assign hover_classes = 'card-hover-scale'
+    when 'shadow'
+      assign hover_classes = 'card-hover-shadow'
+    when 'reveal'
+      assign hover_classes = 'nether-collection-card--hover-reveal'
+    when 'zoom'
+      assign hover_classes = 'card-hover-zoom'
+    when 'glow'
+      assign hover_classes = 'card-hover-glow'
+  endcase
+
+  assign card_title = block.settings.custom_title
+  if card_title == blank and card_collection != blank
+    assign card_title = card_collection.title
+  endif
+
+  assign card_description = block.settings.custom_description
+  if card_description == blank and section.settings.nether_show_collection_description and card_collection != blank
+    assign card_description = card_collection.description
+  endif
+
+  assign card_url = card_collection.url
+  if block.settings.custom_link != blank
+    assign card_url = block.settings.custom_link
+  endif
+
+  assign badge_label = block.settings.badge_label
+  assign badge_type = block.settings.badge_type | default: 'featured'
+  assign badge_style = block.settings.badge_style | default: 'soft'
+
+  assign cta_label = block.settings.cta_label
+  if cta_label == blank and section.settings.nether_default_cta_label != blank
+    assign cta_label = section.settings.nether_default_cta_label
+  endif
+  assign cta_style = block.settings.cta_style | default: section.settings.nether_default_cta_style | default: 'arrow'
+
+  assign label_text = block.settings.collection_label
+  assign product_count = 0
+  if card_collection != blank
+    assign product_count = card_collection.all_products_count
+  endif
+
+  assign card_classes = 'nether-collection-card'
+  assign card_classes = card_classes | append: ' nether-collection-card--position-' | append: content_position
+  assign card_classes = card_classes | append: ' nether-collection-card--align-' | append: content_alignment
+  if premium_style != 'default'
+    assign card_classes = card_classes | append: ' nether-collection-card--style-' | append: premium_style
+  endif
+  if card_size_class != blank
+    assign card_classes = card_classes | append: ' ' | append: card_size_class
+  endif
+  if is_featured_card
+    assign card_classes = card_classes | append: ' nether-collection-card--featured'
+  endif
+  if enable_glass
+    assign card_classes = card_classes | append: ' nether-collection-card--glass'
+  endif
+  if enable_gradient
+    assign card_classes = card_classes | append: ' nether-collection-card--gradient'
+  endif
+  if section.settings.nether_enable_floating_cards
+    assign card_classes = card_classes | append: ' nether-collection-card--floating'
+  endif
+  if hover_classes != blank
+    assign card_classes = card_classes | append: ' ' | append: hover_classes
+  endif
+  assign card_classes = card_classes | append: ' nether-collection-card--index-' | append: card_index_num
+
+  assign overlay_classes = 'nether-collection-card__overlay'
+  if enable_gradient
+    case section.settings.nether_gradient_style
+      when 'dramatic'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-dramatic'
+      when 'vignette'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-vignette'
+      when 'fade-down'
+        assign overlay_classes = overlay_classes | append: ' grad-linear-fade-down'
+      else
+        assign overlay_classes = overlay_classes | append: ' grad-hero-brand'
+    endcase
+  endif
+
+  if card_title != blank
+    assign aria_label = 'sections.nether_collection.card.view_label' | t: title: card_title
+  else
+    assign aria_label = 'sections.nether_collection.card.placeholder_label' | t
+  endif
+-%}
+
+<article
+  class="{{ card_classes }}"
+  data-nether-collection-animate
+  data-nether-collection-card
+  {{ block.shopify_attributes }}
+>
+  <a
+    class="nether-collection-card__link full-unstyled-link"
+    {% if card_url != blank %}
+      href="{{ card_url }}"
+      aria-label="{{ aria_label | escape }}"
+    {% else %}
+      role="link"
+      aria-disabled="true"
+      aria-label="{{ aria_label | escape }}"
+    {% endif %}
+  >
+    <div class="nether-collection-card__inner card card--card card--media{% if premium_style != 'default' %} card--premium-{{ premium_style }}{% endif %}">
+      {%- render 'nether-collection-media',
+        block: block,
+        section: section,
+        collection: card_collection,
+        columns: columns_count,
+        lazy_load: is_lazy
+      -%}
+
+      {%- if show_overlay or enable_gradient -%}
+        <div class="{{ overlay_classes }}" aria-hidden="true" data-nether-collection-overlay></div>
+      {%- endif -%}
+
+      {%- if enable_glass -%}
+        <div class="nether-collection-card__glass-panel glass-card-light" aria-hidden="true"></div>
+      {%- endif -%}
+
+      <div class="nether-collection-card__content" data-nether-collection-card-content>
+        {%- if label_text != blank -%}
+          <p class="nether-collection-card__label type-overline" data-nether-collection-role="eyebrow">{{ label_text | escape }}</p>
+        {%- endif -%}
+
+        {%- if badge_label != blank -%}
+          <div class="nether-collection-card__badge" data-nether-collection-badge data-nether-collection-role="badge">
+            {% render 'badge', label: badge_label, type: badge_type, style: badge_style, size: 'small' %}
+          </div>
+        {%- endif -%}
+
+        <div class="nether-collection-card__information">
+          <h3 class="nether-collection-card__heading type-heading-md" data-nether-collection-title data-nether-collection-role="heading">
+            {%- if card_title != blank -%}
+              {{- card_title | escape -}}
+            {%- else -%}
+              {{ 'onboarding.collection_title' | t }}
+            {%- endif -%}
+          </h3>
+
+          {%- if card_description != blank -%}
+            <div
+              class="nether-collection-card__description rte type-body-sm"
+              data-nether-collection-description
+              data-nether-collection-role="intro"
+            >
+              {{ card_description }}
+            </div>
+          {%- endif -%}
+
+          {%- render 'nether-collection-stat', block: block -%}
+
+          {%- if show_product_count and product_count > 0 -%}
+            <p class="nether-collection-card__count type-caption" data-nether-collection-stat>
+              {{ 'sections.nether_collection.card.product_count' | t: count: product_count }}
+            </p>
+          {%- endif -%}
+        </div>
+
+        {%- if cta_label != blank -%}
+          <div class="nether-collection-card__cta" data-nether-collection-cta data-nether-collection-role="buttons">
+            {%- liquid
+              assign cta_classes = 'nether-collection-card__cta-text button'
+              case cta_style
+                when 'primary'
+                  assign cta_classes = cta_classes | append: ' button--primary'
+                when 'secondary'
+                  assign cta_classes = cta_classes | append: ' button--secondary'
+                else
+                  assign cta_classes = cta_classes | append: ' button--text button--arrow'
+              endcase
+            -%}
+            <span class="{{ cta_classes }}">
+              {{- cta_label | escape -}}
+              {%- if cta_style == 'arrow' or cta_style == 'text' or cta_style == blank -%}
+                <span class="button__icon button__icon--trailing" aria-hidden="true">
+                  {{- 'icon-arrow.svg' | inline_asset_content -}}
+                </span>
+              {%- endif -%}
+            </span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </a>
+</article>

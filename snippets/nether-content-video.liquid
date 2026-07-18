@@ -1,0 +1,141 @@
+{% comment %}
+  Renders Nether Premium Content inline video block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+
+  Usage:
+  {% render 'nether-content-video', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign media_type = block.settings.media_type | default: 'video'
+  assign shopify_video = block.settings.video
+  assign video_url = block.settings.video_url
+  assign poster_image = block.settings.poster_image
+  assign video_description = block.settings.video_description
+  assign video_loop = block.settings.video_loop
+  assign widths = '375, 550, 750, 1100, 1500, 1780, 2000'
+  assign sizes = '(min-width: 990px) 60rem, (min-width: 750px) 50vw, 100vw'
+-%}
+
+{%- if shopify_video != blank or video_url != blank -%}
+  <div
+    class="nether-content__video-block"
+    data-nether-content-animate
+    data-nether-hero-animate
+    data-nether-hero-role="video"
+    {{ block.shopify_attributes }}
+  >    {%- case media_type -%}
+      {%- when 'background_video' -%}
+        {%- if shopify_video != blank -%}
+          {{
+            shopify_video
+            | video_tag:
+              image_size: '1500x',
+              autoplay: true,
+              loop: true,
+              muted: true,
+              controls: false,
+              playsinline: true,
+              class: 'nether-content__video'
+          }}
+        {%- elsif video_url != blank -%}
+          {%- if video_url.type == 'youtube' -%}
+            <iframe
+              src="https://www.youtube.com/embed/{{ video_url.id }}?autoplay=1&mute=1&controls=0&loop=1&playlist={{ video_url.id }}&playsinline=1"
+              class="nether-content__video nether-content__video--iframe"
+              allow="autoplay; encrypted-media"
+              title="{{ video_description | escape }}"
+              loading="lazy"
+            ></iframe>
+          {%- elsif video_url.type == 'vimeo' -%}
+            <iframe
+              src="https://player.vimeo.com/video/{{ video_url.id }}?autoplay=1&muted=1&background=1&loop=1"
+              class="nether-content__video nether-content__video--iframe"
+              allow="autoplay; encrypted-media"
+              title="{{ video_description | escape }}"
+              loading="lazy"
+            ></iframe>
+          {%- endif -%}
+        {%- endif -%}
+
+      {%- else -%}
+        {%- if shopify_video != blank -%}
+          <deferred-media class="nether-content__deferred-video media" data-media-id="{{ shopify_video.id }}">
+            <button
+              type="button"
+              class="deferred-media__poster nether-content__video-poster"
+              aria-label="{{ 'sections.video.load_video' | t: description: video_description | default: shopify_video.alt | escape }}"
+            >
+              {%- if poster_image != blank -%}
+                {{
+                  poster_image
+                  | image_url: width: 2000
+                  | image_tag: widths: widths, sizes: sizes, alt: poster_image.alt | escape
+                }}
+              {%- else -%}
+                {{ 'hero-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+              <span class="deferred-media__poster-button motion-reduce">
+                <span class="svg-wrapper">
+                  {{- 'icon-play.svg' | inline_asset_content -}}
+                </span>
+              </span>
+            </button>
+            <template>
+              {{
+                shopify_video
+                | video_tag:
+                  image_size: '1500x',
+                  autoplay: true,
+                  loop: video_loop,
+                  muted: false,
+                  controls: true,
+                  playsinline: true,
+                  class: 'nether-content__video'
+              }}
+            </template>
+          </deferred-media>
+        {%- elsif video_url != blank -%}
+          <deferred-media class="nether-content__deferred-video media" data-media-id="{{ video_url.id }}">
+            <button
+              type="button"
+              class="deferred-media__poster nether-content__video-poster"
+              aria-label="{{ 'sections.video.load_video' | t: description: video_description | escape }}"
+            >
+              {%- if poster_image != blank -%}
+                {{
+                  poster_image
+                  | image_url: width: 2000
+                  | image_tag: widths: widths, sizes: sizes, alt: poster_image.alt | escape
+                }}
+              {%- else -%}
+                {{ 'hero-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+              <span class="deferred-media__poster-button motion-reduce">
+                <span class="svg-wrapper">
+                  {{- 'icon-play.svg' | inline_asset_content -}}
+                </span>
+              </span>
+            </button>
+            <template>
+              {%- if video_url.type == 'youtube' -%}
+                {{
+                  video_url
+                  | external_video_url: autoplay: true, loop: video_loop, playlist: video_url.id
+                  | external_video_tag: class: 'nether-content__video nether-content__video--iframe'
+                }}
+              {%- else -%}
+                {{
+                  video_url
+                  | external_video_url: autoplay: true, loop: video_loop
+                  | external_video_tag: class: 'nether-content__video nether-content__video--iframe'
+                }}
+              {%- endif -%}
+            </template>
+          </deferred-media>
+        {%- endif -%}
+    {%- endcase -%}
+  </div>
+{%- endif -%}

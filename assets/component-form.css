@@ -1,0 +1,577 @@
+/* =============================================================================
+ * Nether Premium Form System
+ * Extends Dawn's .field / .field__input / .select / .form__message — do not
+ * duplicate base.css rules.
+ * Sizes: small, medium (default), large
+ * States: success, error, warning, disabled, readonly, required
+ * ============================================================================= */
+
+:root {
+  --form-field-height-sm: 3.8rem;
+  --form-field-height-md: 4.5rem;
+  --form-field-height-lg: 5.5rem;
+  --form-field-font-sm: 1.4rem;
+  --form-field-font-md: 1.6rem;
+  --form-field-font-lg: 1.8rem;
+  --form-field-prefix-width: 2.4rem;
+  --form-field-suffix-width: 4.4rem;
+  --form-choice-size: 1.8rem;
+  --form-toggle-width: 4.4rem;
+  --form-toggle-height: 2.4rem;
+  --form-status-success: var(--color-button);
+  --form-status-error: var(--color-foreground);
+  --form-status-warning: var(--color-link);
+}
+
+/* ── Size modifiers (compose with .field) ──────────────────────────────────── */
+
+.field--small .field__input,
+.field--small.customer .field input,
+.select--small .select__select {
+  font-size: var(--form-field-font-sm);
+  height: var(--form-field-height-sm);
+  min-height: var(--form-field-height-sm);
+}
+
+.field--small .field__input:focus,
+.field--small .field__input:not(:placeholder-shown),
+.field--small .field__input:-webkit-autofill,
+.field--small.customer .field input:focus,
+.field--small.customer .field input:not(:placeholder-shown),
+.field--small.customer .field input:-webkit-autofill {
+  padding: 1.8rem 1.3rem 0.5rem 1.6rem;
+}
+
+.field--small .field__label,
+.field--small.customer .field label {
+  font-size: var(--form-field-font-sm);
+  left: calc(var(--inputs-border-width) + 1.6rem);
+  top: calc(0.8rem + var(--inputs-border-width));
+}
+
+.field--small .field__input:focus ~ .field__label,
+.field--small .field__input:not(:placeholder-shown) ~ .field__label,
+.field--small .field__input:-webkit-autofill ~ .field__label,
+.field--small.customer .field input:focus ~ label,
+.field--small.customer .field input:not(:placeholder-shown) ~ label,
+.field--small.customer .field input:-webkit-autofill ~ label {
+  font-size: 0.9rem;
+  top: calc(var(--inputs-border-width) + 0.3rem);
+  left: calc(var(--inputs-border-width) + 1.6rem);
+}
+
+.field--small .field__button {
+  height: var(--form-field-height-sm);
+  width: 3.6rem;
+}
+
+.field--large .field__input,
+.field--large.customer .field input,
+.select--large .select__select {
+  font-size: var(--form-field-font-lg);
+  height: var(--form-field-height-lg);
+  min-height: var(--form-field-height-lg);
+}
+
+.field--large .field__input:focus,
+.field--large .field__input:not(:placeholder-shown),
+.field--large .field__input:-webkit-autofill,
+.field--large.customer .field input:focus,
+.field--large.customer .field input:not(:placeholder-shown),
+.field--large.customer .field input:-webkit-autofill {
+  padding: 2.6rem 1.8rem 1rem 2.2rem;
+}
+
+.field--large .field__label,
+.field--large.customer .field label {
+  font-size: var(--form-field-font-lg);
+}
+
+.field--large .field__button {
+  height: var(--form-field-height-lg);
+  width: 5rem;
+}
+
+.select--small .select__select {
+  font-size: var(--form-field-font-sm);
+  padding: 0 calc(var(--inputs-border-width) + 2.6rem) 0 1.6rem;
+}
+
+.select--large .select__select {
+  font-size: var(--form-field-font-lg);
+  height: var(--form-field-height-lg);
+  min-height: var(--form-field-height-lg);
+}
+
+/* ── Static label (non-floating) ───────────────────────────────────────────── */
+
+.field--static-label .field__label,
+.field--static-label.customer .field label {
+  position: static;
+  display: block;
+  margin-bottom: 0.6rem;
+  pointer-events: auto;
+  letter-spacing: 0.06rem;
+  line-height: 1.4;
+}
+
+.field--static-label .field__input,
+.field--static-label.customer .field input {
+  padding: 1.5rem 2rem;
+  margin: var(--inputs-border-width);
+}
+
+.field--static-label .field__input:focus,
+.field--static-label .field__input:not(:placeholder-shown),
+.field--static-label .field__input:-webkit-autofill,
+.field--static-label.customer .field input:focus,
+.field--static-label.customer .field input:not(:placeholder-shown),
+.field--static-label.customer .field input:-webkit-autofill {
+  padding: 1.5rem 2rem;
+}
+
+.field--static-label .field__input::placeholder,
+.field--static-label.customer .field input::placeholder {
+  opacity: 0.6;
+}
+
+/* ── Prefix / suffix icons ─────────────────────────────────────────────────── */
+
+.field__prefix,
+.field__suffix {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: var(--form-field-prefix-width);
+  color: rgba(var(--color-foreground), 0.65);
+}
+
+.field__prefix {
+  left: calc(var(--inputs-border-width) + 1.2rem);
+}
+
+.field__suffix {
+  right: calc(var(--inputs-border-width) + 1.2rem);
+  pointer-events: none;
+}
+
+.field--has-prefix .field__input,
+.field--has-prefix.customer .field input {
+  padding-left: calc(var(--inputs-border-width) + 1.6rem + var(--form-field-prefix-width));
+}
+
+.field--has-prefix .field__input:focus,
+.field--has-prefix .field__input:not(:placeholder-shown),
+.field--has-prefix .field__input:-webkit-autofill,
+.field--has-prefix.customer .field input:focus,
+.field--has-prefix.customer .field input:not(:placeholder-shown),
+.field--has-prefix.customer .field input:-webkit-autofill {
+  padding-left: calc(var(--inputs-border-width) + 1.6rem + var(--form-field-prefix-width));
+}
+
+.field--has-prefix .field__label,
+.field--has-prefix.customer .field label {
+  left: calc(var(--inputs-border-width) + 1.6rem + var(--form-field-prefix-width));
+}
+
+.field--has-prefix .field__input:focus ~ .field__label,
+.field--has-prefix .field__input:not(:placeholder-shown) ~ .field__label,
+.field--has-prefix .field__input:-webkit-autofill ~ .field__label,
+.field--has-prefix.customer .field input:focus ~ label,
+.field--has-prefix.customer .field input:not(:placeholder-shown) ~ label,
+.field--has-prefix.customer .field input:-webkit-autofill ~ label {
+  left: calc(var(--inputs-border-width) + 1.6rem + var(--form-field-prefix-width));
+}
+
+.field--has-suffix:not(.field--has-clear):not(.field--has-password) .field__input,
+.field--has-suffix:not(.field--has-clear):not(.field--has-password).customer .field input {
+  padding-right: calc(var(--inputs-border-width) + 1.6rem + var(--form-field-prefix-width));
+}
+
+.field--has-clear .field__input,
+.field--has-password .field__input,
+.field--has-clear.customer .field input,
+.field--has-password.customer .field input {
+  padding-right: calc(var(--inputs-border-width) + var(--form-field-suffix-width));
+}
+
+.field--has-clear.field--has-password .field__input,
+.field--has-clear.field--has-password.customer .field input {
+  padding-right: calc(var(--inputs-border-width) + (var(--form-field-suffix-width) * 2));
+}
+
+.field__button--clear {
+  right: 0;
+}
+
+.field--has-password .field__button--clear {
+  right: var(--form-field-suffix-width);
+}
+
+.field__button--password {
+  right: 0;
+}
+
+/* ── State modifiers ───────────────────────────────────────────────────────── */
+
+.field--success::after,
+.select--success::after {
+  box-shadow: 0 0 0 calc(0.1rem + var(--inputs-border-width)) rgb(var(--form-status-success));
+}
+
+.field--error::after,
+.select--error::after {
+  box-shadow: 0 0 0 calc(0.1rem + var(--inputs-border-width)) rgb(var(--form-status-error));
+}
+
+.field--warning::after,
+.select--warning::after {
+  box-shadow: 0 0 0 calc(0.1rem + var(--inputs-border-width)) rgb(var(--form-status-warning));
+}
+
+.field--readonly .field__input,
+.field--readonly.customer .field input {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.field__input:disabled,
+.select__select:disabled,
+.customer .field input:disabled,
+.customer select:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.field--disabled {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* ── Required indicator ────────────────────────────────────────────────────── */
+
+.form-field__required {
+  color: rgb(var(--color-foreground));
+  margin-left: 0.2rem;
+}
+
+/* ── Helper & validation messages ──────────────────────────────────────────── */
+
+.form-field__helper {
+  color: rgba(var(--color-foreground), 0.65);
+  margin: 0.6rem 0 0;
+}
+
+.form-field__message--success {
+  color: rgb(var(--form-status-success));
+}
+
+.form-field__message--error {
+  color: rgb(var(--form-status-error));
+}
+
+.form-field__message--warning {
+  color: rgb(var(--form-status-warning));
+}
+
+.form-field__message--helper {
+  color: rgba(var(--color-foreground), 0.65);
+}
+
+.form-field__footer {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+}
+
+.form-field__footer .form-field__helper {
+  margin-top: 0;
+}
+
+.form-field__counter {
+  color: rgba(var(--color-foreground), 0.55);
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.form-field__counter.is-limit {
+  color: rgb(var(--form-status-warning));
+}
+
+/* ── Textarea enhancements ─────────────────────────────────────────────────── */
+
+.text-area--resize-vertical {
+  resize: vertical;
+}
+
+.field--textarea .text-area {
+  min-height: 12rem;
+  padding-top: 1.5rem;
+}
+
+.field--textarea.field--static-label .text-area {
+  padding: 1.5rem 2rem;
+}
+
+/* ── Select enhancements ───────────────────────────────────────────────────── */
+
+.select--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ── Checkbox & radio (.form-choice) ───────────────────────────────────────── */
+
+.form-choice {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  position: relative;
+}
+
+.form-choice--inline {
+  display: inline-flex;
+  margin-right: 1.6rem;
+}
+
+.form-choice__input {
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+}
+
+.form-choice__label {
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.8rem;
+  line-height: 1.4;
+  position: relative;
+  align-items: flex-start;
+}
+
+.form-choice__control {
+  align-items: center;
+  background-color: rgb(var(--color-background));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--inputs-border-opacity));
+  display: inline-flex;
+  flex-shrink: 0;
+  height: var(--form-choice-size);
+  justify-content: center;
+  margin-top: 0.1rem;
+  transition: border-color var(--duration-short) ease, background-color var(--duration-short) ease;
+  width: var(--form-choice-size);
+}
+
+.form-choice--radio .form-choice__control {
+  border-radius: 50%;
+}
+
+.form-choice--checkbox .form-choice__control {
+  border-radius: 0.3rem;
+}
+
+.form-choice__input:focus-visible + .form-choice__label .form-choice__control {
+  box-shadow: 0 0 0 0.2rem rgb(var(--color-background)), 0 0 0 0.3rem rgba(var(--color-foreground), 0.55);
+}
+
+.form-choice__input:checked + .form-choice__label .form-choice__control {
+  background-color: rgb(var(--color-button));
+  border-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+}
+
+.form-choice--radio .form-choice__input:checked + .form-choice__label .form-choice__control::after {
+  background-color: rgb(var(--color-button-text));
+  border-radius: 50%;
+  content: '';
+  height: 0.8rem;
+  width: 0.8rem;
+}
+
+.form-choice--checkbox .form-choice__input:checked + .form-choice__label .form-choice__control .icon-wrap,
+.form-choice--checkbox .form-choice__input:checked + .form-choice__label .form-choice__control .svg-wrapper {
+  display: inline-flex;
+}
+
+.form-choice--checkbox .form-choice__control .icon-wrap,
+.form-choice--checkbox .form-choice__control .svg-wrapper {
+  display: none;
+  height: 1.2rem;
+  width: 1.2rem;
+}
+
+.form-choice__input:disabled + .form-choice__label {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.form-choice--error .form-choice__control {
+  border-color: rgb(var(--form-status-error));
+}
+
+.form-choice--success .form-choice__control {
+  border-color: rgb(var(--form-status-success));
+}
+
+/* ── Toggle switch (.form-toggle) ──────────────────────────────────────────── */
+
+.form-toggle {
+  align-items: center;
+  display: inline-flex;
+  gap: 1rem;
+}
+
+.form-toggle__input {
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+}
+
+.form-toggle__label {
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.form-toggle__track {
+  background-color: rgba(var(--color-foreground), 0.2);
+  border-radius: var(--form-toggle-height);
+  display: inline-block;
+  height: var(--form-toggle-height);
+  position: relative;
+  transition: background-color var(--duration-short) ease;
+  width: var(--form-toggle-width);
+}
+
+.form-toggle__track::after {
+  background-color: rgb(var(--color-background));
+  border-radius: 50%;
+  box-shadow: 0 0.1rem 0.3rem rgba(var(--color-shadow), 0.2);
+  content: '';
+  height: 1.8rem;
+  left: 0.3rem;
+  position: absolute;
+  top: 0.3rem;
+  transition: transform var(--duration-short) ease;
+  width: 1.8rem;
+}
+
+.form-toggle__input:checked + .form-toggle__label .form-toggle__track {
+  background-color: rgb(var(--color-button));
+}
+
+.form-toggle__input:checked + .form-toggle__label .form-toggle__track::after {
+  transform: translateX(calc(var(--form-toggle-width) - 2.4rem));
+}
+
+.form-toggle__input:focus-visible + .form-toggle__label .form-toggle__track {
+  box-shadow: 0 0 0 0.2rem rgb(var(--color-background)), 0 0 0 0.3rem rgba(var(--color-foreground), 0.55);
+}
+
+.form-toggle__input:disabled + .form-toggle__label {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ── File upload (.form-file) ──────────────────────────────────────────────── */
+
+.form-file {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.form-file__input {
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+}
+
+.form-file__trigger {
+  cursor: pointer;
+}
+
+.form-file__name {
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.form-file__name.is-empty::before {
+  content: attr(data-placeholder);
+  color: rgba(var(--color-foreground), 0.45);
+}
+
+/* ── Layout utilities ──────────────────────────────────────────────────────── */
+
+.form-row {
+  display: grid;
+  gap: 1.6rem;
+}
+
+@media screen and (min-width: 750px) {
+  .form-row--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .form-row--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.form-fieldset {
+  border: 0;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.form-fieldset__legend {
+  margin-bottom: 0.8rem;
+}
+
+.form-fieldset__choices {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-fieldset__choices--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+}
+
+/* ── Accessibility ───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .form-toggle__track,
+  .form-toggle__track::after,
+  .form-choice__control {
+    transition: none;
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .field--success::after,
+  .field--error::after,
+  .field--warning::after,
+  .form-choice__control,
+  .form-toggle__track {
+    border: 1px solid CanvasText;
+  }
+}

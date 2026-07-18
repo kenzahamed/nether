@@ -1,0 +1,129 @@
+{% comment %}
+  Nether Premium Quick View Modal — singleton commerce shell.
+  Lazy-loads product-info via Section Rendering API when possible (Dawn-compatible fallback to full URL).
+  Does not replace Product Form, Variant Picker, Buy Buttons, or Product Page Framework.
+
+  Accepts:
+  - section: {Object} Header section object (required)
+  - color_scheme: {String} Color scheme id (optional)
+  - animation_duration: {Number} Animation duration in seconds (optional)
+
+  Usage:
+  {% render 'nether-quick-view-modal', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign drawer_color_scheme = color_scheme | default: section.settings.color_scheme
+  assign modal_style = section.settings.nether_quick_view_modal_style | default: 'standard'
+  assign gallery_layout = section.settings.nether_quick_view_gallery_layout | default: 'stacked'
+  assign info_layout = section.settings.nether_quick_view_info_layout | default: 'standard'
+  assign modal_width = section.settings.nether_quick_view_modal_width | default: 960
+
+  case section.settings.nether_quick_view_animation_speed
+    when 'fast'
+      assign qv_animation_duration = 0.2
+    when 'slow'
+      assign qv_animation_duration = 0.55
+    else
+      assign qv_animation_duration = animation_duration | default: 0.35
+  endcase
+-%}
+
+<nether-quick-view
+  id="nether-quick-view"
+  class="nether-quick-view nether-quick-view--{{ modal_style }} nether-quick-view--gallery-{{ gallery_layout }} nether-quick-view--info-{{ info_layout }} color-{{ drawer_color_scheme }} gradient"
+  data-section-id="{{ section.id }}"
+  data-product-section-id="main"
+  data-enable-overlay="{{ section.settings.nether_quick_view_enable_overlay }}"
+  data-desktop="{{ section.settings.nether_quick_view_desktop }}"
+  data-tablet="{{ section.settings.nether_quick_view_tablet }}"
+  data-mobile="{{ section.settings.nether_quick_view_mobile }}"
+  data-animation-style="{{ section.settings.nether_quick_view_animation_style | default: 'fade' }}"
+  data-animation-duration="{{ qv_animation_duration }}"
+  data-modal-width="{{ modal_width }}"
+  data-gallery-layout="{{ gallery_layout }}"
+  data-info-layout="{{ info_layout }}"
+  data-show-trust="{{ section.settings.nether_quick_view_show_trust }}"
+  data-show-quick-actions="{{ section.settings.nether_quick_view_show_quick_actions }}"
+  data-nether-motion="quick-view"
+  hidden
+>
+  <script type="application/json" data-nether-quick-view-i18n>
+    {
+      "title": {{ 'sections.nether_quick_view.title' | t | json }},
+      "open": {{ 'sections.nether_quick_view.actions.open' | t | json }},
+      "close": {{ 'accessibility.close' | t | json }},
+      "loading": {{ 'sections.nether_quick_view.loading' | t | json }},
+      "error": {{ 'sections.nether_quick_view.errors.generic' | t | json }},
+      "viewFull": {{ 'sections.nether_quick_view.actions.view_full' | t | json }},
+      "share": {{ 'sections.nether_quick_view.actions.share' | t | json }},
+      "shareCopied": {{ 'sections.nether_quick_view.actions.share_copied' | t | json }}
+    }
+  </script>
+
+  <div
+    class="nether-quick-view__overlay{% unless section.settings.nether_quick_view_enable_overlay %} nether-quick-view__overlay--disabled{% endunless %}"
+    data-nether-quick-view-overlay
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="nether-quick-view__panel{% if section.settings.nether_quick_view_enable_glass %} glass-card-light{% endif %} shadow-lg radius-lg"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="NetherQuickView-Title"
+    tabindex="-1"
+    data-nether-quick-view-panel
+  >
+    {% render 'nether-quick-view-header', section: section %}
+
+    <div class="nether-quick-view__body" data-nether-quick-view-body>
+      <div class="nether-quick-view__loading" data-nether-quick-view-loading hidden>
+        <p class="type-body-sm" role="status">{{ 'sections.nether_quick_view.loading' | t }}</p>
+        {%- render 'loading-spinner' -%}
+      </div>
+
+      <div class="nether-quick-view__error" data-nether-quick-view-error hidden role="alert">
+        <p class="type-body-sm">{{ 'sections.nether_quick_view.errors.generic' | t }}</p>
+      </div>
+
+      <div
+        class="nether-quick-view__content"
+        data-nether-quick-view-content
+        id="NetherQuickViewInfo"
+      ></div>
+
+      {%- comment -%} Composition hooks — product commerce modules live inside product-info {%- endcomment -%}
+      {% render 'nether-quick-view-media' %}
+      {% render 'nether-quick-view-info' %}
+      {% render 'nether-quick-view-pricing' %}
+      {% render 'nether-quick-view-variants' %}
+      {% render 'nether-quick-view-quantity' %}
+      {% render 'nether-quick-view-buy' %}
+
+      {% render 'nether-quick-view-trust', section: section %}
+      {% render 'nether-quick-view-highlights', section: section %}
+      {% render 'nether-quick-view-merchant-content', section: section %}
+    </div>
+
+    <footer class="nether-quick-view__footer" data-nether-quick-view-footer>
+      <a
+        href="#"
+        class="nether-quick-view__view-full link underlined-link"
+        data-nether-quick-view-full-details
+        hidden
+      >
+        {{ 'sections.nether_quick_view.actions.view_full' | t }}
+      </a>
+
+      <div class="nether-quick-view__extensions" data-nether-quick-view-extensions>
+        {% render 'nether-quick-view-extensions', type: 'recently_viewed' %}
+        {% render 'nether-quick-view-extensions', type: 'personalization' %}
+        {% render 'nether-quick-view-extensions', type: 'bundles' %}
+        {% render 'nether-quick-view-extensions', type: 'upsells' %}
+        {% render 'nether-quick-view-extensions', type: 'recommendations' %}
+        {% render 'nether-quick-view-extensions', type: 'analytics' %}
+      </div>
+    </footer>
+  </div>
+</nether-quick-view>

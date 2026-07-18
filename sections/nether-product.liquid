@@ -1,0 +1,1511 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-card-premium.css' | asset_url | stylesheet_tag }}
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-icon.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-typography.css' | asset_url | stylesheet_tag }}
+{{ 'component-shadow.css' | asset_url | stylesheet_tag }}
+{{ 'component-radius.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-showcase.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-product-showcase.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.nether_show_wishlist_placeholder -%}
+  {% render 'nether-wishlist-assets' %}
+{%- endif -%}
+
+{%- if section.settings.nether_show_compare_placeholder or section.settings.nether_enable_compare_cards -%}
+  {% render 'nether-compare-assets' %}
+{%- endif -%}
+
+{%- if section.settings.nether_enable_quick_view_cards -%}
+  {% render 'nether-quick-view-assets' %}
+{%- endif -%}
+
+{%- if section.settings.nether_show_recommendations_note -%}
+  {% render 'nether-recommendations-assets' %}
+{%- endif -%}
+{%- if section.settings.nether_show_bundles_note -%}
+  {% render 'nether-bundles-assets' %}
+{%- endif -%}
+
+{%- liquid
+  assign nether_layout_preview = section.settings.nether_layout | default: 'luxury_grid'
+  assign use_dawn_card_preview = false
+  if nether_layout_preview == 'card_grid' or nether_layout_preview == 'minimal_layout'
+    assign use_dawn_card_preview = true
+  endif
+-%}
+
+{%- if use_dawn_card_preview -%}
+  {{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- liquid
+  assign nether_layout = section.settings.nether_layout | default: 'luxury_grid'
+  assign nether_columns_desktop = section.settings.nether_columns_desktop | default: 3
+  assign nether_columns_tablet = section.settings.nether_columns_tablet | default: 2
+  assign nether_columns_mobile = section.settings.nether_columns_mobile | default: 1
+  assign nether_gap = section.settings.nether_gap | default: 24
+  assign products_limit = section.settings.nether_products_to_show | default: 8
+  assign product_source = section.settings.nether_product_source | default: 'manual'
+
+  case section.settings.nether_animation_speed
+    when 'slow'
+      assign nether_animation_duration = 0.8
+    when 'fast'
+      assign nether_animation_duration = 0.3
+    else
+      assign nether_animation_duration = 0.5
+  endcase
+
+  assign use_dawn_card = false
+  if nether_layout == 'card_grid' or nether_layout == 'minimal_layout'
+    assign use_dawn_card = true
+  endif
+
+  assign use_block_order = false
+  if product_source == 'manual' or product_source == 'featured'
+    assign use_block_order = true
+  elsif product_source == 'automatic'
+    assign product_block_count = section.blocks | where: 'type', 'product' | size
+    if product_block_count > 0
+      assign use_block_order = true
+    endif
+  endif
+
+  assign use_collection_source = false
+  if product_source == 'collection' or product_source == 'best_sellers' or product_source == 'new_arrivals' or product_source == 'trending' or product_source == 'recently_added'
+    assign use_collection_source = true
+  endif
+
+  assign source_collection = section.settings.collection
+  assign source_products = nil
+  assign nether_product_count = 0
+
+  if use_block_order
+    for block in section.blocks
+      if block.type == 'product' or block.type == 'promotional_card'
+        assign nether_product_count = nether_product_count | plus: 1
+      endif
+    endfor
+  elsif use_collection_source and source_collection != blank
+    assign source_products = source_collection.products
+    if product_source == 'new_arrivals' or product_source == 'recently_added'
+      assign source_products = source_collection.products | sort: 'published_at' | reverse
+    endif
+    assign nether_product_count = source_products.size
+    if nether_product_count > products_limit
+      assign nether_product_count = products_limit
+    endif
+  endif
+
+  assign show_slider = false
+  if nether_layout == 'carousel'
+    assign show_slider = true
+  endif
+
+  assign show_horizontal = false
+  if nether_layout == 'horizontal_scroll'
+    assign show_horizontal = true
+  endif
+
+  assign nether_class_list = 'nether-product'
+  assign nether_class_list = nether_class_list | append: ' nether-product--layout-' | append: nether_layout
+  assign nether_class_list = nether_class_list | append: ' nether-product--card-' | append: section.settings.nether_card_style
+  assign nether_class_list = nether_class_list | append: ' nether-product--desktop-' | append: section.settings.nether_layout_desktop
+  assign nether_class_list = nether_class_list | append: ' nether-product--tablet-' | append: section.settings.nether_layout_tablet
+  assign nether_class_list = nether_class_list | append: ' nether-product--mobile-' | append: section.settings.nether_layout_mobile
+
+  if section.settings.nether_enable_glass
+    assign nether_class_list = nether_class_list | append: ' nether-product--glass-enabled'
+  endif
+
+  if section.settings.nether_enable_gradient
+    assign nether_class_list = nether_class_list | append: ' nether-product--gradient-enabled'
+  endif
+
+  if section.settings.nether_enable_floating_cards
+    assign nether_class_list = nether_class_list | append: ' nether-product--floating-enabled'
+  endif
+
+  if section.settings.nether_full_width
+    assign nether_class_list = nether_class_list | append: ' nether-product--full-width'
+  endif
+
+  if use_dawn_card
+    assign nether_class_list = nether_class_list | append: ' nether-product--dawn-cards'
+  endif
+
+  assign heading_tag = 'h2'
+  if section.settings.nether_heading_level == 'h3'
+    assign heading_tag = 'h3'
+  endif
+
+  assign grid_classes = 'nether-product__grid'
+  if use_dawn_card
+    assign grid_classes = grid_classes | append: ' nether-product__grid--dawn grid product-grid contains-card contains-card--product'
+    if settings.card_style == 'standard'
+      assign grid_classes = grid_classes | append: ' contains-card--standard'
+    endif
+    assign grid_classes = grid_classes | append: ' grid--' | append: nether_columns_desktop | append: '-col-desktop'
+    assign grid_classes = grid_classes | append: ' grid--' | append: nether_columns_mobile | append: '-col-tablet-down'
+  endif
+  if show_slider
+    assign grid_classes = grid_classes | append: ' slider slider--desktop grid--peek'
+  endif
+  if show_horizontal
+    assign grid_classes = grid_classes | append: ' nether-product__grid--horizontal'
+  endif
+
+  assign needs_deferred_media = false
+  for block in section.blocks
+    if block.type == 'product' and block.settings.media_type == 'video'
+      assign needs_deferred_media = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if section.settings.nether_image_shape == 'blob' -%}
+  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if section.settings.nether_enable_glass -%}
+  {{ 'component-glass.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if section.settings.nether_enable_gradient -%}
+  {{ 'component-gradient.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if nether_layout == 'carousel' or nether_layout == 'horizontal_scroll' -%}
+  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if needs_deferred_media -%}
+  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if section.settings.nether_show_rating -%}
+  {{ 'component-rating.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if use_dawn_card and section.settings.nether_quick_add != 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  {%- if section.settings.nether_quick_add == 'standard' -%}
+    <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+  {%- if section.settings.nether_quick_add == 'bulk' -%}
+    <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+{%- endif -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .nether-product {
+    --nether-product-gap: {{ nether_gap }}px;
+    --nether-product-columns-desktop: {{ nether_columns_desktop }};
+    --nether-product-columns-tablet: {{ nether_columns_tablet }};
+    --nether-product-columns-mobile: {{ nether_columns_mobile }};
+    --nether-product-overlay-opacity: {{ section.settings.nether_overlay_opacity | divided_by: 100.0 }};
+    --nether-product-transition-duration: {{ nether_animation_duration }}s;
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- if section.settings.nether_show_divider_top -%}
+  {%- render 'nether-product-divider', section: section, position: 'top' -%}
+{%- endif -%}
+
+<nether-product
+  id="NetherProduct-{{ section.id }}"
+  class="{{ nether_class_list }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient{% if use_dawn_card and section.settings.nether_quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-nether-motion="product"
+  data-product-layout="{{ nether_layout }}"
+  data-nether-product-layout="{{ nether_layout }}"
+  data-nether-product-card-style="{{ section.settings.nether_card_style }}"
+  {% if section.settings.nether_enable_parallax or nether_layout == 'editorial_grid' or nether_layout == 'magazine' or nether_layout == 'split_product' or nether_layout == 'masonry_grid' or nether_layout == 'carousel' or nether_layout == 'horizontal_scroll' or section.settings.nether_animation_style == 'stagger' or section.settings.nether_animation_style == 'slide' or section.settings.nether_animation_style == 'scale' %}data-nether-motion-plugins="scrollTrigger"{% endif %}
+  data-animation-style="{{ section.settings.nether_animation_style }}"
+  data-animation-duration="{{ nether_animation_duration }}"
+  data-enable-parallax="{{ section.settings.nether_enable_parallax }}"
+  data-hover-reveal="{{ section.settings.nether_hover_effect }}"
+  data-carousel-ready="{{ show_slider }}"
+  role="region"
+  aria-label="{{ section.settings.nether_aria_label | default: 'Product showcase' | escape }}"
+>
+  <div class="nether-product__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+    {%- render 'nether-product-content', section: section, heading_tag: heading_tag -%}
+
+    {%- if nether_product_count > 0 -%}
+      {%- if show_slider -%}
+        <slider-component
+          class="nether-product__slider slider-mobile-gutter{% if section.settings.nether_full_width %} slider-component-full-width{% endif %}"
+          data-nether-product-carousel
+        >
+      {%- endif -%}
+
+      <ul
+        id="NetherProductGrid-{{ section.id }}"
+        class="{{ grid_classes }}"
+        role="list"
+        aria-label="{{ 'sections.nether_product.grid.label' | t }}"
+        data-nether-product-grid
+        data-product-count="{{ nether_product_count }}"
+      >
+        {%- assign card_index = 0 -%}
+        {%- assign skip_card_product_styles = false -%}
+
+        {%- if use_block_order -%}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'product' -%}
+                {%- assign card_product = block.settings.product -%}
+                {%- assign card_index = card_index | plus: 1 -%}
+                {%- liquid
+                  assign is_featured = false
+                  if nether_layout == 'split_product' or nether_layout == 'magazine'
+                    if card_index == 1
+                      assign is_featured = true
+                    endif
+                  endif
+
+                  assign lazy_load = true
+                  if card_index <= nether_columns_desktop
+                    assign lazy_load = false
+                  endif
+                -%}
+                <li
+                  id="NetherProductSlide-{{ section.id }}-{{ card_index }}"
+                  class="nether-product__item{% if show_slider %} slider__slide{% endif %}{% if is_featured %} nether-product__item--featured{% endif %}{% if use_dawn_card %} grid__item nether-product__dawn-card{% endif %}"
+                  data-nether-product-item
+                >
+                  {%- if use_dawn_card -%}
+                    {% render 'card-product',
+                      card_product: card_product,
+                      media_aspect_ratio: section.settings.nether_image_ratio,
+                      image_shape: section.settings.nether_image_shape,
+                      lazy_load: lazy_load,
+                      show_secondary_image: section.settings.nether_show_secondary_image,
+                      show_vendor: section.settings.nether_show_vendor,
+                      show_rating: section.settings.nether_show_rating,
+                      skip_styles: skip_card_product_styles,
+                      section_id: section.id,
+                      quick_add: section.settings.nether_quick_add,
+                      product_view_context: 'collection',
+                      show_wishlist: section.settings.nether_show_wishlist_placeholder,
+                      show_compare: section.settings.nether_show_compare_placeholder,
+                      show_quick_view: section.settings.nether_enable_quick_view_cards
+                    %}
+                    {%- assign skip_card_product_styles = true -%}
+                  {%- else -%}
+                    {%- render 'nether-product-card',
+                      product: card_product,
+                      block: block,
+                      section: section,
+                      columns: nether_columns_desktop,
+                      lazy_load: lazy_load,
+                      is_featured: is_featured,
+                      card_index: card_index
+                    -%}
+                  {%- endif -%}
+                </li>
+
+              {%- when 'promotional_card' -%}
+                {%- unless use_dawn_card -%}
+                  {%- assign card_index = card_index | plus: 1 -%}
+                  {%- assign lazy_load = true -%}
+                  {%- if card_index <= nether_columns_desktop -%}
+                    {%- assign lazy_load = false -%}
+                  {%- endif -%}
+                  <li
+                    id="NetherProductSlide-{{ section.id }}-{{ card_index }}"
+                    class="nether-product__item{% if show_slider %} slider__slide{% endif %}"
+                    data-nether-product-item
+                  >
+                    {%- render 'nether-product-promotional-card',
+                      block: block,
+                      section: section,
+                      columns: nether_columns_desktop,
+                      lazy_load: lazy_load,
+                      card_index: card_index
+                    -%}
+                  </li>
+                {%- endunless -%}
+            {%- endcase -%}
+          {%- endfor -%}
+
+        {%- elsif use_collection_source and source_collection != blank and source_products.size > 0 -%}
+          {%- for product in source_products limit: products_limit -%}
+            {%- assign card_index = card_index | plus: 1 -%}
+            {%- liquid
+              assign is_featured = false
+              if nether_layout == 'split_product' or nether_layout == 'magazine'
+                if card_index == 1
+                  assign is_featured = true
+                endif
+              endif
+
+              assign lazy_load = true
+              if card_index <= nether_columns_desktop
+                assign lazy_load = false
+              endif
+            -%}
+            <li
+              id="NetherProductSlide-{{ section.id }}-{{ card_index }}"
+              class="nether-product__item{% if show_slider %} slider__slide{% endif %}{% if is_featured %} nether-product__item--featured{% endif %}{% if use_dawn_card %} grid__item nether-product__dawn-card{% endif %}"
+              data-nether-product-item
+            >
+              {%- if use_dawn_card -%}
+                {% render 'card-product',
+                  card_product: product,
+                  media_aspect_ratio: section.settings.nether_image_ratio,
+                  image_shape: section.settings.nether_image_shape,
+                  lazy_load: lazy_load,
+                  show_secondary_image: section.settings.nether_show_secondary_image,
+                  show_vendor: section.settings.nether_show_vendor,
+                  show_rating: section.settings.nether_show_rating,
+                  skip_styles: skip_card_product_styles,
+                  section_id: section.id,
+                  quick_add: section.settings.nether_quick_add,
+                  product_view_context: 'collection',
+                  show_wishlist: section.settings.nether_show_wishlist_placeholder,
+                  show_compare: section.settings.nether_show_compare_placeholder,
+                  show_quick_view: section.settings.nether_enable_quick_view_cards
+                %}
+                {%- assign skip_card_product_styles = true -%}
+              {%- else -%}
+                {%- render 'nether-product-card',
+                  product: product,
+                  block: blank,
+                  section: section,
+                  columns: nether_columns_desktop,
+                  lazy_load: lazy_load,
+                  is_featured: is_featured,
+                  card_index: card_index
+                -%}
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+
+      {%- if show_slider -%}
+        <div class="slider-buttons no-js-hidden">
+          <button
+            type="button"
+            class="slider-button slider-button--prev"
+            name="previous"
+            aria-label="{{ 'general.slider.previous_slide' | t }}"
+            aria-controls="NetherProductGrid-{{ section.id }}"
+            data-nether-product-nav-control
+          >
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+          <div class="slider-counter caption">
+            <span class="slider-counter--current">1</span>
+            <span aria-hidden="true"> / </span>
+            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+            <span class="slider-counter--total">{{ nether_product_count }}</span>
+          </div>
+          <button
+            type="button"
+            class="slider-button slider-button--next"
+            name="next"
+            aria-label="{{ 'general.slider.next_slide' | t }}"
+            aria-controls="NetherProductGrid-{{ section.id }}"
+            data-nether-product-nav-control
+          >
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </div>
+        </slider-component>
+      {%- endif -%}
+    {%- else -%}
+      <ul class="nether-product__grid nether-product__grid--placeholder{% if use_dawn_card %} nether-product__grid--dawn{% endif %}" role="list">
+        {%- for i in (1..nether_columns_desktop) -%}
+          {%- assign placeholder_index = i | modulo: 4 | plus: 1 -%}
+          <li class="nether-product__item{% if use_dawn_card %} grid__item nether-product__dawn-card{% endif %}">
+            {%- if use_dawn_card -%}
+              {%- assign placeholder_image = 'product-apparel-' | append: placeholder_index -%}
+              {% render 'card-product',
+                show_vendor: section.settings.nether_show_vendor,
+                media_aspect_ratio: section.settings.nether_image_ratio,
+                placeholder_image: placeholder_image
+              %}
+            {%- else -%}
+              <article class="nether-product-card nether-product-card--placeholder">
+                <div class="nether-product-card__inner card card--card card--media">
+                  <div class="nether-product-card__media ratio" style="--ratio-percent: 125%;">
+                    {{ 'product-apparel-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                  <div class="nether-product-card__content">
+                    <h3 class="nether-product-card__heading type-heading-md">{{ 'onboarding.product_title' | t }}</h3>
+                  </div>
+                </div>
+              </article>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if section.settings.nether_show_view_all and source_collection != blank -%}
+      <div class="nether-product__view-all" data-nether-product-animate data-nether-product-role="buttons">
+        {%- liquid
+          assign view_all_label = section.settings.nether_view_all_label
+          if view_all_label == blank
+            assign view_all_label = 'sections.nether_product.view_all' | t
+          endif
+          assign view_all_aria = 'sections.nether_product.view_all_label' | t: collection_name: source_collection.title
+        -%}
+        {%- render 'button',
+          label: view_all_label,
+          link: source_collection.url,
+          style: section.settings.nether_view_all_style,
+          show_arrow: true,
+          aria_label: view_all_aria
+        -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.nether_show_recommendations_note -%}
+      <div class="nether-product__recommendations-note" data-nether-product-animate data-nether-recommendations-integration>
+        {% render 'nether-recommendations-extensions', type: 'for_you' %}
+        <p class="type-body-sm">{{ 'sections.nether_recommendations.showcase_note' | t }}</p>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.nether_show_bundles_note -%}
+      <div class="nether-product__bundles-note" data-nether-product-animate data-nether-bundles-integration>
+        {% render 'nether-bundles-extensions', type: 'dynamic_merchandising' %}
+        <p class="type-body-sm">{{ 'sections.nether_bundles.showcase_note' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</nether-product>
+
+{%- if section.settings.nether_show_divider_bottom -%}
+  {%- render 'nether-product-divider', section: section, position: 'bottom' -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Nether products",
+  "tag": "section",
+  "class": "section section-nether-product",
+  "max_blocks": 16,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Nether product framework"
+    },
+    {
+      "type": "select",
+      "id": "nether_product_source",
+      "label": "Product source",
+      "default": "manual",
+      "options": [
+        { "value": "manual", "label": "Manual products" },
+        { "value": "featured", "label": "Featured products" },
+        { "value": "collection", "label": "Collection products" },
+        { "value": "best_sellers", "label": "Best sellers" },
+        { "value": "new_arrivals", "label": "New arrivals" },
+        { "value": "trending", "label": "Trending products" },
+        { "value": "recently_added", "label": "Recently added" },
+        { "value": "automatic", "label": "Automatic" }
+      ]
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Used for collection-based sources. Sort the collection in Shopify admin for best sellers, new arrivals, or trending."
+    },
+    {
+      "type": "range",
+      "id": "nether_products_to_show",
+      "min": 2,
+      "max": 25,
+      "step": 1,
+      "default": 8,
+      "label": "Products to show"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout",
+      "label": "Layout",
+      "default": "luxury_grid",
+      "options": [
+        { "value": "editorial_grid", "label": "Editorial grid" },
+        { "value": "luxury_grid", "label": "Luxury grid" },
+        { "value": "masonry_grid", "label": "Masonry layout" },
+        { "value": "magazine", "label": "Magazine layout" },
+        { "value": "split_product", "label": "Split product" },
+        { "value": "card_grid", "label": "Card grid" },
+        { "value": "minimal_layout", "label": "Minimal layout" },
+        { "value": "horizontal_scroll", "label": "Horizontal scroll" },
+        { "value": "carousel", "label": "Carousel" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "nether_columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "Desktop columns"
+    },
+    {
+      "type": "range",
+      "id": "nether_columns_tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "label": "Tablet columns"
+    },
+    {
+      "type": "select",
+      "id": "nether_columns_mobile",
+      "label": "Mobile columns",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "nether_gap",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24,
+      "label": "Grid gap"
+    },
+    {
+      "type": "select",
+      "id": "nether_card_style",
+      "label": "Card style",
+      "default": "medium",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "editorial", "label": "Editorial" },
+        { "value": "glass", "label": "Glass" },
+        { "value": "gradient", "label": "Gradient" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_content_position",
+      "label": "Content position",
+      "default": "bottom-left",
+      "options": [
+        { "value": "top-left", "label": "Top left" },
+        { "value": "top-center", "label": "Top center" },
+        { "value": "top-right", "label": "Top right" },
+        { "value": "middle-left", "label": "Middle left" },
+        { "value": "middle-center", "label": "Middle center" },
+        { "value": "middle-right", "label": "Middle right" },
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-center", "label": "Bottom center" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_content_alignment",
+      "label": "Content alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_image_ratio",
+      "label": "Image ratio",
+      "default": "portrait",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_image_shape",
+      "label": "Image shape",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "arch", "label": "Arch" },
+        { "value": "blob", "label": "Blob" },
+        { "value": "chevronleft", "label": "Chevron left" },
+        { "value": "chevronright", "label": "Chevron right" },
+        { "value": "diamond", "label": "Diamond" },
+        { "value": "parallelogram", "label": "Parallelogram" },
+        { "value": "round", "label": "Round" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_heading_level",
+      "label": "Primary heading level",
+      "default": "h2",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "nether_aria_label",
+      "label": "Accessibility label",
+      "default": "Product showcase"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_product_description",
+      "label": "Show product description",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_secondary_image",
+      "label": "Show second image on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_rating",
+      "label": "Show product rating",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_savings",
+      "label": "Show savings amount",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_stock_status",
+      "label": "Show stock status",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Product features"
+    },
+    {
+      "type": "select",
+      "id": "nether_quick_add",
+      "label": "Quick add",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" },
+        { "value": "bulk", "label": "Bulk" }
+      ],
+      "info": "Full quick add is available on card grid and minimal layouts. Overlay layouts link to the product page."
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_wishlist_placeholder",
+      "label": "Show wishlist on cards",
+      "info": "Uses the Premium Wishlist toggle. Enable the wishlist framework in the header for the drawer and count.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_compare_placeholder",
+      "label": "Show compare on cards",
+      "info": "Uses the Premium Compare toggle. Enable the compare framework in the header for the drawer, table, and count.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_compare_cards",
+      "label": "Enable compare on cards",
+      "info": "Loads compare button assets for Product Showcase cards even when the header compare framework is off.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_quick_view_cards",
+      "label": "Enable quick view on cards",
+      "info": "Shows the Premium Quick View trigger on Product Showcase cards. Enable the quick view framework in the header for the modal.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_recommendations_note",
+      "label": "Show recommendations integration note",
+      "info": "Displays a future-ready Recommendations Framework extension point under this showcase. Add a Nether Recommendations section for live product recommendations.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_bundles_note",
+      "label": "Show bundles integration note",
+      "info": "Displays a Bundles Framework extension point under this showcase. Add a Nether Bundles section for packs and gift sets.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Visual features"
+    },
+    {
+      "type": "range",
+      "id": "nether_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 35,
+      "label": "Overlay opacity"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_overlay",
+      "label": "Enable image overlay",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_glass",
+      "label": "Enable glass card",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_gradient",
+      "label": "Enable gradient overlay",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "nether_gradient_style",
+      "label": "Gradient style",
+      "default": "brand",
+      "options": [
+        { "value": "brand", "label": "Brand" },
+        { "value": "dramatic", "label": "Dramatic" },
+        { "value": "vignette", "label": "Vignette" },
+        { "value": "fade-down", "label": "Fade down" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_floating_cards",
+      "label": "Floating cards",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "nether_hover_effect",
+      "label": "Hover effect",
+      "default": "zoom",
+      "options": [
+        { "value": "zoom", "label": "Zoom" },
+        { "value": "lift", "label": "Lift" },
+        { "value": "scale", "label": "Scale" },
+        { "value": "shadow", "label": "Shadow" },
+        { "value": "glow", "label": "Glow" },
+        { "value": "reveal", "label": "Hover reveal" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_divider_top",
+      "label": "Top divider",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_divider_bottom",
+      "label": "Bottom divider",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "nether_divider_style",
+      "label": "Divider style",
+      "default": "line",
+      "options": [
+        { "value": "line", "label": "Line" },
+        { "value": "gradient", "label": "Gradient" },
+        { "value": "wave", "label": "Wave" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "nether_default_cta_label",
+      "label": "Default card CTA label",
+      "default": "Shop now"
+    },
+    {
+      "type": "select",
+      "id": "nether_default_cta_style",
+      "label": "Default card CTA style",
+      "default": "arrow",
+      "options": [
+        { "value": "text", "label": "Text" },
+        { "value": "arrow", "label": "Arrow" },
+        { "value": "primary", "label": "Primary" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_view_all",
+      "label": "Show view all button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "nether_view_all_label",
+      "label": "View all button label"
+    },
+    {
+      "type": "select",
+      "id": "nether_view_all_style",
+      "label": "View all button style",
+      "default": "secondary",
+      "options": [
+        { "value": "primary", "label": "Primary" },
+        { "value": "secondary", "label": "Secondary" },
+        { "value": "outline", "label": "Outline" },
+        { "value": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_style",
+      "label": "Animation style",
+      "default": "stagger",
+      "options": [
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide", "label": "Slide" },
+        { "value": "stagger", "label": "Stagger" },
+        { "value": "scale", "label": "Scale" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_speed",
+      "label": "Animation speed",
+      "default": "medium",
+      "options": [
+        { "value": "slow", "label": "Slow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "fast", "label": "Fast" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_parallax",
+      "label": "Enable parallax",
+      "default": false,
+      "info": "Subtle media parallax on scroll. Respects reduced motion preferences."
+    },
+    {
+      "type": "header",
+      "content": "Responsive layouts"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_desktop",
+      "label": "Desktop layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "editorial", "label": "Editorial emphasis" },
+        { "value": "compact", "label": "Compact" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_tablet",
+      "label": "Tablet layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_mobile",
+      "label": "Mobile layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "header",
+          "content": "Media"
+        },
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media type",
+          "default": "image",
+          "options": [
+            { "value": "image", "label": "Image" },
+            { "value": "video", "label": "Video" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom image",
+          "info": "Overrides product featured image when set."
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image_mobile",
+          "label": "Custom mobile image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-hosted video"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "label": "External video URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster_image",
+          "label": "Video poster image"
+        },
+        {
+          "type": "text",
+          "id": "video_description",
+          "label": "Video description"
+        },
+        {
+          "type": "checkbox",
+          "id": "video_loop",
+          "label": "Loop video",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "product_label",
+          "label": "Product label"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom title"
+        },
+        {
+          "type": "richtext",
+          "id": "custom_description",
+          "label": "Custom description"
+        },
+        {
+          "type": "url",
+          "id": "custom_link",
+          "label": "Custom link"
+        },
+        {
+          "type": "text",
+          "id": "badge_label",
+          "label": "Badge label"
+        },
+        {
+          "type": "select",
+          "id": "badge_type",
+          "label": "Badge type",
+          "default": "featured",
+          "options": [
+            { "value": "sale", "label": "Sale" },
+            { "value": "new", "label": "New" },
+            { "value": "bestseller", "label": "Bestseller" },
+            { "value": "featured", "label": "Featured" },
+            { "value": "custom", "label": "Custom" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "badge_style",
+          "label": "Badge style",
+          "default": "soft",
+          "options": [
+            { "value": "solid", "label": "Solid" },
+            { "value": "soft", "label": "Soft" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "CTA label"
+        },
+        {
+          "type": "select",
+          "id": "cta_style",
+          "label": "CTA style",
+          "default": "arrow",
+          "options": [
+            { "value": "text", "label": "Text" },
+            { "value": "arrow", "label": "Arrow" },
+            { "value": "primary", "label": "Primary" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Statistics"
+        },
+        {
+          "type": "text",
+          "id": "stat_1_value",
+          "label": "Stat 1 value"
+        },
+        {
+          "type": "text",
+          "id": "stat_1_label",
+          "label": "Stat 1 label"
+        },
+        {
+          "type": "text",
+          "id": "stat_2_value",
+          "label": "Stat 2 value"
+        },
+        {
+          "type": "text",
+          "id": "stat_2_label",
+          "label": "Stat 2 label"
+        },
+        {
+          "type": "text",
+          "id": "stat_3_value",
+          "label": "Stat 3 value"
+        },
+        {
+          "type": "text",
+          "id": "stat_3_label",
+          "label": "Stat 3 label"
+        }
+      ]
+    },
+    {
+      "type": "promotional_card",
+      "name": "Promotional card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "badge_label",
+          "label": "Badge label"
+        },
+        {
+          "type": "select",
+          "id": "badge_type",
+          "label": "Badge type",
+          "default": "featured",
+          "options": [
+            { "value": "featured", "label": "Featured" },
+            { "value": "sale", "label": "Sale" },
+            { "value": "new", "label": "New" },
+            { "value": "custom", "label": "Custom" }
+          ]
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "CTA label"
+        },
+        {
+          "type": "select",
+          "id": "cta_style",
+          "label": "CTA style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "arrow", "label": "Arrow" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "aria_label",
+          "label": "Accessibility label"
+        }
+      ]
+    },
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Eyebrow text",
+          "default": "Featured"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Featured products"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "default": "h1",
+          "options": [
+            { "value": "h2", "label": "Small" },
+            { "value": "h1", "label": "Medium" },
+            { "value": "h0", "label": "Large" },
+            { "value": "hxl", "label": "Extra large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "select",
+          "id": "subheading_size",
+          "label": "Heading size",
+          "default": "h2",
+          "options": [
+            { "value": "h3", "label": "Small" },
+            { "value": "h2", "label": "Medium" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Curated products for every style.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "default": "body",
+          "options": [
+            { "value": "body", "label": "Body" },
+            { "value": "subtitle", "label": "Subtitle" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label_1",
+          "label": "Button 1 label"
+        },
+        {
+          "type": "url",
+          "id": "button_link_1",
+          "label": "Button 1 link"
+        },
+        {
+          "type": "select",
+          "id": "button_style_1",
+          "label": "Button 1 style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "label": "Button 2 label"
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "Button 2 link"
+        },
+        {
+          "type": "select",
+          "id": "button_style_2",
+          "label": "Button 2 style",
+          "default": "secondary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "product_highlight",
+      "name": "Product highlight",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "Shop"
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nether products",
+      "blocks": [
+        { "type": "eyebrow" },
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    },
+    {
+      "name": "Nether card grid",
+      "settings": {
+        "nether_layout": "card_grid",
+        "nether_product_source": "collection",
+        "nether_columns_desktop": 4
+      },
+      "blocks": [
+        { "type": "heading" }
+      ]
+    },
+    {
+      "name": "Nether editorial products",
+      "settings": {
+        "nether_layout": "editorial_grid",
+        "nether_card_style": "editorial"
+      },
+      "blocks": [
+        { "type": "heading" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    },
+    {
+      "name": "Nether split product",
+      "settings": {
+        "nether_layout": "split_product",
+        "nether_columns_desktop": 2
+      },
+      "blocks": [
+        { "type": "heading" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}

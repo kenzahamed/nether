@@ -1,0 +1,186 @@
+/* Nether Premium Cart Commerce Framework */
+
+#shopify-section-cart-drawer {
+  display: contents;
+}
+
+.nether-cart-page,
+.nether-cart-drawer {
+  --nether-cart-gap: var(--grid-desktop-horizontal-spacing, 2rem);
+  --nether-cart-module-gap: 1.6rem;
+  --nether-cart-transition-duration: 0.5s;
+  --nether-cart-shipping-progress: 0%;
+}
+
+.nether-cart-page {
+  display: block;
+}
+
+.nether-cart-page__layout {
+  display: grid;
+  gap: var(--nether-cart-gap);
+}
+
+.nether-cart-page--layout-split .nether-cart-page__layout {
+  grid-template-columns: minmax(0, 1.4fr) minmax(28rem, 0.8fr);
+  align-items: start;
+}
+
+.nether-cart-page--layout-classic .nether-cart-page__layout {
+  grid-template-columns: 1fr;
+}
+
+.nether-cart-page--layout-editorial .nether-cart-page__layout {
+  grid-template-columns: minmax(0, 1fr) minmax(32rem, 0.75fr);
+  gap: calc(var(--nether-cart-gap) * 1.5);
+}
+
+.nether-cart__module {
+  margin-bottom: var(--nether-cart-module-gap);
+}
+
+.nether-cart__module:last-child {
+  margin-bottom: 0;
+}
+
+.nether-cart__header-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+}
+
+.nether-cart__summary--sticky .nether-cart__summary-inner {
+  position: sticky;
+  top: calc(var(--header-height, 8rem) + 1.6rem);
+}
+
+.nether-cart__summary-inner {
+  padding: 2rem;
+  border-radius: var(--radius-lg, 1.2rem);
+  box-shadow: var(--shadow-card, 0 1rem 3rem rgba(0, 0, 0, 0.08));
+}
+
+.nether-cart-page--glass-enabled .nether-cart__summary-inner {
+  backdrop-filter: blur(var(--glass-blur, 1.6rem));
+  background: color-mix(in srgb, rgb(var(--color-background)) 82%, transparent);
+}
+
+.nether-cart__shipping-track {
+  display: block;
+  width: 100%;
+  height: 0.6rem;
+  margin-top: 0.8rem;
+  border-radius: var(--radius-pill, 999px);
+  background: rgba(var(--color-foreground), 0.08);
+  overflow: hidden;
+}
+
+.nether-cart__shipping-fill {
+  display: block;
+  height: 100%;
+  width: var(--nether-cart-shipping-progress, 0%);
+  border-radius: inherit;
+  background: rgb(var(--color-button));
+  transition: width var(--nether-cart-transition-duration) ease;
+}
+
+.nether-cart__trust-item,
+.nether-cart__gift-wrap-inner,
+.nether-cart__extension-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.nether-cart__secure-message {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  color: rgba(var(--color-foreground), 0.72);
+}
+
+.nether-cart__empty-content {
+  display: grid;
+  gap: 1.2rem;
+  justify-items: start;
+  text-align: left;
+}
+
+.nether-cart-drawer__inner--glass {
+  backdrop-filter: blur(var(--glass-blur, 1.6rem));
+}
+
+.nether-cart-drawer--style-wide .nether-cart-drawer__inner {
+  max-width: min(48rem, 100vw);
+}
+
+.nether-cart-drawer--style-minimal .nether-cart-drawer__inner {
+  box-shadow: none;
+}
+
+.nether-cart-drawer__count {
+  font-weight: 400;
+  opacity: 0.72;
+}
+
+.nether-cart__recommendations-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.6rem;
+}
+
+.nether-cart__divider {
+  height: 1px;
+  margin: 2rem 0;
+  background: rgba(var(--color-foreground), 0.08);
+}
+
+.nether-cart__extension,
+.nether-cart__gift-wrap {
+  padding: 1.2rem 1.4rem;
+  border: 1px dashed rgba(var(--color-foreground), 0.16);
+  border-radius: var(--radius-md, 0.8rem);
+  background: rgba(var(--color-foreground), 0.02);
+}
+
+.nether-cart__items-table {
+  width: 100%;
+}
+
+.nether-cart__line-item[data-nether-cart-animate] {
+  will-change: transform, opacity;
+}
+
+.nether-cart-page--desktop-stacked .nether-cart-page__layout,
+.nether-cart-page--tablet-stacked .nether-cart-page__layout,
+.nether-cart-page--mobile-stacked .nether-cart-page__layout {
+  grid-template-columns: 1fr;
+}
+
+@media screen and (max-width: 989px) {
+  .nether-cart-page--layout-split .nether-cart-page__layout,
+  .nether-cart-page--layout-editorial .nether-cart-page__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-cart__summary--sticky .nether-cart__summary-inner {
+    position: static;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-cart-page--mobile-centered .nether-cart__header-main {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .nether-cart-page--mobile-centered .nether-cart__empty-content {
+    justify-items: center;
+    text-align: center;
+  }
+}
+

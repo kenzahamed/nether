@@ -1,0 +1,229 @@
+{% comment %}
+  Renders a Nether Premium Media card.
+
+  Accepts:
+  - block: {Object} Media item block (required)
+  - section: {Object} Media section (required)
+  - columns: {Number} Grid columns for image sizes (optional)
+  - lazy_load: {Boolean} Lazy load images (default: true)
+  - is_featured: {Boolean} Featured item in split/magazine layouts (default: false)
+  - card_index: {Number} Card index for layout modifiers (optional)
+
+  Usage:
+  {% render 'nether-media-card', block: block, section: section, columns: columns %}
+{% endcomment %}
+
+{%- liquid
+  assign columns_count = columns | default: section.settings.nether_columns_desktop | default: 3
+  assign is_lazy = lazy_load | default: true
+  assign is_featured_card = is_featured | default: false
+  assign card_index_num = card_index | default: 1
+
+  assign card_style = section.settings.nether_media_style | default: 'medium'
+  assign content_position = section.settings.nether_content_position | default: 'bottom-left'
+  assign content_alignment = section.settings.nether_content_alignment | default: 'left'
+  assign show_overlay = section.settings.nether_enable_overlay
+  assign enable_glass = section.settings.nether_enable_glass
+  assign enable_gradient = section.settings.nether_enable_gradient
+  assign hover_effect = section.settings.nether_hover_effect | default: 'zoom'
+  assign enable_lightbox = block.settings.enable_lightbox
+
+  assign premium_style = 'default'
+  case card_style
+    when 'editorial'
+      assign premium_style = 'editorial'
+    when 'glass'
+      assign premium_style = 'glass'
+    when 'minimal'
+      assign premium_style = 'minimal'
+    when 'gradient'
+      assign premium_style = 'default'
+  endcase
+
+  assign card_size_class = ''
+  case card_style
+    when 'small'
+      assign card_size_class = 'nether-media-card--size-small'
+    when 'large'
+      assign card_size_class = 'nether-media-card--size-large'
+    when 'editorial'
+      assign card_size_class = 'nether-media-card--size-editorial'
+  endcase
+
+  assign hover_classes = ''
+  case hover_effect
+    when 'lift'
+      assign hover_classes = 'card-hover-lift'
+    when 'scale'
+      assign hover_classes = 'card-hover-scale'
+    when 'shadow'
+      assign hover_classes = 'card-hover-shadow'
+    when 'reveal'
+      assign hover_classes = 'nether-media-card--hover-reveal'
+    when 'zoom'
+      assign hover_classes = 'card-hover-zoom'
+    when 'glow'
+      assign hover_classes = 'card-hover-glow'
+  endcase
+
+  assign card_title = block.settings.title
+  assign card_caption = block.settings.caption
+  assign card_description = block.settings.description
+  assign card_url = block.settings.cta_link
+  assign badge_label = block.settings.badge_label
+  assign badge_type = block.settings.badge_type | default: 'featured'
+  assign badge_style = block.settings.badge_style | default: 'soft'
+  assign media_label = block.settings.media_label
+  assign cta_label = block.settings.cta_label
+  assign cta_style = block.settings.cta_style | default: section.settings.nether_default_cta_style | default: 'arrow'
+
+  assign card_classes = 'nether-media-card'
+  assign card_classes = card_classes | append: ' nether-media-card--position-' | append: content_position
+  assign card_classes = card_classes | append: ' nether-media-card--align-' | append: content_alignment
+  if premium_style != 'default'
+    assign card_classes = card_classes | append: ' nether-media-card--style-' | append: premium_style
+  endif
+  if card_size_class != blank
+    assign card_classes = card_classes | append: ' ' | append: card_size_class
+  endif
+  if is_featured_card
+    assign card_classes = card_classes | append: ' nether-media-card--featured'
+  endif
+  if enable_glass
+    assign card_classes = card_classes | append: ' nether-media-card--glass'
+  endif
+  if enable_gradient
+    assign card_classes = card_classes | append: ' nether-media-card--gradient'
+  endif
+  if section.settings.nether_enable_floating_cards
+    assign card_classes = card_classes | append: ' nether-media-card--floating'
+  endif
+  if hover_classes != blank
+    assign card_classes = card_classes | append: ' ' | append: hover_classes
+  endif
+  if enable_lightbox
+    assign card_classes = card_classes | append: ' nether-media-card--lightbox-ready'
+  endif
+  assign card_classes = card_classes | append: ' nether-media-card--index-' | append: card_index_num
+
+  assign overlay_classes = 'nether-media-card__overlay'
+  if enable_gradient
+    case section.settings.nether_gradient_style
+      when 'dramatic'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-dramatic'
+      when 'vignette'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-vignette'
+      when 'fade-down'
+        assign overlay_classes = overlay_classes | append: ' grad-linear-fade-down'
+      else
+        assign overlay_classes = overlay_classes | append: ' grad-hero-brand'
+    endcase
+  endif
+
+  if card_title != blank
+    assign aria_label = 'sections.nether_media.card.view_label' | t: title: card_title
+  else
+    assign aria_label = 'sections.nether_media.card.placeholder_label' | t
+  endif
+-%}
+
+<article
+  class="{{ card_classes }}"
+  data-nether-media-animate
+  data-nether-media-card
+  data-nether-media-item
+  data-nether-media-media-type="{{ block.settings.media_type | default: 'image' }}"
+  {% if is_featured_card %}data-nether-media-role="hero"{% else %}data-nether-media-role="media"{% endif %}
+  {{ block.shopify_attributes }}
+>
+  {%- if card_url != blank -%}
+    <a
+      class="nether-media-card__link full-unstyled-link"
+      href="{{ card_url }}"
+      aria-label="{{ aria_label | escape }}"
+    >
+  {%- else -%}
+    <div class="nether-media-card__link" role="group" aria-label="{{ aria_label | escape }}">
+  {%- endif -%}
+    <div class="nether-media-card__inner card card--card card--media{% if premium_style != 'default' %} card--premium-{{ premium_style }}{% endif %}">
+      {%- render 'nether-media-render',
+        block: block,
+        section: section,
+        columns: columns_count,
+        lazy_load: is_lazy
+      -%}
+
+      {%- if show_overlay or enable_gradient -%}
+        <div
+          class="{{ overlay_classes }}"
+          aria-hidden="true"
+          data-nether-media-overlay
+        ></div>
+      {%- endif -%}
+
+      {%- if enable_glass -%}
+        <div class="nether-media-card__glass-panel glass-card-light" aria-hidden="true" data-nether-media-glass></div>
+      {%- endif -%}
+
+      {%- if media_label != blank -%}
+        <span
+          class="nether-media-card__floating-label type-overline"
+          aria-hidden="true"
+          data-nether-media-float-label
+        >{{ media_label | escape }}</span>
+      {%- endif -%}
+
+      <div class="nether-media-card__content" data-nether-media-overlay-content>
+        {%- if badge_label != blank -%}
+          <div class="nether-media-card__badge" data-nether-media-role="badge">
+            {% render 'badge', label: badge_label, type: badge_type, style: badge_style, size: 'small' %}
+          </div>
+        {%- endif -%}
+
+        <div class="nether-media-card__information">
+          {%- if card_title != blank -%}
+            <h3 class="nether-media-card__heading type-heading-md">{{ card_title | escape }}</h3>
+          {%- endif -%}
+
+          {%- if card_caption != blank -%}
+            <p class="nether-media-card__caption type-caption" data-nether-media-caption>{{ card_caption | escape }}</p>
+          {%- endif -%}
+
+          {%- if card_description != blank -%}
+            <div class="nether-media-card__description rte type-body-sm">{{ card_description }}</div>
+          {%- endif -%}
+        </div>
+
+        {%- if cta_label != blank -%}
+          <div class="nether-media-card__cta">
+            {%- liquid
+              assign cta_classes = 'nether-media-card__cta-text button'
+              case cta_style
+                when 'primary'
+                  assign cta_classes = cta_classes | append: ' button--primary'
+                when 'secondary'
+                  assign cta_classes = cta_classes | append: ' button--secondary'
+                else
+                  assign cta_classes = cta_classes | append: ' button--text button--arrow'
+              endcase
+            -%}
+            <span class="{{ cta_classes }}">
+              {{- cta_label | escape -}}
+              {%- if cta_style == 'arrow' or cta_style == 'text' or cta_style == blank -%}
+                <span class="button__icon button__icon--trailing" aria-hidden="true">
+                  {{- 'icon-arrow.svg' | inline_asset_content -}}
+                </span>
+              {%- endif -%}
+            </span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- if card_url != blank -%}
+    </a>
+  {%- else -%}
+    </div>
+  {%- endif -%}
+
+  {%- render 'nether-media-lightbox', block: block, media_image: block.settings.image_desktop -%}
+</article>

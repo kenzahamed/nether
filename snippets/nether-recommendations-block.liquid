@@ -1,0 +1,34 @@
+{% comment %}
+  Nether Premium Recommendations — block dispatcher.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- case block.type -%}
+  {%- when '@app' -%}
+    <div
+      class="nether-recommendations__module nether-recommendations__module--app"
+      data-nether-recommendations-animate
+      {{ block.shopify_attributes }}
+    >
+      {% render block %}
+    </div>
+
+  {%- when 'merchant_content' -%}
+    {% render 'nether-recommendations-merchant-content', block: block %}
+
+  {%- when 'frequently_bought_placeholder',
+    'recently_viewed_placeholder',
+    'recently_purchased_placeholder',
+    'for_you_placeholder',
+    'ai_placeholder',
+    'personalization_placeholder',
+    'analytics_placeholder',
+    'merchandising_placeholder',
+    'ab_testing_placeholder',
+    'collection_cards_placeholder'
+  -%}
+    {% render 'nether-recommendations-extensions', block: block, section: section %}
+{%- endcase -%}

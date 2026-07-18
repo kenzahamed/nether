@@ -1,0 +1,24 @@
+{% comment %}
+  Nether Premium Collection Page — Merchant editorial content module.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- if block.settings.heading != blank or block.settings.content != blank or block.settings.page.content != blank -%}
+  <div
+    class="nether-collection-page__module nether-collection-page__module--merchant{% if block.settings.full_width %} nether-collection-page__module--full-width{% endif %}"
+    data-nether-collection-page-module="merchant"
+    data-nether-collection-page-animate
+    {{ block.shopify_attributes }}
+  >
+    {%- if block.settings.heading != blank -%}
+      <h2 class="nether-collection-page__module-heading type-heading-sm">{{ block.settings.heading }}</h2>
+    {%- endif -%}
+    <div class="nether-collection-page__merchant-content rte">
+      {{ block.settings.content }}
+      {{ block.settings.page.content }}
+    </div>
+  </div>
+{%- endif -%}

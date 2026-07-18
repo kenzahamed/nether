@@ -1,0 +1,44 @@
+{% comment %}
+  Renders contact / support CTA blocks for the Nether FAQ Framework.
+
+  Accepts:
+  - block: {Object} contact_cta or support_cta block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-faq-cta', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-faq-animate'
+  assign cta_heading = block.settings.heading | default: block.settings.title
+  assign cta_text = block.settings.text | default: block.settings.description
+  assign cta_style = block.settings.card_style | default: 'support'
+-%}
+
+{%- if cta_heading != blank or cta_text != blank or block.settings.button_label != blank -%}
+  <div
+    class="nether-faq__cta nether-faq__cta--{{ cta_style }}"
+    {{ motion_attribute }}
+    data-nether-faq-cta
+    {{ block.shopify_attributes }}
+  >
+    <div class="nether-faq__cta-inner">
+      {%- if cta_heading != blank -%}
+        <p class="nether-faq__cta-heading">{{ cta_heading | escape }}</p>
+      {%- endif -%}
+      {%- if cta_text != blank -%}
+        <div class="nether-faq__cta-text rte">{{ cta_text }}</div>
+      {%- endif -%}
+      {%- if block.settings.button_label != blank -%}
+        {%- render 'button',
+          label: block.settings.button_label,
+          link: block.settings.button_link,
+          style: block.settings.button_style,
+          size: block.settings.button_size,
+          disabled: block.settings.button_link == blank
+        -%}
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

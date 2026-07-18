@@ -1,0 +1,19 @@
+{% comment %}
+  Nether Mega Menu — Custom HTML placeholder block.
+  For merchant-provided markup and future app block compatibility.
+
+  Accepts:
+  - block: {Object} Section block
+{% endcomment %}
+
+<div class="nether-mega-menu__custom-html" data-nether-mega-reveal>
+  {%- if block.settings.heading != blank -%}
+    <p class="nether-mega-menu__column-heading h4">{{ block.settings.heading | escape }}</p>
+  {%- endif -%}
+
+  {%- if block.settings.html != blank -%}
+    <div class="nether-mega-menu__html rte">{{ block.settings.html }}</div>
+  {%- elsif request.design_mode -%}
+    <p class="nether-mega-menu__placeholder">{{ 'sections.header.nether_mega_menu.html_placeholder' | t }}</p>
+  {%- endif -%}
+</div>

@@ -1,0 +1,35 @@
+{% comment %}
+  Renders a related question link for the Nether FAQ Framework.
+
+  Accepts:
+  - block: {Object} related_question block (required)
+  - section: {Object} FAQ section (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-faq-related', block: block, section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-faq-animate'
+  assign question_label = block.settings.question | default: block.settings.label
+  assign target_id = block.settings.target_block_id
+  assign target_url = block.settings.link
+
+  if target_id != blank
+    assign target_url = '#' | append: target_id
+  endif
+-%}
+
+{%- if question_label != blank -%}
+  <li class="nether-faq__related-item" {{ motion_attribute }} {{ block.shopify_attributes }}>
+    <a
+      class="nether-faq__related-link link"
+      {% if target_url != blank %}href="{{ target_url }}"{% else %}href="#" role="link" aria-disabled="true"{% endif %}
+      {% if target_id != blank %}data-nether-faq-related-target="{{ target_id }}"{% endif %}
+    >
+      {%- render 'icon', icon: 'arrow', size: 'sm', class: 'nether-faq__related-icon' -%}
+      <span>{{ question_label | escape }}</span>
+    </a>
+  </li>
+{%- endif -%}

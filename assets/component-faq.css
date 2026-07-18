@@ -1,0 +1,656 @@
+/* =============================================================================
+ * Nether Premium FAQ & Knowledge Framework
+ * Extends component-hero.css, component-accordion.css, and Dawn collapsible-content.
+ * Reuses: Card Premium, Typography, Button, Badge, Glass, Gradient, Shadow, Radius
+ * ============================================================================= */
+
+nether-faq {
+  display: block;
+  position: relative;
+}
+
+.nether-faq {
+  --nether-faq-gap: 2.4rem;
+  --nether-faq-columns-desktop: 1;
+  --nether-faq-columns-tablet: 1;
+  --nether-faq-columns-mobile: 1;
+  --nether-faq-overlay-opacity: 0.35;
+  --nether-faq-transition-duration: 0.5s;
+  --nether-hero-overlay-opacity: var(--nether-faq-overlay-opacity);
+  --nether-hero-transition-duration: var(--nether-faq-transition-duration);
+  --nether-hero-min-height: auto;
+}
+
+.nether-faq__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+/* ── Section header ────────────────────────────────────────────────────────── */
+
+.nether-faq__header-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 72rem;
+}
+
+.nether-faq__header-inner--align-center {
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.nether-faq__header-inner--align-right {
+  margin-inline-start: auto;
+  text-align: right;
+  align-items: flex-end;
+}
+
+.nether-faq__eyebrow,
+.nether-faq__heading,
+.nether-faq__subheading,
+.nether-faq__text {
+  margin: 0;
+}
+
+.nether-faq__text {
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-faq__buttons,
+.nether-faq__button-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nether-faq__header-inner--align-center .nether-faq__buttons {
+  justify-content: center;
+}
+
+.nether-faq__header-inner--align-right .nether-faq__buttons {
+  justify-content: flex-end;
+}
+
+/* ── Search ────────────────────────────────────────────────────────────────── */
+
+.nether-faq__search {
+  margin-bottom: 2rem;
+}
+
+.nether-faq__search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.6rem;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.12);
+  border-radius: var(--radius-md, 0.8rem);
+  background: rgba(var(--color-background), 0.92);
+}
+
+.nether-faq__search-input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  padding: 1.4rem 0;
+  min-height: auto;
+}
+
+.nether-faq__search-input:focus {
+  box-shadow: none;
+}
+
+.nether-faq__search-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(var(--color-foreground), 0.65);
+}
+
+.nether-faq__search-clear.hidden {
+  display: none;
+}
+
+/* ── Expand / collapse controls ────────────────────────────────────────────── */
+
+.nether-faq__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.6rem;
+}
+
+.nether-faq__control {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+
+.nether-faq__control-separator {
+  opacity: 0.45;
+}
+
+/* ── Body layout with sidebar ──────────────────────────────────────────────── */
+
+.nether-faq__body {
+  display: grid;
+  gap: var(--nether-faq-gap);
+}
+
+.nether-faq__body--with-sidebar {
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-faq--layout-categorized_faq .nether-faq__body--with-sidebar,
+  .nether-faq--layout-help_center .nether-faq__body--with-sidebar,
+  .nether-faq--layout-knowledge_base .nether-faq__body--with-sidebar,
+  .nether-faq--layout-support_center .nether-faq__body--with-sidebar,
+  .nether-faq--layout-two_column_faq .nether-faq__body--with-sidebar {
+    grid-template-columns: minmax(18rem, 24rem) minmax(0, 1fr) minmax(18rem, 26rem);
+  }
+
+  .nether-faq--layout-two_column_faq .nether-faq__body:not(.nether-faq__body--with-sidebar) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+/* ── Category navigation ───────────────────────────────────────────────────── */
+
+.nether-faq__nav {
+  position: sticky;
+  top: calc(var(--header-height, 8rem) + 2rem);
+  align-self: start;
+}
+
+.nether-faq__nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.nether-faq__nav-link {
+  display: block;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--radius-sm, 0.4rem);
+  text-decoration: none;
+  transition: background var(--nether-faq-transition-duration) ease;
+}
+
+.nether-faq__nav-link:hover,
+.nether-faq__nav-link.is-active {
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+@media screen and (max-width: 989px) {
+  .nether-faq__nav {
+    position: static;
+    overflow-x: auto;
+  }
+
+  .nether-faq__nav-list {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding-bottom: 0.4rem;
+  }
+
+  .nether-faq__nav-link {
+    white-space: nowrap;
+  }
+}
+
+/* ── FAQ list ──────────────────────────────────────────────────────────────── */
+
+.nether-faq__list {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--nether-faq-gap) * 0.65);
+  min-width: 0;
+}
+
+.nether-faq__list--layout-two_column_faq {
+  display: grid;
+  grid-template-columns: repeat(var(--nether-faq-columns-mobile), minmax(0, 1fr));
+  gap: var(--nether-faq-gap);
+}
+
+.nether-faq__list--layout-knowledge_base {
+  display: grid;
+  grid-template-columns: repeat(var(--nether-faq-columns-mobile), minmax(0, 1fr));
+  gap: var(--nether-faq-gap);
+}
+
+.nether-faq__list--layout-magazine {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nether-faq-gap);
+}
+
+@media screen and (min-width: 750px) {
+  .nether-faq__list--layout-two_column_faq,
+  .nether-faq__list--layout-knowledge_base {
+    grid-template-columns: repeat(var(--nether-faq-columns-tablet), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-faq__list--layout-two_column_faq,
+  .nether-faq__list--layout-knowledge_base {
+    grid-template-columns: repeat(var(--nether-faq-columns-desktop), minmax(0, 1fr));
+  }
+
+  .nether-faq__list--layout-magazine {
+    grid-template-columns: 2fr 1fr;
+    grid-auto-rows: minmax(0, auto);
+  }
+
+  .nether-faq__item--featured {
+    grid-row: span 2;
+  }
+}
+
+/* ── Accordion items ───────────────────────────────────────────────────────── */
+
+.nether-faq__item {
+  margin: 0;
+  border-radius: var(--radius-md, 0.8rem);
+  overflow: hidden;
+  transition: box-shadow var(--nether-faq-transition-duration) ease,
+    transform var(--nether-faq-transition-duration) ease;
+}
+
+.nether-faq__item.accordion {
+  margin-top: 0;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-faq__details {
+  background: rgba(var(--color-background), 0.92);
+}
+
+.nether-faq__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  padding: 1.8rem 2rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.nether-faq__summary::-webkit-details-marker {
+  display: none;
+}
+
+.nether-faq__summary-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.nether-faq__question {
+  margin: 0;
+  word-break: break-word;
+}
+
+.nether-faq__icon {
+  flex-shrink: 0;
+}
+
+.nether-faq__caret {
+  flex-shrink: 0;
+  transition: transform var(--nether-faq-transition-duration) ease;
+}
+
+.nether-faq__details[open] .nether-faq__caret {
+  transform: rotate(180deg);
+}
+
+.nether-faq__answer {
+  padding: 0 2rem 2rem;
+  color: rgba(var(--color-foreground), 0.82);
+}
+
+.nether-faq__summary:hover {
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+.nether-faq__item.is-hidden {
+  display: none;
+}
+
+.nether-faq__item.is-filter-match {
+  animation: nether-faq-highlight 0.6s ease;
+}
+
+@keyframes nether-faq-highlight {
+  0% { background: rgba(var(--color-foreground), 0.08); }
+  100% { background: transparent; }
+}
+
+/* Card styles */
+
+.nether-faq__item--style-glass .nether-faq__details {
+  background: rgba(var(--color-background), 0.55);
+  backdrop-filter: blur(1.2rem);
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-faq__item--style-gradient .nether-faq__details {
+  background: linear-gradient(
+    145deg,
+    rgba(var(--color-background), 0.96),
+    rgba(var(--color-foreground), 0.06)
+  );
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-faq__item--style-editorial .nether-faq__question {
+  font-size: calc(var(--font-heading-scale) * 2rem);
+  line-height: 1.35;
+}
+
+.nether-faq__item--style-minimal .nether-faq__details {
+  background: transparent;
+}
+
+.nether-faq__item--style-minimal.accordion {
+  border: 0;
+}
+
+.nether-faq--floating-enabled .nether-faq__item--style-medium .nether-faq__details,
+.nether-faq--floating-enabled .nether-faq__item--style-large .nether-faq__details {
+  box-shadow: 0 1.6rem 4rem rgba(var(--color-shadow), 0.1);
+}
+
+.nether-faq--layout-product_faq .nether-faq__item {
+  border-radius: var(--radius-sm, 0.4rem);
+}
+
+.nether-faq--layout-product_faq .nether-faq__summary,
+.nether-faq--layout-product_faq .nether-faq__answer {
+  padding-inline: 1.2rem;
+}
+
+/* ── Category blocks ───────────────────────────────────────────────────────── */
+
+.nether-faq__category {
+  padding-top: 1.6rem;
+  scroll-margin-top: calc(var(--header-height, 8rem) + 2rem);
+}
+
+.nether-faq__category-title {
+  margin: 0 0 0.8rem;
+}
+
+.nether-faq__category-description {
+  margin: 0 0 1.6rem;
+  color: rgba(var(--color-foreground), 0.72);
+}
+
+/* ── Callouts ───────────────────────────────────────────────────────────────── */
+
+.nether-faq__callout {
+  display: flex;
+  gap: 1.2rem;
+  padding: 1.6rem 2rem;
+  border-radius: var(--radius-md, 0.8rem);
+  border: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  background: rgba(var(--color-background), 0.92);
+}
+
+.nether-faq__callout--tip {
+  border-color: rgba(var(--color-foreground), 0.12);
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+.nether-faq__callout--warning {
+  border-color: rgba(220, 80, 40, 0.35);
+  background: rgba(220, 80, 40, 0.08);
+}
+
+.nether-faq__callout-heading {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+
+.nether-faq__callout-text {
+  margin: 0;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────────── */
+
+.nether-faq__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: sticky;
+  top: calc(var(--header-height, 8rem) + 2rem);
+  align-self: start;
+}
+
+.nether-faq__sidebar-heading {
+  margin: 0 0 1rem;
+  font-weight: 600;
+}
+
+.nether-faq__related-list,
+.nether-faq__links-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.nether-faq__related-link,
+.nether-faq__helpful-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+/* ── CTA blocks ──────────────────────────────────────────────────────────────── */
+
+.nether-faq__cta {
+  padding: 2rem;
+  border-radius: var(--radius-md, 0.8rem);
+  border: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  background: rgba(var(--color-background), 0.96);
+}
+
+.nether-faq__cta--support {
+  background: linear-gradient(
+    145deg,
+    rgba(var(--color-background), 0.98),
+    rgba(var(--color-foreground), 0.05)
+  );
+}
+
+.nether-faq__cta-heading {
+  margin: 0 0 0.8rem;
+  font-weight: 600;
+}
+
+.nether-faq__cta-text {
+  margin: 0 0 1.6rem;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+/* ── Shell / editorial panel ─────────────────────────────────────────────────── */
+
+.nether-faq__panel--floating {
+  transform: translateY(-1.6rem);
+}
+
+.nether-faq__block-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-faq__block-divider--gradient {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(var(--color-foreground), 0.28), transparent);
+}
+
+.nether-faq__block-divider--space {
+  height: 2.4rem;
+  background: transparent;
+}
+
+/* ── Section dividers ────────────────────────────────────────────────────────── */
+
+.nether-faq__divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-faq__divider--gradient {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(var(--color-foreground), 0.28), transparent);
+}
+
+.nether-faq__divider--wave {
+  height: 3.2rem;
+  background: transparent;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q300 0 600 20 T1200 20 V40 H0 Z' fill='black'/%3E%3C/svg%3E");
+  mask-size: 100% 100%;
+  background-color: rgba(var(--color-foreground), 0.12);
+}
+
+/* ── Responsive layout modifiers ─────────────────────────────────────────────── */
+
+.nether-faq--mobile-stacked .nether-faq__list--layout-two_column_faq,
+.nether-faq--mobile-stacked .nether-faq__list--layout-knowledge_base {
+  grid-template-columns: 1fr;
+}
+
+.nether-faq--mobile-centered .nether-faq__header-inner,
+.nether-faq--mobile-centered .nether-faq__controls {
+  text-align: center;
+  justify-content: center;
+}
+
+.nether-faq--mobile-minimal .nether-faq__item--style-medium .nether-faq__details,
+.nether-faq--mobile-minimal .nether-faq__item--style-large .nether-faq__details {
+  box-shadow: none;
+  border: 0;
+  background: transparent;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-faq__item,
+  .nether-faq__caret,
+  .nether-faq__nav-link {
+    transition: none;
+  }
+
+  .nether-faq__item.is-filter-match {
+    animation: none;
+  }
+}
+
+.nether-faq__item--motion-reduced .nether-faq__answer {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Motion Framework 2.0 hooks (Phase 5.3.6) ───────────────────────────────── */
+
+nether-faq[data-nether-motion-pending='true'] .nether-faq__header [data-nether-faq-animate],
+nether-faq[data-nether-motion-pending='true'] [data-nether-faq-header] [data-nether-faq-animate],
+nether-faq[data-nether-motion-pending='true'] [data-nether-faq-shell] .nether-faq__blocks [data-nether-faq-animate],
+nether-faq[data-nether-motion-pending='true'] .nether-faq__item,
+nether-faq[data-nether-motion-pending='true'] [data-nether-faq-category],
+nether-faq[data-nether-motion-pending='true'] [data-nether-faq-nav-link],
+nether-faq[data-nether-motion-pending='true'] [data-nether-faq-search-wrap],
+nether-faq[data-nether-motion-pending='true'] [data-nether-faq-controls] {
+  opacity: 0;
+}
+
+nether-faq[data-nether-motion-ready='true'] .nether-faq__header [data-nether-faq-animate],
+nether-faq[data-nether-motion-ready='true'] [data-nether-faq-header] [data-nether-faq-animate],
+nether-faq[data-nether-motion-ready='true'] [data-nether-faq-shell] .nether-faq__blocks [data-nether-faq-animate],
+nether-faq[data-nether-motion-ready='true'] .nether-faq__item,
+nether-faq[data-nether-motion-ready='true'] [data-nether-faq-category],
+nether-faq[data-nether-motion-ready='true'] [data-nether-faq-icon],
+nether-faq[data-nether-motion-ready='true'] [data-nether-faq-question],
+nether-faq[data-nether-motion-ready='true'] [data-nether-faq-answer],
+nether-faq[data-nether-motion-ready='true'] [data-nether-faq-caret] {
+  will-change: transform, opacity;
+}
+
+nether-faq[data-nether-motion-ready='true'] .nether-faq__buttons .button,
+nether-faq[data-nether-motion-ready='true'] .nether-faq__button-block .button,
+nether-faq[data-nether-motion-ready='true'] [data-nether-faq-nav-link] {
+  will-change: transform;
+}
+
+/* Drive caret via Motion Engine while ready — avoid CSS fighting GSAP */
+nether-faq[data-nether-motion-ready='true'] .nether-faq__caret {
+  transition: none;
+}
+
+nether-faq[data-nether-motion-ready='true'] .nether-faq__details[open] .nether-faq__caret {
+  transform: none;
+}
+
+/* Avoid CSS transform fighting GSAP hover on floating panels while motion is active */
+nether-faq[data-nether-motion-ready='true'].nether-faq--floating-enabled .nether-faq__panel--floating,
+nether-faq[data-nether-motion-ready='true'].nether-faq--floating-enabled .nether-hero__panel {
+  transition-property: box-shadow, background-color, border-color;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  nether-faq[data-nether-motion-pending='true'] .nether-faq__header [data-nether-faq-animate],
+  nether-faq[data-nether-motion-pending='true'] [data-nether-faq-header] [data-nether-faq-animate],
+  nether-faq[data-nether-motion-pending='true'] [data-nether-faq-shell] .nether-faq__blocks [data-nether-faq-animate],
+  nether-faq[data-nether-motion-pending='true'] .nether-faq__item,
+  nether-faq[data-nether-motion-pending='true'] [data-nether-faq-category],
+  nether-faq[data-nether-motion-pending='true'] [data-nether-faq-nav-link],
+  nether-faq[data-nether-motion-pending='true'] [data-nether-faq-search-wrap],
+  nether-faq[data-nether-motion-pending='true'] [data-nether-faq-controls] {
+    opacity: 1;
+  }
+
+  nether-faq[data-nether-motion-ready='true'] .nether-faq__header [data-nether-faq-animate],
+  nether-faq[data-nether-motion-ready='true'] [data-nether-faq-header] [data-nether-faq-animate],
+  nether-faq[data-nether-motion-ready='true'] [data-nether-faq-shell] .nether-faq__blocks [data-nether-faq-animate],
+  nether-faq[data-nether-motion-ready='true'] .nether-faq__item,
+  nether-faq[data-nether-motion-ready='true'] [data-nether-faq-category],
+  nether-faq[data-nether-motion-ready='true'] [data-nether-faq-icon],
+  nether-faq[data-nether-motion-ready='true'] [data-nether-faq-question],
+  nether-faq[data-nether-motion-ready='true'] [data-nether-faq-answer],
+  nether-faq[data-nether-motion-ready='true'] [data-nether-faq-caret],
+  nether-faq[data-nether-motion-ready='true'] .nether-faq__buttons .button,
+  nether-faq[data-nether-motion-ready='true'] .nether-faq__button-block .button,
+  nether-faq[data-nether-motion-ready='true'] [data-nether-faq-nav-link] {
+    will-change: auto;
+  }
+
+  nether-faq[data-nether-motion-ready='true'] .nether-faq__details[open] .nether-faq__caret {
+    transform: rotate(180deg);
+  }
+}

@@ -1,0 +1,90 @@
+{% comment %}
+  Renders a Nether mobile drawer navigation item (recursive).
+
+  Reuses Dawn menu-drawer markup so HeaderDrawer / MenuDrawer JS continues to work.
+
+  Accepts:
+  - link: {Object} Menu link object (required)
+  - depth: {Number} Nesting depth (default: 0)
+  - parent_handles: {String} Ancestor handle chain for unique ids
+
+  Usage:
+  {% render 'nether-mobile-drawer-nav-item', link: link, depth: 0 %}
+{% endcomment %}
+
+{%- liquid
+  assign item_depth = depth | default: 0
+  assign handle_chain = parent_handles | default: ''
+  if handle_chain != blank
+    assign id_prefix = handle_chain | append: '-' | append: link.handle
+  else
+    assign id_prefix = link.handle
+  endif
+-%}
+
+<li class="nether-mobile-drawer__item" data-nether-drawer-depth="{{ item_depth }}">
+  {%- if link.links != blank -%}
+    <details
+      id="Details-menu-drawer-{{ id_prefix }}"
+      class="nether-mobile-drawer__details"
+      data-nether-drawer-submenu
+    >
+      <summary
+        id="HeaderDrawer-{{ id_prefix }}"
+        class="menu-drawer__menu-item list-menu__item link link--text focus-inset nether-mobile-drawer__link{% if link.child_active %} menu-drawer__menu-item--active nether-mobile-drawer__link--active{% endif %}"
+        aria-expanded="false"
+      >
+        <span class="nether-mobile-drawer__link-label">{{ link.title | escape }}</span>
+        <span class="svg-wrapper nether-mobile-drawer__chevron" aria-hidden="true">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </span>
+        <span class="svg-wrapper nether-mobile-drawer__arrow" aria-hidden="true">
+          {{- 'icon-arrow.svg' | inline_asset_content -}}
+        </span>
+      </summary>
+      <div
+        id="link-{{ id_prefix | escape }}"
+        class="menu-drawer__submenu has-submenu gradient motion-reduce nether-mobile-drawer__submenu"
+        tabindex="-1"
+        data-nether-drawer-panel
+      >
+        <div class="menu-drawer__inner-submenu nether-mobile-drawer__submenu-inner">
+          <button
+            type="button"
+            class="menu-drawer__close-button link link--text focus-inset nether-mobile-drawer__back"
+            data-nether-drawer-back
+            aria-expanded="true"
+          >
+            <span class="svg-wrapper" aria-hidden="true">
+              {{- 'icon-arrow.svg' | inline_asset_content -}}
+            </span>
+            {{ link.title | escape }}
+          </button>
+          <ul class="menu-drawer__menu list-menu nether-mobile-drawer__menu" role="list" tabindex="-1">
+            {%- for childlink in link.links -%}
+              {%- render 'nether-mobile-drawer-nav-item',
+                link: childlink,
+                depth: item_depth | plus: 1,
+                parent_handles: id_prefix
+              -%}
+            {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+    </details>
+  {%- else -%}
+    <a
+      id="HeaderDrawer-{{ id_prefix }}"
+      href="{{ link.url }}"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset nether-mobile-drawer__link{% if link.current %} menu-drawer__menu-item--active nether-mobile-drawer__link--active{% endif %}"
+      {% if link.current %}
+        aria-current="page"
+      {% endif %}
+    >
+      <span class="nether-mobile-drawer__link-label">{{ link.title | escape }}</span>
+      {%- if link.current -%}
+        <span class="nether-mobile-drawer__active-indicator" aria-hidden="true"></span>
+      {%- endif -%}
+    </a>
+  {%- endif -%}
+</li>

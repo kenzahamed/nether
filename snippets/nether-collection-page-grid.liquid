@@ -1,0 +1,96 @@
+{% comment %}
+  Product grid module for Nether Premium Collection Page.
+  Preserves Dawn #product-grid IDs and card-product integration.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - collection: {Object} Collection object (required)
+  - paginate: {Object} Paginate object (required)
+{% endcomment %}
+
+{%- liquid
+  assign use_premium_cards = false
+  if section.settings.nether_card_mode == 'premium'
+    assign use_premium_cards = true
+  endif
+
+  assign grid_layout = section.settings.nether_grid_layout | default: 'standard'
+  assign columns_desktop = section.settings.columns_desktop
+  assign columns_mobile = section.settings.columns_mobile
+-%}
+
+<div
+  class="collection nether-collection-page__grid-shell{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}{% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}"
+  data-nether-collection-page-grid-shell
+>
+  <div class="loading-overlay gradient"></div>
+  <ul
+    id="product-grid"
+    data-id="{{ section.id }}"
+    data-nether-collection-page-grid
+    class="
+      nether-collection-page__grid
+      nether-collection-page__grid--{{ grid_layout }}
+      {% if use_premium_cards %}
+        nether-collection-page__grid--premium
+      {% else %}
+        grid product-grid contains-card contains-card--product
+        {% if settings.card_style == 'standard' %} contains-card--standard{% endif %}
+        grid--{{ columns_desktop }}-col-desktop
+        grid--{{ columns_mobile }}-col-tablet-down
+      {% endif %}
+    "
+    role="list"
+  >
+    {% assign skip_card_product_styles = false %}
+    {%- for product in collection.products -%}
+      {% assign lazy_load = false %}
+      {%- if forloop.index > 2 -%}
+        {%- assign lazy_load = true -%}
+      {%- endif -%}
+
+      <li
+        class="nether-collection-page__grid-item{% unless use_premium_cards %} grid__item{% endunless %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+        data-nether-collection-page-item
+        {% if settings.animations_reveal_on_scroll %}
+          data-cascade
+          style="--animation-order: {{ forloop.index }};"
+        {% endif %}
+      >
+        {%- if use_premium_cards -%}
+          {% render 'nether-product-card',
+            product: product,
+            section: section,
+            columns: columns_desktop,
+            lazy_load: lazy_load,
+            card_index: forloop.index
+          %}
+        {%- else -%}
+          {% render 'card-product',
+            card_product: product,
+            media_aspect_ratio: section.settings.image_ratio,
+            image_shape: section.settings.image_shape,
+            show_secondary_image: section.settings.show_secondary_image,
+            show_vendor: section.settings.show_vendor,
+            show_rating: section.settings.show_rating,
+            lazy_load: lazy_load,
+            skip_styles: skip_card_product_styles,
+            quick_add: section.settings.quick_add,
+            section_id: section.id,
+            product_view_context: 'collection',
+            show_wishlist: section.settings.nether_enable_wishlist_cards,
+            show_compare: section.settings.nether_enable_compare_cards,
+            show_quick_view: section.settings.nether_enable_quick_view_cards
+          %}
+        {%- endif -%}
+      </li>
+      {%- assign skip_card_product_styles = true -%}
+    {%- endfor -%}
+  </ul>
+
+  {%- if paginate.pages > 1 -%}
+    <div class="nether-collection-page__pagination" data-nether-collection-page-pagination data-nether-infinite-scroll-anchor>
+      {% render 'pagination', paginate: paginate, anchor: '' %}
+    </div>
+  {%- endif -%}
+</div>

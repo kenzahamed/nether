@@ -1,0 +1,32 @@
+{% comment %}
+  Collection footer zone — description, merchant blocks, and extension modules.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - collection: {Object} Collection object (required)
+  - paginate: {Object} Paginate object (optional)
+{% endcomment %}
+
+<div class="nether-collection-page__footer" data-nether-collection-page-footer>
+  {%- if section.settings.nether_show_collection_description and section.settings.nether_description_placement == 'footer' -%}
+    {% render 'nether-collection-page-description', section: section, collection: collection %}
+  {%- endif -%}
+
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign footer_block = false
+      if block.type == 'merchant_content' or block.type == 'editorial_content' or block.type == 'category_highlight' or block.type == 'stat' or block.type == 'subcollections' or block.type == 'collection_info' or block.type == 'collection_description' or block.type == 'promotional_card' or block.type contains 'placeholder'
+        assign footer_block = true
+      endif
+    -%}
+    {%- if footer_block -%}
+      {% render 'nether-collection-page-block',
+        block: block,
+        section: section,
+        collection: collection,
+        paginate: paginate,
+        zone: 'footer'
+      %}
+    {%- endif -%}
+  {%- endfor -%}
+</div>

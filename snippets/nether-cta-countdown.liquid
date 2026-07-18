@@ -1,0 +1,32 @@
+{% comment %}
+  Future-ready countdown placeholder for Nether Premium CTA Framework.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-cta-countdown', block: block, motion_attr: motion_attr %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-cta-animate'
+-%}
+
+<div
+  class="nether-cta__countdown"
+  data-nether-cta-countdown
+  data-nether-cta-role="countdown"
+  data-nether-hero-role="countdown"
+  {{ motion_attribute }}
+  hidden
+  aria-hidden="true"
+  {{ block.shopify_attributes }}
+>
+  <p class="nether-cta__countdown-label type-label">
+    {{- block.settings.label | default: 'sections.nether_cta.countdown.label' | t | escape -}}
+  </p>
+  <div class="nether-cta__countdown-slot" data-nether-cta-countdown-slot>
+    {%- comment -%} Future: wire countdown timer module here {%- endcomment -%}
+  </div>
+</div>

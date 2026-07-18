@@ -1,0 +1,72 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — future extension points.
+  Structural placeholders only where functionality is not yet implemented.
+
+  Accepts:
+  - extension: {String} delivery_provider | shipping_api | ai_messaging | localization | preorder | coming_soon | shipping_countdown
+  - label: {String}
+  - text: {String}
+  - class: {String}
+  - attributes: {String}
+{% endcomment %}
+
+{%- liquid
+  assign extension_type = extension | default: 'delivery_provider'
+  assign extension_label = label
+  assign extension_icon = 'info'
+
+  case extension_type
+    when 'delivery_provider'
+      assign extension_data = 'data-nether-commerce-delivery-provider-placeholder'
+      assign default_label = 'sections.nether_commerce.extensions.delivery_provider' | t
+      assign extension_icon = 'truck'
+    when 'shipping_api'
+      assign extension_data = 'data-nether-commerce-shipping-api-placeholder'
+      assign default_label = 'sections.nether_commerce.extensions.shipping_api' | t
+      assign extension_icon = 'plane'
+    when 'ai_messaging'
+      assign extension_data = 'data-nether-commerce-ai-messaging-placeholder'
+      assign default_label = 'sections.nether_commerce.extensions.ai_messaging' | t
+      assign extension_icon = 'star'
+    when 'localization'
+      assign extension_data = 'data-nether-commerce-localization-placeholder'
+      assign default_label = 'sections.nether_commerce.extensions.localization' | t
+      assign extension_icon = 'map_pin'
+    when 'preorder'
+      assign extension_data = 'data-nether-commerce-preorder-placeholder'
+      assign default_label = 'sections.nether_commerce.extensions.preorder' | t
+      assign extension_icon = 'box'
+    when 'coming_soon'
+      assign extension_data = 'data-nether-commerce-coming-soon-placeholder'
+      assign default_label = 'sections.nether_commerce.extensions.coming_soon' | t
+      assign extension_icon = 'stopwatch'
+    when 'shipping_countdown'
+      assign extension_data = 'data-nether-commerce-shipping-countdown-placeholder'
+      assign default_label = 'sections.nether_commerce.extensions.shipping_countdown' | t
+      assign extension_icon = 'stopwatch'
+    else
+      assign extension_data = 'data-nether-commerce-extension-placeholder'
+      assign default_label = 'sections.nether_commerce.extensions.generic' | t
+  endcase
+
+  if extension_label == blank
+    assign extension_label = default_label
+  endif
+-%}
+
+<div
+  class="nether-commerce__extension nether-commerce__extension--{{ extension_type }}{% if class != blank %} {{ class }}{% endif %}"
+  data-nether-commerce-module="extension"
+  data-nether-commerce-animate
+  {{ extension_data }}
+  hidden
+  {% if attributes != blank %}{{ attributes }}{% endif %}
+>
+  <div class="nether-commerce__extension-inner" role="group" aria-label="{{ extension_label | escape }}">
+    {% render 'nether-commerce-icon', icon: extension_icon, size: 'sm', decorative: false, label: extension_label %}
+    <span class="nether-commerce__extension-label type-body-sm">{{ extension_label }}</span>
+    {%- if text != blank -%}
+      <p class="nether-commerce__extension-text type-body-sm">{{ text }}</p>
+    {%- endif -%}
+  </div>
+</div>

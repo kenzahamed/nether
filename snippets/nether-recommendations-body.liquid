@@ -1,0 +1,69 @@
+{% comment %}
+  Nether Premium Recommendations — shared body (header, toolbar, products, empty, extensions).
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - products: {Array} Product list (optional — blank triggers empty)
+  - products_limit: {Number}
+  - product_count: {Number}
+  - strategy: {String} related | complementary | collection | …
+  - strategy_label: {String}
+  - view_all_url: {String}
+  - show_empty: {Boolean} force empty module
+  - empty_context: {String}
+{% endcomment %}
+
+{%- liquid
+  assign layout = section.settings.nether_layout | default: 'grid'
+  assign limit = products_limit | default: section.settings.nether_products_to_show | default: 4
+  assign count = product_count | default: 0
+  if count == 0 and products != blank
+    assign count = products.size
+    if count > limit
+      assign count = limit
+    endif
+  endif
+  assign force_empty = show_empty | default: false
+-%}
+
+{% render 'nether-recommendations-header',
+  section: section,
+  strategy_label: strategy_label
+%}
+
+{% render 'nether-recommendations-toolbar',
+  section: section,
+  product_count: count,
+  view_all_url: view_all_url
+%}
+
+{%- if force_empty or products == blank or count == 0 -%}
+  {% render 'nether-recommendations-empty', section: section, context: empty_context %}
+{%- else -%}
+  {%- case layout -%}
+    {%- when 'carousel' -%}
+      {% render 'nether-recommendations-carousel',
+        section: section,
+        products: products,
+        products_limit: limit
+      %}
+    {%- when 'editorial' -%}
+      {% render 'nether-recommendations-grid',
+        section: section,
+        products: products,
+        products_limit: limit,
+        layout_mode: 'editorial'
+      %}
+    {%- else -%}
+      {% render 'nether-recommendations-grid',
+        section: section,
+        products: products,
+        products_limit: limit,
+        layout_mode: 'grid'
+      %}
+  {%- endcase -%}
+{%- endif -%}
+
+{%- for block in section.blocks -%}
+  {% render 'nether-recommendations-block', block: block, section: section %}
+{%- endfor -%}

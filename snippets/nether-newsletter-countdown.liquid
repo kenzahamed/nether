@@ -1,0 +1,32 @@
+{% comment %}
+  Future-ready countdown placeholder for Nether Premium Newsletter Framework.
+  Hidden until countdown functionality is implemented.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-newsletter-countdown', block: block, motion_attr: motion_attr %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-newsletter-animate'
+-%}
+
+<div
+  class="nether-newsletter__countdown"
+  data-nether-newsletter-countdown
+  data-nether-newsletter-role="countdown"
+  {{ motion_attribute }}
+  hidden
+  aria-hidden="true"
+  {{ block.shopify_attributes }}
+>
+  <p class="nether-newsletter__countdown-label type-label">
+    {{- block.settings.label | default: 'Countdown' | escape -}}
+  </p>
+  <div class="nether-newsletter__countdown-slot" data-nether-newsletter-countdown-slot>
+    {%- comment -%} Future: wire countdown timer module here {%- endcomment -%}
+  </div>
+</div>

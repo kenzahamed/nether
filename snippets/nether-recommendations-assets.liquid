@@ -1,0 +1,12 @@
+{% comment %}
+  Loads Nether Recommendations framework assets when needed outside the section shell.
+  Safe to render multiple times — browsers cache deferred scripts/styles.
+
+  Usage:
+  {% render 'nether-recommendations-assets' %}
+{% endcomment %}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-recommendations.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-recommendations.js' | asset_url }}" defer="defer"></script>

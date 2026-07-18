@@ -1,0 +1,324 @@
+{% comment %}
+  Renders a Nether Premium Card.
+
+  For Shopify resource cards, use the dedicated snippets instead:
+  - Product:  {% render 'card-product', ... %}
+  - Collection: {% render 'card-collection', ... %}
+  - Blog: {% render 'article-card', ... %}
+
+  This snippet handles premium content cards and applies the Nether card system
+  to Feature, Testimonial, Team, Category, and Generic Content card types.
+
+  Accepts:
+  - type: {String} feature | testimonial | team | category | content (default: content)
+  - style: {String} default | elevated | outline | glass | minimal | editorial (default: default)
+  - radius: {String} none | sm | md | lg | full (default: md — uses theme token)
+  - shadow: {String} none | sm | md | lg (default: md — uses theme token)
+  - gradient_border: {Boolean} Gradient border effect (default: false)
+  - image: {Object} Shopify image object (optional)
+  - image_alt: {String} Image alt text override (optional)
+  - link: {String} Card link URL — makes card interactive (optional)
+  - heading: {String} Card title (optional)
+  - caption: {String} Subtitle / role / meta text (optional)
+  - description: {String} Body text (optional)
+  - quote: {String} Testimonial quote text (for type: testimonial)
+  - attribution: {String} Testimonial author name (for type: testimonial)
+  - attribution_detail: {String} Testimonial author detail e.g. role (optional)
+  - badge_text: {String} Badge label (optional)
+  - badge_position: {String} Badge position — inherits settings.badge_position if blank
+  - icon: {String} Icon name without extension, e.g. 'star' → icon-star.svg (optional)
+  - cta_label: {String} CTA button label (optional)
+  - cta_link: {String} CTA button URL (optional)
+  - cta_style: {String} Button style for CTA (default: text)
+  - footer: {String} Footer content (optional)
+  - hover: {String} Comma-separated hover effects: lift, shadow, zoom, scale, border, arrow, glow
+  - equal_height: {Boolean} Stretch to grid height (default: true)
+  - color_scheme: {String} Color scheme class suffix e.g. 'scheme-1' (default: settings.card_color_scheme)
+  - card_layout: {String} Dawn layout — card | standard (default: card)
+  - media_aspect_ratio: {String} square | portrait | adapt (default: square)
+  - lazy_load: {Boolean} Lazy load image (default: true)
+  - show_arrow: {Boolean} Show arrow icon on heading link (default: false)
+  - skip_styles: {Boolean} Skip stylesheet tags (default: false)
+  - class: {String} Additional classes on .card element
+  - wrapper_class: {String} Additional classes on .card-wrapper
+  - shopify_attributes: {String} Theme Editor block attributes
+  - id: {String} HTML id on card element
+
+  Usage:
+  {% render 'card',
+    type: 'feature',
+    heading: 'Free Shipping',
+    description: 'On all orders over $100',
+    icon: 'truck',
+    style: 'elevated',
+    hover: 'lift,shadow'
+  %}
+
+  {% render 'card',
+    type: 'testimonial',
+    quote: 'Exceptional quality and service.',
+    attribution: 'Jane Smith',
+    attribution_detail: 'Verified Buyer',
+    style: 'outline',
+    image: block.settings.avatar
+  %}
+
+  {% render 'card',
+    type: 'team',
+    heading: 'Alex Rivera',
+    caption: 'Creative Director',
+    image: block.settings.photo,
+    link: '/pages/team',
+    hover: 'zoom,border'
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign card_type = type | default: 'content'
+  assign card_style = style | default: 'default'
+  assign card_radius = radius | default: 'md'
+  assign card_shadow = shadow | default: 'md'
+  assign card_layout = card_layout | default: 'card'
+  assign card_color = color_scheme | default: settings.card_color_scheme
+  assign is_equal_height = equal_height | default: true
+  assign is_lazy = lazy_load | default: true
+  assign badge_pos = badge_position | default: settings.badge_position
+
+  assign wrapper_type_class = 'content-card-wrapper'
+  case card_type
+    when 'feature'
+      assign wrapper_type_class = 'feature-card-wrapper'
+    when 'testimonial'
+      assign wrapper_type_class = 'testimonial-card-wrapper'
+    when 'team'
+      assign wrapper_type_class = 'team-card-wrapper'
+    when 'category'
+      assign wrapper_type_class = 'category-card-wrapper'
+  endcase
+
+  assign hover_classes = ''
+  if hover != blank
+    assign hover_effects = hover | split: ','
+    for effect in hover_effects
+      assign effect_trimmed = effect | strip
+      if effect_trimmed != blank
+        assign hover_classes = hover_classes | append: ' card-hover-' | append: effect_trimmed
+      endif
+    endfor
+  endif
+
+  assign card_classes = 'card card--' | append: card_layout
+  assign card_classes = card_classes | append: ' card--type-' | append: card_type
+
+  if card_layout == 'card'
+    assign card_classes = card_classes | append: ' color-' | append: card_color | append: ' gradient'
+  endif
+
+  if image != blank
+    assign card_classes = card_classes | append: ' card--media'
+  else
+    assign card_classes = card_classes | append: ' card--text'
+  endif
+
+  if card_style != 'default'
+    assign card_classes = card_classes | append: ' card--premium-' | append: card_style
+  endif
+
+  if card_radius != 'md'
+    assign card_classes = card_classes | append: ' card--radius-' | append: card_radius
+  endif
+
+  if card_shadow != 'md'
+    assign card_classes = card_classes | append: ' card--shadow-' | append: card_shadow
+  endif
+
+  if gradient_border
+    assign card_classes = card_classes | append: ' card--gradient-border'
+  endif
+
+  if is_equal_height
+    assign card_classes = card_classes | append: ' card--equal-height card--extend-height'
+  endif
+
+  if class != blank
+    assign card_classes = card_classes | append: ' ' | append: class
+  endif
+
+  assign ratio = 1
+  if image != blank and media_aspect_ratio == 'portrait'
+    assign ratio = 0.8
+  elsif image != blank and media_aspect_ratio == 'adapt'
+    assign ratio = image.aspect_ratio
+  endif
+  if ratio == 0 or ratio == null
+    assign ratio = 1
+  endif
+
+  assign wrapper_classes = 'card-wrapper premium-card-wrapper ' | append: wrapper_type_class | append: hover_classes
+  if link != blank
+    assign wrapper_classes = wrapper_classes | append: ' underline-links-hover'
+  endif
+  if show_arrow
+    assign wrapper_classes = wrapper_classes | append: ' card-hover-arrow'
+  endif
+  if wrapper_class != blank
+    assign wrapper_classes = wrapper_classes | append: ' ' | append: wrapper_class
+  endif
+
+  assign card_element = 'div'
+  if card_type == 'testimonial' or card_type == 'content'
+    assign card_element = 'article'
+  endif
+-%}
+
+{%- unless skip_styles -%}
+  {{ 'component-card.css' | asset_url | stylesheet_tag }}
+  {{ 'component-card-premium.css' | asset_url | stylesheet_tag }}
+{%- endunless -%}
+
+<div
+  class="{{ wrapper_classes }}"
+  {{ shopify_attributes }}
+>
+  <{{ card_element }}
+    {% if id != blank %}id="{{ id }}"{% endif %}
+    class="{{ card_classes }}"
+    style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+    {% if card_type == 'testimonial' and heading != blank %}aria-label="{{ heading | escape }}"{% endif %}
+  >
+    <div
+      class="card__inner{% if card_layout == 'standard' %} color-{{ card_color }} gradient{% endif %}{% if image != blank or card_layout == 'standard' %} ratio{% endif %}"
+      style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+    >
+      {%- if image != blank -%}
+        <div class="card__media">
+          <div class="media media--transparent{% unless card_type == 'category' %} media--hover-effect{% endunless %}">
+            {%- liquid
+              assign img_alt = image_alt | default: image.alt | default: heading
+            -%}
+            <img
+              srcset="
+                {%- if image.width >= 165 -%}{{ image | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if image.width >= 360 -%}{{ image | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if image.width >= 533 -%}{{ image | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if image.width >= 720 -%}{{ image | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if image.width >= 940 -%}{{ image | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if image.width >= 1066 -%}{{ image | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ image | image_url }} {{ image.width }}w
+              "
+              src="{{ image | image_url: width: 533 }}"
+              sizes="(min-width: 990px) calc((100vw - 10rem) / 3), (min-width: 750px) calc((100vw - 8rem) / 2), calc(100vw - 4rem)"
+              alt="{{ img_alt | escape }}"
+              class="motion-reduce"
+              {% if is_lazy %}
+                loading="lazy"
+              {% endif %}
+              width="{{ image.width }}"
+              height="{{ image.height }}"
+            >
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="card__content">
+        {%- if badge_text != blank -%}
+          <div class="card__badge {{ badge_pos }}">
+            {% render 'badge', label: badge_text, type: 'custom', color_scheme: card_color %}
+          </div>
+        {%- endif -%}
+
+        {%- if icon != blank and card_type == 'feature' -%}
+          <div class="card__icon" aria-hidden="true">
+            <span class="svg-wrapper">
+              {%- assign icon_file = icon | replace: '_', '-' | prepend: 'icon-' | append: '.svg' -%}
+              {{- icon_file | inline_asset_content -}}
+            </span>
+          </div>
+        {%- endif -%}
+
+        <div class="card__information">
+          {%- if card_type == 'testimonial' and quote != blank -%}
+            <blockquote class="card__quote">
+              {{ quote | escape }}
+            </blockquote>
+            {%- if attribution != blank -%}
+              <cite class="card__attribution">
+                <strong>{{ attribution | escape }}</strong>
+                {%- if attribution_detail != blank -%}
+                  <span>{{ attribution_detail | escape }}</span>
+                {%- endif -%}
+              </cite>
+            {%- endif -%}
+          {%- else -%}
+            {%- if heading != blank -%}
+              <h3 class="card__heading">
+                {%- if link != blank -%}
+                  <a href="{{ link }}" class="full-unstyled-link">
+                    {{ heading | escape }}
+                    {%- if show_arrow -%}
+                      <span class="icon-wrap" aria-hidden="true">
+                        {{- 'icon-arrow.svg' | inline_asset_content -}}
+                      </span>
+                    {%- endif -%}
+                  </a>
+                {%- else -%}
+                  {{ heading | escape }}
+                {%- endif -%}
+              </h3>
+            {%- endif -%}
+
+            {%- if caption != blank -%}
+              <p class="card__caption">{{ caption | escape }}</p>
+            {%- endif -%}
+
+            {%- if description != blank -%}
+              <p class="card__description">{{ description | escape }}</p>
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- if cta_label != blank -%}
+            <div class="card__cta">
+              {% render 'button',
+                label: cta_label,
+                link: cta_link,
+                style: cta_style | default: 'text',
+                size: 'small',
+                show_arrow: show_arrow
+              %}
+            </div>
+          {%- endif -%}
+
+          {%- if footer != blank -%}
+            <div class="card__footer">{{ footer | escape }}</div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    {%- if card_layout == 'card' and image != blank and card_type != 'testimonial' and card_type != 'feature' -%}
+      <div class="card__content">
+        <div class="card__information">
+          {%- if heading != blank -%}
+            <h3 class="card__heading">
+              {%- if link != blank -%}
+                <a href="{{ link }}" class="full-unstyled-link">
+                  {{ heading | escape }}
+                  {%- if show_arrow -%}
+                    <span class="icon-wrap" aria-hidden="true">
+                      {{- 'icon-arrow.svg' | inline_asset_content -}}
+                    </span>
+                  {%- endif -%}
+                </a>
+              {%- else -%}
+                {{ heading | escape }}
+              {%- endif -%}
+            </h3>
+            {%- if caption != blank -%}
+              <p class="card__caption">{{ caption | escape }}</p>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </{{ card_element }}>
+</div>

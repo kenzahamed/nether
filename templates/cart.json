@@ -1,0 +1,43 @@
+{
+  "sections": {
+    "cart-page": {
+      "type": "nether-cart-page",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "nether_layout": "split",
+        "nether_enable_sticky_summary": true,
+        "nether_enable_shipping_progress": true,
+        "nether_free_shipping_threshold": 100,
+        "nether_enable_trust": true,
+        "nether_enable_notes": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      },
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
+        },
+        "recommendations": {
+          "type": "recommendations",
+          "settings": {
+            "heading": "You may also like",
+            "products_to_show": 4
+          }
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "buttons",
+        "recommendations"
+      ]
+    }
+  },
+  "order": [
+    "cart-page"
+  ]
+}

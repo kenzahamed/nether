@@ -1,0 +1,112 @@
+{% comment %}
+  Renders a single Nether Premium FAQ accordion item.
+  Extends Dawn collapsible-content / component-accordion patterns.
+
+  Accepts:
+  - block: {Object} faq_item or paired question block (required)
+  - section: {Object} FAQ section (required)
+  - answer_block: {Object} Optional answer block for question/answer pairs
+  - item_index: {Number} Item index for IDs and expand-first logic
+  - is_open: {Boolean} Force open state
+  - is_featured: {Boolean} Magazine featured item
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-faq-item', block: block, section: section, item_index: item_index %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-faq-animate'
+  assign index = item_index | default: 1
+  assign question_text = block.settings.question | default: block.settings.heading
+  assign answer_content = block.settings.answer | default: block.settings.row_content
+  assign page_content = block.settings.page.content
+
+  if answer_block != blank
+    assign answer_content = answer_block.settings.answer | default: answer_block.settings.text
+    assign page_content = answer_block.settings.page.content
+  endif
+
+  assign category_slug = block.settings.category_slug | default: block.settings.category_id | handleize
+  assign icon_name = block.settings.icon | default: 'question_mark'
+  assign show_icon = true
+  if icon_name == 'none'
+    assign show_icon = false
+  endif
+
+  assign open_item = is_open
+  if open_item == blank and section.settings.nether_expand_first and index == 1
+    assign open_item = true
+  endif
+  if open_item == blank and block.settings.open_by_default
+    assign open_item = true
+  endif
+
+  assign item_classes = 'nether-faq__item accordion'
+  if is_featured
+    assign item_classes = item_classes | append: ' nether-faq__item--featured'
+  endif
+  if section.settings.nether_card_style != blank
+    assign item_classes = item_classes | append: ' nether-faq__item--style-' | append: section.settings.nether_card_style
+  endif
+
+  assign search_text = question_text | strip_html | strip
+  assign search_answer = answer_content | strip_html | strip | append: ' ' | append: page_content | strip_html | strip
+  assign search_blob = search_text | append: ' ' | append: search_answer
+-%}
+
+{%- if question_text != blank -%}
+  <div
+    class="{{ item_classes }}"
+    {{ motion_attribute }}
+    data-nether-faq-item
+    data-nether-faq-role="item"
+    {% if category_slug != blank %}data-faq-category="{{ category_slug }}"{% endif %}
+    data-search-text="{{ search_blob | escape }}"
+    {{ block.shopify_attributes }}
+    {% if answer_block != blank %}{{ answer_block.shopify_attributes }}{% endif %}
+  >
+    <details
+      id="NetherFaqDetails-{{ section.id }}-{{ block.id }}"
+      class="nether-faq__details"
+      data-nether-faq-details
+      {% if open_item %}open{% endif %}
+    >
+      <summary
+        id="NetherFaqSummary-{{ section.id }}-{{ block.id }}"
+        class="nether-faq__summary"
+        aria-expanded="{% if open_item %}true{% else %}false{% endif %}"
+      >
+        <span class="nether-faq__summary-inner">
+          {%- if show_icon -%}
+            <span class="nether-faq__icon svg-wrapper" aria-hidden="true" data-nether-faq-icon data-nether-faq-role="icon">
+              {%- render 'icon-accordion', icon: icon_name -%}
+            </span>
+          {%- endif -%}
+          <h3 class="nether-faq__question accordion__title inline-richtext h4" data-nether-faq-question data-nether-faq-role="question">
+            {{- question_text -}}
+          </h3>
+        </span>
+        <span class="nether-faq__caret svg-wrapper" aria-hidden="true" data-nether-faq-caret data-nether-faq-role="caret">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </span>
+      </summary>
+      <div
+        class="nether-faq__answer accordion__content rte"
+        id="NetherFaqAnswer-{{ section.id }}-{{ block.id }}"
+        role="region"
+        aria-labelledby="NetherFaqSummary-{{ section.id }}-{{ block.id }}"
+        data-nether-faq-panel
+        data-nether-faq-answer
+        data-nether-faq-role="answer"
+      >
+        {%- if answer_content != blank -%}
+          {{ answer_content }}
+        {%- endif -%}
+        {%- if page_content != blank -%}
+          {{ page_content }}
+        {%- endif -%}
+      </div>
+    </details>
+  </div>
+{%- endif -%}

@@ -1,0 +1,171 @@
+{% comment %}
+  Central dispatcher for Nether Premium Content blocks.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - section: {Object} Content section (required)
+  - heading_tag: {String} Primary heading element (default: h2)
+
+  Usage:
+  {% render 'nether-content-block', block: block, section: section, heading_tag: heading_tag %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign subheading_element = 'h3'
+  if heading_element == 'h3'
+    assign subheading_element = 'h4'
+  endif
+-%}
+
+{%- case block.type -%}
+  {%- when '@app' -%}
+    <div
+      class="nether-content__app-block"
+      data-nether-content-animate
+      data-nether-hero-animate
+      data-nether-hero-role="app"
+      {{ block.shopify_attributes }}
+    >
+      {% render block %}
+    </div>
+
+  {%- when 'eyebrow' -%}
+    {%- if block.settings.text != blank -%}
+      <p
+        class="nether-content__eyebrow type-overline"
+        data-nether-content-animate
+        data-nether-hero-animate
+        data-nether-hero-role="eyebrow"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.text | escape -}}
+      </p>
+    {%- endif -%}
+
+  {%- when 'heading' -%}
+    {%- if block.settings.heading != blank -%}
+      <{{ heading_element }}
+        class="nether-content__heading inline-richtext {{ block.settings.heading_size }}"
+        data-nether-content-animate
+        data-nether-hero-animate
+        data-nether-hero-role="heading"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.heading -}}
+      </{{ heading_element }}>
+    {%- endif -%}
+
+  {%- when 'subheading' -%}
+    {%- if block.settings.subheading != blank -%}
+      <{{ subheading_element }}
+        class="nether-content__subheading inline-richtext {{ block.settings.subheading_size }}"
+        data-nether-content-animate
+        data-nether-hero-animate
+        data-nether-hero-role="subheading"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.subheading -}}
+      </{{ subheading_element }}>
+    {%- endif -%}
+
+  {%- when 'text' -%}
+    {%- if block.settings.text != blank -%}
+      <div
+        class="nether-content__text rte {{ block.settings.text_style }}"
+        data-nether-content-animate
+        data-nether-hero-animate
+        data-nether-hero-role="text"
+        {{ block.shopify_attributes }}
+      >
+        {{ block.settings.text }}
+      </div>
+    {%- endif -%}
+
+  {%- when 'image' -%}
+    {%- render 'nether-content-image', block: block -%}
+
+  {%- when 'video' -%}
+    {%- render 'nether-content-video', block: block -%}
+
+  {%- when 'quote' -%}
+    {%- render 'nether-content-quote', block: block -%}
+
+  {%- when 'statistic' -%}
+    {%- render 'nether-hero-stat', block: block -%}
+
+  {%- when 'feature_list' -%}
+    {%- render 'nether-hero-feature-list', block: block -%}
+
+  {%- when 'icon_list' -%}
+    {%- render 'nether-content-icon-list', block: block -%}
+
+  {%- when 'buttons' -%}
+    {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
+      <div
+        class="nether-content__buttons"
+        data-nether-content-animate
+        data-nether-hero-animate
+        data-nether-hero-role="buttons"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.button_label_1 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_1,
+            link: block.settings.button_link_1,
+            style: block.settings.button_style_1,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_1 == blank
+          -%}
+        {%- endif -%}
+        {%- if block.settings.button_label_2 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_2,
+            link: block.settings.button_link_2,
+            style: block.settings.button_style_2,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_2 == blank
+          -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  {%- when 'divider' -%}
+    <div
+      class="nether-content__block-divider nether-content__block-divider--{{ block.settings.divider_style | default: 'line' }}"
+      data-nether-content-animate
+      data-nether-hero-animate
+      data-nether-hero-role="divider"
+      aria-hidden="true"
+      role="presentation"
+      {{ block.shopify_attributes }}
+    ></div>
+
+  {%- when 'custom_html' -%}
+    {%- render 'nether-content-custom-html', block: block -%}
+
+  {%- when 'content_card' -%}
+    <div
+      class="nether-content__card-slot"
+      data-nether-content-animate
+      data-nether-hero-animate
+      data-nether-hero-role="card"
+      {{ block.shopify_attributes }}
+    >
+      {%- render 'card',
+        type: 'content',
+        style: block.settings.card_style,
+        heading: block.settings.heading,
+        caption: block.settings.caption,
+        description: block.settings.description,
+        image: block.settings.image,
+        cta_label: block.settings.cta_label,
+        cta_link: block.settings.cta_link,
+        cta_style: block.settings.cta_style,
+        icon: block.settings.icon,
+        hover: block.settings.hover_effects,
+        radius: block.settings.card_radius,
+        shadow: block.settings.card_shadow
+      -%}
+    </div>
+{%- endcase -%}

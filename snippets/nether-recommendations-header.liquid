@@ -1,0 +1,59 @@
+{% comment %}
+  Nether Premium Recommendations — section header module.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - block: {Object} Optional block override for heading/eyebrow
+  - strategy_label: {String} Optional strategy badge label
+{% endcomment %}
+
+{%- liquid
+  assign heading = section.settings.nether_heading
+  assign subheading = section.settings.nether_subheading
+  assign eyebrow = section.settings.nether_eyebrow
+
+  if block != blank
+    if block.settings.heading != blank
+      assign heading = block.settings.heading
+    endif
+    if block.settings.subheading != blank
+      assign subheading = block.settings.subheading
+    endif
+    if block.settings.eyebrow != blank
+      assign eyebrow = block.settings.eyebrow
+    endif
+  endif
+
+  if heading == blank
+    assign heading = 'sections.nether_recommendations.heading' | t
+  endif
+
+  assign heading_tag = 'h2'
+  if section.settings.nether_heading_level == 'h3'
+    assign heading_tag = 'h3'
+  endif
+-%}
+
+<header
+  class="nether-recommendations__module nether-recommendations__header"
+  data-nether-recommendations-module="header"
+  data-nether-recommendations-animate
+>
+  <div class="nether-recommendations__header-copy">
+    {%- if eyebrow != blank -%}
+      <p class="nether-recommendations__eyebrow type-overline">{{ eyebrow }}</p>
+    {%- endif -%}
+    <{{ heading_tag }} class="nether-recommendations__heading type-display-sm">
+      {{ heading }}
+    </{{ heading_tag }}>
+    {%- if subheading != blank -%}
+      <p class="nether-recommendations__subheading type-body">{{ subheading }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if strategy_label != blank and section.settings.nether_show_strategy_badge -%}
+    <div class="nether-recommendations__header-badge">
+      {% render 'badge', type: 'custom', label: strategy_label, style: 'soft', size: 'small' %}
+    </div>
+  {%- endif -%}
+</header>

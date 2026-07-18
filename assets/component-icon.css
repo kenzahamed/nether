@@ -1,0 +1,199 @@
+/* =============================================================================
+ * Nether Premium Icon System
+ * Extends Dawn's .svg-wrapper / .icon — do not duplicate base.css rules.
+ * ============================================================================= */
+
+:root {
+  --icon-size-sm: 1.6rem;
+  --icon-size-md: 2rem;
+  --icon-size-lg: 2.4rem;
+  --icon-size-xl: 3.2rem;
+  --icon-gap-sm: 0.4rem;
+  --icon-gap-md: 0.8rem;
+  --icon-gap-lg: 1.2rem;
+  --icon-stroke-width: 1.5;
+}
+
+/* ── Base wrapper (composes with Dawn .svg-wrapper) ────────────────────────── */
+
+.icon-wrap {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  color: currentColor;
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.icon-wrap > svg,
+.icon-wrap .icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: currentColor;
+}
+
+.icon-wrap svg [stroke] {
+  stroke: currentColor;
+}
+
+/* ── Sizes ─────────────────────────────────────────────────────────────────── */
+
+.icon-wrap--sm {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.icon-wrap--md {
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+}
+
+.icon-wrap--lg {
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
+}
+
+.icon-wrap--xl {
+  width: var(--icon-size-xl);
+  height: var(--icon-size-xl);
+}
+
+/* ── Responsive sizing ─────────────────────────────────────────────────────── */
+
+.icon-wrap--responsive {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+@media screen and (min-width: 750px) {
+  .icon-wrap--responsive {
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .icon-wrap--responsive.icon-wrap--responsive-lg {
+    width: var(--icon-size-lg);
+    height: var(--icon-size-lg);
+  }
+}
+
+/* ── Colour utilities ──────────────────────────────────────────────────────── */
+
+.icon-wrap--inherit {
+  color: inherit;
+}
+
+.icon-wrap--foreground {
+  color: rgb(var(--color-foreground));
+}
+
+.icon-wrap--muted {
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.icon-wrap--subtle {
+  color: rgba(var(--color-foreground), 0.55);
+}
+
+.icon-wrap--link {
+  color: rgb(var(--color-link));
+}
+
+.icon-wrap--button {
+  color: rgb(var(--color-button-text));
+}
+
+/* ── Alignment utilities ───────────────────────────────────────────────────── */
+
+.icon-wrap--align-start {
+  align-self: flex-start;
+}
+
+.icon-wrap--align-center {
+  align-self: center;
+}
+
+.icon-wrap--align-end {
+  align-self: flex-end;
+}
+
+.icon-wrap--block {
+  display: flex;
+}
+
+.icon-wrap--inline {
+  display: inline-flex;
+}
+
+/* ── Spacing utilities ─────────────────────────────────────────────────────── */
+
+.icon-wrap--gap-before-sm {
+  margin-right: var(--icon-gap-sm);
+}
+
+.icon-wrap--gap-before-md {
+  margin-right: var(--icon-gap-md);
+}
+
+.icon-wrap--gap-before-lg {
+  margin-right: var(--icon-gap-lg);
+}
+
+.icon-wrap--gap-after-sm {
+  margin-left: var(--icon-gap-sm);
+}
+
+.icon-wrap--gap-after-md {
+  margin-left: var(--icon-gap-md);
+}
+
+.icon-wrap--gap-after-lg {
+  margin-left: var(--icon-gap-lg);
+}
+
+/* ── Inline icon + text composition ────────────────────────────────────────── */
+
+.icon-text {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--icon-gap-md);
+}
+
+.icon-text--sm {
+  gap: var(--icon-gap-sm);
+}
+
+.icon-text--lg {
+  gap: var(--icon-gap-lg);
+}
+
+.icon-text--stack {
+  flex-direction: column;
+  text-align: center;
+}
+
+/* ── Stroke normalisation for stroke-based SVGs ──────────────────────────── */
+
+.icon-wrap--stroke svg [stroke] {
+  stroke-width: var(--icon-stroke-width);
+  vector-effect: non-scaling-stroke;
+}
+
+/* ── High contrast mode (extends Dawn .icon forced-colors rule) ───────────── */
+
+@media (forced-colors: active) {
+  .icon-wrap {
+    color: CanvasText;
+  }
+
+  .icon-wrap > svg,
+  .icon-wrap .icon {
+    fill: CanvasText;
+  }
+}

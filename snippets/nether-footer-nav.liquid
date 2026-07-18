@@ -1,0 +1,50 @@
+{% comment %}
+  Renders a Nether Premium Footer navigation menu block.
+
+  Accepts:
+  - block: {Object} Theme Editor block
+  - heading_tag: {String} Heading element tag (default: h2)
+  - hide_heading: {Boolean} Suppress heading output (default: false)
+
+  Usage:
+  {% render 'nether-footer-nav', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign suppress_heading = hide_heading | default: false, allow_false: true
+-%}
+
+{%- unless suppress_heading -%}
+  {%- if block.settings.heading != blank -%}
+    <{{ heading_element }} class="footer-block__heading inline-richtext nether-footer__heading" id="FooterNavHeading-{{ block.id }}">
+      {{- block.settings.heading -}}
+    </{{ heading_element }}>
+  {%- endif -%}
+{%- endunless -%}
+
+{%- if block.settings.menu != blank -%}
+  <nav
+    class="nether-footer__nav"
+    {% unless suppress_heading %}
+      aria-labelledby="FooterNavHeading-{{ block.id }}"
+    {% endunless %}
+    {% if suppress_heading %}
+      aria-label="{{ block.settings.heading | default: 'Navigation' | escape }}"
+    {% endif %}
+  >
+    <ul class="footer-block__details-content list-unstyled nether-footer__nav-list" role="list">
+      {%- for link in block.settings.menu.links -%}
+        <li class="nether-footer__nav-item">
+          <a
+            href="{{ link.url }}"
+            class="link link--text list-menu__item list-menu__item--link nether-footer__nav-link{% if link.active %} list-menu__item--active{% endif %}"
+            {% if link.current %}aria-current="page"{% endif %}
+          >
+            {{ link.title | escape }}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+{%- endif -%}

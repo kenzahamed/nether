@@ -1,0 +1,23 @@
+{% comment %}
+  Optional section divider for Nether Premium Collection Showcase.
+
+  Accepts:
+  - section: {Object} Collection section (required)
+  - position: {String} top or bottom (required)
+
+  Usage:
+  {% render 'nether-collection-divider', section: section, position: 'bottom' %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-collection__divider nether-collection__divider--{{ divider_position }} nether-collection__divider--{{ divider_style }}"
+  data-nether-collection-divider
+  data-nether-collection-role="divider"
+  aria-hidden="true"
+  role="presentation"
+></div>

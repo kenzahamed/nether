@@ -1,0 +1,176 @@
+{% comment %}
+  Renders a Nether Premium textarea field.
+
+  Extends Dawn's .field / .text-area / .field__input — existing textareas unchanged.
+
+  Accepts:
+  - name: {String} Textarea name attribute
+  - id: {String} Textarea id (auto-generated from name if blank)
+  - value: {String} Textarea content
+  - label: {String} Field label
+  - placeholder: {String} Placeholder text
+  - rows: {Number} Rows attribute (default: 6)
+  - size: {String} small | medium | large (default: medium)
+  - state: {String} success | error | warning (optional)
+  - floating_label: {Boolean} Dawn floating label (default: true)
+  - resize: {Boolean} Allow vertical resize (default: false)
+  - required: {Boolean} Required field (default: false)
+  - disabled: {Boolean} Disabled state (default: false)
+  - readonly: {Boolean} Readonly state (default: false)
+  - maxlength: {Number} Max character length
+  - show_counter: {Boolean} Show character counter (default: false when maxlength set, else false)
+  - helper_text: {String} Helper text below field
+  - error_message: {String} Error validation message
+  - success_message: {String} Success validation message
+  - warning_message: {String} Warning validation message
+  - class: {String} Additional classes on field wrapper
+  - input_class: {String} Additional classes on textarea
+  - attributes: {String} Additional textarea HTML attributes
+  - shopify_attributes: {String} Theme Editor block attributes
+
+  Usage:
+  {% render 'form-textarea', name: 'contact[body]', label: 'Message', rows: 8 %}
+
+  {% render 'form-textarea',
+    name: 'properties[Message]',
+    label: 'Gift message',
+    maxlength: 200,
+    show_counter: true
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign field_size = size | default: 'medium'
+  assign is_floating = floating_label | default: true, allow_false: true
+  assign is_required = required | default: false, allow_false: true
+  assign is_disabled = disabled | default: false, allow_false: true
+  assign is_readonly = readonly | default: false, allow_false: true
+  assign textarea_rows = rows | default: 6
+  assign is_resizable = resize | default: false, allow_false: true
+
+  assign field_id = id
+  if field_id == blank and name != blank
+    assign field_id = name | handleize | append: '-textarea'
+  endif
+
+  assign show_char_counter = show_counter | default: false, allow_false: true
+
+  assign describedby_ids = ''
+  if helper_text != blank and field_id != blank
+    assign describedby_ids = field_id | append: '-helper'
+  endif
+  if error_message != blank and field_id != blank
+    if describedby_ids != blank
+      assign describedby_ids = describedby_ids | append: ' '
+    endif
+    assign describedby_ids = describedby_ids | append: field_id | append: '-error'
+  endif
+
+  assign input_classes = 'text-area field__input'
+  if is_resizable
+    assign input_classes = input_classes | append: ' text-area--resize-vertical'
+  endif
+  if input_class != blank
+    assign input_classes = input_classes | append: ' ' | append: input_class
+  endif
+
+  assign field_classes = 'field field--textarea'
+
+  case field_size
+    when 'small'
+      assign field_classes = field_classes | append: ' field--small'
+    when 'large'
+      assign field_classes = field_classes | append: ' field--large'
+    when 'medium'
+      assign field_classes = field_classes | append: ' field--medium'
+  endcase
+
+  unless is_floating
+    assign field_classes = field_classes | append: ' field--static-label'
+  endunless
+
+  if state == 'success'
+    assign field_classes = field_classes | append: ' field--success'
+  elsif state == 'error' or error_message != blank
+    assign field_classes = field_classes | append: ' field--with-error field--error'
+  elsif state == 'warning'
+    assign field_classes = field_classes | append: ' field--warning'
+  endif
+
+  if is_readonly
+    assign field_classes = field_classes | append: ' field--readonly'
+  endif
+
+  if is_disabled
+    assign field_classes = field_classes | append: ' field--disabled'
+  endif
+
+  if class != blank
+    assign field_classes = field_classes | append: ' ' | append: class
+  endif
+
+  assign error_id = field_id | append: '-error'
+  assign success_id = field_id | append: '-success'
+  assign warning_id = field_id | append: '-warning'
+  assign helper_id = field_id | append: '-helper'
+  assign counter_id = field_id | append: '-counter'
+-%}
+
+{%- if show_char_counter and maxlength != blank -%}
+  <form-textarea class="{{ field_classes }}" data-max-length="{{ maxlength }}" {{ shopify_attributes }}>
+{%- else -%}
+  <div class="{{ field_classes }}" {{ shopify_attributes }}>
+{%- endif -%}
+
+  <textarea
+    {% if field_id != blank %}id="{{ field_id }}"{% endif %}
+    {% if name != blank %}name="{{ name }}"{% endif %}
+    rows="{{ textarea_rows }}"
+    class="{{ input_classes }}"
+    {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% elsif label != blank %}placeholder="{{ label | escape }}"{% endif %}
+    {% if is_required %}required aria-required="true"{% endif %}
+    {% if is_disabled %}disabled{% endif %}
+    {% if is_readonly %}readonly{% endif %}
+    {% if maxlength != blank %}maxlength="{{ maxlength }}"{% endif %}
+    {% if error_message != blank or state == 'error' %}aria-invalid="true"{% endif %}
+    {% if describedby_ids != blank %}aria-describedby="{{ describedby_ids }}"{% endif %}
+    {{ attributes }}
+  >{{ value }}</textarea>
+
+  {%- if label != blank and field_id != blank -%}
+    <label class="{% unless is_floating %}form__label {% endunless %}field__label" for="{{ field_id }}">
+      {{ label | escape }}
+      {%- if is_required -%}
+        <span class="form-field__required" aria-hidden="true">*</span>
+      {%- endif -%}
+    </label>
+  {%- endif -%}
+
+{%- if show_char_counter and maxlength != blank -%}
+  </form-textarea>
+{%- else -%}
+  </div>
+{%- endif -%}
+
+{%- if helper_text != blank or show_char_counter -%}
+  <div class="form-field__footer">
+    {%- if helper_text != blank -%}
+      <p class="form-field__helper type-caption" id="{{ helper_id }}">{{ helper_text | escape }}</p>
+    {%- endif -%}
+    {%- if show_char_counter and maxlength != blank -%}
+      <p class="form-field__counter type-caption" id="{{ counter_id }}" data-form-counter aria-live="off">0/{{ maxlength }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{%- if error_message != blank -%}
+  {% render 'form-message', message: error_message, type: 'error', id: error_id %}
+{%- endif -%}
+
+{%- if success_message != blank -%}
+  {% render 'form-message', message: success_message, type: 'success', id: success_id %}
+{%- endif -%}
+
+{%- if warning_message != blank -%}
+  {% render 'form-message', message: warning_message, type: 'warning', id: warning_id %}
+{%- endif -%}

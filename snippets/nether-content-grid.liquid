@@ -1,0 +1,67 @@
+{% comment %}
+  Renders Nether Premium Content row-based layouts (grid, timeline, alternating).
+
+  Accepts:
+  - section: {Object} Content section (required)
+  - heading_tag: {String} Primary heading element (default: h2)
+
+  Usage:
+  {% render 'nether-content-grid', section: section, heading_tag: heading_tag %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign layout = section.settings.nether_content_layout
+  assign alignment = section.settings.nether_content_alignment | default: 'left'
+  assign header_block_types = 'eyebrow,heading,subheading,text,buttons,quote,divider' | split: ','
+  assign row_blocks = section.blocks | where: 'type', 'content_row'
+  assign has_header = false
+
+  for block in section.blocks
+    if header_block_types contains block.type
+      assign has_header = true
+      break
+    endif
+  endfor
+
+  assign grid_classes = 'nether-content__rows'
+  assign grid_classes = grid_classes | append: ' nether-content__rows--' | append: layout
+  assign grid_classes = grid_classes | append: ' nether-content__rows--desktop-' | append: section.settings.nether_content_columns_desktop
+  assign grid_classes = grid_classes | append: ' nether-content__rows--tablet-' | append: section.settings.nether_content_columns_tablet
+  assign grid_classes = grid_classes | append: ' nether-content__rows--mobile-' | append: section.settings.nether_content_columns_mobile
+-%}
+
+<div class="nether-content__grid-wrapper page-width" data-nether-content-grid>
+  {%- if has_header -%}
+    <header class="nether-content__grid-header nether-content__grid-header--align-{{ alignment }}">
+      {%- for block in section.blocks -%}
+        {%- if header_block_types contains block.type -%}
+          {%- render 'nether-content-block',
+            block: block,
+            section: section,
+            heading_tag: heading_element
+          -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </header>
+  {%- endif -%}
+
+  {%- if row_blocks.size > 0 -%}
+    <div
+      class="{{ grid_classes }}"
+      role="list"
+      aria-label="{{ 'sections.nether_content.rows.label' | t }}"
+    >
+      {%- for block in row_blocks -%}
+        <div class="nether-content__row-item" role="listitem">
+          {%- render 'nether-content-row',
+            block: block,
+            section: section,
+            row_index: forloop.index,
+            layout: layout
+          -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>

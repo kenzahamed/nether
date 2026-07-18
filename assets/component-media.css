@@ -1,0 +1,663 @@
+/* =============================================================================
+ * Nether Premium Media Framework
+ * Extends Dawn media sections — scoped to .nether-media
+ * Reuses: Card Premium, Typography, Button, Badge, Glass, Gradient, Shadow, Radius
+ * ============================================================================= */
+
+nether-media {
+  display: block;
+  position: relative;
+}
+
+.nether-media {
+  --nether-media-gap: 2.4rem;
+  --nether-media-columns-desktop: 3;
+  --nether-media-columns-tablet: 2;
+  --nether-media-columns-mobile: 1;
+  --nether-media-overlay-opacity: 0.35;
+  --nether-media-transition-duration: 0.5s;
+}
+
+.nether-media__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+/* ── Section header ────────────────────────────────────────────────────────── */
+
+.nether-media__header {
+  margin-bottom: 0;
+}
+
+.nether-media__header-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 72rem;
+}
+
+.nether-media__header-inner--align-center {
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.nether-media__header-inner--align-right {
+  margin-inline-start: auto;
+  text-align: right;
+  align-items: flex-end;
+}
+
+.nether-media__eyebrow {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.62);
+}
+
+.nether-media__heading {
+  margin: 0;
+}
+
+.nether-media__subheading {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-media__text {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-media__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* ── Grid system ───────────────────────────────────────────────────────────── */
+
+.nether-media__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--nether-media-columns-mobile), minmax(0, 1fr));
+  gap: var(--nether-media-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nether-media__item {
+  min-width: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-media__grid {
+    grid-template-columns: repeat(var(--nether-media-columns-tablet), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-media__grid {
+    grid-template-columns: repeat(var(--nether-media-columns-desktop), minmax(0, 1fr));
+  }
+}
+
+/* ── Layout: Editorial gallery ─────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-media--layout-editorial_gallery .nether-media__item:nth-child(4n + 1) {
+    grid-column: span 2;
+  }
+
+  .nether-media--desktop-editorial .nether-media__item:nth-child(odd) .nether-media-card__heading {
+    font-size: calc(var(--font-heading-scale) * 2.8rem);
+  }
+}
+
+/* ── Layout: Grid gallery ──────────────────────────────────────────────────── */
+
+.nether-media--layout-grid_gallery .nether-media-card__inner {
+  box-shadow: 0 1.6rem 4rem rgba(var(--color-shadow), 0.08);
+}
+
+.nether-media--layout-grid_gallery .nether-media-card__content {
+  padding: 2.4rem;
+}
+
+/* ── Layout: Masonry gallery ───────────────────────────────────────────────── */
+
+@media screen and (min-width: 750px) {
+  .nether-media--layout-masonry_gallery .nether-media__grid {
+    grid-auto-rows: 8px;
+  }
+
+  .nether-media--layout-masonry_gallery .nether-media__item:nth-child(6n + 1) { grid-row: span 34; }
+  .nether-media--layout-masonry_gallery .nether-media__item:nth-child(6n + 2) { grid-row: span 28; }
+  .nether-media--layout-masonry_gallery .nether-media__item:nth-child(6n + 3) { grid-row: span 32; }
+  .nether-media--layout-masonry_gallery .nether-media__item:nth-child(6n + 4) { grid-row: span 26; }
+  .nether-media--layout-masonry_gallery .nether-media__item:nth-child(6n + 5) { grid-row: span 30; }
+  .nether-media--layout-masonry_gallery .nether-media__item:nth-child(6n + 6) { grid-row: span 28; }
+
+  .nether-media--layout-masonry_gallery .nether-media-card,
+  .nether-media--layout-masonry_gallery .nether-media-card__link,
+  .nether-media--layout-masonry_gallery .nether-media-card__inner {
+    height: 100%;
+  }
+}
+
+/* ── Layout: Magazine ────────────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-media--layout-magazine_layout .nether-media__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .nether-media--layout-magazine_layout .nether-media__item--featured {
+    grid-column: span 7;
+    grid-row: span 2;
+  }
+
+  .nether-media--layout-magazine_layout .nether-media__item:not(.nether-media__item--featured) {
+    grid-column: span 5;
+  }
+
+  .nether-media--layout-magazine_layout .nether-media__item:nth-child(3) { grid-column: span 5; }
+  .nether-media--layout-magazine_layout .nether-media__item:nth-child(4) { grid-column: span 7; }
+}
+
+/* ── Layout: Split media ───────────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-media--layout-split_media .nether-media__grid {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: stretch;
+  }
+
+  .nether-media--layout-split_media .nether-media__item--featured {
+    grid-row: span 2;
+  }
+
+  .nether-media--layout-split_media .nether-media__item:not(.nether-media__item--featured) {
+    grid-column: 2;
+  }
+}
+
+/* ── Layout: Video showcase ────────────────────────────────────────────────── */
+
+.nether-media--layout-video_showcase .nether-media-card__deferred-media,
+.nether-media--layout-video_showcase .nether-media-card__video {
+  min-height: 100%;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-media--layout-video_showcase .nether-media__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nether-media--layout-video_showcase .nether-media__item:first-child {
+    grid-column: span 2;
+  }
+}
+
+/* ── Layout: Lookbook ──────────────────────────────────────────────────────── */
+
+.nether-media--layout-lookbook .nether-media-card__media {
+  --ratio-percent: 140%;
+}
+
+.nether-media--layout-lookbook .nether-media-card__floating-label {
+  display: block;
+}
+
+.nether-media--layout-lookbook .nether-media-card__content {
+  justify-content: flex-end;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-media--layout-lookbook .nether-media__item:nth-child(3n + 1) {
+    grid-column: span 2;
+  }
+}
+
+/* ── Layout: Minimal gallery ───────────────────────────────────────────────── */
+
+.nether-media--layout-minimal_gallery .nether-media-card__overlay,
+.nether-media--layout-minimal_gallery .nether-media-card__glass-panel {
+  display: none;
+}
+
+.nether-media--layout-minimal_gallery .nether-media-card__content {
+  position: relative;
+  padding: 1.2rem 0 0;
+  color: rgb(var(--color-foreground));
+}
+
+.nether-media--layout-minimal_gallery .nether-media-card__inner {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ── Layout: Before / after ────────────────────────────────────────────────── */
+
+.nether-media--layout-before_after .nether-media__grid {
+  grid-template-columns: 1fr;
+  max-width: 80rem;
+  margin-inline: auto;
+}
+
+/* ── Layout: Horizontal gallery ────────────────────────────────────────────── */
+
+.nether-media--layout-horizontal_gallery .nether-media__grid--horizontal {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--page-width-margin, 1.5rem);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 0.8rem;
+}
+
+.nether-media--layout-horizontal_gallery .nether-media__item {
+  flex: 0 0 min(78vw, 32rem);
+  scroll-snap-align: start;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-media--layout-horizontal_gallery .nether-media__item {
+    flex-basis: min(42vw, 36rem);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-media--layout-horizontal_gallery .nether-media__item {
+    flex-basis: calc((100% - (var(--nether-media-gap) * (var(--nether-media-columns-desktop) - 1))) / var(--nether-media-columns-desktop));
+  }
+}
+
+/* ── Layout: Carousel ──────────────────────────────────────────────────────── */
+
+.nether-media--layout-horizontal_gallery .nether-media__slider {
+  position: relative;
+}
+
+.nether-media__grid.slider {
+  display: flex;
+  flex-wrap: inherit;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nether-media__item.slider__slide {
+  flex: 0 0 calc((100% - (var(--nether-media-gap) * (var(--nether-media-columns-mobile) - 1))) / var(--nether-media-columns-mobile));
+  scroll-snap-align: start;
+}
+
+/* ── Responsive modifiers ──────────────────────────────────────────────────── */
+
+@media screen and (max-width: 989px) {
+  .nether-media--tablet-stacked .nether-media__grid,
+  .nether-media--tablet-centered .nether-media__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-media--tablet-centered .nether-media__header-inner {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-media--mobile-stacked .nether-media__grid,
+  .nether-media--mobile-centered .nether-media__grid,
+  .nether-media--mobile-minimal .nether-media__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-media--mobile-centered .nether-media__header-inner {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  .nether-media--mobile-minimal .nether-media-card__description,
+  .nether-media--mobile-minimal .nether-media-card__cta {
+    display: none;
+  }
+}
+
+.nether-media--desktop-compact .nether-media__inner {
+  gap: 2.4rem;
+}
+
+.nether-media--full-width .nether-media__inner {
+  max-width: none;
+}
+
+/* ── Media card ────────────────────────────────────────────────────────────── */
+
+.nether-media-card {
+  position: relative;
+  height: 100%;
+}
+
+.nether-media-card__link {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  border-radius: inherit;
+}
+
+.nether-media-card__link:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.55);
+  outline-offset: 0.3rem;
+}
+
+.nether-media-card__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--text-boxes-radius, 1rem);
+  border: 0;
+}
+
+.nether-media-card__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.nether-media-card__media-inner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nether-media-card__media img,
+.nether-media-card__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nether-media-card__video--iframe {
+  border: 0;
+}
+
+.nether-media-card__video--background {
+  pointer-events: none;
+}
+
+.nether-media-card__deferred-media {
+  width: 100%;
+  height: 100%;
+}
+
+.nether-media-card__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--nether-media-overlay-opacity);
+  background: rgba(var(--color-shadow), 0.45);
+  z-index: 1;
+}
+
+.nether-media-card__glass-panel {
+  position: absolute;
+  inset: auto 1.2rem 1.2rem;
+  height: 40%;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: calc(var(--text-boxes-radius, 1rem) * 0.75);
+}
+
+.nether-media-card__floating-label {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  z-index: 3;
+  padding: 0.4rem 1rem;
+  background: rgba(var(--color-background), 0.82);
+  color: rgb(var(--color-foreground));
+  border-radius: 999px;
+  display: none;
+}
+
+.nether-media-card__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 2rem;
+  color: rgb(var(--color-background));
+  transition: transform var(--nether-media-transition-duration) ease, opacity var(--nether-media-transition-duration) ease;
+}
+
+.nether-media-card--position-top-left .nether-media-card__content { justify-content: flex-start; align-items: flex-start; }
+.nether-media-card--position-top-center .nether-media-card__content { justify-content: flex-start; align-items: center; text-align: center; }
+.nether-media-card--position-top-right .nether-media-card__content { justify-content: flex-start; align-items: flex-end; text-align: right; }
+.nether-media-card--position-middle-left .nether-media-card__content { justify-content: center; align-items: flex-start; }
+.nether-media-card--position-middle-center .nether-media-card__content { justify-content: center; align-items: center; text-align: center; }
+.nether-media-card--position-middle-right .nether-media-card__content { justify-content: center; align-items: flex-end; text-align: right; }
+.nether-media-card--position-bottom-left .nether-media-card__content { justify-content: flex-end; align-items: flex-start; }
+.nether-media-card--position-bottom-center .nether-media-card__content { justify-content: flex-end; align-items: center; text-align: center; }
+.nether-media-card--position-bottom-right .nether-media-card__content { justify-content: flex-end; align-items: flex-end; text-align: right; }
+
+.nether-media-card--align-center .nether-media-card__information { text-align: center; }
+.nether-media-card--align-right .nether-media-card__information { text-align: right; }
+
+.nether-media-card--hover-reveal .nether-media-card__content {
+  opacity: 0.92;
+  transform: translateY(1.2rem);
+}
+
+.nether-media-card--floating {
+  transform: translateY(0);
+  transition: transform var(--nether-media-transition-duration) ease;
+}
+
+.nether-media--floating-enabled .nether-media-card--floating:hover,
+.nether-media--floating-enabled .nether-media-card--floating:focus-within {
+  transform: translateY(-0.6rem);
+}
+
+.nether-media-card--lightbox-ready {
+  cursor: zoom-in;
+}
+
+.nether-media-card--motion-reduced .nether-media-card__content {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Motion hooks (Hero Motion standard — additive Media selectors) ─────────── */
+
+nether-media[data-nether-motion-pending='true'] .nether-media__header [data-nether-media-animate],
+nether-media[data-nether-motion-pending='true'] .nether-media__item,
+nether-media[data-nether-motion-pending='true'] [data-nether-media-before-after],
+nether-media[data-nether-motion-pending='true'] .nether-media-card__floating-label {
+  opacity: 0;
+}
+
+nether-media[data-nether-motion-ready='true'] .nether-media__header [data-nether-media-animate],
+nether-media[data-nether-motion-ready='true'] .nether-media__item,
+nether-media[data-nether-motion-ready='true'] [data-nether-media-card],
+nether-media[data-nether-motion-ready='true'] .nether-media-card__media-inner,
+nether-media[data-nether-motion-ready='true'] [data-nether-media-before-after],
+nether-media[data-nether-motion-ready='true'] .nether-media-card__floating-label {
+  will-change: transform, opacity;
+}
+
+nether-media[data-nether-motion-ready='true'] .nether-media__buttons .button,
+nether-media[data-nether-motion-ready='true'] .nether-media-card__video-poster,
+nether-media[data-nether-motion-ready='true'] [data-nether-media-play],
+nether-media[data-nether-motion-ready='true'] [data-nether-media-before-after-handle] {
+  will-change: transform;
+}
+
+/* Avoid CSS transform fighting GSAP hover on floating cards while motion is active */
+nether-media[data-nether-motion-ready='true'].nether-media--floating-enabled .nether-media-card--floating {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  nether-media[data-nether-motion-pending='true'] .nether-media__header [data-nether-media-animate],
+  nether-media[data-nether-motion-pending='true'] .nether-media__item,
+  nether-media[data-nether-motion-pending='true'] [data-nether-media-before-after],
+  nether-media[data-nether-motion-pending='true'] .nether-media-card__floating-label {
+    opacity: 1;
+  }
+
+  nether-media[data-nether-motion-ready='true'] .nether-media__header [data-nether-media-animate],
+  nether-media[data-nether-motion-ready='true'] .nether-media__item,
+  nether-media[data-nether-motion-ready='true'] [data-nether-media-card],
+  nether-media[data-nether-motion-ready='true'] .nether-media-card__media-inner,
+  nether-media[data-nether-motion-ready='true'] [data-nether-media-before-after],
+  nether-media[data-nether-motion-ready='true'] .nether-media-card__floating-label,
+  nether-media[data-nether-motion-ready='true'] .nether-media__buttons .button,
+  nether-media[data-nether-motion-ready='true'] .nether-media-card__video-poster,
+  nether-media[data-nether-motion-ready='true'] [data-nether-media-play],
+  nether-media[data-nether-motion-ready='true'] [data-nether-media-before-after-handle] {
+    will-change: auto;
+  }
+
+  .nether-media-card__content,
+  .nether-media-card--floating {
+    transition: none;
+  }
+}
+
+/* ── Before / after ────────────────────────────────────────────────────────── */
+
+.nether-media-before-after {
+  margin: 0;
+}
+
+.nether-media-before-after__title {
+  margin: 0 0 1.2rem;
+}
+
+.nether-media-before-after__container {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--media-radius, var(--text-boxes-radius, 1rem));
+}
+
+.nether-media-before-after__images {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.nether-media-before-after__image {
+  position: absolute;
+  inset: 0;
+}
+
+.nether-media-before-after__image--after {
+  clip-path: inset(0 0 0 50%);
+}
+
+.nether-media-before-after__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.nether-media-before-after__badge {
+  position: absolute;
+  bottom: 1.2rem;
+  padding: 0.4rem 1rem;
+  background: rgba(var(--color-background), 0.85);
+  color: rgb(var(--color-foreground));
+  border-radius: 999px;
+}
+
+.nether-media-before-after__image--before .nether-media-before-after__badge { left: 1.2rem; }
+.nether-media-before-after__image--after .nether-media-before-after__badge { right: 1.2rem; }
+
+.nether-media-before-after__slider {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  z-index: 3;
+}
+
+.nether-media-before-after__handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 0.3rem;
+  background: rgb(var(--color-background));
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.nether-media-before-after__handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  background: rgb(var(--color-background));
+  border: 0.2rem solid rgba(var(--color-foreground), 0.15);
+  transform: translate(-50%, -50%);
+}
+
+.nether-media-before-after__description {
+  margin: 1.2rem 0 0;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+/* ── Dividers ──────────────────────────────────────────────────────────────── */
+
+.nether-media__divider {
+  width: 100%;
+  height: 0.1rem;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-media__divider--gradient {
+  height: 0.2rem;
+  background: linear-gradient(90deg, transparent, rgba(var(--color-foreground), 0.2), transparent);
+  border: 0;
+}
+
+.nether-media__divider--wave {
+  height: 2.4rem;
+  background: transparent;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath fill='black' d='M0 20 Q300 0 600 20 T1200 20 V40 H0Z'/%3E%3C/svg%3E");
+  mask-size: cover;
+  background-color: rgba(var(--color-foreground), 0.08);
+}
+
+.nether-media__divider--top {
+  margin-bottom: 2.4rem;
+}
+
+.nether-media__divider--bottom {
+  margin-top: 2.4rem;
+}
+
+/* ── Placeholder grid ──────────────────────────────────────────────────────── */
+
+.nether-media__grid--placeholder .nether-media-card__content {
+  position: relative;
+  padding: 1.2rem 0 0;
+  color: rgb(var(--color-foreground));
+}

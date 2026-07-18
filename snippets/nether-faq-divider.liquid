@@ -1,0 +1,23 @@
+{% comment %}
+  Optional section divider for Nether Premium FAQ Framework.
+
+  Accepts:
+  - section: {Object} FAQ section (required)
+  - position: {String} top or bottom (required)
+
+  Usage:
+  {% render 'nether-faq-divider', section: section, position: 'bottom' %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-faq__divider nether-faq__divider--{{ divider_position }} nether-faq__divider--{{ divider_style }}"
+  aria-hidden="true"
+  role="presentation"
+  data-nether-faq-divider
+  data-nether-faq-role="divider"
+></div>

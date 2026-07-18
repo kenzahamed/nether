@@ -1,0 +1,23 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Delivery Information.
+  Presentation only — does not replace Shopify shipping rates.
+
+  Accepts:
+  - heading, text, icon, style, class, attributes, rte, animate
+{% endcomment %}
+
+{%- liquid
+  assign delivery_icon = icon | default: 'truck'
+  assign delivery_style = style | default: 'card'
+-%}
+
+{% render 'nether-commerce-info-card',
+  heading: heading,
+  text: text,
+  rte: rte,
+  icon: delivery_icon,
+  style: delivery_style,
+  class: class,
+  attributes: attributes,
+  animate: animate
+%}

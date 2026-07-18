@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "main": {
+      "type": "nether-compare-page",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "nether_layout": "table",
+        "nether_compare_table_style": "standard",
+        "nether_compare_highlight_differences": true,
+        "nether_compare_max_items": 4,
+        "nether_compare_show_count": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      },
+      "blocks": {
+        "attributes": {
+          "type": "attributes",
+          "settings": {}
+        },
+        "recommendations": {
+          "type": "recommendations_placeholder",
+          "settings": {}
+        },
+        "sharing": {
+          "type": "sharing_placeholder",
+          "settings": {}
+        }
+      },
+      "block_order": ["attributes", "recommendations", "sharing"]
+    }
+  },
+  "order": ["main"]
+}

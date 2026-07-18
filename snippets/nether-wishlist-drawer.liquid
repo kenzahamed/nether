@@ -1,0 +1,128 @@
+{% comment %}
+  Nether Premium Wishlist Drawer — search-drawer pattern shell.
+  Guest wishlist UI with move-to-cart via Shopify /cart/add.js.
+  Does not replace Product Form, Cart, Variants, or Checkout.
+
+  Accepts:
+  - section: {Object} Header section object (required)
+  - color_scheme: {String} Color scheme id (optional)
+  - animation_duration: {Number} Animation duration in seconds (optional)
+
+  Usage:
+  {% render 'nether-wishlist-drawer', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign drawer_color_scheme = color_scheme | default: section.settings.color_scheme
+  assign drawer_style = section.settings.nether_wishlist_drawer_style | default: 'standard'
+  assign button_style = section.settings.nether_wishlist_button_style | default: 'icon'
+
+  case section.settings.nether_wishlist_animation_speed
+    when 'fast'
+      assign wishlist_animation_duration = 0.15
+    when 'slow'
+      assign wishlist_animation_duration = 0.5
+    else
+      assign wishlist_animation_duration = animation_duration | default: 0.3
+  endcase
+
+  assign wishlist_page_url = section.settings.nether_wishlist_page_url
+-%}
+
+<nether-wishlist-drawer
+  id="nether-wishlist-drawer"
+  class="nether-wishlist-drawer nether-wishlist-drawer--{{ drawer_style }} color-{{ drawer_color_scheme }} gradient"
+  data-section-id="{{ section.id }}"
+  data-enable-overlay="{{ section.settings.nether_wishlist_enable_overlay }}"
+  data-desktop="{{ section.settings.nether_wishlist_desktop }}"
+  data-tablet="{{ section.settings.nether_wishlist_tablet }}"
+  data-mobile="{{ section.settings.nether_wishlist_mobile }}"
+  data-animation-style="{{ section.settings.nether_wishlist_animation_style | default: 'slide' }}"
+  data-animation-duration="{{ wishlist_animation_duration }}"
+  data-drawer-width="{{ section.settings.nether_wishlist_drawer_width | default: 420 }}"
+  data-drawer-style="{{ drawer_style }}"
+  data-button-style="{{ button_style }}"
+  data-show-count="{{ section.settings.nether_wishlist_show_count }}"
+  data-nether-motion="wishlist-drawer"
+  hidden
+>
+  <script type="application/json" data-nether-wishlist-i18n>
+    {
+      "title": {{ 'sections.nether_wishlist.title' | t | json }},
+      "countOne": {{ 'sections.nether_wishlist.count.one' | t | json }},
+      "countOther": {{ 'sections.nether_wishlist.count.other' | t | json }},
+      "add": {{ 'sections.nether_wishlist.actions.add' | t | json }},
+      "remove": {{ 'sections.nether_wishlist.actions.remove' | t | json }},
+      "clear": {{ 'sections.nether_wishlist.actions.clear' | t | json }},
+      "moveToCart": {{ 'sections.nether_wishlist.actions.move_to_cart' | t | json }},
+      "moving": {{ 'sections.nether_wishlist.actions.moving' | t | json }},
+      "moved": {{ 'sections.nether_wishlist.actions.moved' | t | json }},
+      "unavailable": {{ 'sections.nether_wishlist.availability.unavailable' | t | json }},
+      "available": {{ 'sections.nether_wishlist.availability.available' | t | json }},
+      "error": {{ 'sections.nether_wishlist.errors.generic' | t | json }},
+      "liveAdd": {{ 'sections.nether_wishlist.live.added' | t | json }},
+      "liveRemove": {{ 'sections.nether_wishlist.live.removed' | t | json }}
+    }
+  </script>
+
+  <div
+    class="nether-wishlist-drawer__overlay{% unless section.settings.nether_wishlist_enable_overlay %} nether-wishlist-drawer__overlay--disabled{% endunless %}"
+    data-nether-wishlist-overlay
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="nether-wishlist-drawer__panel{% if section.settings.nether_wishlist_enable_glass %} glass-card-light{% endif %}"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="NetherWishlistDrawer-Title"
+    tabindex="-1"
+    data-nether-wishlist-panel
+  >
+    <header class="nether-wishlist-drawer__header">
+      <div class="nether-wishlist-drawer__header-inner">
+        <h2 id="NetherWishlistDrawer-Title" class="nether-wishlist-drawer__title h3">
+          {{ 'sections.nether_wishlist.title' | t }}
+        </h2>
+        <button
+          type="button"
+          class="nether-wishlist-drawer__close drawer__close"
+          data-nether-wishlist-close
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+      {% render 'nether-wishlist-toolbar', section: section, context: 'drawer', page_url: wishlist_page_url %}
+    </header>
+
+    <div class="nether-wishlist-drawer__body" data-nether-wishlist-body>
+      {% render 'nether-wishlist-empty', section: section, context: 'drawer' %}
+
+      <div
+        class="nether-wishlist-drawer__list"
+        data-nether-wishlist-list
+        role="list"
+        aria-label="{{ 'sections.nether_wishlist.list_label' | t }}"
+        hidden
+      ></div>
+
+      {% render 'nether-wishlist-card', context: 'drawer' %}
+    </div>
+
+    <footer class="nether-wishlist-drawer__footer" data-nether-wishlist-footer hidden>
+      {%- if wishlist_page_url != blank -%}
+        {% render 'button',
+          label: 'sections.nether_wishlist.actions.view_page' | t,
+          link: wishlist_page_url,
+          style: 'secondary',
+          size: 'medium',
+          full_width: true
+        %}
+      {%- endif -%}
+      <div class="nether-wishlist-drawer__status visually-hidden" data-nether-wishlist-live role="status" aria-live="polite"></div>
+    </footer>
+  </div>
+</nether-wishlist-drawer>

@@ -1,0 +1,28 @@
+{% comment %}
+  Renders a Nether Premium predictive search query suggestion card.
+
+  Accepts:
+  - query: {Object} Predictive search query resource
+  - index: {Number} Loop index for unique ids
+
+  Usage:
+  {% render 'nether-search-result-query', query: query, index: forloop.index %}
+{% endcomment %}
+
+<li
+  id="predictive-search-option-query-{{ index }}"
+  class="nether-search-result nether-search-result--query predictive-search__list-item"
+  role="option"
+  aria-selected="false"
+>
+  <a href="{{ query.url }}" class="nether-search-result__link predictive-search__item link link--text" tabindex="-1">
+    <div class="nether-search-result__content predictive-search__item-content predictive-search__item-content--centered">
+      <p
+        class="nether-search-result__title predictive-search__item-heading predictive-search__item-query-result h5"
+        aria-label="{{ query.text }}"
+      >
+        {{ query.styled_text }}
+      </p>
+    </div>
+  </a>
+</li>

@@ -1,0 +1,26 @@
+{% comment %}
+  Nether Premium Product Page — Shipping information module.
+  Extends shared Commerce Enhancements delivery-info component.
+
+  Accepts:
+  - block: {Object} Block object (required)
+{% endcomment %}
+
+{%- if block.settings.heading != blank or block.settings.text != blank -%}
+  <div
+    class="nether-product-page__module nether-product-page__module--shipping"
+    data-nether-product-page-module="shipping"
+    data-nether-product-page-animate
+    {{ block.shopify_attributes }}
+  >
+    {% render 'nether-commerce-delivery-info',
+      heading: block.settings.heading,
+      text: block.settings.text,
+      icon: block.settings.icon | default: 'truck',
+      style: 'card',
+      rte: true,
+      class: 'nether-product-page__shipping',
+      animate: false
+    %}
+  </div>
+{%- endif -%}

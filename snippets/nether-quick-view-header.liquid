@@ -1,0 +1,26 @@
+{% comment %}
+  Nether Premium Quick View — modal header chrome.
+  Accepts:
+  - section: {Object} Header section (required)
+{% endcomment %}
+
+<header class="nether-quick-view__header" data-nether-quick-view-module="header">
+  <div class="nether-quick-view__header-inner">
+    <h2 id="NetherQuickView-Title" class="nether-quick-view__title h4" data-nether-quick-view-title>
+      {{ 'sections.nether_quick_view.title' | t }}
+    </h2>
+    <div class="nether-quick-view__header-actions" role="group" aria-label="{{ 'sections.nether_quick_view.actions.group' | t }}">
+      {% render 'nether-quick-view-actions', section: section, context: 'header' %}
+      <button
+        type="button"
+        class="nether-quick-view__close drawer__close"
+        data-nether-quick-view-close
+        aria-label="{{ 'accessibility.close' | t }}"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </div>
+  </div>
+</header>

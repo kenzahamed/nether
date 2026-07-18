@@ -1,0 +1,48 @@
+{% comment %}
+  Dispatches Nether Mega Menu content blocks to type-specific snippets.
+
+  Accepts:
+  - block: {Object} Section block
+  - link: {Object} Parent menu link
+  - section: {Object} Header section
+  - column_index: {Number} Column position for animation hooks
+
+  Usage:
+  {% render 'nether-mega-menu-block', block: block, link: link, section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign block_type = block.type
+  assign column_span = block.settings.column_span | default: 1
+-%}
+
+<div
+  class="nether-mega-menu__block nether-mega-menu__block--{{ block_type | replace: '_', '-' }}"
+  style="--nether-mega-column-span: {{ column_span }};"
+  data-nether-mega-block="{{ block_type }}"
+  data-nether-mega-column="{{ column_index }}"
+  {{ block.shopify_attributes }}
+>
+  {%- case block_type -%}
+    {%- when 'mega_menu_nav_links' -%}
+      {%- render 'nether-mega-menu-nav-links', block: block, link: link, section: section -%}
+    {%- when 'mega_menu_featured_collection' -%}
+      {%- render 'nether-mega-menu-featured-collection', block: block, section: section -%}
+    {%- when 'mega_menu_featured_products' -%}
+      {%- render 'nether-mega-menu-featured-products', block: block, section: section -%}
+    {%- when 'mega_menu_promotion' -%}
+      {%- render 'nether-mega-menu-promotion', block: block, section: section -%}
+    {%- when 'mega_menu_editorial' -%}
+      {%- render 'nether-mega-menu-editorial', block: block, section: section -%}
+    {%- when 'mega_menu_image_card' -%}
+      {%- render 'nether-mega-menu-image-card', block: block, section: section -%}
+    {%- when 'mega_menu_collection_card' -%}
+      {%- render 'nether-mega-menu-collection-card', block: block, section: section -%}
+    {%- when 'mega_menu_custom_html' -%}
+      {%- render 'nether-mega-menu-custom-html', block: block -%}
+    {%- when '@app' -%}
+      <div class="nether-mega-menu__app-block">
+        {% render block %}
+      </div>
+  {%- endcase -%}
+</div>

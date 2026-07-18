@@ -1,0 +1,50 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Payment Methods.
+  Uses Shopify shop.enabled_payment_types + payment_type_svg_tag.
+
+  Accepts:
+  - heading: {String}
+  - heading_tag: {String} (default: h2)
+  - heading_class: {String}
+  - list_class: {String}
+  - class: {String}
+  - attributes: {String}
+  - block: {Object} Optional Theme Editor block
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign block_heading = heading
+  if block_heading == blank and block != blank
+    assign block_heading = block.settings.heading
+  endif
+  assign heading_uid = block.id | default: section.id | default: 'payment'
+  assign payment_heading_id = 'NetherCommercePaymentHeading-' | append: heading_uid
+-%}
+
+{%- if shop.enabled_payment_types.size > 0 -%}
+  <div
+    class="nether-commerce__payment{% if class != blank %} {{ class }}{% endif %}"
+    data-nether-commerce-module="payment-methods"
+    data-nether-commerce-animate
+    {% if attributes != blank %}{{ attributes }}{% endif %}
+    {% if block %}{{ block.shopify_attributes }}{% endif %}
+  >
+    {%- if block_heading != blank -%}
+      <{{ heading_element }} class="nether-commerce__payment-heading{% if heading_class != blank %} {{ heading_class }}{% endif %}" id="{{ payment_heading_id }}">
+        {{- block_heading -}}
+      </{{ heading_element }}>
+    {%- endif -%}
+
+    <div class="nether-commerce__payment-inner"{% if block_heading != blank %} aria-labelledby="{{ payment_heading_id }}"{% endif %}>
+      <span class="visually-hidden">{{ 'sections.nether_commerce.payment.label' | t }}</span>
+      <ul class="list list-payment nether-commerce__payment-list{% if list_class != blank %} {{ list_class }}{% endif %}" role="list">
+        {%- for type in shop.enabled_payment_types -%}
+          <li class="list-payment__item nether-commerce__payment-item">
+            {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}

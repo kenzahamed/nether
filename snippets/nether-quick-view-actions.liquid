@@ -1,0 +1,46 @@
+{% comment %}
+  Nether Premium Quick View — quick actions (wishlist, compare, share, view full details).
+  Reuses Wishlist + Compare frameworks. Share is native Web Share / copy extension point.
+
+  Accepts:
+  - section: {Object} Section with settings (optional)
+  - context: {String} header | footer | card (default: header)
+{% endcomment %}
+
+{%- liquid
+  assign actions_context = context | default: 'header'
+  assign show_wishlist = section.settings.nether_quick_view_show_wishlist
+  if show_wishlist == nil
+    assign show_wishlist = true
+  endif
+  assign show_compare = section.settings.nether_quick_view_show_compare
+  if show_compare == nil
+    assign show_compare = true
+  endif
+  assign show_share = section.settings.nether_quick_view_show_share
+  if show_share == nil
+    assign show_share = true
+  endif
+-%}
+
+<div
+  class="nether-quick-view__actions nether-quick-view__actions--{{ actions_context }}"
+  data-nether-quick-view-module="quick-actions"
+  data-nether-quick-view-actions
+>
+  {%- if show_wishlist -%}
+    <div class="nether-quick-view__action nether-quick-view__action--wishlist" data-nether-quick-view-wishlist-slot hidden>
+      {%- comment -%} Populated after product load with nether-wishlist-button via JS clone or live bind {%- endcomment -%}
+    </div>
+  {%- endif -%}
+
+  {%- if show_compare -%}
+    <div class="nether-quick-view__action nether-quick-view__action--compare" data-nether-quick-view-compare-slot hidden>
+      {%- comment -%} Populated after product load {%- endcomment -%}
+    </div>
+  {%- endif -%}
+
+  {%- if show_share -%}
+    {% render 'nether-quick-view-share' %}
+  {%- endif -%}
+</div>

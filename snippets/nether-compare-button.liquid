@@ -1,0 +1,168 @@
+{% comment %}
+  Nether Premium Compare — reusable toggle button.
+
+  Accepts:
+  - product: {Object} Product (required)
+  - variant: {Object} Variant override (optional)
+  - style: {String} icon | button | text (default: icon)
+  - size: {String} sm | md | lg (default: md)
+  - button_style: {String} Button system style when style is button (default: ghost)
+  - class: {String} Extra classes (optional)
+  - context: {String} card | product | collection | header | cart | wishlist (optional)
+  - label_add: {String} Accessible add label override (optional)
+  - label_remove: {String} Accessible remove label override (optional)
+
+  Usage:
+  {% render 'nether-compare-button', product: product, style: 'icon', context: 'product' %}
+{% endcomment %}
+
+{%- if product != blank -%}
+{%- liquid
+  assign compare_variant = variant | default: product.selected_or_first_available_variant
+  assign compare_style = style | default: 'icon'
+  assign compare_size = size | default: 'md'
+  assign compare_button_style = button_style | default: 'ghost'
+  assign compare_context = context | default: 'product'
+
+  assign add_label = label_add | default: 'sections.nether_compare.actions.add' | t
+  assign remove_label = label_remove | default: 'sections.nether_compare.actions.remove' | t
+
+  assign icon_size = 'md'
+  if compare_size == 'sm'
+    assign icon_size = 'sm'
+  elsif compare_size == 'lg'
+    assign icon_size = 'lg'
+  endif
+
+  assign image_url = blank
+  if product.featured_media
+    assign image_url = product.featured_media | image_url: width: 200
+  endif
+
+  assign price_money = compare_variant.price | money
+  assign compare_money = blank
+  if compare_variant.compare_at_price > compare_variant.price
+    assign compare_money = compare_variant.compare_at_price | money
+  endif
+
+  assign availability_label = 'sections.nether_compare.availability.available' | t
+  unless compare_variant.available
+    assign availability_label = 'sections.nether_compare.availability.unavailable' | t
+  endunless
+
+  assign button_classes = 'nether-compare-button nether-compare-button--' | append: compare_style
+  assign button_classes = button_classes | append: ' nether-compare-button--' | append: compare_size
+  if class != blank
+    assign button_classes = button_classes | append: ' ' | append: class
+  endif
+-%}
+
+{%- capture compare_attributes_json -%}
+[
+  {
+    "key": "vendor",
+    "label": {{ 'sections.nether_compare.attributes.vendor' | t | json }},
+    "value": {{ product.vendor | default: '—' | json }}
+  },
+  {
+    "key": "type",
+    "label": {{ 'sections.nether_compare.attributes.type' | t | json }},
+    "value": {{ product.type | default: '—' | json }}
+  },
+  {
+    "key": "price",
+    "label": {{ 'sections.nether_compare.attributes.price' | t | json }},
+    "value": {{ price_money | json }}
+  },
+  {
+    "key": "availability",
+    "label": {{ 'sections.nether_compare.attributes.availability' | t | json }},
+    "value": {{ availability_label | json }}
+  }
+  {%- if compare_variant.sku != blank -%}
+  ,{
+    "key": "sku",
+    "label": {{ 'sections.nether_compare.attributes.sku' | t | json }},
+    "value": {{ compare_variant.sku | json }}
+  }
+  {%- endif -%}
+  {%- if compare_variant.weight > 0 -%}
+  ,{
+    "key": "weight",
+    "label": {{ 'sections.nether_compare.attributes.weight' | t | json }},
+    "value": {{ compare_variant.weight | weight_with_unit | json }}
+  }
+  {%- endif -%}
+  {%- for option in product.options_with_values -%}
+  ,{
+    "key": {{ option.name | handleize | prepend: 'option_' | json }},
+    "label": {{ option.name | json }},
+    "value": {{ compare_variant.options[forloop.index0] | default: '—' | json }}
+  }
+  {%- endfor -%}
+]
+{%- endcapture -%}
+
+<nether-compare-button
+  class="{{ button_classes }}"
+  data-nether-compare-toggle
+  data-product-id="{{ product.id }}"
+  data-variant-id="{{ compare_variant.id }}"
+  data-product-handle="{{ product.handle | escape }}"
+  data-product-title="{{ product.title | escape }}"
+  data-product-url="{{ product.url }}"
+  data-product-vendor="{{ product.vendor | escape }}"
+  data-product-type="{{ product.type | escape }}"
+  data-product-image="{{ image_url | escape }}"
+  data-product-price="{{ compare_variant.price }}"
+  data-product-price-formatted="{{ price_money | escape }}"
+  data-product-compare-price="{{ compare_variant.compare_at_price | default: 0 }}"
+  data-product-compare-formatted="{{ compare_money | escape }}"
+  data-product-available="{{ compare_variant.available }}"
+  data-product-attributes="{{ compare_attributes_json | strip_newlines | escape }}"
+  data-compare-context="{{ compare_context }}"
+  data-label-add="{{ add_label | escape }}"
+  data-label-remove="{{ remove_label | escape }}"
+>
+  {%- if compare_style == 'button' -%}
+    <button
+      type="button"
+      class="button button--{{ compare_button_style }} button--{{ compare_size | replace: 'sm', 'small' | replace: 'md', 'medium' | replace: 'lg', 'large' }} nether-compare-button__control"
+      aria-pressed="false"
+      aria-label="{{ add_label | escape }}"
+      data-nether-compare-control
+    >
+      <span class="nether-compare-button__icon" aria-hidden="true">
+        {% render 'icon', icon: 'clipboard', size: icon_size, decorative: true %}
+      </span>
+      <span class="nether-compare-button__label" data-nether-compare-label>{{ add_label }}</span>
+    </button>
+  {%- elsif compare_style == 'text' -%}
+    <button
+      type="button"
+      class="nether-compare-button__control nether-compare-button__control--text link focus-inset"
+      aria-pressed="false"
+      aria-label="{{ add_label | escape }}"
+      data-nether-compare-control
+    >
+      <span class="nether-compare-button__icon" aria-hidden="true">
+        {% render 'icon', icon: 'clipboard', size: icon_size, decorative: true %}
+      </span>
+      <span class="nether-compare-button__label type-body-sm" data-nether-compare-label>{{ add_label }}</span>
+    </button>
+  {%- else -%}
+    <button
+      type="button"
+      class="nether-compare-button__control nether-compare-button__control--icon link focus-inset"
+      aria-pressed="false"
+      aria-label="{{ add_label | escape }}"
+      data-nether-compare-control
+    >
+      <span class="nether-compare-button__icon" aria-hidden="true">
+        {% render 'icon', icon: 'clipboard', size: icon_size, decorative: true %}
+      </span>
+      <span class="visually-hidden" data-nether-compare-label>{{ add_label }}</span>
+    </button>
+  {%- endif -%}
+</nether-compare-button>
+{%- endif -%}

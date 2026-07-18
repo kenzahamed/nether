@@ -1,0 +1,1058 @@
+{{ 'component-hero.css' | asset_url | stylesheet_tag }}
+{{ 'component-testimonials.css' | asset_url | stylesheet_tag }}
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-icon.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-typography.css' | asset_url | stylesheet_tag }}
+{{ 'component-card-premium.css' | asset_url | stylesheet_tag }}
+{{ 'component-shadow.css' | asset_url | stylesheet_tag }}
+{{ 'component-radius.css' | asset_url | stylesheet_tag }}
+{{ 'component-rating.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-hero.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-testimonials.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.nether_enable_glass -%}
+  {{ 'component-glass.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if section.settings.nether_enable_gradient -%}
+  {{ 'component-gradient.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- liquid
+  assign nether_layout = section.settings.nether_layout | default: 'grid_testimonials'
+  assign nether_columns_desktop = section.settings.nether_columns_desktop | default: 3
+  assign nether_columns_tablet = section.settings.nether_columns_tablet | default: 2
+  assign nether_columns_mobile = section.settings.nether_columns_mobile | default: 1
+  assign nether_gap = section.settings.nether_gap | default: 24
+
+  assign uses_hero_shell = false
+  assign uses_section_media = false
+  assign is_magazine = false
+  assign show_slider = false
+
+  case nether_layout
+    when 'editorial_testimonials'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'editorial'
+    when 'minimal'
+      assign uses_hero_shell = true
+      assign nether_hero_layout = 'minimal'
+    when 'magazine'
+      assign is_magazine = true
+    when 'carousel_testimonials'
+      assign show_slider = true
+    when 'grid_testimonials', 'video_testimonials', 'brand_logos', 'statistics', 'awards', 'press_mentions', 'magazine'
+  endcase
+
+  case section.settings.nether_animation_speed
+    when 'slow'
+      assign nether_animation_duration = 0.8
+    when 'fast'
+      assign nether_animation_duration = 0.3
+    else
+      assign nether_animation_duration = 0.5
+  endcase
+
+  assign nether_class_list = 'nether-testimonials nether-hero'
+  assign nether_class_list = nether_class_list | append: ' nether-testimonials--layout-' | append: nether_layout
+  if uses_hero_shell
+    assign nether_class_list = nether_class_list | append: ' nether-hero--layout-' | append: nether_hero_layout
+  endif
+  assign nether_class_list = nether_class_list | append: ' nether-testimonials--card-' | append: section.settings.nether_card_style
+  assign nether_class_list = nether_class_list | append: ' nether-hero--desktop-' | append: section.settings.nether_layout_desktop
+  assign nether_class_list = nether_class_list | append: ' nether-hero--tablet-' | append: section.settings.nether_layout_tablet
+  assign nether_class_list = nether_class_list | append: ' nether-hero--mobile-' | append: section.settings.nether_layout_mobile
+
+  if section.settings.nether_enable_glass
+    assign nether_class_list = nether_class_list | append: ' nether-hero--glass-enabled nether-testimonials--glass-enabled'
+  endif
+
+  if section.settings.nether_enable_gradient
+    assign nether_class_list = nether_class_list | append: ' nether-hero--gradient-enabled'
+  endif
+
+  if section.settings.nether_enable_floating_cards
+    assign nether_class_list = nether_class_list | append: ' nether-testimonials--floating-enabled'
+  endif
+
+  if section.settings.nether_full_width
+    assign nether_class_list = nether_class_list | append: ' nether-testimonials--full-width'
+  endif
+
+  assign overlay_classes = 'nether-hero__overlay'
+  if section.settings.nether_enable_gradient
+    case section.settings.nether_gradient_style
+      when 'dramatic'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-dramatic'
+      when 'vignette'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-vignette'
+      when 'fade-down'
+        assign overlay_classes = overlay_classes | append: ' grad-linear-fade-down'
+      else
+        assign overlay_classes = overlay_classes | append: ' grad-hero-brand'
+    endcase
+  endif
+
+  assign heading_tag = 'h2'
+  if section.settings.nether_heading_level == 'h3'
+    assign heading_tag = 'h3'
+  endif
+
+  assign needs_deferred_media = false
+  if section.settings.nether_testimonials_media_type == 'video'
+    assign needs_deferred_media = true
+  endif
+  for block in section.blocks
+    if block.type == 'video_testimonial'
+      assign needs_deferred_media = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if show_slider -%}
+  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if needs_deferred_media -%}
+  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .nether-testimonials {
+    --nether-testimonials-gap: {{ nether_gap }}px;
+    --nether-testimonials-columns-desktop: {{ nether_columns_desktop }};
+    --nether-testimonials-columns-tablet: {{ nether_columns_tablet }};
+    --nether-testimonials-columns-mobile: {{ nether_columns_mobile }};
+    --nether-testimonials-overlay-opacity: {{ section.settings.nether_overlay_opacity | divided_by: 100.0 }};
+    --nether-testimonials-transition-duration: {{ nether_animation_duration }}s;
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  {%- if uses_section_media and section.settings.nether_testimonials_image_desktop != blank -%}
+    #NetherTestimonials-{{ section.id }} .nether-hero__media::before {
+      padding-bottom: {{ 1 | divided_by: section.settings.nether_testimonials_image_desktop.aspect_ratio | times: 100 }}%;
+      content: '';
+      display: block;
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+{%- if section.settings.nether_show_divider_top -%}
+  {%- render 'nether-testimonials-divider', section: section, position: 'top' -%}
+{%- endif -%}
+
+<nether-testimonials
+  id="NetherTestimonials-{{ section.id }}"
+  class="{{ nether_class_list }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient"
+  data-section-id="{{ section.id }}"
+  data-nether-motion="testimonials"
+  data-testimonials-layout="{{ nether_layout }}"
+  data-nether-testimonials-layout="{{ nether_layout }}"
+  data-nether-testimonials-card-style="{{ section.settings.nether_card_style }}"
+  {% if section.settings.nether_enable_parallax or nether_layout == 'editorial_testimonials' or nether_layout == 'magazine' or nether_layout == 'brand_logos' or nether_layout == 'statistics' or section.settings.nether_animation_style == 'stagger' or section.settings.nether_animation_style == 'card_reveal' or section.settings.nether_animation_style == 'logo_reveal' or section.settings.nether_animation_style == 'counter_reveal' %}data-nether-motion-plugins="scrollTrigger"{% endif %}
+  data-animation-style="{{ section.settings.nether_animation_style }}"
+  data-animation-duration="{{ nether_animation_duration }}"
+  data-enable-parallax="{{ section.settings.nether_enable_parallax }}"
+  data-hover-reveal="{{ section.settings.nether_hover_effect }}"
+  data-carousel-ready="{{ show_slider }}"
+  role="region"
+  aria-label="{{ section.settings.nether_aria_label | default: 'Testimonials and social proof' | escape }}"
+>
+  <div class="nether-testimonials__inner nether-hero__inner" data-nether-testimonials-shell-outer>
+    {%- if uses_section_media -%}
+      {%- render 'nether-hero-media', section: section, adapter: 'testimonials' -%}
+
+      {%- if section.settings.nether_enable_image_overlay or section.settings.nether_enable_gradient -%}
+        <div class="{{ overlay_classes }}" aria-hidden="true" data-nether-testimonials-overlay></div>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if uses_hero_shell -%}
+      {%- render 'nether-testimonials-shell', section: section, heading_tag: heading_tag -%}
+    {%- else -%}
+      <div class="nether-testimonials__body{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+        {%- render 'nether-testimonials-content', section: section, heading_tag: heading_tag -%}
+        {%- render 'nether-testimonials-grid',
+          section: section,
+          layout: nether_layout,
+          show_slider: show_slider,
+          is_magazine: is_magazine
+        -%}
+      </div>
+    {%- endif -%}
+  </div>
+</nether-testimonials>
+
+{%- if section.settings.nether_show_divider_bottom -%}
+  {%- render 'nether-testimonials-divider', section: section, position: 'bottom' -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Nether testimonials",
+  "tag": "section",
+  "class": "section section-nether-testimonials",
+  "max_blocks": 24,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Nether testimonials framework"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout",
+      "label": "Layout",
+      "default": "grid_testimonials",
+      "options": [
+        { "value": "editorial_testimonials", "label": "Editorial testimonials" },
+        { "value": "grid_testimonials", "label": "Grid testimonials" },
+        { "value": "carousel_testimonials", "label": "Carousel testimonials" },
+        { "value": "video_testimonials", "label": "Video testimonials" },
+        { "value": "magazine", "label": "Magazine layout" },
+        { "value": "minimal", "label": "Minimal layout" },
+        { "value": "brand_logos", "label": "Brand logos" },
+        { "value": "statistics", "label": "Statistics layout" },
+        { "value": "awards", "label": "Awards & recognition" },
+        { "value": "press_mentions", "label": "Press mentions" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "nether_columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3,
+      "label": "Desktop columns"
+    },
+    {
+      "type": "range",
+      "id": "nether_columns_tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "label": "Tablet columns"
+    },
+    {
+      "type": "select",
+      "id": "nether_columns_mobile",
+      "label": "Mobile columns",
+      "default": "1",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "nether_gap",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24,
+      "label": "Grid gap"
+    },
+    {
+      "type": "select",
+      "id": "nether_card_style",
+      "label": "Card style",
+      "default": "medium",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "editorial", "label": "Editorial" },
+        { "value": "glass", "label": "Glass" },
+        { "value": "gradient", "label": "Gradient" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_content_alignment",
+      "label": "Content alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_heading_level",
+      "label": "Primary heading level",
+      "default": "h2",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "nether_aria_label",
+      "label": "Accessibility label",
+      "default": "Testimonials and social proof"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_full_width",
+      "default": false,
+      "label": "Full width"
+    },
+    {
+      "type": "header",
+      "content": "Section media"
+    },
+    {
+      "type": "select",
+      "id": "nether_testimonials_media_type",
+      "label": "Media type",
+      "default": "image",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "nether_testimonials_image_desktop",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "nether_testimonials_image_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "video",
+      "id": "nether_testimonials_video",
+      "label": "Shopify-hosted video"
+    },
+    {
+      "type": "video_url",
+      "id": "nether_testimonials_video_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "External video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "nether_testimonials_poster_image",
+      "label": "Poster image"
+    },
+    {
+      "type": "text",
+      "id": "nether_testimonials_video_description",
+      "label": "Video description"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_testimonials_video_loop",
+      "default": true,
+      "label": "Loop video"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_testimonials_enable_blur",
+      "default": false,
+      "label": "Background blur"
+    },
+    {
+      "type": "header",
+      "content": "Visual features"
+    },
+    {
+      "type": "range",
+      "id": "nether_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 35,
+      "label": "Overlay opacity"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_image_overlay",
+      "default": false,
+      "label": "Enable image overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_glass",
+      "default": false,
+      "label": "Enable glass card"
+    },
+    {
+      "type": "select",
+      "id": "nether_glass_style",
+      "label": "Glass style",
+      "default": "medium",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "heavy", "label": "Heavy" },
+        { "value": "frosted", "label": "Frosted" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_gradient",
+      "default": false,
+      "label": "Enable gradient overlay"
+    },
+    {
+      "type": "select",
+      "id": "nether_gradient_style",
+      "label": "Gradient style",
+      "default": "brand",
+      "options": [
+        { "value": "brand", "label": "Brand" },
+        { "value": "dramatic", "label": "Dramatic" },
+        { "value": "vignette", "label": "Vignette" },
+        { "value": "fade-down", "label": "Fade down" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_floating_cards",
+      "default": false,
+      "label": "Floating cards"
+    },
+    {
+      "type": "select",
+      "id": "nether_hover_effect",
+      "label": "Hover effect",
+      "default": "lift",
+      "options": [
+        { "value": "lift", "label": "Lift" },
+        { "value": "scale", "label": "Scale" },
+        { "value": "shadow", "label": "Shadow" },
+        { "value": "glow", "label": "Glow" },
+        { "value": "reveal", "label": "Hover reveal" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_divider_top",
+      "default": false,
+      "label": "Top divider"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_divider_bottom",
+      "default": false,
+      "label": "Bottom divider"
+    },
+    {
+      "type": "select",
+      "id": "nether_divider_style",
+      "label": "Divider style",
+      "default": "line",
+      "options": [
+        { "value": "line", "label": "Line" },
+        { "value": "gradient", "label": "Gradient" },
+        { "value": "wave", "label": "Wave" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_style",
+      "label": "Animation style",
+      "default": "stagger",
+      "options": [
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide", "label": "Slide" },
+        { "value": "scale", "label": "Scale" },
+        { "value": "stagger", "label": "Stagger" },
+        { "value": "card_reveal", "label": "Card reveal" },
+        { "value": "logo_reveal", "label": "Logo reveal" },
+        { "value": "counter_reveal", "label": "Counter reveal" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_speed",
+      "label": "Animation speed",
+      "default": "medium",
+      "options": [
+        { "value": "slow", "label": "Slow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "fast", "label": "Fast" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_parallax",
+      "default": false,
+      "label": "Enable parallax",
+      "info": "Subtle media parallax on scroll. Respects reduced motion preferences."
+    },
+    {
+      "type": "header",
+      "content": "Responsive layouts"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_desktop",
+      "label": "Desktop layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "editorial", "label": "Editorial emphasis" },
+        { "value": "compact", "label": "Compact" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_tablet",
+      "label": "Tablet layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_mobile",
+      "label": "Mobile layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Social proof"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Trusted by customers worldwide"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "default": "h1",
+          "options": [
+            { "value": "h2", "label": "Small" },
+            { "value": "h1", "label": "Medium" },
+            { "value": "h0", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "select",
+          "id": "subheading_size",
+          "label": "Subheading size",
+          "default": "h3",
+          "options": [
+            { "value": "h4", "label": "Small" },
+            { "value": "h3", "label": "Medium" },
+            { "value": "h2", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Build trust with editorial testimonials, press mentions, and social proof for any industry.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "default": "body",
+          "options": [
+            { "value": "body", "label": "Body" },
+            { "value": "subtitle", "label": "Subtitle" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "customer_testimonial",
+      "name": "Customer testimonial",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Quote",
+          "default": "<p>This brand exceeded every expectation. The quality, service, and attention to detail are unmatched.</p>"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Alex Morgan"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author image"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / position",
+          "default": "Creative Director"
+        },
+        {
+          "type": "text",
+          "id": "company",
+          "label": "Company",
+          "default": "Studio North"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_rating",
+          "default": true,
+          "label": "Show rating"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 0.5,
+          "default": 5,
+          "label": "Rating"
+        }
+      ]
+    },
+    {
+      "type": "video_testimonial",
+      "name": "Video testimonial",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-hosted video"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "label": "External video URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster_image",
+          "label": "Poster image"
+        },
+        {
+          "type": "text",
+          "id": "video_description",
+          "label": "Video description"
+        },
+        {
+          "type": "checkbox",
+          "id": "video_loop",
+          "default": false,
+          "label": "Loop video"
+        },
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Quote"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author image"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / position"
+        },
+        {
+          "type": "text",
+          "id": "company",
+          "label": "Company"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_rating",
+          "default": false,
+          "label": "Show rating"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 0.5,
+          "default": 5,
+          "label": "Rating"
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "Quote",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Quote"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author"
+        },
+        {
+          "type": "text",
+          "id": "author_title",
+          "label": "Author title"
+        }
+      ]
+    },
+    {
+      "type": "author",
+      "name": "Author",
+      "settings": [
+        { "type": "text", "id": "author", "label": "Author" },
+        { "type": "image_picker", "id": "author_image", "label": "Author image" },
+        { "type": "text", "id": "role", "label": "Role / position" },
+        { "type": "text", "id": "company", "label": "Company" }
+      ]
+    },
+    {
+      "type": "author_image",
+      "name": "Author image",
+      "settings": [
+        { "type": "image_picker", "id": "author_image", "label": "Author image" },
+        { "type": "text", "id": "author", "label": "Author name" }
+      ]
+    },
+    {
+      "type": "company",
+      "name": "Company",
+      "settings": [
+        { "type": "text", "id": "company", "label": "Company" }
+      ]
+    },
+    {
+      "type": "role",
+      "name": "Role / position",
+      "settings": [
+        { "type": "text", "id": "role", "label": "Role / position" }
+      ]
+    },
+    {
+      "type": "rating",
+      "name": "Rating",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 0.5,
+          "default": 5,
+          "label": "Rating"
+        }
+      ]
+    },
+    {
+      "type": "brand_logo",
+      "name": "Brand logo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Logo image" },
+        { "type": "text", "id": "label", "label": "Logo label" },
+        { "type": "url", "id": "link", "label": "Logo link" }
+      ]
+    },
+    {
+      "type": "statistic",
+      "name": "Statistic",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "98" },
+        { "type": "text", "id": "prefix", "label": "Prefix" },
+        { "type": "text", "id": "suffix", "label": "Suffix", "default": "%" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Customer satisfaction" }
+      ]
+    },
+    {
+      "type": "award",
+      "name": "Award",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Award image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Best in class" },
+        { "type": "text", "id": "year", "label": "Year", "default": "2026" },
+        { "type": "text", "id": "description", "label": "Description" }
+      ]
+    },
+    {
+      "type": "certification",
+      "name": "Certification",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Certification image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Certified quality" },
+        { "type": "text", "id": "issuer", "label": "Issuer" },
+        { "type": "text", "id": "description", "label": "Description" }
+      ]
+    },
+    {
+      "type": "press_mention",
+      "name": "Press mention",
+      "settings": [
+        { "type": "image_picker", "id": "logo", "label": "Publication logo" },
+        { "type": "text", "id": "publication", "label": "Publication" },
+        { "type": "richtext", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "date", "label": "Date" },
+        { "type": "url", "id": "link", "label": "Article link" }
+      ]
+    },
+    {
+      "type": "trust_badge",
+      "name": "Trust badge",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Badge image" },
+        { "type": "text", "id": "label", "label": "Badge label" },
+        {
+          "type": "select",
+          "id": "badge_type",
+          "label": "Badge type",
+          "default": "custom",
+          "options": [
+            { "value": "featured", "label": "Featured" },
+            { "value": "new", "label": "New" },
+            { "value": "exclusive", "label": "Exclusive" },
+            { "value": "custom", "label": "Custom" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "badge_style",
+          "label": "Badge style",
+          "default": "soft",
+          "options": [
+            { "value": "solid", "label": "Solid" },
+            { "value": "soft", "label": "Soft" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "button_label_1", "label": "First button label" },
+        { "type": "url", "id": "button_link_1", "label": "First button link" },
+        {
+          "type": "select",
+          "id": "button_style_1",
+          "label": "First button style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" },
+            { "value": "text", "label": "Text" }
+          ]
+        },
+        { "type": "text", "id": "button_label_2", "label": "Second button label" },
+        { "type": "url", "id": "button_link_2", "label": "Second button link" },
+        {
+          "type": "select",
+          "id": "button_style_2",
+          "label": "Second button style",
+          "default": "outline",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" },
+            { "value": "text", "label": "Text" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": [
+        {
+          "type": "select",
+          "id": "divider_style",
+          "label": "Divider style",
+          "default": "line",
+          "options": [
+            { "value": "line", "label": "Line" },
+            { "value": "gradient", "label": "Gradient" },
+            { "value": "space", "label": "Space" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "custom_html",
+      "name": "Custom HTML",
+      "settings": [
+        {
+          "type": "html",
+          "id": "html",
+          "label": "HTML",
+          "default": "<p>Add custom HTML or install an app block for reviews widgets.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nether testimonials",
+      "blocks": [
+        { "type": "eyebrow" },
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "customer_testimonial" },
+        { "type": "customer_testimonial" },
+        { "type": "customer_testimonial" }
+      ]
+    },
+    {
+      "name": "Nether brand logos",
+      "settings": {
+        "nether_layout": "brand_logos"
+      },
+      "blocks": [
+        { "type": "heading" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" }
+      ]
+    },
+    {
+      "name": "Nether statistics",
+      "settings": {
+        "nether_layout": "statistics",
+        "nether_animation_style": "counter_reveal"
+      },
+      "blocks": [
+        { "type": "heading" },
+        { "type": "statistic" },
+        { "type": "statistic" },
+        { "type": "statistic" }
+      ]
+    }
+  ]
+}
+{% endschema %}

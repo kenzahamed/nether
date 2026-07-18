@@ -1,0 +1,44 @@
+{% comment %}
+  Nether Premium Compare — item card template shell.
+  Client-side renderer clones [data-nether-compare-card-template] content.
+
+  Accepts:
+  - context: {String} drawer | page (default: drawer)
+
+  Usage:
+  {% render 'nether-compare-card', context: 'drawer' %}
+{% endcomment %}
+
+{%- assign compare_context = context | default: 'drawer' -%}
+
+<template data-nether-compare-card-template data-context="{{ compare_context }}">
+  <article
+    class="nether-compare-card nether-compare-card--{{ compare_context }} shadow-sm radius-md"
+    data-nether-compare-card
+    data-nether-compare-animate
+  >
+    <a class="nether-compare-card__media" data-nether-compare-card-link href="#" tabindex="-1" aria-hidden="true">
+      <img
+        class="nether-compare-card__image"
+        data-nether-compare-card-image
+        src=""
+        alt=""
+        width="120"
+        height="120"
+        loading="lazy"
+      >
+    </a>
+
+    <div class="nether-compare-card__body">
+      <p class="nether-compare-card__vendor type-overline caption-with-letter-spacing" data-nether-compare-card-vendor hidden></p>
+      <h3 class="nether-compare-card__title type-heading-xs">
+        <a class="full-unstyled-link" data-nether-compare-card-title-link href="#">
+          <span data-nether-compare-card-title></span>
+        </a>
+      </h3>
+      <div class="nether-compare-card__price" data-nether-compare-card-price></div>
+      <p class="nether-compare-card__availability type-body-sm" data-nether-compare-card-availability hidden></p>
+      {% render 'nether-compare-actions', context: compare_context %}
+    </div>
+  </article>
+</template>

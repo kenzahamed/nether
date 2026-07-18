@@ -1,0 +1,172 @@
+{% comment %}
+  Nether Premium Bundles — product card / pack item renderer.
+  Reuses Dawn card-product + optional Wishlist / Compare / Quick View slots.
+
+  Accepts:
+  - card_product: {Object} Product (required)
+  - section: {Object} Section object (required)
+  - skip_styles: {Boolean}
+  - lazy_load: {Boolean}
+  - index: {Number}
+  - required: {Boolean} Required pack member (default: false for optional strategies)
+  - optional: {Boolean} Explicit optional flag
+  - quantity: {Number} Default quantity (default: 1)
+  - block: {Object} Optional bundle_product block for shopify_attributes
+  - compact: {Boolean} Compact card chrome
+{% endcomment %}
+
+{%- liquid
+  assign media_ratio = section.settings.nether_image_ratio | default: 'adapt'
+  assign image_shape = section.settings.nether_image_shape | default: 'default'
+  assign show_secondary = section.settings.nether_show_secondary_image | default: false
+  assign show_vendor = section.settings.nether_show_vendor | default: false
+  assign show_rating = section.settings.nether_show_rating | default: false
+  assign show_wishlist = section.settings.nether_enable_wishlist_cards | default: false
+  assign show_compare = section.settings.nether_enable_compare_cards | default: false
+  assign show_quick_view = section.settings.nether_enable_quick_view_cards | default: false
+  assign card_badge_label = section.settings.nether_card_badge_label
+  assign item_qty = quantity | default: 1
+  if item_qty < 1
+    assign item_qty = 1
+  endif
+
+  assign is_required = required | default: false
+  if optional == true
+    assign is_required = false
+  endif
+
+  assign selected_variant = card_product.selected_or_first_available_variant
+  assign variant_id = selected_variant.id
+  assign item_price = selected_variant.price | default: 0
+  assign item_compare = selected_variant.compare_at_price | default: 0
+  assign item_available = selected_variant.available | default: false
+
+  assign allow_optional = section.settings.nether_allow_optional | default: true
+  assign show_variant_select = section.settings.nether_show_variant_select | default: true
+  assign is_compact = compact | default: false
+-%}
+
+<article
+  class="nether-bundles__card{% if is_compact %} nether-bundles__card--compact{% endif %}{% if is_required %} nether-bundles__card--required{% else %} nether-bundles__card--optional{% endif %}{% unless item_available %} nether-bundles__card--unavailable{% endunless %}"
+  data-nether-bundles-card
+  data-nether-bundles-item
+  data-product-id="{{ card_product.id }}"
+  data-variant-id="{{ variant_id }}"
+  data-price="{{ item_price }}"
+  data-compare-at="{{ item_compare }}"
+  data-quantity="{{ item_qty }}"
+  data-required="{{ is_required }}"
+  data-available="{{ item_available }}"
+  data-product-title="{{ card_product.title | escape }}"
+  {% if block != blank %}{{ block.shopify_attributes }}{% endif %}
+>
+  <div class="nether-bundles__card-controls">
+    {%- if allow_optional or is_required == false -%}
+      <label class="nether-bundles__card-toggle">
+        <span class="visually-hidden">
+          {%- if is_required -%}
+            {{ 'sections.nether_bundles.item.required' | t: title: card_product.title }}
+          {%- else -%}
+            {{ 'sections.nether_bundles.item.include' | t: title: card_product.title }}
+          {%- endif -%}
+        </span>
+        <input
+          type="checkbox"
+          class="nether-bundles__card-checkbox"
+          data-nether-bundles-toggle
+          {% if is_required or item_available %}checked{% endif %}
+          {% if is_required %}disabled{% endif %}
+          {% unless item_available %}disabled{% endunless %}
+        >
+        <span class="nether-bundles__card-toggle-ui" aria-hidden="true"></span>
+      </label>
+    {%- endif -%}
+
+    {%- if is_required -%}
+      {%- assign required_badge_label = 'sections.nether_bundles.item.required_badge' | t -%}
+      <span class="nether-bundles__card-flag">
+        {% render 'badge', type: 'custom', label: required_badge_label, style: 'soft', size: 'small' %}
+      </span>
+    {%- elsif allow_optional -%}
+      {%- assign optional_badge_label = 'sections.nether_bundles.item.optional_badge' | t -%}
+      <span class="nether-bundles__card-flag">
+        {% render 'badge', type: 'custom', label: optional_badge_label, style: 'minimal', size: 'small' %}
+      </span>
+    {%- endif -%}
+  </div>
+
+  <div class="nether-bundles__card-media">
+    {%- if card_badge_label != blank -%}
+      <div class="nether-bundles__card-badge">
+        {% render 'badge', type: 'custom', label: card_badge_label, style: 'soft', size: 'small' %}
+      </div>
+    {%- endif -%}
+
+    {% render 'card-product',
+      card_product: card_product,
+      media_aspect_ratio: media_ratio,
+      image_shape: image_shape,
+      show_secondary_image: show_secondary,
+      show_vendor: show_vendor,
+      show_rating: show_rating,
+      lazy_load: lazy_load,
+      skip_styles: skip_styles,
+      quick_add: 'none',
+      section_id: section.id,
+      product_view_context: 'bundle',
+      show_wishlist: show_wishlist,
+      show_compare: show_compare,
+      show_quick_view: show_quick_view
+    %}
+  </div>
+
+  <div class="nether-bundles__card-meta">
+    {%- if show_variant_select and card_product.has_only_default_variant == false -%}
+      <label class="nether-bundles__variant-label type-body-sm" for="NetherBundlesVariant-{{ section.id }}-{{ card_product.id }}-{{ index }}">
+        {{ 'products.product.product_variants' | t }}
+      </label>
+      <select
+        id="NetherBundlesVariant-{{ section.id }}-{{ card_product.id }}-{{ index }}"
+        class="nether-bundles__variant-select select__select"
+        data-nether-bundles-variant
+        {% unless item_available %}disabled{% endunless %}
+      >
+        {%- for variant in card_product.variants -%}
+          <option
+            value="{{ variant.id }}"
+            data-price="{{ variant.price }}"
+            data-compare-at="{{ variant.compare_at_price | default: 0 }}"
+            data-available="{{ variant.available }}"
+            {% if variant.id == variant_id %}selected{% endif %}
+            {% unless variant.available %}disabled{% endunless %}
+          >
+            {{ variant.title }}
+            {%- if settings.currency_code_enabled -%}
+              — {{ variant.price | money_with_currency }}
+            {%- else -%}
+              — {{ variant.price | money }}
+            {%- endif -%}
+          </option>
+        {%- endfor -%}
+      </select>
+    {%- endif -%}
+
+    {%- if section.settings.nether_show_item_quantity -%}
+      <div class="nether-bundles__qty">
+        <label class="visually-hidden" for="NetherBundlesQty-{{ section.id }}-{{ card_product.id }}-{{ index }}">
+          {{ 'products.product.quantity.label' | t }}
+        </label>
+        <input
+          id="NetherBundlesQty-{{ section.id }}-{{ card_product.id }}-{{ index }}"
+          class="nether-bundles__qty-input"
+          type="number"
+          min="1"
+          max="99"
+          value="{{ item_qty }}"
+          data-nether-bundles-qty
+          {% unless item_available %}disabled{% endunless %}
+        >
+      </div>
+    {%- endif -%}
+  </div>
+</article>

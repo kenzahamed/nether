@@ -1,0 +1,55 @@
+{% comment %}
+  Nether Premium Recommendations — empty state module.
+
+  Accepts:
+  - section: {Object} Section object (optional)
+  - context: {String} section | design | api (default: section)
+{% endcomment %}
+
+{%- liquid
+  assign empty_context = context | default: 'section'
+  assign empty_heading = blank
+  assign empty_text = blank
+  assign empty_button_label = blank
+  assign empty_button_link = routes.all_products_collection_url
+
+  if section != blank
+    assign empty_heading = section.settings.nether_empty_heading
+    assign empty_text = section.settings.nether_empty_text
+    assign empty_button_label = section.settings.nether_empty_button_label
+    if section.settings.nether_empty_button_link != blank
+      assign empty_button_link = section.settings.nether_empty_button_link
+    endif
+  endif
+
+  if empty_heading == blank
+    assign empty_heading = 'sections.nether_recommendations.empty.heading' | t
+  endif
+  if empty_text == blank
+    if empty_context == 'design'
+      assign empty_text = 'sections.nether_recommendations.empty.design_text' | t
+    else
+      assign empty_text = 'sections.nether_recommendations.empty.text' | t
+    endif
+  endif
+  if empty_button_label == blank
+    assign empty_button_label = 'general.continue_shopping' | t
+  endif
+-%}
+
+<div
+  class="nether-recommendations__module nether-recommendations__empty nether-recommendations__empty--{{ empty_context }}"
+  data-nether-recommendations-module="empty"
+  data-nether-recommendations-empty
+  data-nether-recommendations-animate
+  role="status"
+>
+  <div class="nether-recommendations__empty-content">
+    <span class="nether-recommendations__empty-icon" aria-hidden="true">
+      {% render 'icon', icon: 'star', size: 'lg', decorative: true %}
+    </span>
+    <h2 class="nether-recommendations__empty-heading type-heading-sm">{{ empty_heading }}</h2>
+    <p class="nether-recommendations__empty-text type-body">{{ empty_text }}</p>
+    {% render 'button', label: empty_button_label, link: empty_button_link, style: 'primary', size: 'medium' %}
+  </div>
+</div>

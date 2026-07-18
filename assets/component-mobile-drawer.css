@@ -1,0 +1,283 @@
+/* =============================================================================
+ * Nether Premium Mobile Navigation Drawer Framework
+ * Extends Dawn header-drawer / menu-drawer — reuses design tokens.
+ * ============================================================================= */
+
+nether-mobile-drawer {
+  --nether-drawer-width: 36rem;
+  --nether-drawer-duration: var(--duration-default, 0.3s);
+  --nether-drawer-shadow: var(--shadow-level-md, 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.12));
+  --nether-drawer-header-offset: var(--nether-header-announcement-offset, 0px);
+  --nether-drawer-radius: var(--radius-md, 0);
+  display: contents;
+}
+
+.nether-mobile-drawer__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(var(--color-foreground), 0.45);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--nether-drawer-duration) ease, visibility var(--nether-drawer-duration) ease;
+}
+
+.nether-mobile-drawer__overlay--disabled {
+  background: transparent;
+}
+
+.nether-mobile-drawer.is-open .nether-mobile-drawer__overlay:not(.nether-mobile-drawer__overlay--disabled) {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.nether-mobile-drawer.is-open[data-nether-motion-ready] .nether-mobile-drawer__overlay {
+  transition: none;
+}
+
+/* Suppress Dawn pseudo overlay when premium overlay is active */
+.nether-mobile-drawer.is-enabled .nether-mobile-drawer__host > details > summary::before {
+  display: none !important;
+}
+
+.nether-mobile-drawer.is-enabled .nether-mobile-drawer__panel {
+  position: fixed;
+  top: var(--nether-drawer-header-offset);
+  left: 0;
+  width: min(var(--nether-drawer-width), 100vw);
+  height: calc(100dvh - var(--nether-drawer-header-offset));
+  max-height: calc(100dvh - var(--nether-drawer-header-offset));
+  z-index: 1000;
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  box-shadow: var(--nether-drawer-shadow);
+  transform: translateX(-100%);
+  visibility: hidden;
+  overflow: hidden;
+}
+
+.nether-mobile-drawer--position-right.is-enabled .nether-mobile-drawer__panel {
+  left: auto;
+  right: 0;
+  border-right: 0;
+  border-left: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  transform: translateX(100%);
+}
+
+.nether-mobile-drawer.is-enabled.is-visible .nether-mobile-drawer__panel,
+.nether-mobile-drawer.is-enabled .nether-mobile-drawer__host > details[open].menu-opening > .nether-mobile-drawer__panel {
+  visibility: visible;
+}
+
+.nether-mobile-drawer.is-enabled:not([data-nether-motion-ready]).is-visible .nether-mobile-drawer__panel,
+.nether-mobile-drawer.is-enabled:not([data-nether-motion-ready]) .nether-mobile-drawer__host > details[open].menu-opening > .nether-mobile-drawer__panel {
+  transform: translateX(0);
+  transition: transform var(--nether-drawer-duration) cubic-bezier(0.22, 1, 0.36, 1),
+    visibility var(--nether-drawer-duration) ease;
+}
+
+.nether-mobile-drawer.is-enabled[data-nether-motion-ready] .nether-mobile-drawer__panel {
+  transition: visibility var(--nether-drawer-duration) ease;
+}
+
+.nether-mobile-drawer__inner,
+.nether-mobile-drawer__body {
+  height: 100%;
+}
+
+.nether-mobile-drawer__nav {
+  padding: 2rem 0 1rem;
+}
+
+.nether-mobile-drawer__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nether-mobile-drawer__link-label {
+  flex: 1 1 auto;
+}
+
+.nether-mobile-drawer__link--active,
+.nether-mobile-drawer__link.menu-drawer__menu-item--active {
+  font-weight: var(--font-body-weight-bold, 600);
+}
+
+.nether-mobile-drawer__active-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0.3rem;
+  height: 60%;
+  transform: translateY(-50%);
+  border-radius: var(--radius-full, 999px);
+  background: rgb(var(--color-foreground));
+}
+
+.nether-mobile-drawer__chevron {
+  width: 1.2rem;
+  transition: transform var(--nether-drawer-duration) ease;
+}
+
+.nether-mobile-drawer__details[open] > summary .nether-mobile-drawer__chevron {
+  transform: rotate(180deg);
+}
+
+.nether-mobile-drawer__arrow {
+  display: none;
+}
+
+.nether-mobile-drawer .menu-drawer__menu-item > .svg-wrapper.nether-mobile-drawer__arrow {
+  display: block;
+  width: 1.5rem;
+  position: absolute;
+  right: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.nether-mobile-drawer .menu-drawer__menu-item > .svg-wrapper.nether-mobile-drawer__chevron {
+  position: absolute;
+  right: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.nether-mobile-drawer__submenu {
+  will-change: transform;
+}
+
+.nether-mobile-drawer__back .svg-wrapper {
+  transform: rotate(180deg);
+}
+
+.nether-mobile-drawer__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem 3rem;
+  margin-top: auto;
+}
+
+.nether-mobile-drawer__footer-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.8rem;
+}
+
+.nether-mobile-drawer__footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 0;
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: rgb(var(--color-foreground));
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.nether-mobile-drawer__footer-link .svg-wrapper {
+  width: 2rem;
+  height: 2rem;
+}
+
+.nether-mobile-drawer__cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0 0.4rem;
+  border-radius: var(--radius-full, 999px);
+  font-size: 1.1rem;
+  line-height: 1;
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+}
+
+.nether-mobile-drawer__secondary-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nether-mobile-drawer__secondary-link {
+  display: block;
+  padding: 0.6rem 0;
+  font-size: 1.4rem;
+  text-decoration: none;
+}
+
+.nether-mobile-drawer__secondary-link--active {
+  font-weight: var(--font-body-weight-bold, 600);
+}
+
+.nether-mobile-drawer__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 1.3rem;
+}
+
+.nether-mobile-drawer__contact-text {
+  margin: 0;
+  opacity: 0.75;
+}
+
+.nether-mobile-drawer__social {
+  justify-content: flex-start;
+  margin-left: -1.25rem;
+}
+
+.nether-mobile-drawer__localization {
+  padding: 0;
+}
+
+.nether-mobile-drawer.is-open {
+  pointer-events: none;
+}
+
+.nether-mobile-drawer.is-open .nether-mobile-drawer__host,
+.nether-mobile-drawer.is-open .nether-mobile-drawer__panel,
+.nether-mobile-drawer.is-open .nether-mobile-drawer__overlay:not(.nether-mobile-drawer__overlay--disabled) {
+  pointer-events: auto;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-mobile-drawer.is-enabled[data-desktop='false'] .nether-mobile-drawer__host {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .nether-mobile-drawer.is-enabled[data-tablet='false'] .nether-mobile-drawer__host {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-mobile-drawer.is-enabled[data-mobile='false'] .nether-mobile-drawer__host {
+    display: none;
+  }
+
+  .nether-mobile-drawer__footer {
+    padding: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-mobile-drawer__overlay,
+  .nether-mobile-drawer.is-enabled:not([data-nether-motion-ready]) .nether-mobile-drawer__panel,
+  .nether-mobile-drawer__chevron {
+    transition: none;
+  }
+}

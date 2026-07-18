@@ -1,0 +1,70 @@
+{% comment %}
+  Nether Premium Bundles — summary module (selected items + pricing host).
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - product_count: {Number}
+  - total_price: {Number}
+  - compare_total: {Number}
+  - savings: {Number}
+{% endcomment %}
+
+{%- liquid
+  assign count = product_count | default: 0
+  assign show_notes = section.settings.nether_show_bundle_notes | default: false
+  assign show_summary = section.settings.nether_show_summary | default: true
+-%}
+
+{%- if show_summary -%}
+  <aside
+    class="nether-bundles__module nether-bundles__summary{% if section.settings.nether_enable_glass %} glass-card-light shadow-md radius-lg{% endif %}"
+    data-nether-bundles-module="summary"
+    data-nether-bundles-summary
+    data-nether-bundles-animate
+    aria-label="{{ 'sections.nether_bundles.summary.label' | t }}"
+  >
+    <div class="nether-bundles__summary-header">
+      <h3 class="nether-bundles__summary-heading type-heading-sm">{{ 'sections.nether_bundles.summary.heading' | t }}</h3>
+      <p class="nether-bundles__summary-count type-body-sm" data-nether-bundles-count>
+        {{ 'sections.nether_bundles.summary.count' | t: count: count }}
+      </p>
+    </div>
+
+    <ul class="nether-bundles__summary-list" data-nether-bundles-summary-list role="list"></ul>
+
+    {% render 'nether-bundles-pricing',
+      section: section,
+      total_price: total_price,
+      compare_total: compare_total,
+      savings: savings
+    %}
+
+    {%- if show_notes -%}
+      <div class="nether-bundles__notes">
+        <label class="nether-bundles__notes-label type-body-sm" for="NetherBundlesNotes-{{ section.id }}">
+          {{ 'sections.nether_bundles.notes.label' | t }}
+        </label>
+        <textarea
+          id="NetherBundlesNotes-{{ section.id }}"
+          class="nether-bundles__notes-input text-area"
+          name="attributes[Bundle note]"
+          rows="2"
+          data-nether-bundles-notes
+          placeholder="{{ 'sections.nether_bundles.notes.placeholder' | t }}"
+        ></textarea>
+      </div>
+    {%- endif -%}
+
+    {% render 'nether-bundles-actions', section: section %}
+  </aside>
+{%- else -%}
+  <div class="nether-bundles__module nether-bundles__summary nether-bundles__summary--actions-only" data-nether-bundles-summary>
+    {% render 'nether-bundles-pricing',
+      section: section,
+      total_price: total_price,
+      compare_total: compare_total,
+      savings: savings
+    %}
+    {% render 'nether-bundles-actions', section: section %}
+  </div>
+{%- endif -%}

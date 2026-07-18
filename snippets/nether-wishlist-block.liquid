@@ -1,0 +1,56 @@
+{% comment %}
+  Nether Premium Wishlist — page/drawer block dispatcher.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- case block.type -%}
+  {%- when 'toolbar' -%}
+    {% render 'nether-wishlist-toolbar', section: section, context: 'page' %}
+
+  {%- when 'empty' -%}
+    {% render 'nether-wishlist-empty', section: section, context: 'page' %}
+
+  {%- when 'recently_wishlisted_placeholder' -%}
+    {% render 'nether-wishlist-extensions', block: block, section: section, type: 'recently' %}
+
+  {%- when 'sharing_placeholder' -%}
+    {% render 'nether-wishlist-extensions', block: block, section: section, type: 'sharing' %}
+
+  {%- when 'sync_placeholder' -%}
+    {% render 'nether-wishlist-extensions', block: block, section: section, type: 'sync' %}
+
+  {%- when 'account_placeholder' -%}
+    {% render 'nether-wishlist-extensions', block: block, section: section, type: 'account' %}
+
+  {%- when 'guest_placeholder' -%}
+    {% render 'nether-wishlist-extensions', block: block, section: section, type: 'guest' %}
+
+  {%- when 'apps_placeholder' -%}
+    {% render 'nether-wishlist-extensions', block: block, section: section, type: 'apps' %}
+
+  {%- when 'analytics_placeholder' -%}
+    {% render 'nether-wishlist-extensions', block: block, section: section, type: 'analytics' %}
+
+  {%- when 'notifications_placeholder' -%}
+    {% render 'nether-wishlist-extensions', block: block, section: section, type: 'notifications' %}
+
+  {%- when 'recommendations_placeholder' -%}
+    {% render 'nether-recommendations-extensions', block: block, section: section, type: 'for_you' %}
+
+  {%- when 'merchant_content' -%}
+    <div
+      class="nether-wishlist__module nether-wishlist__merchant-content"
+      data-nether-wishlist-animate
+      {{ block.shopify_attributes }}
+    >
+      {%- if block.settings.heading != blank -%}
+        <h2 class="nether-wishlist__merchant-heading type-heading-sm">{{ block.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if block.settings.text != blank -%}
+        <div class="nether-wishlist__merchant-text rte type-body">{{ block.settings.text }}</div>
+      {%- endif -%}
+    </div>
+{%- endcase -%}

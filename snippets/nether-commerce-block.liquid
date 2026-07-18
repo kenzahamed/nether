@@ -1,0 +1,192 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — OS 2.0 block dispatcher.
+
+  Accepts:
+  - block: {Object} (required)
+  - section: {Object} (required)
+  - product: {Object} Optional (inventory / sales / pickup contexts)
+{% endcomment %}
+
+{%- case block.type -%}
+  {%- when 'trust' -%}
+    {% render 'nether-commerce-trust',
+      heading: block.settings.heading,
+      layout: block.settings.layout | default: section.settings.trust_layout,
+      icon_1: block.settings.icon_1,
+      heading_1: block.settings.heading_1,
+      text_1: block.settings.text_1,
+      icon_2: block.settings.icon_2,
+      heading_2: block.settings.heading_2,
+      text_2: block.settings.text_2,
+      icon_3: block.settings.icon_3,
+      heading_3: block.settings.heading_3,
+      text_3: block.settings.text_3,
+      icon_4: block.settings.icon_4,
+      heading_4: block.settings.heading_4,
+      text_4: block.settings.text_4,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'secure_checkout' -%}
+    {% render 'nether-commerce-secure-checkout',
+      text: block.settings.text,
+      icon: block.settings.icon,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'delivery_info' -%}
+    {% render 'nether-commerce-delivery-info',
+      heading: block.settings.heading,
+      text: block.settings.text,
+      icon: block.settings.icon,
+      style: block.settings.style,
+      rte: true,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'estimated_delivery' -%}
+    {% render 'nether-commerce-estimated-delivery',
+      heading: block.settings.heading,
+      text: block.settings.text,
+      icon: block.settings.icon,
+      visible: block.settings.visible,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'return_policy' -%}
+    {% render 'nether-commerce-return-policy',
+      heading: block.settings.heading,
+      text: block.settings.text,
+      icon: block.settings.icon,
+      style: block.settings.style,
+      rte: true,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'warranty' -%}
+    {% render 'nether-commerce-warranty',
+      heading: block.settings.heading,
+      text: block.settings.text,
+      icon: block.settings.icon,
+      style: block.settings.style,
+      rte: true,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'money_back' -%}
+    {% render 'nether-commerce-money-back',
+      heading: block.settings.heading,
+      text: block.settings.text,
+      icon: block.settings.icon,
+      style: block.settings.style,
+      rte: true,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'inventory_status' -%}
+    {%- if product != blank -%}
+      {% render 'nether-commerce-inventory-status',
+        product: product,
+        section: section,
+        block: block,
+        show_progress: block.settings.show_progress,
+        show_badge: block.settings.show_badge
+      %}
+    {%- endif -%}
+
+  {%- when 'shipping_progress' -%}
+    {% render 'nether-commerce-shipping-progress',
+      threshold: block.settings.threshold | default: section.settings.shipping_threshold,
+      enable: true,
+      context: section.settings.context | default: 'generic',
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'payment_methods' -%}
+    {% render 'nether-commerce-payment-methods',
+      heading: block.settings.heading,
+      block: block
+    %}
+
+  {%- when 'pickup' -%}
+    {%- if product != blank -%}
+      {% render 'nether-commerce-pickup', product: product, section: section, show: true %}
+    {%- endif -%}
+
+  {%- when 'commerce_badges' -%}
+    {% render 'nether-commerce-badges',
+      product: product,
+      style: block.settings.badge_style | default: section.settings.badge_style,
+      show_sale: block.settings.show_sale,
+      show_new: block.settings.show_new,
+      show_low_stock: block.settings.show_low_stock,
+      show_preorder: block.settings.show_preorder,
+      show_coming_soon: block.settings.show_coming_soon,
+      badge_1_label: block.settings.badge_1_label,
+      badge_1_type: block.settings.badge_1_type,
+      badge_2_label: block.settings.badge_2_label,
+      badge_2_type: block.settings.badge_2_type,
+      badge_3_label: block.settings.badge_3_label,
+      badge_3_type: block.settings.badge_3_type,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'promotional_notice' -%}
+    {% render 'nether-commerce-promotional-notice',
+      heading: block.settings.heading,
+      text: block.settings.text,
+      notice_style: block.settings.notice_style | default: section.settings.notice_style,
+      icon: block.settings.icon,
+      rte: true,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'sales_messaging' -%}
+    {% render 'nether-commerce-sales-messaging',
+      product: product,
+      heading: block.settings.heading,
+      text: block.settings.text,
+      show_savings: block.settings.show_savings,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'announcement' -%}
+    {% render 'nether-commerce-announcement',
+      heading: block.settings.heading,
+      text: block.settings.text,
+      icon: block.settings.icon,
+      notice_style: block.settings.notice_style | default: section.settings.notice_style,
+      rte: true,
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'summary' -%}
+    {%- capture summary_content -%}
+      {%- if block.settings.show_secure -%}
+        {% render 'nether-commerce-secure-checkout', text: block.settings.secure_text | default: 'Secure checkout' %}
+      {%- endif -%}
+      {%- if block.settings.show_payment -%}
+        {% render 'nether-commerce-payment-methods', heading: block.settings.payment_heading %}
+      {%- endif -%}
+    {%- endcapture -%}
+    {% render 'nether-commerce-summary',
+      heading: block.settings.heading,
+      content: summary_content,
+      layout: block.settings.layout | default: 'stack',
+      attributes: block.shopify_attributes
+    %}
+
+  {%- when 'divider' -%}
+    {% render 'nether-commerce-divider', style: block.settings.style, attributes: block.shopify_attributes %}
+
+  {%- when 'extension_delivery_provider', 'extension_shipping_api', 'extension_ai_messaging', 'extension_localization', 'extension_preorder', 'extension_coming_soon', 'extension_shipping_countdown' -%}
+    {%- liquid
+      assign ext = block.type | remove: 'extension_'
+    -%}
+    {% render 'nether-commerce-extensions',
+      extension: ext,
+      label: block.settings.label,
+      text: block.settings.text,
+      attributes: block.shopify_attributes
+    %}
+{%- endcase -%}

@@ -1,0 +1,391 @@
+/* Nether Premium Commerce Enhancements Framework
+   Shared presentation layer — scoped under .nether-commerce / nether-commerce
+   Reuses design tokens, card, badge, icon, typography, shadow, radius, glass.
+*/
+
+nether-commerce,
+.nether-commerce {
+  display: block;
+  --nether-commerce-gap: var(--nether-space-md, 1.2rem);
+  --nether-commerce-gap-sm: var(--nether-space-sm, 0.8rem);
+  --nether-commerce-text: rgb(var(--color-foreground));
+  --nether-commerce-muted: rgba(var(--color-foreground), 0.7);
+  --nether-commerce-border: rgba(var(--color-foreground), 0.12);
+  --nether-commerce-surface: rgba(var(--color-foreground), 0.04);
+  --nether-commerce-accent: rgb(var(--color-button));
+  --nether-commerce-transition: 0.25s ease;
+}
+
+.nether-commerce__modules {
+  display: grid;
+  gap: var(--nether-commerce-gap);
+}
+
+.nether-commerce__modules--desktop-row {
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-commerce--layout-row .nether-commerce__modules--desktop-row,
+  .nether-commerce--desktop-row .nether-commerce__modules {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nether-commerce--desktop-compact .nether-commerce__modules {
+    gap: var(--nether-commerce-gap-sm);
+  }
+}
+
+@media screen and (max-width: 989px) and (min-width: 750px) {
+  .nether-commerce--tablet-stacked .nether-commerce__modules {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-commerce--mobile-stacked .nether-commerce__modules {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-commerce--mobile-compact .nether-commerce__info-inner,
+  .nether-commerce--mobile-compact .nether-commerce__trust-item {
+    padding: 0.8rem;
+  }
+}
+
+/* Icon */
+.nether-commerce__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--nether-commerce-text);
+}
+
+/* Divider */
+.nether-commerce__divider {
+  border: 0;
+  margin: var(--nether-commerce-gap) 0;
+  height: 0.1rem;
+  background: var(--nether-commerce-border);
+}
+
+.nether-commerce__divider--space {
+  background: transparent;
+  height: 0;
+  margin: var(--nether-commerce-gap) 0;
+}
+
+.nether-commerce__divider--fade {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--nether-commerce-border),
+    transparent
+  );
+}
+
+/* Info card */
+.nether-commerce__info-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 1rem 1.2rem;
+}
+
+.nether-commerce__info--minimal .nether-commerce__info-inner {
+  padding: 0;
+}
+
+.nether-commerce__info--inline .nether-commerce__info-inner {
+  padding: 0.4rem 0;
+  align-items: center;
+}
+
+.nether-commerce__info-heading {
+  margin: 0;
+  color: var(--nether-commerce-text);
+  font-weight: 550;
+}
+
+.nether-commerce__info-text {
+  margin: 0.2rem 0 0;
+  color: var(--nether-commerce-muted);
+}
+
+.nether-commerce__info.is-hover .nether-commerce__info-inner {
+  transition: transform var(--nether-commerce-transition), box-shadow var(--nether-commerce-transition);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nether-commerce__info.is-hover .card {
+    transform: translateY(-1px);
+  }
+}
+
+/* Trust */
+.nether-commerce__trust-title {
+  margin: 0 0 0.8rem;
+}
+
+.nether-commerce__trust-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.nether-commerce__trust--row .nether-commerce__trust-list {
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  overflow-x: auto;
+}
+
+.nether-commerce__trust--grid .nether-commerce__trust-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media screen and (max-width: 749px) {
+  .nether-commerce__trust--grid .nether-commerce__trust-list,
+  .nether-commerce__trust--row .nether-commerce__trust-list {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+  }
+}
+
+.nether-commerce__trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  transition: transform var(--nether-commerce-transition);
+}
+
+.nether-commerce__trust-item.is-hover {
+  transform: translateY(-1px);
+}
+
+.nether-commerce__trust-heading {
+  margin: 0;
+  font-weight: 550;
+}
+
+.nether-commerce__trust-text {
+  margin: 0.2rem 0 0;
+  color: var(--nether-commerce-muted);
+}
+
+/* Secure checkout */
+.nether-commerce__secure {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  color: var(--nether-commerce-muted);
+}
+
+/* Inventory */
+.nether-commerce__inventory {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+  margin: 0;
+}
+
+.nether-commerce__inventory-badge {
+  display: inline-flex;
+}
+
+.nether-commerce__low-stock {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Meters / progress */
+.nether-commerce__meter,
+nether-commerce-meter {
+  display: block;
+  width: 100%;
+  height: 0.4rem;
+  border-radius: var(--nether-radius-pill, 999px);
+  background: var(--nether-commerce-surface);
+  overflow: hidden;
+}
+
+.nether-commerce__meter-fill {
+  display: block;
+  height: 100%;
+  width: var(--nether-commerce-meter-progress, 0%);
+  max-width: 100%;
+  border-radius: inherit;
+  background: var(--nether-commerce-accent);
+  transition: width 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-commerce__meter-fill {
+    transition: none;
+  }
+}
+
+.nether-commerce__shipping-progress,
+.nether-commerce__stock-progress {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.nether-commerce__shipping-message {
+  margin: 0;
+}
+
+/* Payment */
+.nether-commerce__payment-heading {
+  margin: 0 0 0.8rem;
+}
+
+.nether-commerce__payment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nether-commerce__payment-item {
+  display: inline-flex;
+}
+
+/* Badges */
+.nether-commerce__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nether-commerce__badge-item {
+  display: inline-flex;
+}
+
+/* Notices */
+.nether-commerce__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--nether-radius-md, 0.8rem);
+  border: 0.1rem solid transparent;
+  transition: border-color var(--nether-commerce-transition), background var(--nether-commerce-transition);
+}
+
+.nether-commerce__notice--soft {
+  background: var(--nether-commerce-surface);
+}
+
+.nether-commerce__notice--outline {
+  border-color: var(--nether-commerce-border);
+  background: transparent;
+}
+
+.nether-commerce__notice--solid {
+  background: rgba(var(--color-button), 0.1);
+  border-color: rgba(var(--color-button), 0.2);
+}
+
+.nether-commerce__notice--minimal {
+  padding: 0.2rem 0;
+  background: transparent;
+}
+
+.nether-commerce__notice-heading {
+  margin: 0;
+  font-weight: 550;
+}
+
+.nether-commerce__notice-text {
+  margin: 0.2rem 0 0;
+  color: var(--nether-commerce-muted);
+}
+
+.nether-commerce__notice.is-hover {
+  border-color: rgba(var(--color-foreground), 0.2);
+}
+
+/* Sales */
+.nether-commerce__sales {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.nether-commerce__sales-heading,
+.nether-commerce__sales-text {
+  margin: 0;
+}
+
+.nether-commerce__sales-text {
+  color: var(--nether-commerce-muted);
+}
+
+/* Summary */
+.nether-commerce__summary-heading {
+  margin: 0 0 0.8rem;
+}
+
+.nether-commerce__summary-body {
+  display: grid;
+  gap: var(--nether-commerce-gap-sm);
+}
+
+.nether-commerce__summary--compact .nether-commerce__summary-body {
+  gap: 0.6rem;
+}
+
+.nether-commerce__summary--split .nether-commerce__summary-body {
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-commerce__summary--split .nether-commerce__summary-body {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Pickup wrapper */
+.nether-commerce__pickup {
+  margin-top: 0.4rem;
+}
+
+/* Extensions (hidden until activated) */
+.nether-commerce__extension[hidden] {
+  display: none !important;
+}
+
+.nether-commerce__extension-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem;
+  border: 0.1rem dashed var(--nether-commerce-border);
+  border-radius: var(--nether-radius-md, 0.8rem);
+}
+
+/* Motion initial state helpers (GSAP takes over when available) */
+[data-nether-commerce-animate] {
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-nether-commerce-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .nether-commerce__trust-item,
+  .nether-commerce__info .card,
+  .nether-commerce__notice {
+    transition: none;
+  }
+}

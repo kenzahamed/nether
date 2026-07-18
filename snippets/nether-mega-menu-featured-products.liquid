@@ -1,0 +1,45 @@
+{% comment %}
+  Nether Mega Menu — Featured Products block.
+  Reuses card-product snippet.
+
+  Accepts:
+  - block: {Object} Section block
+  - section: {Object} Header section
+{% endcomment %}
+
+{%- liquid
+  assign product_count = block.settings.products_to_show | default: 2
+  assign skip_styles = false
+-%}
+
+{%- unless section.settings.nether_mega_enable_featured_products -%}
+  {%- if request.design_mode -%}
+    <p class="nether-mega-menu__placeholder">{{ 'sections.header.nether_mega_menu.products_disabled' | t }}</p>
+  {%- endif -%}
+{%- else -%}
+  <div class="nether-mega-menu__featured-products" data-nether-mega-reveal>
+    {%- if block.settings.heading != blank -%}
+      <p class="nether-mega-menu__column-heading h4">{{ block.settings.heading | escape }}</p>
+    {%- endif -%}
+
+    {%- if block.settings.product_list != blank -%}
+      <ul class="nether-mega-menu__product-grid list-unstyled" role="list">
+        {%- for product in block.settings.product_list limit: product_count -%}
+          <li class="nether-mega-menu__product-item" data-nether-mega-image-reveal>
+            {%- render 'card-product',
+              card_product: product,
+              media_aspect_ratio: block.settings.image_ratio,
+              show_vendor: block.settings.show_vendor,
+              lazy_load: true,
+              skip_styles: skip_styles,
+              section_id: section.id
+            -%}
+            {%- assign skip_styles = true -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- elsif request.design_mode -%}
+      <p class="nether-mega-menu__placeholder">{{ 'sections.header.nether_mega_menu.products_placeholder' | t }}</p>
+    {%- endif -%}
+  </div>
+{%- endunless -%}

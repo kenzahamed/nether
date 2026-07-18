@@ -1,0 +1,24 @@
+{% comment %}
+  Central dispatcher for Nether Premium Banner content blocks.
+  Extends hero block dispatcher — reuses nether-hero-block for shared blocks.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - section: {Object} Banner section (required)
+  - heading_tag: {String} Primary heading element (default: h2)
+
+  Usage:
+  {% render 'nether-banner-block', block: block, section: section, heading_tag: heading_tag %}
+{% endcomment %}
+
+{%- case block.type -%}
+  {%- when 'countdown' -%}
+    {%- render 'nether-banner-countdown', block: block -%}
+
+  {%- else -%}
+    {%- render 'nether-hero-block',
+      block: block,
+      section: section,
+      heading_tag: heading_tag
+    -%}
+{%- endcase -%}

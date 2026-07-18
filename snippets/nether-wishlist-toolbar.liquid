@@ -1,0 +1,61 @@
+{% comment %}
+  Nether Premium Wishlist — toolbar (count, clear, view page, sharing hook).
+
+  Accepts:
+  - section: {Object} Section object (optional)
+  - context: {String} drawer | page (default: page)
+  - page_url: {String} Wishlist page URL (optional)
+
+  Usage:
+  {% render 'nether-wishlist-toolbar', context: 'drawer', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign wishlist_context = context | default: 'page'
+  assign wishlist_page_url = page_url
+  if wishlist_page_url == blank and section != blank
+    assign wishlist_page_url = section.settings.nether_wishlist_page_url
+  endif
+-%}
+
+<div
+  class="nether-wishlist__module nether-wishlist__toolbar nether-wishlist__toolbar--{{ wishlist_context }}"
+  data-nether-wishlist-toolbar
+  data-nether-wishlist-animate
+  role="toolbar"
+  aria-label="{{ 'sections.nether_wishlist.toolbar.label' | t }}"
+>
+  <p class="nether-wishlist__toolbar-count type-body-sm" data-nether-wishlist-toolbar-count>
+    {{ 'sections.nether_wishlist.count' | t: count: 0 }}
+  </p>
+
+  <div class="nether-wishlist__toolbar-actions">
+    <button
+      type="button"
+      class="nether-wishlist__toolbar-action link focus-inset type-body-sm"
+      data-nether-wishlist-clear
+      hidden
+    >
+      {{ 'sections.nether_wishlist.actions.clear' | t }}
+    </button>
+
+    {%- if wishlist_page_url != blank and wishlist_context == 'drawer' -%}
+      <a
+        href="{{ wishlist_page_url }}"
+        class="nether-wishlist__toolbar-action link focus-inset type-body-sm"
+        data-nether-wishlist-view-page
+      >
+        {{ 'sections.nether_wishlist.actions.view_page' | t }}
+      </a>
+    {%- endif -%}
+
+    <span
+      class="nether-wishlist__toolbar-share"
+      data-nether-wishlist-share-placeholder
+      hidden
+      aria-hidden="true"
+    >
+      {{ 'sections.nether_wishlist.extensions.sharing' | t }}
+    </span>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+{% comment %}
+  Renders a Nether Premium FAQ category heading / anchor.
+
+  Accepts:
+  - block: {Object} category block (required)
+  - section: {Object} FAQ section (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-faq-category', block: block, section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-faq-animate'
+  assign category_title = block.settings.heading | default: block.settings.title
+  assign category_slug = block.settings.slug | default: category_title | handleize
+  assign heading_level = block.settings.heading_level | default: 'h3'
+-%}
+
+{%- if category_title != blank -%}
+  <div
+    id="NetherFaqCategory-{{ section.id }}-{{ category_slug }}"
+    class="nether-faq__category"
+    {{ motion_attribute }}
+    data-nether-faq-category
+    data-nether-faq-group
+    data-nether-faq-role="category"
+    data-category-slug="{{ category_slug }}"
+    {{ block.shopify_attributes }}
+  >
+    <{{ heading_level }} class="nether-faq__category-title inline-richtext h3">
+      {{- category_title -}}
+    </{{ heading_level }}>
+    {%- if block.settings.description != blank -%}
+      <div class="nether-faq__category-description rte">
+        {{ block.settings.description }}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

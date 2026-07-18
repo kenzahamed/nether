@@ -1,0 +1,163 @@
+{% comment %}
+  Renders the Nether Premium Search Drawer framework.
+
+  Accepts:
+  - section: {Object} Header section object (required)
+  - input_id: {String} Search input id (required)
+  - color_scheme: {String} Color scheme id (optional)
+  - animation_duration: {Number} Animation duration in seconds (optional)
+
+  Usage:
+  {% render 'nether-search-drawer', section: section, input_id: 'Nether-Search-Input' %}
+{% endcomment %}
+
+{%- liquid
+  assign drawer_color_scheme = color_scheme | default: section.settings.color_scheme
+  assign drawer_placeholder = section.settings.nether_search_placeholder_text
+  if drawer_placeholder == blank
+    assign drawer_placeholder = 'general.search.search' | t
+  endif
+
+  assign use_predictive = section.settings.nether_search_predictive
+-%}
+
+<nether-search-drawer
+  id="nether-search-drawer"
+  class="nether-search-drawer color-{{ drawer_color_scheme }} gradient"
+  data-section-id="{{ section.id }}"
+  data-enable-overlay="{{ section.settings.nether_search_enable_overlay }}"
+  data-desktop="{{ section.settings.nether_search_desktop }}"
+  data-mobile="{{ section.settings.nether_search_mobile }}"
+  data-animation-duration="{{ animation_duration | default: 0.3 }}"
+  data-drawer-width="{{ section.settings.nether_search_drawer_width }}"
+  data-nether-motion="search-drawer"
+  hidden
+>
+  <div
+    class="nether-search-drawer__overlay{% unless section.settings.nether_search_enable_overlay %} nether-search-drawer__overlay--disabled{% endunless %}"
+    data-nether-search-overlay
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="nether-search-drawer__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ 'sections.header.search_drawer.title' | t }}"
+    tabindex="-1"
+    data-nether-search-panel
+  >
+    <header class="nether-search-drawer__header">
+      <div class="nether-search-drawer__header-inner">
+        <h2 class="nether-search-drawer__title h3">{{ 'sections.header.search_drawer.title' | t }}</h2>
+        <button
+          type="button"
+          class="nether-search-drawer__close drawer__close"
+          data-nether-search-close
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+
+      {%- if use_predictive -%}
+        <nether-predictive-search
+          class="nether-search-drawer__form"
+          data-loading-text="{{ 'accessibility.loading' | t }}"
+          data-section-id="nether-predictive-search"
+          data-max-results="{{ section.settings.nether_search_max_results }}"
+          data-enable-collections="{{ section.settings.nether_search_enable_collections }}"
+          data-enable-articles="{{ section.settings.nether_search_enable_articles }}"
+          data-enable-pages="{{ section.settings.nether_search_enable_pages }}"
+        >
+      {%- else -%}
+        <nether-search-form class="nether-search-drawer__form">
+      {%- endif -%}
+        <form action="{{ routes.search_url }}" method="get" role="search" class="search nether-search-drawer__search-form">
+          <div class="field nether-search-drawer__field">
+            <input
+              class="search__input field__input nether-search-drawer__input"
+              id="{{ input_id }}"
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="{{ drawer_placeholder }}"
+              {%- if use_predictive -%}
+                role="combobox"
+                aria-expanded="false"
+                aria-owns="predictive-search-results"
+                aria-controls="predictive-search-results"
+                aria-haspopup="listbox"
+                aria-autocomplete="list"
+                autocorrect="off"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+              {%- endif -%}
+            >
+            <label class="field__label" for="{{ input_id }}">{{ drawer_placeholder }}</label>
+            <input type="hidden" name="options[prefix]" value="last">
+            <button
+              type="reset"
+              class="reset__button field__button nether-search-drawer__clear{% if search.terms == blank %} hidden{% endif %}"
+              aria-label="{{ 'general.search.reset' | t }}"
+            >
+              <span class="svg-wrapper">
+                {{- 'icon-reset.svg' | inline_asset_content -}}
+              </span>
+            </button>
+            <button class="search__button field__button nether-search-drawer__submit" aria-label="{{ 'general.search.search' | t }}">
+              <span class="svg-wrapper">
+                {{- 'icon-search.svg' | inline_asset_content -}}
+              </span>
+            </button>
+          </div>
+
+          {%- if use_predictive -%}
+            <div class="nether-search-drawer__results-shell" data-nether-search-results-shell>
+              <div
+                class="nether-search-drawer__empty"
+                data-nether-search-empty
+                role="status"
+              >
+                <p class="nether-search-drawer__empty-text">{{ 'sections.header.search_drawer.empty' | t }}</p>
+              </div>
+
+              <div class="predictive-search nether-search-drawer__predictive" tabindex="-1" data-predictive-search>
+                {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
+              </div>
+
+              <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+
+              <div
+                class="nether-search-drawer__recommendations"
+                data-nether-search-recommendations
+                data-nether-recommendations-search-placeholder
+                hidden
+              >
+                {% render 'nether-recommendations-extensions', type: 'for_you' %}
+              </div>
+            </div>
+          {%- endif -%}
+        </form>
+      {%- if use_predictive -%}
+        </nether-predictive-search>
+      {%- else -%}
+        </nether-search-form>
+      {%- endif -%}
+    </header>
+
+    {%- if section.settings.nether_search_show_footer -%}
+      <footer class="nether-search-drawer__footer">
+        <a href="{{ routes.search_url }}" class="nether-search-drawer__footer-link link animate-arrow">
+          {{ 'sections.header.search_drawer.view_all' | t }}
+          <span class="svg-wrapper">
+            {{- 'icon-arrow.svg' | inline_asset_content -}}
+          </span>
+        </a>
+      </footer>
+    {%- endif -%}
+  </div>
+</nether-search-drawer>

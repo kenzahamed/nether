@@ -1,0 +1,37 @@
+{% comment %}
+  Nether Mega Menu — Promotion Banner block.
+  Reuses Nether Premium Card and Badge systems.
+
+  Accepts:
+  - block: {Object} Section block
+  - section: {Object} Header section
+{% endcomment %}
+
+{%- unless section.settings.nether_mega_enable_promotion -%}
+  {%- if request.design_mode -%}
+    <p class="nether-mega-menu__placeholder">{{ 'sections.header.nether_mega_menu.promotion_disabled' | t }}</p>
+  {%- endif -%}
+{%- else -%}
+  <div class="nether-mega-menu__promotion" data-nether-mega-reveal data-nether-mega-promo-reveal>
+    {%- render 'card',
+      type: 'content',
+      style: block.settings.card_style,
+      radius: 'md',
+      shadow: 'md',
+      image: block.settings.image,
+      image_alt: block.settings.image.alt,
+      link: block.settings.link,
+      heading: block.settings.heading,
+      caption: block.settings.subheading,
+      description: block.settings.text,
+      badge_text: block.settings.badge,
+      cta_label: block.settings.button_label,
+      cta_link: block.settings.link,
+      cta_style: block.settings.button_style,
+      media_aspect_ratio: block.settings.image_ratio,
+      hover: 'lift,shadow',
+      skip_styles: false,
+      class: 'nether-mega-menu__promo-card'
+    -%}
+  </div>
+{%- endunless -%}

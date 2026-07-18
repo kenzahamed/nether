@@ -1,0 +1,57 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Stock Progress bar.
+  Visual remaining-stock meter for low inventory (merchant presentation).
+
+  Accepts:
+  - quantity: {Number} Current inventory quantity
+  - threshold: {Number} Low-stock threshold (max for bar)
+  - max_stock: {Number} Optional override for 100% (default: threshold * 2 or threshold)
+  - id: {String} Related inventory element id for labelledby
+  - class: {String}
+{% endcomment %}
+
+{%- liquid
+  assign stock_qty = quantity | default: 0 | plus: 0
+  assign stock_threshold = threshold | default: 10 | plus: 0
+  assign stock_max = max_stock
+  if stock_max == blank or stock_max == 0
+    assign stock_max = stock_threshold
+  endif
+  if stock_max < 1
+    assign stock_max = 1
+  endif
+  assign progress_percent = stock_qty | times: 100 | divided_by: stock_max
+  if progress_percent > 100
+    assign progress_percent = 100
+  endif
+  if progress_percent < 0
+    assign progress_percent = 0
+  endif
+  assign meter_id = 'NetherCommerceStock-' | append: id | default: 'default'
+-%}
+
+<div
+  class="nether-commerce__stock-progress{% if class != blank %} {{ class }}{% endif %}"
+  data-nether-commerce-module="stock-progress"
+  data-nether-commerce-animate
+>
+  <p class="nether-commerce__stock-progress-label type-body-sm visually-hidden" id="{{ meter_id }}-label">
+    {{ 'sections.nether_commerce.stock.progress_label' | t: quantity: stock_qty }}
+  </p>
+  <nether-commerce-meter
+    class="nether-commerce__meter nether-commerce__meter--stock"
+    role="progressbar"
+    aria-valuemin="0"
+    aria-valuemax="{{ stock_max }}"
+    aria-valuenow="{{ stock_qty }}"
+    aria-labelledby="{{ meter_id }}-label"
+    data-nether-commerce-meter
+    data-progress="{{ progress_percent }}"
+  >
+    <span
+      class="nether-commerce__meter-fill"
+      data-nether-commerce-meter-fill
+      style="--nether-commerce-meter-progress: {{ progress_percent }}%;"
+    ></span>
+  </nether-commerce-meter>
+</div>

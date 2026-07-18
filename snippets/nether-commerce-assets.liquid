@@ -1,0 +1,17 @@
+{% comment %}
+  Loads Nether Premium Commerce Enhancements Framework assets.
+  Safe to render multiple times — browsers cache deferred scripts/styles.
+
+  Usage:
+  {% render 'nether-commerce-assets' %}
+{% endcomment %}
+
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-icon.css' | asset_url | stylesheet_tag }}
+{{ 'component-typography.css' | asset_url | stylesheet_tag }}
+{{ 'component-card-premium.css' | asset_url | stylesheet_tag }}
+{{ 'component-shadow.css' | asset_url | stylesheet_tag }}
+{{ 'component-radius.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
+{{ 'component-commerce.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-commerce.js' | asset_url }}" defer="defer"></script>

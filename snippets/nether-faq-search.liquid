@@ -1,0 +1,41 @@
+{% comment %}
+  Search-ready architecture for the Nether FAQ Framework.
+  Client-side filter today; data attributes prepared for future AJAX search.
+
+  Accepts:
+  - section: {Object} FAQ section (required)
+
+  Usage:
+  {% render 'nether-faq-search', section: section %}
+{% endcomment %}
+
+{%- if section.settings.nether_enable_search -%}
+  <div class="nether-faq__search" data-nether-faq-search-wrap>
+    <label class="visually-hidden" for="NetherFaqSearch-{{ section.id }}">
+      {{- 'sections.nether_faq.search.label' | t -}}
+    </label>
+    <div class="nether-faq__search-field">
+      {%- render 'icon', icon: 'search', size: 'sm', class: 'nether-faq__search-icon' -%}
+      <input
+        type="search"
+        id="NetherFaqSearch-{{ section.id }}"
+        class="nether-faq__search-input field__input"
+        name="nether-faq-search"
+        placeholder="{{ section.settings.nether_search_placeholder | default: 'sections.nether_faq.search.placeholder' | t | escape }}"
+        autocomplete="off"
+        data-nether-faq-search
+        data-nether-faq-search-endpoint="{{ section.settings.nether_search_endpoint | escape }}"
+        aria-controls="NetherFaqList-{{ section.id }}"
+      >
+      <button
+        type="button"
+        class="nether-faq__search-clear hidden"
+        data-nether-faq-search-clear
+        aria-label="{{ 'sections.nether_faq.search.clear' | t }}"
+      >
+        {%- render 'icon', icon: 'close', size: 'sm' -%}
+      </button>
+    </div>
+    <p class="nether-faq__search-status visually-hidden" data-nether-faq-search-status aria-live="polite"></p>
+  </div>
+{%- endif -%}

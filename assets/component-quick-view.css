@@ -1,0 +1,394 @@
+/* Nether Premium Quick View Commerce Framework
+   Reuses design tokens, glass, shadow, radius, button, and Product Page styles.
+   Scoped to .nether-quick-view* — does not alter Dawn quick-add-modal. */
+
+nether-quick-view,
+.nether-quick-view {
+  --nether-quick-view-width: 96rem;
+  --nether-quick-view-max-height: min(92vh, 90rem);
+  --nether-quick-view-pad: 1.6rem;
+  --nether-quick-view-overlay: rgba(var(--color-foreground), 0.42);
+  --nether-quick-view-panel-bg: rgb(var(--color-background));
+  --nether-quick-view-transition: 0.35s ease;
+}
+
+.nether-quick-view {
+  position: fixed;
+  inset: 0;
+  z-index: 1005;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.nether-quick-view.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.nether-quick-view__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--nether-quick-view-overlay);
+  opacity: 0;
+  transition: opacity var(--nether-quick-view-transition);
+}
+
+.nether-quick-view__overlay--disabled {
+  background: transparent;
+  pointer-events: none;
+}
+
+.nether-quick-view.is-visible .nether-quick-view__overlay:not(.nether-quick-view__overlay--disabled) {
+  opacity: 1;
+}
+
+.nether-quick-view__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: min(var(--nether-quick-view-width), calc(100vw - 2.4rem));
+  max-height: var(--nether-quick-view-max-height);
+  background: var(--nether-quick-view-panel-bg);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(1.2rem);
+}
+
+.nether-quick-view.is-visible:not([data-nether-motion-ready]) .nether-quick-view__panel,
+.nether-quick-view.is-open:not(.is-visible) .nether-quick-view__panel,
+.nether-quick-view.is-visible .nether-quick-view__panel {
+  opacity: 1;
+  transform: none;
+}
+
+.nether-quick-view--minimal .nether-quick-view__panel {
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-quick-view--editorial .nether-quick-view__panel {
+  border-radius: var(--nether-radius-xl, 1.6rem);
+}
+
+.nether-quick-view__header {
+  flex: 0 0 auto;
+  padding: var(--nether-quick-view-pad) var(--nether-quick-view-pad) 1rem;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-quick-view__header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+
+.nether-quick-view__title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nether-quick-view__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 0 0 auto;
+}
+
+.nether-quick-view__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  padding: 0;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  border-radius: 50%;
+  background: rgb(var(--color-background));
+  color: rgba(var(--color-foreground), 0.7);
+  cursor: pointer;
+}
+
+.nether-quick-view__close:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.nether-quick-view__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nether-quick-view__share {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nether-quick-view__body {
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--nether-quick-view-pad);
+  -webkit-overflow-scrolling: touch;
+}
+
+.nether-quick-view__loading,
+.nether-quick-view__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 16rem;
+  text-align: center;
+}
+
+.nether-quick-view__loading[hidden],
+.nether-quick-view__error[hidden],
+.nether-quick-view__module-hook[hidden],
+.nether-quick-view__extension[hidden],
+.nether-quick-view__action[hidden],
+.nether-quick-view__share[hidden],
+.nether-quick-view__view-full[hidden],
+.nether-quick-view__trust[hidden] {
+  display: none !important;
+}
+
+.nether-quick-view__content {
+  width: 100%;
+}
+
+.nether-quick-view__content > product-info {
+  padding: 0;
+  display: block;
+}
+
+.nether-quick-view__content .page-width {
+  padding: 0;
+  max-width: none;
+}
+
+.nether-quick-view__content .nether-product-page__layout,
+.nether-quick-view__content .product {
+  margin: 0;
+}
+
+.nether-quick-view__trust {
+  margin-top: 1.6rem;
+  padding: 1.2rem 1.4rem;
+  background: rgba(var(--color-foreground), 0.03);
+}
+
+.nether-quick-view__trust-heading {
+  margin: 0 0 0.4rem;
+}
+
+.nether-quick-view__trust-text {
+  margin: 0;
+}
+
+.nether-quick-view__highlights {
+  margin-top: 1.6rem;
+}
+
+.nether-quick-view__highlights-heading {
+  margin: 0 0 0.6rem;
+}
+
+.nether-quick-view__merchant-content {
+  margin-top: 1.6rem;
+}
+
+.nether-quick-view__footer {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem var(--nether-quick-view-pad) var(--nether-quick-view-pad);
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-quick-view__extensions {
+  display: none;
+}
+
+/* Gallery / info layout modifiers applied to injected Product Page */
+@media screen and (min-width: 750px) {
+  .nether-quick-view--gallery-stacked .nether-quick-view__content .product:not(.product--no-media) .product__media-wrapper {
+    max-width: 48%;
+    width: calc(48% - var(--grid-desktop-horizontal-spacing, 1rem) / 2);
+  }
+
+  .nether-quick-view--gallery-stacked .nether-quick-view__content .product:not(.product--no-media) .product__info-wrapper {
+    max-width: 52%;
+    width: calc(52% - var(--grid-desktop-horizontal-spacing, 1rem) / 2);
+    padding-left: 2.4rem;
+  }
+
+  .nether-quick-view--gallery-media-focus .nether-quick-view__content .product:not(.product--no-media) .product__media-wrapper {
+    max-width: 58%;
+    width: calc(58% - var(--grid-desktop-horizontal-spacing, 1rem) / 2);
+  }
+
+  .nether-quick-view--gallery-media-focus .nether-quick-view__content .product:not(.product--no-media) .product__info-wrapper {
+    max-width: 42%;
+    width: calc(42% - var(--grid-desktop-horizontal-spacing, 1rem) / 2);
+  }
+
+  .nether-quick-view--info-compact .nether-quick-view__content .product__title,
+  .nether-quick-view--info-compact .nether-quick-view__content .nether-product-page__module--title {
+    font-size: calc(var(--font-heading-scale, 1) * 2.2rem);
+  }
+
+  .nether-quick-view--info-editorial .nether-quick-view__content .product__title {
+    letter-spacing: -0.02em;
+  }
+}
+
+.nether-quick-view__content .nether-product-page__sticky,
+.nether-quick-view__content .quick-add-hidden {
+  display: none !important;
+}
+
+.nether-quick-view__content .product-form__buttons {
+  max-width: none;
+}
+
+.nether-quick-view__content .scroll-trigger.scroll-trigger {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+.nether-quick-view-trigger {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.nether-quick-view-trigger__control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.nether-quick-view-trigger__control--icon {
+  width: 3.6rem;
+  height: 3.6rem;
+  padding: 0;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.12);
+  border-radius: 50%;
+  background: rgba(var(--color-background), 0.92);
+  color: rgb(var(--color-foreground));
+}
+
+.nether-quick-view-trigger__control--icon:hover {
+  border-color: rgba(var(--color-foreground), 0.28);
+  transform: translateY(-0.1rem);
+}
+
+.nether-quick-view-trigger__control--overlay {
+  width: 100%;
+}
+
+.nether-quick-view-trigger .loading__spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+}
+
+.nether-quick-view-trigger .loading__spinner.hidden {
+  display: none;
+}
+
+.card__quick-view {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+
+.card__wishlist + .card__quick-view,
+.card__compare + .card__quick-view {
+  top: 5rem;
+}
+
+.card__wishlist ~ .card__compare ~ .card__quick-view {
+  top: 9rem;
+}
+
+.nether-product-card__actions .nether-quick-view-trigger {
+  flex: 1 1 auto;
+}
+
+.nether-search-result__row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.nether-search-result__row .nether-search-result__link {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nether-search-result__quick-view {
+  flex: 0 0 auto;
+}
+
+body:not(:has(nether-quick-view)) .nether-search-result__quick-view {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .nether-quick-view {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .nether-quick-view__panel {
+    width: 100%;
+    max-height: min(94vh, 100%);
+    border-radius: var(--nether-radius-lg, 1.2rem) var(--nether-radius-lg, 1.2rem) 0 0;
+  }
+
+  .nether-quick-view--info-stacked-mobile .nether-quick-view__content .product__media-wrapper,
+  .nether-quick-view--info-stacked-mobile .nether-quick-view__content .product__info-wrapper {
+    max-width: 100%;
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .nether-quick-view__share-label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-quick-view__overlay,
+  .nether-quick-view__panel,
+  .nether-quick-view-trigger__control {
+    transition: none;
+  }
+
+  .nether-quick-view.is-visible .nether-quick-view__panel {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,32 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Commerce Summary shell.
+  Lightweight composition host for stacking enhancement modules.
+
+  Accepts:
+  - heading: {String}
+  - content: {String} Inner HTML (pass via variable)
+  - layout: {String} stack | compact | split (default: stack)
+  - class: {String}
+  - attributes: {String}
+  - label: {String} Region label
+{% endcomment %}
+
+{%- liquid
+  assign summary_layout = layout | default: 'stack'
+  assign region_label = label | default: heading | default: 'sections.nether_commerce.summary.label' | t
+-%}
+
+<section
+  class="nether-commerce__summary nether-commerce__summary--{{ summary_layout }}{% if class != blank %} {{ class }}{% endif %}"
+  data-nether-commerce-module="summary"
+  data-nether-commerce-animate
+  aria-label="{{ region_label | escape }}"
+  {% if attributes != blank %}{{ attributes }}{% endif %}
+>
+  {%- if heading != blank -%}
+    <p class="nether-commerce__summary-heading type-overline caption-with-letter-spacing">{{ heading }}</p>
+  {%- endif -%}
+  <div class="nether-commerce__summary-body">
+    {{ content }}
+  </div>
+</section>

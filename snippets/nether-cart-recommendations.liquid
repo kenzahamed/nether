@@ -1,0 +1,81 @@
+{% comment %}
+  Nether Premium Cart — recommended products area.
+  Extends Dawn product-recommendations for cart context.
+  Composes with Nether Recommendations Commerce Framework via <nether-recommendations>.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - block: {Object} Block object (required)
+{% endcomment %}
+
+{%- liquid
+  assign products_limit = block.settings.products_to_show | default: 4
+  assign recommendation_url = routes.product_recommendations_url | append: '?limit=' | append: products_limit
+  assign seed_product_id = blank
+
+  if block.settings.product != blank
+    assign seed_product_id = block.settings.product.id
+    assign recommendation_url = recommendation_url | append: '&product_id=' | append: seed_product_id
+  elsif cart.items.first
+    assign seed_product_id = cart.items.first.product_id
+    assign recommendation_url = recommendation_url | append: '&product_id=' | append: seed_product_id
+  endif
+-%}
+
+{% render 'nether-recommendations-assets' %}
+
+<product-recommendations
+  class="nether-cart__module nether-cart__module--recommendations nether-cart__recommendations nether-recommendations--embedded quick-add-hidden"
+  data-nether-cart-module="recommendations"
+  data-nether-cart-animate
+  data-url="{{ recommendation_url }}"
+  data-section-id="{{ section.id }}"
+  {% if seed_product_id != blank %}data-product-id="{{ seed_product_id }}"{% endif %}
+  {{ block.shopify_attributes }}
+>
+  <nether-recommendations
+    id="NetherRecommendations-Cart-{{ section.id }}"
+    class="nether-recommendations nether-recommendations--embedded nether-recommendations--source-related"
+    data-nether-motion="recommendations"
+    data-section-id="{{ section.id }}"
+    data-recommendation-source="related"
+    data-layout="grid"
+    data-animation-style="{{ section.settings.nether_animation_style | default: 'stagger' }}"
+    data-animation-duration="{{ section.settings.nether_animation_duration | default: 0.5 }}"
+    role="region"
+    aria-label="{{ block.settings.heading | default: 'sections.nether_cart.recommendations.heading' | t | escape }}"
+  >
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+      <div class="nether-cart__recommendations-inner nether-recommendations__inner">
+        <h2 class="nether-cart__module-heading nether-recommendations__heading type-heading-sm">
+          {{ block.settings.heading | default: 'sections.nether_cart.recommendations.heading' | t }}
+        </h2>
+        <ul
+          class="nether-cart__recommendations-list nether-recommendations__grid list-unstyled"
+          role="list"
+          aria-label="{{ 'sections.nether_recommendations.grid.label' | t }}"
+          data-nether-recommendations-grid
+        >
+          {% assign skip_card_product_styles = false %}
+          {%- for recommendation in recommendations.products limit: products_limit -%}
+            <li class="nether-cart__recommendations-item nether-recommendations__item" data-nether-recommendations-item>
+              {% render 'card-product',
+                card_product: recommendation,
+                media_aspect_ratio: block.settings.image_ratio,
+                show_secondary_image: block.settings.show_secondary_image,
+                show_vendor: block.settings.show_vendor,
+                skip_styles: skip_card_product_styles,
+                product_view_context: 'recommendation'
+              %}
+            </li>
+            {%- assign skip_card_product_styles = true -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- elsif request.design_mode -%}
+      <div class="nether-cart__recommendations-placeholder nether-recommendations__empty" role="status" aria-hidden="true">
+        <p class="type-body-sm">{{ 'sections.nether_cart.recommendations.placeholder' | t }}</p>
+      </div>
+    {%- endif -%}
+  </nether-recommendations>
+</product-recommendations>

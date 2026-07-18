@@ -1,0 +1,279 @@
+/* =============================================================================
+ * Nether Premium Button System
+ * Extends Dawn's .button component — do not duplicate base button styles.
+ * Variants: primary, secondary, outline, ghost, text, icon, arrow
+ * Sizes: small, medium (default), large
+ * ============================================================================= */
+
+/* ── Shared inner layout ─────────────────────────────────────────────────── */
+
+.button__inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--icon-gap-md);
+  position: relative;
+  z-index: 2;
+}
+
+.button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.button__icon .svg-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.button__label {
+  line-height: inherit;
+}
+
+/* ── Variant: Primary (explicit alias) ───────────────────────────────────── */
+
+.button--primary {
+  --alpha-button-background: 1;
+  --alpha-button-border: 1;
+}
+
+/* ── Variant: Outline ────────────────────────────────────────────────────── */
+
+.button--outline {
+  --alpha-button-background: 0;
+  --alpha-button-border: 1;
+}
+
+.button--outline::after {
+  --border-opacity: var(--buttons-border-opacity);
+}
+
+.button--outline:not([disabled]):not([aria-disabled='true']):hover {
+  --alpha-button-background: 0.08;
+}
+
+.button--outline:not([disabled]):not([aria-disabled='true']):active {
+  --alpha-button-background: 0.14;
+}
+
+/* ── Variant: Ghost ────────────────────────────────────────────────────────── */
+
+.button--ghost {
+  --alpha-button-background: 0;
+  --alpha-button-border: 0;
+  --shadow-opacity: 0;
+}
+
+.button--ghost::before,
+.button--ghost::after {
+  box-shadow: none;
+}
+
+.button--ghost:not([disabled]):not([aria-disabled='true']):hover {
+  background-color: rgba(var(--color-foreground), 0.06);
+}
+
+.button--ghost:not([disabled]):not([aria-disabled='true']):active {
+  background-color: rgba(var(--color-foreground), 0.1);
+}
+
+/* ── Variant: Text ───────────────────────────────────────────────────────── */
+
+.button--text {
+  --alpha-button-background: 0;
+  --alpha-button-border: 0;
+  --shadow-opacity: 0;
+  min-width: auto;
+  min-height: auto;
+  padding: 0.6rem 0.4rem;
+  background-color: transparent;
+  color: rgb(var(--color-link));
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  text-decoration-thickness: 0.1rem;
+  transition: color var(--duration-short) ease, text-decoration-thickness var(--duration-short) ease;
+}
+
+.button--text::before,
+.button--text::after {
+  display: none;
+}
+
+.button--text:not([disabled]):not([aria-disabled='true']):hover {
+  color: rgba(var(--color-link), 0.85);
+  text-decoration-thickness: 0.2rem;
+}
+
+.button--text:not([disabled]):not([aria-disabled='true']):active {
+  color: rgb(var(--color-link));
+}
+
+.button--text:focus-visible,
+.button--text:focus,
+.button--text.focused {
+  box-shadow: none;
+  outline: var(--focused-base-outline);
+  outline-offset: var(--focused-base-outline-offset);
+}
+
+/* ── Variant: Icon ─────────────────────────────────────────────────────────── */
+
+.button--icon {
+  min-width: calc(4.4rem + var(--buttons-border-width) * 2);
+  min-height: calc(4.4rem + var(--buttons-border-width) * 2);
+  width: calc(4.4rem + var(--buttons-border-width) * 2);
+  height: calc(4.4rem + var(--buttons-border-width) * 2);
+  padding: 0;
+}
+
+.button--icon .button__icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.button--icon .button__inner {
+  gap: 0;
+}
+
+/* ── Variant: Arrow ────────────────────────────────────────────────────────── */
+
+.button--arrow .button__icon--trailing {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: transform var(--duration-short) ease;
+}
+
+.button--arrow:not([disabled]):not([aria-disabled='true']):hover .button__icon--trailing {
+  transform: translateX(0.3rem);
+}
+
+.button--arrow .button__icon--trailing .icon-arrow path {
+  transition: transform var(--duration-short) ease;
+}
+
+.button--arrow:not([disabled]):not([aria-disabled='true']):hover .button__icon--trailing .icon-arrow path {
+  transform: translateX(0.05rem);
+}
+
+/* ── Sizes ─────────────────────────────────────────────────────────────────── */
+
+.button--medium {
+  font-size: 1.5rem;
+  min-height: calc(4.5rem + var(--buttons-border-width) * 2);
+  min-width: calc(12rem + var(--buttons-border-width) * 2);
+  padding: 0 3rem;
+}
+
+.button--large {
+  font-size: 1.6rem;
+  min-height: calc(5.5rem + var(--buttons-border-width) * 2);
+  min-width: calc(14rem + var(--buttons-border-width) * 2);
+  padding: 0 4rem;
+}
+
+.button--small {
+  font-size: 1.3rem;
+  min-height: calc(3.8rem + var(--buttons-border-width) * 2);
+  min-width: calc(9rem + var(--buttons-border-width) * 2);
+  padding: 0 2.2rem;
+}
+
+.button--small.button--icon {
+  min-width: calc(3.6rem + var(--buttons-border-width) * 2);
+  min-height: calc(3.6rem + var(--buttons-border-width) * 2);
+  width: calc(3.6rem + var(--buttons-border-width) * 2);
+  height: calc(3.6rem + var(--buttons-border-width) * 2);
+}
+
+.button--large.button--icon {
+  min-width: calc(5.2rem + var(--buttons-border-width) * 2);
+  min-height: calc(5.2rem + var(--buttons-border-width) * 2);
+  width: calc(5.2rem + var(--buttons-border-width) * 2);
+  height: calc(5.2rem + var(--buttons-border-width) * 2);
+}
+
+.button--small.button--text {
+  font-size: 1.2rem;
+  padding: 0.4rem 0.2rem;
+}
+
+.button--large.button--text {
+  font-size: 1.6rem;
+  padding: 0.8rem 0.4rem;
+}
+
+/* ── States: Active ────────────────────────────────────────────────────────── */
+
+.button--primary:not([disabled]):not([aria-disabled='true']):active::after,
+.button--secondary:not([disabled]):not([aria-disabled='true']):active::after,
+.button--outline:not([disabled]):not([aria-disabled='true']):active::after {
+  --border-offset: 0.5px;
+}
+
+/* ── States: Disabled (extended) ───────────────────────────────────────────── */
+
+.button--text:disabled,
+.button--text[aria-disabled='true'],
+.button--text.disabled,
+.button--ghost:disabled,
+.button--ghost[aria-disabled='true'],
+.button--ghost.disabled,
+.button--outline:disabled,
+.button--outline[aria-disabled='true'],
+.button--outline.disabled {
+  opacity: 0.45;
+}
+
+/* ── States: Loading (extended for icon/text variants) ─────────────────────── */
+
+.button--icon.loading > .loading__spinner,
+.button--text.loading > .loading__spinner {
+  height: auto;
+}
+
+.button--text.loading {
+  color: transparent;
+}
+
+.button--text.loading > .loading__spinner .path {
+  stroke: rgb(var(--color-link));
+}
+
+/* ── Premium hover transitions ─────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  .button--ghost,
+  .button--text,
+  .button--outline {
+    transition:
+      background-color var(--duration-short) ease,
+      color var(--duration-short) ease,
+      box-shadow var(--duration-short) ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button--arrow:not([disabled]):hover .button__icon--trailing,
+  .button--arrow .button__icon--trailing .icon-arrow path {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ── High contrast mode ────────────────────────────────────────────────────── */
+
+@media (forced-colors: active) {
+  .button--outline,
+  .button--ghost {
+    border: 1px solid transparent;
+  }
+
+  .button--text::before,
+  .button--text::after {
+    display: none;
+  }
+}

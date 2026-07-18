@@ -1,0 +1,326 @@
+{% comment %}
+  Renders Nether Premium Hero media layer.
+
+  Accepts:
+  - section: {Object} Hero or Banner section (required)
+  - fetch_priority: {String} Image fetch priority (optional)
+  - adapter: {String} 'hero' (default) or 'banner' — selects settings namespace
+
+  Usage:
+  {% render 'nether-hero-media', section: section, fetch_priority: fetch_priority %}
+  {% render 'nether-hero-media', section: section, adapter: 'banner' %}
+{% endcomment %}
+
+{%- liquid
+  assign adapter_mode = adapter | default: 'hero'
+
+  if adapter_mode == 'newsletter'
+    assign media_type = section.settings.nether_newsletter_media_type | default: 'image'
+    if section.settings.nether_layout == 'background_video'
+      assign media_type = 'video'
+    endif
+    assign desktop_image = section.settings.nether_newsletter_image_desktop
+    assign mobile_image = section.settings.nether_newsletter_image_mobile | default: desktop_image
+    assign poster_image = section.settings.nether_newsletter_poster_image | default: desktop_image
+    assign shopify_video = section.settings.nether_newsletter_video
+    assign video_url = section.settings.nether_newsletter_video_url
+    assign enable_blur = section.settings.nether_newsletter_enable_blur
+    assign enable_parallax = section.settings.nether_enable_parallax
+    assign video_description = section.settings.nether_newsletter_video_description
+    assign video_loop = section.settings.nether_newsletter_video_loop
+  elsif adapter_mode == 'faq'
+    assign media_type = section.settings.nether_faq_media_type | default: 'image'
+    assign desktop_image = section.settings.nether_faq_image_desktop
+    assign mobile_image = section.settings.nether_faq_image_mobile | default: desktop_image
+    assign poster_image = section.settings.nether_faq_poster_image | default: desktop_image
+    assign shopify_video = section.settings.nether_faq_video
+    assign video_url = section.settings.nether_faq_video_url
+    assign enable_blur = section.settings.nether_faq_enable_blur
+    assign enable_parallax = section.settings.nether_enable_parallax
+    assign video_description = section.settings.nether_faq_video_description
+    assign video_loop = section.settings.nether_faq_video_loop
+  elsif adapter_mode == 'testimonials'
+    assign media_type = section.settings.nether_testimonials_media_type | default: 'image'
+    assign desktop_image = section.settings.nether_testimonials_image_desktop
+    assign mobile_image = section.settings.nether_testimonials_image_mobile | default: desktop_image
+    assign poster_image = section.settings.nether_testimonials_poster_image | default: desktop_image
+    assign shopify_video = section.settings.nether_testimonials_video
+    assign video_url = section.settings.nether_testimonials_video_url
+    assign enable_blur = section.settings.nether_testimonials_enable_blur
+    assign enable_parallax = section.settings.nether_testimonials_enable_parallax
+    assign video_description = section.settings.nether_testimonials_video_description
+    assign video_loop = section.settings.nether_testimonials_video_loop
+  elsif adapter_mode == 'content'
+    assign media_type = section.settings.nether_content_media_type | default: 'image'
+    assign desktop_image = section.settings.nether_content_image_desktop
+    assign mobile_image = section.settings.nether_content_image_mobile | default: desktop_image
+    assign poster_image = section.settings.nether_content_poster_image | default: desktop_image
+    assign shopify_video = section.settings.nether_content_video
+    assign video_url = section.settings.nether_content_video_url
+    assign enable_blur = section.settings.nether_content_enable_blur
+    assign enable_parallax = section.settings.nether_content_enable_parallax
+    assign video_description = section.settings.nether_content_video_description
+    assign video_loop = section.settings.nether_content_video_loop
+  elsif adapter_mode == 'cta'
+    assign media_type = section.settings.nether_cta_media_type | default: 'image'
+    if section.settings.nether_layout == 'background_video_cta'
+      assign media_type = 'background_video'
+    endif
+    assign desktop_image = section.settings.nether_cta_image_desktop
+    assign mobile_image = section.settings.nether_cta_image_mobile | default: desktop_image
+    assign poster_image = section.settings.nether_cta_poster_image | default: desktop_image
+    assign shopify_video = section.settings.nether_cta_video
+    assign video_url = section.settings.nether_cta_video_url
+    assign enable_blur = section.settings.nether_cta_enable_blur
+    assign enable_parallax = section.settings.nether_enable_parallax
+    assign video_description = section.settings.nether_cta_video_description
+    assign video_loop = section.settings.nether_cta_video_loop
+
+    if desktop_image == blank and section.settings.nether_cta_product != blank
+      assign cta_product_media = all_products[section.settings.nether_cta_product]
+      if cta_product_media.featured_media != blank
+        assign desktop_image = cta_product_media.featured_media.preview_image
+        assign mobile_image = desktop_image
+      endif
+    endif
+
+    if desktop_image == blank and section.settings.nether_cta_collection != blank
+      assign cta_collection_media = collections[section.settings.nether_cta_collection]
+      if cta_collection_media.featured_image != blank
+        assign desktop_image = cta_collection_media.featured_image
+        assign mobile_image = desktop_image
+      elsif cta_collection_media.image != blank
+        assign desktop_image = cta_collection_media.image
+        assign mobile_image = desktop_image
+      endif
+    endif
+  elsif adapter_mode == 'banner'
+    assign media_type = section.settings.nether_banner_media_type | default: 'image'
+    assign desktop_image = section.settings.nether_banner_image_desktop
+    assign mobile_image = section.settings.nether_banner_image_mobile | default: desktop_image
+    assign poster_image = section.settings.nether_banner_poster_image | default: desktop_image
+    assign shopify_video = section.settings.nether_banner_video
+    assign video_url = section.settings.nether_banner_video_url
+    assign enable_blur = section.settings.nether_banner_enable_blur
+    assign enable_parallax = section.settings.nether_banner_enable_parallax
+    assign video_description = section.settings.nether_banner_video_description
+    assign video_loop = section.settings.nether_banner_video_loop
+
+    if desktop_image == blank and section.settings.nether_banner_collection != blank
+      assign banner_collection = collections[section.settings.nether_banner_collection]
+      if banner_collection.image != blank
+        assign desktop_image = banner_collection.image
+        assign mobile_image = banner_collection.image
+      endif
+    endif
+  else
+    assign media_type = section.settings.nether_media_type | default: 'image'
+    assign desktop_image = section.settings.nether_image_desktop
+    assign mobile_image = section.settings.nether_image_mobile | default: desktop_image
+    assign poster_image = section.settings.nether_poster_image | default: desktop_image
+    assign shopify_video = section.settings.nether_video
+    assign video_url = section.settings.nether_video_url
+    assign enable_blur = section.settings.nether_enable_blur
+    assign enable_parallax = section.settings.nether_enable_parallax
+    assign video_description = section.settings.nether_video_description
+    assign video_loop = section.settings.nether_video_loop
+  endif
+
+  assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+  assign sizes = '100vw'
+  assign fetch_priority_value = fetch_priority | default: 'auto'
+
+  assign media_classes = 'nether-hero__media'
+  if enable_blur
+    assign media_classes = media_classes | append: ' nether-hero__media--blur'
+  endif
+  if desktop_image == blank and shopify_video == blank and video_url == blank
+    assign media_classes = media_classes | append: ' nether-hero__media--placeholder'
+  endif
+-%}
+
+<div
+  class="{{ media_classes }}"
+  data-nether-hero-media
+  data-nether-hero-media-type="{{ media_type }}"
+  {% if enable_parallax %}data-nether-parallax{% endif %}
+>
+  <div class="nether-hero__media-inner">
+    {%- case media_type -%}
+      {%- when 'background_video' -%}
+        {%- if shopify_video != blank -%}
+          <div data-nether-hero-bg-video>
+            {{
+              shopify_video
+              | video_tag:
+                image_size: '1920x',
+                autoplay: true,
+                loop: true,
+                muted: true,
+                controls: false,
+                playsinline: true,
+                class: 'nether-hero__video'
+            }}
+          </div>
+        {%- elsif video_url != blank -%}
+          {%- if video_url.type == 'youtube' -%}
+            <iframe
+              src="https://www.youtube.com/embed/{{ video_url.id }}?autoplay=1&mute=1&controls=0&loop=1&playlist={{ video_url.id }}&playsinline=1"
+              class="nether-hero__video nether-hero__video--iframe"
+              allow="autoplay; encrypted-media"
+              title="{{ video_description | escape }}"
+              loading="lazy"
+            ></iframe>
+          {%- elsif video_url.type == 'vimeo' -%}
+            <iframe
+              src="https://player.vimeo.com/video/{{ video_url.id }}?autoplay=1&muted=1&background=1&loop=1"
+              class="nether-hero__video nether-hero__video--iframe"
+              allow="autoplay; encrypted-media"
+              title="{{ video_description | escape }}"
+              loading="lazy"
+            ></iframe>
+          {%- endif -%}
+        {%- elsif poster_image != blank -%}
+          {{
+            poster_image
+            | image_url: width: 3840
+            | image_tag:
+              widths: widths,
+              sizes: sizes,
+              fetchpriority: fetch_priority_value,
+              alt: poster_image.alt | escape
+          }}
+        {%- else -%}
+          {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+
+      {%- when 'video' -%}
+        {%- if shopify_video != blank -%}
+          <deferred-media class="nether-hero__deferred-video media" data-media-id="{{ shopify_video.id }}">
+            <button
+              type="button"
+              class="deferred-media__poster nether-hero__video-poster"
+              aria-label="{{ 'sections.video.load_video' | t: description: video_description | default: shopify_video.alt | escape }}"
+            >
+              {%- if poster_image != blank -%}
+                {{
+                  poster_image
+                  | image_url: width: 3840
+                  | image_tag:
+                    widths: widths,
+                    sizes: sizes,
+                    fetchpriority: fetch_priority_value,
+                    alt: poster_image.alt | escape
+                }}
+              {%- else -%}
+                {{ 'hero-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+              <span class="deferred-media__poster-button motion-reduce">
+                <span class="svg-wrapper">
+                  {{- 'icon-play.svg' | inline_asset_content -}}
+                </span>
+              </span>
+            </button>
+            <template>
+              {{
+                shopify_video
+                | video_tag:
+                  image_size: '1920x',
+                  autoplay: true,
+                  loop: video_loop,
+                  muted: false,
+                  controls: true,
+                  playsinline: true,
+                  class: 'nether-hero__video'
+              }}
+            </template>
+          </deferred-media>
+        {%- elsif video_url != blank -%}
+          <deferred-media class="nether-hero__deferred-video media" data-media-id="{{ video_url.id }}">
+            <button
+              type="button"
+              class="deferred-media__poster nether-hero__video-poster"
+              aria-label="{{ 'sections.video.load_video' | t: description: video_description | escape }}"
+            >
+              {%- if poster_image != blank -%}
+                {{
+                  poster_image
+                  | image_url: width: 3840
+                  | image_tag:
+                    widths: widths,
+                    sizes: sizes,
+                    fetchpriority: fetch_priority_value,
+                    alt: poster_image.alt | escape
+                }}
+              {%- else -%}
+                {{ 'hero-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+              <span class="deferred-media__poster-button motion-reduce">
+                <span class="svg-wrapper">
+                  {{- 'icon-play.svg' | inline_asset_content -}}
+                </span>
+              </span>
+            </button>
+            <template>
+              {%- if video_url.type == 'youtube' -%}
+                {{
+                  video_url
+                  | external_video_url: autoplay: true, loop: video_loop, playlist: video_url.id
+                  | external_video_tag: class: 'nether-hero__video nether-hero__video--iframe'
+                }}
+              {%- else -%}
+                {{
+                  video_url
+                  | external_video_url: autoplay: true, loop: video_loop
+                  | external_video_tag: class: 'nether-hero__video nether-hero__video--iframe'
+                }}
+              {%- endif -%}
+            </template>
+          </deferred-media>
+        {%- elsif poster_image != blank -%}
+          {{
+            poster_image
+            | image_url: width: 3840
+            | image_tag:
+              widths: widths,
+              sizes: sizes,
+              fetchpriority: fetch_priority_value,
+              alt: poster_image.alt | escape
+          }}
+        {%- else -%}
+          {{ 'hero-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+
+      {%- else -%}
+        {%- if desktop_image != blank -%}
+          <picture>
+            {%- if mobile_image != blank and mobile_image != desktop_image -%}
+              <source
+                media="(max-width: 749px)"
+                srcset="
+                  {%- if mobile_image.width >= 375 -%}{{ mobile_image | image_url: width: 375 }} 375w,{%- endif -%}
+                  {%- if mobile_image.width >= 750 -%}{{ mobile_image | image_url: width: 750 }} 750w,{%- endif -%}
+                  {%- if mobile_image.width >= 1100 -%}{{ mobile_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                  {{ mobile_image | image_url }} {{ mobile_image.width }}w
+                "
+              >
+            {%- endif -%}
+            {{
+              desktop_image
+              | image_url: width: 3840
+              | image_tag:
+                widths: widths,
+                sizes: sizes,
+                fetchpriority: fetch_priority_value,
+                alt: desktop_image.alt | escape
+            }}
+          </picture>
+        {%- else -%}
+          {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+    {%- endcase -%}
+  </div>
+
+  {%- comment -%} Future-ready slot for 3D / interactive media integrations {%- endcomment -%}
+  <div class="nether-hero__media-slot--future" data-nether-hero-media-future hidden></div>
+</div>

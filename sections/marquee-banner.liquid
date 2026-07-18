@@ -1,0 +1,80 @@
+{%- style -%}
+  .marquee-banner-{{ section.id }} {
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    width: 100%;
+    overflow: hidden;
+    padding: 1.25rem 0;
+  }
+
+  .marquee-banner-{{ section.id }} .fx-marquee__item {
+    font-size: {{ section.settings.font_size }}px;
+    line-height: 1.2;
+    white-space: nowrap;
+    padding-right: 3rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+{%- endstyle -%}
+
+<section
+  id="MarqueeBanner-{{ section.id }}"
+  class="marquee-banner marquee-banner-{{ section.id }}"
+  aria-label="{{ section.settings.text | escape }}"
+>
+  {%- if section.settings.text != blank -%}
+    <div
+      class="fx-marquee"
+      data-fx-duration="20"
+      style="overflow: hidden;"
+    >
+      <div class="fx-marquee__track" style="display: flex; width: max-content;">
+        <span class="fx-marquee__item">{{ section.settings.text | escape }}</span>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Marquee Banner",
+  "tag": "section",
+  "class": "section-marquee-banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Scrolling text",
+      "default": "Luxury Brand · Timeless Design · Crafted to Last · "
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 12,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Banner",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,60 @@
+{% comment %}
+  Nether Premium Cart — cart items module (page).
+  Preserves Dawn <cart-items>, #cart form, and #main-cart-items for native AJAX.
+
+  Accepts:
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+<cart-items
+  class="nether-cart__items-host gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% endif %}"
+  view-event-payload="{{ cart | standard_event_data: 'view', context: 'page' | escape }}"
+>
+  <div class="cart__warnings nether-cart__warnings">
+    {% render 'nether-cart-empty', section: section, context: 'page' %}
+  </div>
+
+  <form action="{{ routes.cart_url }}" class="cart__contents critical-hidden" method="post" id="cart">
+    <div
+      class="cart__items nether-cart__items"
+      id="main-cart-items"
+      data-id="{{ section.id }}"
+      data-section-type="nether-cart-page"
+    >
+      <div class="js-contents">
+        {%- if cart != empty -%}
+          <table class="cart-items nether-cart__items-table" role="table">
+            <caption class="visually-hidden">{{ 'sections.cart.title' | t }}</caption>
+            <thead role="rowgroup">
+              <tr role="row">
+                <th class="caption-with-letter-spacing" colspan="2" scope="col">
+                  {{ 'sections.cart.headings.product' | t }}
+                </th>
+                <th class="medium-hide large-up-hide right caption-with-letter-spacing" colspan="1" scope="col">
+                  {{ 'sections.cart.headings.total' | t }}
+                </th>
+                <th class="cart-items__heading--wide cart-items__heading--quantity small-hide caption-with-letter-spacing" colspan="1" scope="col">
+                  {{ 'sections.cart.headings.quantity' | t }}
+                </th>
+                <th class="small-hide right caption-with-letter-spacing" colspan="1" scope="col">
+                  {{ 'sections.cart.headings.total' | t }}
+                </th>
+              </tr>
+            </thead>
+            <tbody role="rowgroup">
+              {%- for item in cart.items -%}
+                {% render 'nether-cart-line-item', item: item, context: 'page' %}
+              {%- endfor -%}
+            </tbody>
+          </table>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <p class="visually-hidden" id="cart-live-region-text" aria-live="polite" role="status"></p>
+    <p class="visually-hidden" id="shopping-cart-line-item-status" aria-live="polite" aria-hidden="true" role="status">
+      {{ 'accessibility.loading' | t }}
+    </p>
+  </form>
+</cart-items>
+

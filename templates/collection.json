@@ -1,0 +1,94 @@
+{
+  "sections": {
+    "banner": {
+      "type": "nether-collection-page-banner",
+      "settings": {
+        "nether_hero_layout": "classic",
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "nether_description_style": "inline",
+        "nether_enable_glass": false,
+        "nether_enable_gradient": false,
+        "nether_animation_style": "fade",
+        "nether_animation_speed": "normal",
+        "nether_layout_desktop": "default",
+        "nether_layout_tablet": "default",
+        "nether_layout_mobile": "default",
+        "color_scheme": "scheme-1"
+      },
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Collection"
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow"
+      ]
+    },
+    "product-grid": {
+      "type": "nether-collection-page",
+      "settings": {
+        "nether_toolbar_layout": "inline",
+        "nether_enable_sticky_toolbar": false,
+        "nether_enable_view_toggle": false,
+        "nether_default_view": "grid",
+        "nether_grid_layout": "standard",
+        "nether_card_mode": "dawn",
+        "nether_grid_gap": 24,
+        "nether_card_gap": 16,
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "nether_show_collection_description": false,
+        "nether_description_placement": "footer",
+        "nether_description_style": "default",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "nether_card_style": "medium",
+        "nether_content_position": "bottom-left",
+        "nether_enable_overlay": true,
+        "nether_hover_effect": "zoom",
+        "nether_show_vendor": false,
+        "nether_show_rating": false,
+        "nether_show_savings": true,
+        "nether_show_stock_status": false,
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "nether_enable_glass": false,
+        "nether_enable_gradient": false,
+        "nether_animation_style": "stagger",
+        "nether_animation_speed": "normal",
+        "nether_layout_desktop": "default",
+        "nether_layout_tablet": "default",
+        "nether_layout_mobile": "default",
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      },
+      "blocks": {
+        "collection-info": {
+          "type": "collection_info",
+          "settings": {
+            "show_product_count": true,
+            "show_collection_rules": false
+          }
+        }
+      },
+      "block_order": [
+        "collection-info"
+      ]
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid"
+  ]
+}

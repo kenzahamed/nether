@@ -1,0 +1,61 @@
+{% comment %}
+  Nether Premium Compare — toolbar (count, clear, view page, share hook).
+
+  Accepts:
+  - section: {Object} Section object (optional)
+  - context: {String} drawer | page (default: page)
+  - page_url: {String} Compare page URL (optional)
+
+  Usage:
+  {% render 'nether-compare-toolbar', context: 'drawer', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign compare_context = context | default: 'page'
+  assign compare_page_url = page_url
+  if compare_page_url == blank and section != blank
+    assign compare_page_url = section.settings.nether_compare_page_url
+  endif
+-%}
+
+<div
+  class="nether-compare__module nether-compare__toolbar nether-compare__toolbar--{{ compare_context }}"
+  data-nether-compare-toolbar
+  data-nether-compare-animate
+  role="toolbar"
+  aria-label="{{ 'sections.nether_compare.toolbar.label' | t }}"
+>
+  <p class="nether-compare__toolbar-count type-body-sm" data-nether-compare-toolbar-count>
+    {{ 'sections.nether_compare.count' | t: count: 0 }}
+  </p>
+
+  <div class="nether-compare__toolbar-actions">
+    <button
+      type="button"
+      class="nether-compare__toolbar-action link focus-inset type-body-sm"
+      data-nether-compare-clear
+      hidden
+    >
+      {{ 'sections.nether_compare.actions.clear' | t }}
+    </button>
+
+    {%- if compare_page_url != blank and compare_context == 'drawer' -%}
+      <a
+        href="{{ compare_page_url }}"
+        class="nether-compare__toolbar-action link focus-inset type-body-sm"
+        data-nether-compare-view-page
+      >
+        {{ 'sections.nether_compare.actions.view_page' | t }}
+      </a>
+    {%- endif -%}
+
+    <span
+      class="nether-compare__toolbar-share"
+      data-nether-compare-share-placeholder
+      hidden
+      aria-hidden="true"
+    >
+      {{ 'sections.nether_compare.extensions.sharing' | t }}
+    </span>
+  </div>
+</div>

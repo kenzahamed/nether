@@ -1,0 +1,47 @@
+{% comment %}
+  Nether Mega Menu — Footer and secondary navigation area.
+
+  Accepts:
+  - section: {Object} Header section
+{% endcomment %}
+
+{%- liquid
+  assign show_footer = section.settings.nether_mega_enable_footer
+  assign show_secondary = section.settings.nether_mega_enable_secondary_nav
+  assign secondary_menu = section.settings.nether_mega_secondary_menu
+-%}
+
+{%- if show_footer or show_secondary -%}
+  <div class="nether-mega-menu__footer-area" data-nether-mega-footer>
+    {%- if show_secondary and secondary_menu != blank -%}
+      <nav class="nether-mega-menu__secondary" aria-label="{{ 'sections.header.nether_mega_menu.secondary_nav' | t }}">
+        <ul class="nether-mega-menu__secondary-list list-unstyled" role="list">
+          {%- for sec_link in secondary_menu.links -%}
+            <li>
+              <a
+                href="{{ sec_link.url }}"
+                class="nether-mega-menu__secondary-link link link--text{% if sec_link.current %} nether-mega-menu__secondary-link--active{% endif %}"
+                {% if sec_link.current %}aria-current="page"{% endif %}
+              >
+                {{ sec_link.title | escape }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    {%- if show_footer -%}
+      <div class="nether-mega-menu__footer">
+        {%- if section.settings.nether_mega_footer_text != blank -%}
+          <p class="nether-mega-menu__footer-text">{{ section.settings.nether_mega_footer_text | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.nether_mega_footer_link_label != blank and section.settings.nether_mega_footer_link != blank -%}
+          <a href="{{ section.settings.nether_mega_footer_link }}" class="nether-mega-menu__footer-link link link--text">
+            {{ section.settings.nether_mega_footer_link_label | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

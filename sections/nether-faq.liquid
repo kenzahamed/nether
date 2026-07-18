@@ -1,0 +1,1138 @@
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+{{ 'component-hero.css' | asset_url | stylesheet_tag }}
+{{ 'component-faq.css' | asset_url | stylesheet_tag }}
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-icon.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-typography.css' | asset_url | stylesheet_tag }}
+{{ 'component-card-premium.css' | asset_url | stylesheet_tag }}
+{{ 'component-shadow.css' | asset_url | stylesheet_tag }}
+{{ 'component-radius.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-hero.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-faq.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.nether_enable_glass -%}
+  {{ 'component-glass.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if section.settings.nether_enable_gradient -%}
+  {{ 'component-gradient.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- liquid
+  assign nether_layout = section.settings.nether_layout | default: 'classic_accordion'
+  assign nether_columns_desktop = section.settings.nether_columns_desktop | default: 2
+  assign nether_columns_tablet = section.settings.nether_columns_tablet | default: 2
+  assign nether_columns_mobile = section.settings.nether_columns_mobile | default: 1
+  assign nether_gap = section.settings.nether_gap | default: 24
+
+  assign uses_hero_shell = false
+  assign uses_section_media = false
+  assign is_magazine = false
+
+  case nether_layout
+    when 'editorial_faq'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'editorial'
+    when 'minimal_faq'
+      assign uses_hero_shell = true
+      assign nether_hero_layout = 'minimal'
+    when 'magazine'
+      assign is_magazine = true
+  endcase
+
+  case section.settings.nether_animation_speed
+    when 'slow'
+      assign nether_animation_duration = 0.8
+    when 'fast'
+      assign nether_animation_duration = 0.3
+    else
+      assign nether_animation_duration = 0.5
+  endcase
+
+  assign nether_class_list = 'nether-faq nether-hero'
+  assign nether_class_list = nether_class_list | append: ' nether-faq--layout-' | append: nether_layout
+  if uses_hero_shell
+    assign nether_class_list = nether_class_list | append: ' nether-hero--layout-' | append: nether_hero_layout
+  endif
+  assign nether_class_list = nether_class_list | append: ' nether-faq--card-' | append: section.settings.nether_card_style
+  assign nether_class_list = nether_class_list | append: ' nether-hero--desktop-' | append: section.settings.nether_layout_desktop
+  assign nether_class_list = nether_class_list | append: ' nether-hero--tablet-' | append: section.settings.nether_layout_tablet
+  assign nether_class_list = nether_class_list | append: ' nether-hero--mobile-' | append: section.settings.nether_layout_mobile
+
+  if section.settings.nether_enable_glass
+    assign nether_class_list = nether_class_list | append: ' nether-hero--glass-enabled nether-faq--glass-enabled'
+  endif
+
+  if section.settings.nether_enable_gradient
+    assign nether_class_list = nether_class_list | append: ' nether-hero--gradient-enabled'
+  endif
+
+  if section.settings.nether_enable_floating_cards
+    assign nether_class_list = nether_class_list | append: ' nether-faq--floating-enabled'
+  endif
+
+  if section.settings.nether_full_width
+    assign nether_class_list = nether_class_list | append: ' nether-faq--full-width'
+  endif
+
+  case section.settings.nether_layout_mobile
+    when 'stacked'
+      assign nether_class_list = nether_class_list | append: ' nether-faq--mobile-stacked'
+    when 'centered'
+      assign nether_class_list = nether_class_list | append: ' nether-faq--mobile-centered'
+    when 'minimal'
+      assign nether_class_list = nether_class_list | append: ' nether-faq--mobile-minimal'
+  endcase
+
+  assign overlay_classes = 'nether-hero__overlay'
+  if section.settings.nether_enable_gradient
+    case section.settings.nether_gradient_style
+      when 'dramatic'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-dramatic'
+      when 'vignette'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-vignette'
+      when 'fade-down'
+        assign overlay_classes = overlay_classes | append: ' grad-linear-fade-down'
+      else
+        assign overlay_classes = overlay_classes | append: ' grad-hero-brand'
+    endcase
+  endif
+
+  assign heading_tag = 'h2'
+  if section.settings.nether_heading_level == 'h3'
+    assign heading_tag = 'h3'
+  endif
+
+  assign needs_deferred_media = false
+  if section.settings.nether_faq_media_type == 'video'
+    assign needs_deferred_media = true
+  endif
+  for block in section.blocks
+    if block.type == 'video'
+      assign needs_deferred_media = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if needs_deferred_media -%}
+  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .nether-faq {
+    --nether-faq-gap: {{ nether_gap }}px;
+    --nether-faq-columns-desktop: {{ nether_columns_desktop }};
+    --nether-faq-columns-tablet: {{ nether_columns_tablet }};
+    --nether-faq-columns-mobile: {{ nether_columns_mobile }};
+    --nether-faq-overlay-opacity: {{ section.settings.nether_overlay_opacity | divided_by: 100.0 }};
+    --nether-faq-transition-duration: {{ nether_animation_duration }}s;
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  {%- if uses_section_media and section.settings.nether_faq_image_desktop != blank -%}
+    #NetherFaq-{{ section.id }} .nether-hero__media::before {
+      padding-bottom: {{ 1 | divided_by: section.settings.nether_faq_image_desktop.aspect_ratio | times: 100 }}%;
+      content: '';
+      display: block;
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+{%- if section.settings.nether_show_divider_top -%}
+  {%- render 'nether-faq-divider', section: section, position: 'top' -%}
+{%- endif -%}
+
+<nether-faq
+  id="NetherFaq-{{ section.id }}"
+  class="{{ nether_class_list }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient"
+  data-section-id="{{ section.id }}"
+  data-nether-motion="faq"
+  data-faq-layout="{{ nether_layout }}"
+  data-nether-faq-card-style="{{ section.settings.nether_card_style }}"
+  {% if section.settings.nether_enable_parallax or nether_layout == 'editorial_faq' or nether_layout == 'magazine' or nether_layout == 'categorized_faq' or nether_layout == 'help_center' or nether_layout == 'support_center' or nether_layout == 'knowledge_base' or section.settings.nether_animation_style == 'stagger' or section.settings.nether_animation_style == 'accordion_reveal' or section.settings.nether_animation_style == 'category_reveal' %}data-nether-motion-plugins="scrollTrigger"{% endif %}
+  data-animation-style="{{ section.settings.nether_animation_style }}"
+  data-animation-duration="{{ nether_animation_duration }}"
+  data-enable-parallax="{{ section.settings.nether_enable_parallax }}"
+  data-expand-all="{{ section.settings.nether_expand_all }}"
+  data-search-result-singular="{{ 'sections.nether_faq.search.result_singular' | t | escape }}"
+  data-search-result-plural="{{ 'sections.nether_faq.search.result_plural' | t | escape }}"
+  role="region"
+  aria-label="{{ section.settings.nether_aria_label | default: 'Frequently asked questions' | escape }}"
+>
+  <div class="nether-faq__inner nether-hero__inner">
+    {%- if uses_section_media -%}
+      {%- render 'nether-hero-media', section: section, adapter: 'faq' -%}
+
+      {%- if section.settings.nether_enable_image_overlay or section.settings.nether_enable_gradient -%}
+        <div class="{{ overlay_classes }}" aria-hidden="true" data-nether-faq-overlay></div>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if uses_hero_shell -%}
+      {%- render 'nether-faq-shell', section: section, heading_tag: heading_tag -%}
+    {%- else -%}
+      <div class="nether-faq__body-wrap{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+        {%- render 'nether-faq-content', section: section, heading_tag: heading_tag -%}
+
+        {%- render 'nether-faq-search', section: section -%}
+
+        {%- if section.settings.nether_show_expand_controls -%}
+          <div class="nether-faq__controls" data-nether-faq-controls>
+            <button type="button" class="nether-faq__control link" data-nether-faq-expand-all>
+              {{- 'sections.nether_faq.controls.expand_all' | t -}}
+            </button>
+            <span class="nether-faq__control-separator" aria-hidden="true">·</span>
+            <button type="button" class="nether-faq__control link" data-nether-faq-collapse-all>
+              {{- 'sections.nether_faq.controls.collapse_all' | t -}}
+            </button>
+          </div>
+        {%- endif -%}
+
+        {%- render 'nether-faq-list', section: section, layout: nether_layout, is_magazine: is_magazine -%}
+      </div>
+    {%- endif -%}
+  </div>
+</nether-faq>
+
+{%- if section.settings.nether_show_divider_bottom -%}
+  {%- render 'nether-faq-divider', section: section, position: 'bottom' -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Nether FAQ",
+  "tag": "section",
+  "class": "section section-nether-faq",
+  "max_blocks": 48,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Nether FAQ & knowledge framework"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout",
+      "label": "Layout",
+      "default": "classic_accordion",
+      "options": [
+        { "value": "editorial_faq", "label": "Editorial FAQ" },
+        { "value": "classic_accordion", "label": "Classic accordion" },
+        { "value": "two_column_faq", "label": "Two column FAQ" },
+        { "value": "categorized_faq", "label": "Categorized FAQ" },
+        { "value": "help_center", "label": "Help center" },
+        { "value": "knowledge_base", "label": "Knowledge base" },
+        { "value": "minimal_faq", "label": "Minimal FAQ" },
+        { "value": "magazine", "label": "Magazine layout" },
+        { "value": "product_faq", "label": "Product FAQ" },
+        { "value": "support_center", "label": "Support center" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "nether_columns_desktop",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2,
+      "label": "Desktop columns"
+    },
+    {
+      "type": "range",
+      "id": "nether_columns_tablet",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2,
+      "label": "Tablet columns"
+    },
+    {
+      "type": "select",
+      "id": "nether_columns_mobile",
+      "label": "Mobile columns",
+      "default": "1",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "nether_gap",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24,
+      "label": "Grid gap"
+    },
+    {
+      "type": "select",
+      "id": "nether_card_style",
+      "label": "Card style",
+      "default": "medium",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "editorial", "label": "Editorial" },
+        { "value": "glass", "label": "Glass" },
+        { "value": "gradient", "label": "Gradient" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_category_nav",
+      "default": true,
+      "label": "Enable category navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_expand_first",
+      "default": false,
+      "label": "Expand first item"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_expand_all",
+      "default": false,
+      "label": "Expand all items by default"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_expand_controls",
+      "default": true,
+      "label": "Show expand / collapse controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_search",
+      "default": false,
+      "label": "Enable FAQ search",
+      "info": "Client-side filter today. Optional endpoint URL prepares future AJAX search."
+    },
+    {
+      "type": "text",
+      "id": "nether_search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search questions..."
+    },
+    {
+      "type": "url",
+      "id": "nether_search_endpoint",
+      "label": "Search endpoint URL",
+      "info": "Optional future AJAX search endpoint. Leave blank for client-side filter."
+    },
+    {
+      "type": "select",
+      "id": "nether_content_alignment",
+      "label": "Content alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_heading_level",
+      "label": "Primary heading level",
+      "default": "h2",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "nether_aria_label",
+      "label": "Accessibility label",
+      "default": "Frequently asked questions"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_full_width",
+      "default": false,
+      "label": "Full width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section media"
+    },
+    {
+      "type": "select",
+      "id": "nether_faq_media_type",
+      "label": "Media type",
+      "default": "image",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "nether_faq_image_desktop",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "nether_faq_image_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "video",
+      "id": "nether_faq_video",
+      "label": "Shopify-hosted video"
+    },
+    {
+      "type": "video_url",
+      "id": "nether_faq_video_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "External video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "nether_faq_poster_image",
+      "label": "Poster image"
+    },
+    {
+      "type": "text",
+      "id": "nether_faq_video_description",
+      "label": "Video description"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_faq_video_loop",
+      "default": true,
+      "label": "Loop video"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_faq_enable_blur",
+      "default": false,
+      "label": "Background blur"
+    },
+    {
+      "type": "header",
+      "content": "Visual features"
+    },
+    {
+      "type": "range",
+      "id": "nether_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 35,
+      "unit": "%",
+      "label": "Overlay opacity"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_image_overlay",
+      "default": true,
+      "label": "Enable image overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_glass",
+      "default": false,
+      "label": "Enable glass card"
+    },
+    {
+      "type": "select",
+      "id": "nether_glass_style",
+      "label": "Glass style",
+      "default": "medium",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "heavy", "label": "Heavy" },
+        { "value": "frosted", "label": "Frosted" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_gradient",
+      "default": false,
+      "label": "Enable gradient overlay"
+    },
+    {
+      "type": "select",
+      "id": "nether_gradient_style",
+      "label": "Gradient style",
+      "default": "brand",
+      "options": [
+        { "value": "brand", "label": "Brand" },
+        { "value": "dramatic", "label": "Dramatic" },
+        { "value": "vignette", "label": "Vignette" },
+        { "value": "fade-down", "label": "Fade down" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_floating_cards",
+      "default": false,
+      "label": "Floating cards"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_divider_top",
+      "default": false,
+      "label": "Top divider"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_divider_bottom",
+      "default": false,
+      "label": "Bottom divider"
+    },
+    {
+      "type": "select",
+      "id": "nether_divider_style",
+      "label": "Divider style",
+      "default": "line",
+      "options": [
+        { "value": "line", "label": "Line" },
+        { "value": "gradient", "label": "Gradient" },
+        { "value": "wave", "label": "Wave" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_style",
+      "label": "Animation style",
+      "default": "stagger",
+      "options": [
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide", "label": "Slide" },
+        { "value": "scale", "label": "Scale" },
+        { "value": "stagger", "label": "Stagger" },
+        { "value": "accordion_reveal", "label": "Accordion reveal" },
+        { "value": "category_reveal", "label": "Category reveal" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_speed",
+      "label": "Animation speed",
+      "default": "medium",
+      "options": [
+        { "value": "slow", "label": "Slow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "fast", "label": "Fast" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_parallax",
+      "default": false,
+      "label": "Enable parallax",
+      "info": "Subtle media parallax on scroll. Respects reduced motion preferences."
+    },
+    {
+      "type": "header",
+      "content": "Responsive layouts"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_desktop",
+      "label": "Desktop layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "editorial", "label": "Editorial emphasis" },
+        { "value": "compact", "label": "Compact" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_tablet",
+      "label": "Tablet layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_mobile",
+      "label": "Mobile layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Frequently asked questions" },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "default": "h1",
+          "options": [
+            { "value": "h2", "label": "Small" },
+            { "value": "h1", "label": "Medium" },
+            { "value": "h0", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "settings": [
+        { "type": "inline_richtext", "id": "subheading", "label": "Subheading" },
+        {
+          "type": "select",
+          "id": "subheading_size",
+          "label": "Subheading size",
+          "default": "h3",
+          "options": [
+            { "value": "h4", "label": "Small" },
+            { "value": "h3", "label": "Medium" },
+            { "value": "h2", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text" },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "default": "body",
+          "options": [
+            { "value": "body", "label": "Body" },
+            { "value": "subtitle", "label": "Subtitle" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "faq_item",
+      "name": "FAQ item",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "What is your return policy?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>We offer a 30-day return policy on most items. Contact support for details.</p>" },
+        { "type": "page", "id": "page", "label": "Page content" },
+        { "type": "text", "id": "category_slug", "label": "Category slug", "info": "Match a category block slug for navigation filtering." },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "question_mark",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "question_mark", "label": "Question mark" },
+            { "value": "check_mark", "label": "Check mark" },
+            { "value": "chat_bubble", "label": "Chat bubble" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "return", "label": "Return" },
+            { "value": "lock", "label": "Lock" }
+          ]
+        },
+        { "type": "checkbox", "id": "open_by_default", "default": false, "label": "Open by default" }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "text", "id": "category_slug", "label": "Category slug" },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "question_mark",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "question_mark", "label": "Question mark" },
+            { "value": "check_mark", "label": "Check mark" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "answer",
+      "name": "Answer",
+      "settings": [
+        { "type": "richtext", "id": "answer", "label": "Answer" },
+        { "type": "page", "id": "page", "label": "Page content" }
+      ]
+    },
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Category heading", "default": "Shipping & delivery" },
+        { "type": "text", "id": "slug", "label": "Category slug", "info": "Used for navigation anchors. Auto-generated from heading if blank." },
+        { "type": "richtext", "id": "description", "label": "Description" },
+        {
+          "type": "select",
+          "id": "heading_level",
+          "label": "Heading level",
+          "default": "h3",
+          "options": [
+            { "value": "h3", "label": "H3" },
+            { "value": "h4", "label": "H4" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "icon",
+      "name": "Icon",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "question_mark",
+          "options": [
+            { "value": "question_mark", "label": "Question" },
+            { "value": "check_mark", "label": "Check" },
+            { "value": "chat_bubble", "label": "Chat" },
+            { "value": "truck", "label": "Shipping" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "icon_size",
+          "label": "Icon size",
+          "default": "lg",
+          "options": [
+            { "value": "sm", "label": "Small" },
+            { "value": "md", "label": "Medium" },
+            { "value": "lg", "label": "Large" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "link",
+          "options": [
+            { "value": "inherit", "label": "Inherit" },
+            { "value": "link", "label": "Link" },
+            { "value": "muted", "label": "Muted" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "image_picker", "id": "image_mobile", "label": "Mobile image" },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        {
+          "type": "select",
+          "id": "image_ratio",
+          "label": "Image ratio",
+          "default": "adapt",
+          "options": [
+            { "value": "adapt", "label": "Adapt" },
+            { "value": "square", "label": "Square" },
+            { "value": "portrait", "label": "Portrait" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media type",
+          "default": "video",
+          "options": [
+            { "value": "video", "label": "Inline video" },
+            { "value": "background_video", "label": "Background video" }
+          ]
+        },
+        { "type": "video", "id": "video", "label": "Shopify-hosted video" },
+        { "type": "video_url", "id": "video_url", "accept": ["youtube", "vimeo"], "label": "External video URL" },
+        { "type": "image_picker", "id": "poster_image", "label": "Poster image" },
+        { "type": "text", "id": "video_description", "label": "Video description" },
+        { "type": "checkbox", "id": "video_loop", "default": true, "label": "Loop video" }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        { "type": "text", "id": "button_label", "label": "Button label" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" },
+            { "value": "text", "label": "Text" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "button_label_1", "label": "First button label" },
+        { "type": "url", "id": "button_link_1", "label": "First button link" },
+        {
+          "type": "select",
+          "id": "button_style_1",
+          "label": "First button style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" },
+            { "value": "text", "label": "Text" }
+          ]
+        },
+        { "type": "text", "id": "button_label_2", "label": "Second button label" },
+        { "type": "url", "id": "button_link_2", "label": "Second button link" },
+        {
+          "type": "select",
+          "id": "button_style_2",
+          "label": "Second button style",
+          "default": "outline",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" },
+            { "value": "text", "label": "Text" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": [
+        {
+          "type": "select",
+          "id": "divider_style",
+          "label": "Divider style",
+          "default": "line",
+          "options": [
+            { "value": "line", "label": "Line" },
+            { "value": "gradient", "label": "Gradient" },
+            { "value": "space", "label": "Space" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "callout_card",
+      "name": "Callout card",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        {
+          "type": "select",
+          "id": "callout_style",
+          "label": "Callout style",
+          "default": "default",
+          "options": [
+            { "value": "default", "label": "Default" },
+            { "value": "glass", "label": "Glass" },
+            { "value": "gradient", "label": "Gradient" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "chat_bubble",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "chat_bubble", "label": "Chat" },
+            { "value": "check_mark", "label": "Check" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tip",
+      "name": "Tip",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Tip" },
+        { "type": "richtext", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "warning",
+      "name": "Warning",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Important" },
+        { "type": "richtext", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "contact_cta",
+      "name": "Contact CTA",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Still need help?" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Contact us" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "support_cta",
+      "name": "Support CTA",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Visit our support center" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Get support" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        {
+          "type": "select",
+          "id": "card_style",
+          "label": "Card style",
+          "default": "support",
+          "options": [
+            { "value": "support", "label": "Support card" },
+            { "value": "contact", "label": "Contact card" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "outline",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "related_question",
+      "name": "Related question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question label" },
+        { "type": "text", "id": "target_block_id", "label": "Target element ID", "info": "Use NetherFaqDetails-{section}-{block} from Theme Editor block ID." },
+        { "type": "url", "id": "link", "label": "External link" }
+      ]
+    },
+    {
+      "type": "helpful_link",
+      "name": "Helpful link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Link label" },
+        { "type": "url", "id": "link", "label": "Link URL" },
+        { "type": "checkbox", "id": "open_new_tab", "default": false, "label": "Open in new tab" },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "arrow",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "arrow", "label": "Arrow" },
+            { "value": "chat_bubble", "label": "Chat" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "custom_html",
+      "name": "Custom HTML",
+      "settings": [
+        {
+          "type": "html",
+          "id": "html",
+          "label": "HTML",
+          "default": "<p>Add custom HTML or install an app block for help desk widgets.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nether FAQ",
+      "blocks": [
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "faq_item" },
+        { "type": "faq_item" },
+        { "type": "faq_item" },
+        { "type": "faq_item" }
+      ]
+    },
+    {
+      "name": "Nether help center",
+      "settings": {
+        "nether_layout": "help_center",
+        "nether_enable_category_nav": true,
+        "nether_enable_search": true
+      },
+      "blocks": [
+        { "type": "heading" },
+        { "type": "category" },
+        { "type": "faq_item" },
+        { "type": "faq_item" },
+        { "type": "category" },
+        { "type": "faq_item" },
+        { "type": "support_cta" },
+        { "type": "helpful_link" }
+      ]
+    },
+    {
+      "name": "Nether product FAQ",
+      "settings": {
+        "nether_layout": "product_faq",
+        "nether_card_style": "minimal",
+        "nether_expand_first": true
+      },
+      "blocks": [
+        { "type": "subheading" },
+        { "type": "faq_item" },
+        { "type": "faq_item" },
+        { "type": "faq_item" }
+      ]
+    }
+  ]
+}
+{% endschema %}

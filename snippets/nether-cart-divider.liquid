@@ -1,0 +1,30 @@
+{% comment %}
+  Nether Premium Cart — optional section divider.
+
+  Accepts:
+  - position: {String} top | bottom (default: top)
+  - section: {Object} Section object (optional)
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'top'
+  assign show_divider = false
+
+  if section.settings
+    if divider_position == 'top' and section.settings.nether_show_top_divider
+      assign show_divider = true
+    elsif divider_position == 'bottom' and section.settings.nether_show_bottom_divider
+      assign show_divider = true
+    endif
+  endif
+-%}
+
+{%- if show_divider -%}
+  <div
+    class="nether-cart__divider nether-cart__divider--{{ divider_position }}"
+    role="separator"
+    aria-hidden="true"
+    data-nether-cart-animate
+  ></div>
+{%- endif -%}
+

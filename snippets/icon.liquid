@@ -1,0 +1,133 @@
+{% comment %}
+  Renders a Nether Premium Icon.
+
+  Reuses Dawn's native SVG assets (assets/icon-*.svg) via inline_asset_content.
+  For simple Dawn-compatible output, icon-accordion.liquid remains available unchanged.
+
+  Accepts:
+  - icon: {String} Icon name — Dawn convention: 'cart', 'arrow', 'chat_bubble', 'check_mark'
+           Also accepts full asset name: 'icon-cart.svg'
+           Pass 'none' or blank to render nothing.
+  - size: {String} sm | md | lg | xl | responsive (default: md)
+  - decorative: {Boolean} Hide from assistive tech (default: true)
+  - label: {String} Accessible label — required when decorative is false
+  - title: {String} SVG title for supplementary description (optional)
+  - category: {String} Icon category for data attribute (optional, see report)
+  - color: {String} inherit | foreground | muted | subtle | link | button (default: inherit)
+  - gap: {String} Spacing when inline — before-sm, before-md, after-sm, etc. (optional)
+  - align: {String} start | center | end (optional)
+  - stroke: {Boolean} Normalise stroke width for stroke-based SVGs (default: false)
+  - class: {String} Additional classes on wrapper
+  - wrapper: {Boolean} Wrap in .icon-wrap span (default: true). Set false to output raw SVG only.
+  - use_svg_wrapper: {Boolean} Also apply Dawn's .svg-wrapper class (default: true)
+
+  Usage:
+  {% render 'icon', icon: 'cart', size: 'lg' %}
+
+  {% render 'icon', icon: 'search', size: 'md', decorative: false, label: 'Search' %}
+
+  {% render 'icon', icon: 'arrow', size: 'sm', gap: 'after-sm' %}
+
+  {% render 'icon', icon: 'truck', size: 'lg', category: 'shipping', color: 'muted' %}
+
+  <span class="icon-text">
+    {% render 'icon', icon: 'checkmark', size: 'sm' %}
+    Free shipping
+  </span>
+
+  Decorative (default):
+  {% render 'icon', icon: 'heart' %}
+
+  Functional UI icon:
+  {% render 'icon', icon: 'close', decorative: false, label: 'Close' %}
+{% endcomment %}
+
+{%- if icon != blank and icon != 'none' -%}
+  {%- liquid
+    assign icon_size = size | default: 'md'
+    assign is_decorative = decorative | default: true
+    assign icon_color = color | default: 'inherit'
+    assign use_wrapper = wrapper | default: true
+    assign use_dawn_wrapper = use_svg_wrapper | default: true
+
+    if icon contains '.svg'
+      assign icon_file = icon
+    else
+      assign icon_file = icon | replace: '_', '-' | prepend: 'icon-' | append: '.svg'
+    endif
+
+    assign wrap_classes = 'icon-wrap'
+
+    case icon_size
+      when 'sm'
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--sm'
+      when 'lg'
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--lg'
+      when 'xl'
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--xl'
+      when 'responsive'
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--responsive'
+      else
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--md'
+    endcase
+
+    case icon_color
+      when 'foreground'
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--foreground'
+      when 'muted'
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--muted'
+      when 'subtle'
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--subtle'
+      when 'link'
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--link'
+      when 'button'
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--button'
+      else
+        assign wrap_classes = wrap_classes | append: ' icon-wrap--inherit'
+    endcase
+
+    if align == 'start'
+      assign wrap_classes = wrap_classes | append: ' icon-wrap--align-start'
+    elsif align == 'center'
+      assign wrap_classes = wrap_classes | append: ' icon-wrap--align-center'
+    elsif align == 'end'
+      assign wrap_classes = wrap_classes | append: ' icon-wrap--align-end'
+    endif
+
+    if gap != blank
+      assign wrap_classes = wrap_classes | append: ' icon-wrap--gap-' | append: gap
+    endif
+
+    if stroke
+      assign wrap_classes = wrap_classes | append: ' icon-wrap--stroke'
+    endif
+
+    if use_dawn_wrapper
+      assign wrap_classes = wrap_classes | append: ' svg-wrapper'
+    endif
+
+    if class != blank
+      assign wrap_classes = wrap_classes | append: ' ' | append: class
+    endif
+  -%}
+
+  {%- if use_wrapper -%}
+    <span
+      class="{{ wrap_classes }}"
+      {% if is_decorative %}
+        aria-hidden="true"
+      {% else %}
+        role="img"
+        aria-label="{{ label | escape }}"
+      {% endif %}
+      {% if category != blank %}data-icon-category="{{ category | escape }}"{% endif %}
+    >
+      {%- if title != blank and is_decorative == false -%}
+        <span class="visually-hidden">{{ title | escape }}</span>
+      {%- endif -%}
+      {{- icon_file | inline_asset_content -}}
+    </span>
+  {%- else -%}
+    {{- icon_file | inline_asset_content -}}
+  {%- endif -%}
+{%- endif -%}

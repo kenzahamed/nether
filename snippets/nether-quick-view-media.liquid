@@ -1,0 +1,6 @@
+{% comment %}
+  Quick View Product Media module — reuses Dawn product-media-gallery via lazy product-info.
+  Layout controlled by modal data-gallery-layout + CSS (does not rebuild gallery).
+{% endcomment %}
+{% render 'nether-quick-view-block', module: 'media' %}
+{% render 'nether-quick-view-extensions', type: 'image_zoom' %}

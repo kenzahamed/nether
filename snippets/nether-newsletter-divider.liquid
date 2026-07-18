@@ -1,0 +1,23 @@
+{% comment %}
+  Optional section divider for Nether Premium Newsletter Framework.
+
+  Accepts:
+  - section: {Object} Newsletter section (required)
+  - position: {String} top or bottom (required)
+
+  Usage:
+  {% render 'nether-newsletter-divider', section: section, position: 'bottom' %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-newsletter__divider nether-newsletter__divider--{{ divider_position }} nether-newsletter__divider--{{ divider_style }}"
+  data-nether-newsletter-divider
+  data-nether-newsletter-role="divider"
+  aria-hidden="true"
+  role="presentation"
+></div>

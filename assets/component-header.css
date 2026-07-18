@@ -1,0 +1,376 @@
+/* =============================================================================
+ * Nether Premium Header Framework
+ * Extends Dawn header architecture — do not duplicate base.css layout rules.
+ * ============================================================================= */
+
+nether-header {
+  display: block;
+}
+
+.nether-header {
+  --nether-header-height: var(--header-height, auto);
+  --nether-header-active-height: var(--nether-header-height, auto);
+  --nether-header-shrink-height: 5.6rem;
+  --nether-header-transition-duration: var(--duration-default, 0.3s);
+  --nether-header-logo-width: var(--logo-width, 100px);
+  --nether-header-icon-size: 4.4rem;
+  --nether-header-icon-inner: 2rem;
+  --nether-header-gap: 2rem;
+  --nether-header-padding-inline: 3rem;
+  --nether-header-padding-block: 2rem;
+  --nether-header-border-width: 0;
+  --nether-header-border-color: rgba(var(--color-foreground), 0.08);
+  --nether-header-shadow: none;
+  --nether-header-shrink-scale: 1;
+  --nether-header-announcement-offset: 0px;
+  --nether-header-bg: rgb(var(--color-background));
+  --nether-header-fg: rgb(var(--color-foreground));
+  position: relative;
+  z-index: inherit;
+}
+
+.nether-header__inner {
+  min-height: var(--nether-header-height);
+}
+
+.nether-header .header-wrapper {
+  will-change: transform, background-color, box-shadow;
+}
+
+.nether-header .header {
+  padding: calc(var(--nether-header-padding-block) * 0.5) var(--nether-header-padding-inline);
+  gap: var(--nether-header-gap);
+  min-height: var(--nether-header-active-height, var(--nether-header-height));
+  transition:
+    min-height var(--nether-header-transition-duration) ease,
+    padding var(--nether-header-transition-duration) ease,
+    background-color var(--nether-header-transition-duration) ease,
+    box-shadow var(--nether-header-transition-duration) ease,
+    border-color var(--nether-header-transition-duration) ease,
+    transform var(--nether-header-transition-duration) ease;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-header .header {
+    padding-block: var(--nether-header-padding-block);
+  }
+}
+
+.nether-header .header__heading-logo-wrapper {
+  width: min(100%, var(--nether-header-logo-width));
+  transform: scale(var(--nether-header-shrink-scale));
+  transform-origin: center left;
+  transition:
+    width var(--nether-header-transition-duration) cubic-bezier(0.52, 0, 0.61, 0.99),
+    transform var(--nether-header-transition-duration) ease;
+}
+
+.nether-header--layout-center-logo .header__heading-logo-wrapper,
+.nether-header--layout-split-nav .header__heading-logo-wrapper {
+  transform-origin: center center;
+}
+
+.nether-header .header__icon .svg-wrapper {
+  width: var(--nether-header-icon-size);
+  height: var(--nether-header-icon-size);
+}
+
+.nether-header .header__icon .icon,
+.nether-header .nether-header__action .icon-wrap svg {
+  width: var(--nether-header-icon-inner);
+  height: var(--nether-header-icon-inner);
+}
+
+/* ── Spacing presets ───────────────────────────────────────────────────────── */
+
+.nether-header--spacing-compact {
+  --nether-header-gap: 1rem;
+  --nether-header-padding-block: 1.2rem;
+  --nether-header-padding-inline: 2rem;
+}
+
+.nether-header--spacing-relaxed {
+  --nether-header-gap: 2.8rem;
+  --nether-header-padding-block: 2.8rem;
+  --nether-header-padding-inline: 4rem;
+}
+
+/* ── Icon size presets ─────────────────────────────────────────────────────── */
+
+.nether-header--icon-sm {
+  --nether-header-icon-size: 3.6rem;
+  --nether-header-icon-inner: 1.8rem;
+}
+
+.nether-header--icon-lg {
+  --nether-header-icon-size: 5.2rem;
+  --nether-header-icon-inner: 2.4rem;
+}
+
+/* ── Border presets ────────────────────────────────────────────────────────── */
+
+.nether-header--border-subtle {
+  --nether-header-border-width: 0.1rem;
+}
+
+.nether-header--border-solid {
+  --nether-header-border-width: 0.2rem;
+}
+
+.nether-header--border-subtle .header-wrapper,
+.nether-header--border-solid .header-wrapper {
+  border-bottom: var(--nether-header-border-width) solid var(--nether-header-border-color);
+}
+
+.nether-header--border-subtle .header-wrapper.header-wrapper--border-bottom,
+.nether-header--border-solid .header-wrapper.header-wrapper--border-bottom {
+  border-bottom-width: var(--nether-header-border-width);
+}
+
+/* ── Shadow presets (Shadow System) ───────────────────────────────────────── */
+
+.nether-header--shadow-xs {
+  --nether-header-shadow: var(--shadow-level-xs, 0 0.1rem 0.2rem rgba(var(--color-shadow), 0.04));
+}
+
+.nether-header--shadow-sm {
+  --nether-header-shadow: var(--shadow-level-sm, 0 0.2rem 0.4rem rgba(var(--color-shadow), 0.06));
+}
+
+.nether-header--shadow-md {
+  --nether-header-shadow: var(--shadow-level-md, 0 0.4rem 0.8rem rgba(var(--color-shadow), 0.1));
+}
+
+.nether-header--shadow-lg {
+  --nether-header-shadow: var(--shadow-level-lg, 0 0.8rem 2rem rgba(var(--color-shadow), 0.16));
+}
+
+.nether-header--shadow-xs .header-wrapper,
+.nether-header--shadow-sm .header-wrapper,
+.nether-header--shadow-md .header-wrapper,
+.nether-header--shadow-lg .header-wrapper {
+  box-shadow: var(--nether-header-shadow);
+}
+
+/* ── Header states (reusable framework state classes) ──────────────────────── */
+
+.nether-header.is-transparent .header-wrapper,
+.nether-header--state-transparent:not(.is-solid) .header-wrapper {
+  background-color: transparent;
+}
+
+.nether-header.is-transparent .header-wrapper.gradient,
+.nether-header--state-transparent:not(.is-solid) .header-wrapper.gradient {
+  background: transparent;
+}
+
+.nether-header.is-solid .header-wrapper,
+.nether-header--state-solid .header-wrapper {
+  background-color: var(--nether-header-bg);
+}
+
+.nether-header--state-transparent.nether-header--glass-enabled.is-transparent .header-wrapper {
+  background: transparent;
+}
+
+.nether-header--glass-enabled.is-solid .header-wrapper,
+.nether-header--glass-enabled.nether-header--state-solid .header-wrapper,
+.nether-header--glass-enabled.is-sticky .header-wrapper,
+.nether-header--glass-enabled.shopify-section-header-sticky .header-wrapper {
+  backdrop-filter: blur(var(--glass-blur-medium, 1.2rem));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium, 1.2rem));
+  background: rgba(var(--color-background), var(--glass-bg-opacity-medium, 0.55));
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-medium, 0.14));
+}
+
+.nether-header.is-sticky,
+.nether-header--sticky-ready.is-sticky {
+  --nether-header-sticky-top: var(--nether-header-announcement-offset, 0px);
+}
+
+.nether-header--sticky-ready.is-sticky .header-wrapper {
+  position: sticky;
+  top: var(--nether-header-sticky-top, 0px);
+  z-index: 4;
+}
+
+.nether-header--shrink-ready {
+  --nether-header-shrink-scale-ready: 0.85;
+}
+
+.nether-header.is-shrunk .header,
+.nether-header--shrink-ready.is-shrunk .header,
+.nether-header--shrink-ready.is-nether-header-shrunk .header {
+  min-height: var(--nether-header-shrink-height);
+  --nether-header-active-height: var(--nether-header-shrink-height);
+}
+
+.nether-header.is-shrunk .header__heading-logo-wrapper,
+.nether-header--shrink-ready.is-shrunk .header__heading-logo-wrapper,
+.nether-header--shrink-ready.is-nether-header-shrunk .header__heading-logo-wrapper {
+  --nether-header-shrink-scale: var(--nether-header-shrink-scale-ready);
+}
+
+.nether-header.is-shrunk .header,
+.nether-header--shrink-ready.is-shrunk .header {
+  padding-block: calc(var(--nether-header-padding-block) * 0.65);
+}
+
+.nether-header.is-scrolled .header-wrapper {
+  box-shadow: var(--nether-header-shadow, var(--shadow-level-xs, 0 0.1rem 0.2rem rgba(var(--color-shadow), 0.04)));
+}
+
+.nether-header.is-hidden,
+.nether-header--hide-scroll-ready.is-hidden,
+.nether-header--hide-scroll-ready.is-nether-header-hidden {
+  pointer-events: none;
+}
+
+.nether-header.is-hidden .header-wrapper,
+.nether-header--hide-scroll-ready.is-hidden .header-wrapper,
+.nether-header--hide-scroll-ready.is-nether-header-hidden .header-wrapper {
+  transition: transform var(--nether-header-transition-duration) ease;
+}
+
+nether-header:not([data-nether-motion-ready]) .is-hidden .header-wrapper,
+nether-header:not([data-nether-motion-ready]) .is-nether-header-hidden .header-wrapper {
+  transform: translateY(-100%);
+}
+
+.nether-header--announcement-aware {
+  scroll-margin-top: calc(var(--nether-header-height, 0px) + var(--nether-header-announcement-offset, 0px));
+}
+
+/* ── Layout: Split navigation ──────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-header--layout-split-nav .header {
+    grid-template-areas: 'navigation-left heading navigation-right icons';
+    grid-template-columns: 1fr auto 1fr auto;
+    column-gap: var(--nether-header-gap);
+  }
+
+  .nether-header--layout-split-nav .nether-header__nav--left {
+    grid-area: navigation-left;
+    justify-self: end;
+  }
+
+  .nether-header--layout-split-nav .nether-header__nav--right {
+    grid-area: navigation-right;
+    justify-self: start;
+  }
+
+  .nether-header--layout-split-nav .header__inline-menu {
+    margin-top: 0;
+  }
+}
+
+/* ── Layout: Minimal ───────────────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-header--layout-minimal .header__inline-menu {
+    display: none;
+  }
+
+  .nether-header--layout-minimal .header {
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
+/* ── Layout: Commerce ──────────────────────────────────────────────────────── */
+
+.nether-header--layout-commerce .nether-header__actions {
+  gap: 0.2rem;
+}
+
+.nether-header--layout-commerce .header__icon--cart {
+  order: -1;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-header--layout-commerce .header {
+    grid-template-columns: auto 1fr auto;
+    column-gap: calc(var(--nether-header-gap) * 1.25);
+  }
+
+  .nether-header--layout-commerce .nether-header__actions .header__icon--cart .cart-count-bubble {
+    transform: scale(1.05);
+  }
+}
+
+/* ── Mobile layout presets ─────────────────────────────────────────────────── */
+
+@media screen and (max-width: 989px) {
+  .nether-header--mobile-compact .header {
+    --nether-header-padding-block: 1rem;
+    --nether-header-padding-inline: 1.6rem;
+    --nether-header-gap: 0.6rem;
+  }
+
+  .nether-header--mobile-icons-only .header__inline-menu {
+    display: none;
+  }
+}
+
+/* ── Actions row ───────────────────────────────────────────────────────────── */
+
+.nether-header__actions {
+  display: flex;
+  align-items: center;
+  grid-area: icons;
+  justify-self: end;
+  gap: 0.4rem;
+  padding-right: 0.8rem;
+}
+
+.nether-header__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nether-header-fg);
+  position: relative;
+}
+
+.nether-header__action--placeholder {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.nether-header__action--placeholder[aria-disabled='true'] {
+  pointer-events: none;
+}
+
+.nether-header__action:focus-visible,
+.nether-header .header__icon:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.72);
+  outline-offset: 0.2rem;
+}
+
+.nether-header__placeholder-badge {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.2rem;
+  pointer-events: none;
+}
+
+/* ── Skip link offset ──────────────────────────────────────────────────────── */
+
+.nether-header:focus-within ~ main,
+body:has(.nether-header) .skip-to-content-link:focus {
+  scroll-padding-top: calc(var(--nether-header-height, 0px) + var(--nether-header-announcement-offset, 0px));
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-header .header,
+  .nether-header .header-wrapper,
+  .nether-header .header__heading-logo-wrapper {
+    transition: none;
+  }
+
+  .nether-header.is-hidden .header-wrapper,
+  .nether-header--hide-scroll-ready.is-hidden .header-wrapper {
+    transform: none;
+  }
+}

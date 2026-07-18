@@ -1,0 +1,23 @@
+{% comment %}
+  Optional section divider for Nether Premium CTA Framework.
+
+  Accepts:
+  - section: {Object} CTA section (required)
+  - position: {String} top or bottom (required)
+
+  Usage:
+  {% render 'nether-cta-divider', section: section, position: 'bottom' %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-cta__divider nether-cta__divider--{{ divider_position }} nether-cta__divider--{{ divider_style }}"
+  data-nether-cta-divider
+  data-nether-cta-role="divider"
+  aria-hidden="true"
+  role="presentation"
+></div>

@@ -1,0 +1,651 @@
+{% comment %}
+  Nether Premium Commerce Enhancements Framework
+  Reusable composition host — not a standalone page framework.
+  Place on product, cart, collection, or custom templates to compose commerce modules.
+{% endcomment %}
+
+{% render 'nether-commerce-assets' %}
+
+{%- liquid
+  assign trust_layout = section.settings.trust_layout | default: 'stack'
+  assign badge_style = section.settings.badge_style | default: 'solid'
+  assign notice_style = section.settings.notice_style | default: 'soft'
+  assign animation_style = section.settings.animation_style | default: 'fade'
+  assign animation_speed = section.settings.animation_speed | default: 0.45
+  assign desktop_layout = section.settings.desktop_layout | default: 'stack'
+  assign tablet_layout = section.settings.tablet_layout | default: 'stacked'
+  assign mobile_layout = section.settings.mobile_layout | default: 'stacked'
+
+  assign section_classes = 'nether-commerce color-' | append: section.settings.color_scheme
+  assign section_classes = section_classes | append: ' nether-commerce--trust-' | append: trust_layout
+  assign section_classes = section_classes | append: ' nether-commerce--desktop-' | append: desktop_layout
+  assign section_classes = section_classes | append: ' nether-commerce--tablet-' | append: tablet_layout
+  assign section_classes = section_classes | append: ' nether-commerce--mobile-' | append: mobile_layout
+  if section.settings.enable_glass
+    assign section_classes = section_classes | append: ' nether-commerce--glass'
+  endif
+-%}
+
+{%- if section.settings.enable_glass -%}
+  {{ 'component-glass.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<section
+  id="NetherCommerce-{{ section.id }}"
+  class="nether-commerce-section section-{{ section.id }}-padding gradient {{ section_classes }}"
+  style="--section-nether-commerce-padding-top: {{ section.settings.padding_top }}px; --section-nether-commerce-padding-bottom: {{ section.settings.padding_bottom }}px;"
+  aria-label="{{ section.settings.aria_label | default: 'sections.nether_commerce.label' | t | escape }}"
+>
+  <div class="page-width{% if section.settings.full_width %} page-width--full{% endif %}">
+    <nether-commerce
+      id="NetherCommerceRoot-{{ section.id }}"
+      class="nether-commerce nether-commerce--layout-{{ desktop_layout }}"
+      data-nether-motion="commerce"
+      data-nether-commerce-root
+      data-section-id="{{ section.id }}"
+      data-animation-style="{{ animation_style }}"
+      data-animation-duration="{{ animation_speed }}"
+      data-trust-layout="{{ trust_layout }}"
+      data-badge-style="{{ badge_style }}"
+      data-notice-style="{{ notice_style }}"
+      data-inventory-display="{{ section.settings.inventory_display }}"
+    >
+      {%- if section.settings.heading != blank -%}
+        <header class="nether-commerce__header" data-nether-commerce-animate>
+          <h2 class="nether-commerce__heading {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+          {%- if section.settings.subheading != blank -%}
+            <p class="nether-commerce__subheading type-body-sm">{{ section.settings.subheading }}</p>
+          {%- endif -%}
+        </header>
+      {%- endif -%}
+
+      <div class="nether-commerce__modules nether-commerce__modules--desktop-{{ desktop_layout }}">
+        {%- for block in section.blocks -%}
+          <div class="nether-commerce__module-wrap" {{ block.shopify_attributes }}>
+            {% render 'nether-commerce-block', block: block, section: section, product: product %}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {% render 'nether-commerce-extensions', extension: 'delivery_provider' %}
+      {% render 'nether-commerce-extensions', extension: 'shipping_api' %}
+      {% render 'nether-commerce-extensions', extension: 'ai_messaging' %}
+      {% render 'nether-commerce-extensions', extension: 'localization' %}
+    </nether-commerce>
+  </div>
+</section>
+
+<style>
+  #NetherCommerce-{{ section.id }}.section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "t:sections.nether_commerce.name",
+  "tag": "section",
+  "class": "section nether-commerce-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "t:sections.nether_commerce.settings.aria_label.label",
+      "default": "Commerce information"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "t:sections.nether_commerce.settings.heading.label"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:sections.nether_commerce.settings.subheading.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:sections.nether_commerce.settings.heading_size.label",
+      "default": "h2",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h1", "label": "H1" },
+        { "value": "h3", "label": "H3" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_commerce.settings.trust_header.content"
+    },
+    {
+      "type": "select",
+      "id": "trust_layout",
+      "label": "t:sections.nether_commerce.settings.trust_layout.label",
+      "default": "stack",
+      "options": [
+        { "value": "stack", "label": "t:sections.nether_commerce.settings.trust_layout.options.stack" },
+        { "value": "row", "label": "t:sections.nether_commerce.settings.trust_layout.options.row" },
+        { "value": "grid", "label": "t:sections.nether_commerce.settings.trust_layout.options.grid" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_style",
+      "label": "t:sections.nether_commerce.settings.badge_style.label",
+      "default": "solid",
+      "options": [
+        { "value": "solid", "label": "Solid" },
+        { "value": "outline", "label": "Outline" },
+        { "value": "soft", "label": "Soft" },
+        { "value": "pill", "label": "Pill" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "notice_style",
+      "label": "t:sections.nether_commerce.settings.notice_style.label",
+      "default": "soft",
+      "options": [
+        { "value": "soft", "label": "Soft" },
+        { "value": "outline", "label": "Outline" },
+        { "value": "solid", "label": "Solid" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "inventory_display",
+      "label": "t:sections.nether_commerce.settings.inventory_display.label",
+      "default": "status",
+      "options": [
+        { "value": "status", "label": "t:sections.nether_commerce.settings.inventory_display.options.status" },
+        { "value": "status_progress", "label": "t:sections.nether_commerce.settings.inventory_display.options.status_progress" },
+        { "value": "hidden", "label": "t:sections.nether_commerce.settings.inventory_display.options.hidden" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_commerce.settings.shipping_header.content"
+    },
+    {
+      "type": "number",
+      "id": "shipping_threshold",
+      "label": "t:sections.nether_commerce.settings.shipping_threshold.label",
+      "default": 100
+    },
+    {
+      "type": "text",
+      "id": "context",
+      "label": "t:sections.nether_commerce.settings.context.label",
+      "default": "generic",
+      "info": "t:sections.nether_commerce.settings.context.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_commerce.settings.layout_header.content"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "t:sections.nether_commerce.settings.desktop_layout.label",
+      "default": "stack",
+      "options": [
+        { "value": "stack", "label": "Stack" },
+        { "value": "row", "label": "Row" },
+        { "value": "compact", "label": "Compact" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "tablet_layout",
+      "label": "t:sections.nether_commerce.settings.tablet_layout.label",
+      "default": "stacked",
+      "options": [
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "compact", "label": "Compact" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "t:sections.nether_commerce.settings.mobile_layout.label",
+      "default": "stacked",
+      "options": [
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "compact", "label": "Compact" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:sections.nether_commerce.settings.full_width.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_glass",
+      "label": "t:sections.nether_commerce.settings.enable_glass.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_commerce.settings.motion_header.content"
+    },
+    {
+      "type": "select",
+      "id": "animation_style",
+      "label": "t:sections.nether_commerce.settings.animation_style.label",
+      "default": "fade",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide", "label": "Slide" },
+        { "value": "stagger", "label": "Stagger" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "min": 0.2,
+      "max": 1.2,
+      "step": 0.1,
+      "unit": "s",
+      "label": "t:sections.nether_commerce.settings.animation_speed.label",
+      "default": 0.5
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust",
+      "name": "t:sections.nether_commerce.blocks.trust.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:sections.nether_commerce.blocks.trust.settings.heading.label" },
+        { "type": "select", "id": "layout", "label": "t:sections.nether_commerce.blocks.trust.settings.layout.label", "default": "stack", "options": [
+          { "value": "stack", "label": "Stack" },
+          { "value": "row", "label": "Row" },
+          { "value": "grid", "label": "Grid" }
+        ]},
+        { "type": "select", "id": "icon_1", "default": "truck", "label": "Icon 1", "options": [
+          { "value": "truck", "label": "Truck" },
+          { "value": "lock", "label": "Lock" },
+          { "value": "return", "label": "Return" },
+          { "value": "check_mark", "label": "Check" },
+          { "value": "none", "label": "None" }
+        ]},
+        { "type": "inline_richtext", "id": "heading_1", "default": "Complimentary shipping", "label": "Trust item 1" },
+        { "type": "text", "id": "text_1", "label": "Trust text 1" },
+        { "type": "select", "id": "icon_2", "default": "return", "label": "Icon 2", "options": [
+          { "value": "return", "label": "Return" },
+          { "value": "lock", "label": "Lock" },
+          { "value": "check_mark", "label": "Check" },
+          { "value": "none", "label": "None" }
+        ]},
+        { "type": "inline_richtext", "id": "heading_2", "default": "Easy returns", "label": "Trust item 2" },
+        { "type": "text", "id": "text_2", "label": "Trust text 2" },
+        { "type": "select", "id": "icon_3", "default": "lock", "label": "Icon 3", "options": [
+          { "value": "lock", "label": "Lock" },
+          { "value": "padlock", "label": "Padlock" },
+          { "value": "check_mark", "label": "Check" },
+          { "value": "none", "label": "None" }
+        ]},
+        { "type": "inline_richtext", "id": "heading_3", "default": "Secure checkout", "label": "Trust item 3" },
+        { "type": "text", "id": "text_3", "label": "Trust text 3" },
+        { "type": "select", "id": "icon_4", "default": "none", "label": "Icon 4", "options": [
+          { "value": "none", "label": "None" },
+          { "value": "star", "label": "Star" },
+          { "value": "check_mark", "label": "Check" }
+        ]},
+        { "type": "inline_richtext", "id": "heading_4", "label": "Trust item 4" },
+        { "type": "text", "id": "text_4", "label": "Trust text 4" }
+      ]
+    },
+    {
+      "type": "secure_checkout",
+      "name": "t:sections.nether_commerce.blocks.secure_checkout.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "text", "default": "Secure checkout", "label": "t:sections.nether_commerce.blocks.secure_checkout.settings.text.label" },
+        { "type": "select", "id": "icon", "default": "lock", "label": "Icon", "options": [
+          { "value": "lock", "label": "Lock" },
+          { "value": "padlock", "label": "Padlock" }
+        ]}
+      ]
+    },
+    {
+      "type": "delivery_info",
+      "name": "t:sections.nether_commerce.blocks.delivery_info.name",
+      "limit": 1,
+      "settings": [
+        { "type": "select", "id": "icon", "default": "truck", "label": "Icon", "options": [
+          { "value": "truck", "label": "Truck" },
+          { "value": "plane", "label": "Plane" },
+          { "value": "box", "label": "Box" }
+        ]},
+        { "type": "inline_richtext", "id": "heading", "default": "Delivery information", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "select", "id": "style", "default": "card", "label": "Style", "options": [
+          { "value": "card", "label": "Card" },
+          { "value": "minimal", "label": "Minimal" },
+          { "value": "inline", "label": "Inline" },
+          { "value": "glass", "label": "Glass" }
+        ]}
+      ]
+    },
+    {
+      "type": "estimated_delivery",
+      "name": "t:sections.nether_commerce.blocks.estimated_delivery.name",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "visible", "default": false, "label": "t:sections.nether_commerce.blocks.estimated_delivery.settings.visible.label", "info": "t:sections.nether_commerce.blocks.estimated_delivery.settings.visible.info" },
+        { "type": "inline_richtext", "id": "heading", "default": "Estimated delivery", "label": "Heading" },
+        { "type": "text", "id": "text", "label": "Placeholder text" },
+        { "type": "select", "id": "icon", "default": "stopwatch", "label": "Icon", "options": [
+          { "value": "stopwatch", "label": "Stopwatch" },
+          { "value": "truck", "label": "Truck" }
+        ]}
+      ]
+    },
+    {
+      "type": "return_policy",
+      "name": "t:sections.nether_commerce.blocks.return_policy.name",
+      "limit": 1,
+      "settings": [
+        { "type": "select", "id": "icon", "default": "return", "label": "Icon", "options": [
+          { "value": "return", "label": "Return" }
+        ]},
+        { "type": "inline_richtext", "id": "heading", "default": "Returns", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "select", "id": "style", "default": "card", "label": "Style", "options": [
+          { "value": "card", "label": "Card" },
+          { "value": "minimal", "label": "Minimal" },
+          { "value": "inline", "label": "Inline" }
+        ]}
+      ]
+    },
+    {
+      "type": "warranty",
+      "name": "t:sections.nether_commerce.blocks.warranty.name",
+      "limit": 1,
+      "settings": [
+        { "type": "select", "id": "icon", "default": "padlock", "label": "Icon", "options": [
+          { "value": "padlock", "label": "Padlock" },
+          { "value": "lock", "label": "Lock" },
+          { "value": "check_mark", "label": "Check" }
+        ]},
+        { "type": "inline_richtext", "id": "heading", "default": "Warranty", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "select", "id": "style", "default": "card", "label": "Style", "options": [
+          { "value": "card", "label": "Card" },
+          { "value": "minimal", "label": "Minimal" }
+        ]}
+      ]
+    },
+    {
+      "type": "money_back",
+      "name": "t:sections.nether_commerce.blocks.money_back.name",
+      "limit": 1,
+      "settings": [
+        { "type": "select", "id": "icon", "default": "check_mark", "label": "Icon", "options": [
+          { "value": "check_mark", "label": "Check" },
+          { "value": "return", "label": "Return" }
+        ]},
+        { "type": "inline_richtext", "id": "heading", "default": "Money-back guarantee", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "select", "id": "style", "default": "card", "label": "Style", "options": [
+          { "value": "card", "label": "Card" },
+          { "value": "minimal", "label": "Minimal" }
+        ]}
+      ]
+    },
+    {
+      "type": "inventory_status",
+      "name": "t:sections.nether_commerce.blocks.inventory_status.name",
+      "limit": 1,
+      "settings": [
+        { "type": "range", "id": "inventory_threshold", "min": 0, "max": 100, "step": 1, "default": 10, "label": "t:sections.nether_commerce.blocks.inventory_status.settings.inventory_threshold.label" },
+        { "type": "checkbox", "id": "show_inventory_quantity", "default": true, "label": "t:sections.nether_commerce.blocks.inventory_status.settings.show_inventory_quantity.label" },
+        { "type": "checkbox", "id": "show_progress", "default": false, "label": "t:sections.nether_commerce.blocks.inventory_status.settings.show_progress.label" },
+        { "type": "checkbox", "id": "show_badge", "default": false, "label": "t:sections.nether_commerce.blocks.inventory_status.settings.show_badge.label" },
+        { "type": "select", "id": "text_style", "default": "body", "label": "Text style", "options": [
+          { "value": "body", "label": "Body" },
+          { "value": "subtitle", "label": "Subtitle" },
+          { "value": "uppercase", "label": "Uppercase" }
+        ]}
+      ]
+    },
+    {
+      "type": "shipping_progress",
+      "name": "t:sections.nether_commerce.blocks.shipping_progress.name",
+      "limit": 1,
+      "settings": [
+        { "type": "number", "id": "threshold", "label": "t:sections.nether_commerce.blocks.shipping_progress.settings.threshold.label", "default": 100 }
+      ]
+    },
+    {
+      "type": "payment_methods",
+      "name": "t:sections.nether_commerce.blocks.payment_methods.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:sections.nether_commerce.blocks.payment_methods.settings.heading.label", "default": "Payment methods" }
+      ]
+    },
+    {
+      "type": "pickup",
+      "name": "t:sections.nether_commerce.blocks.pickup.name",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "t:sections.nether_commerce.blocks.pickup.settings.paragraph.content" }
+      ]
+    },
+    {
+      "type": "commerce_badges",
+      "name": "t:sections.nether_commerce.blocks.commerce_badges.name",
+      "limit": 1,
+      "settings": [
+        { "type": "select", "id": "badge_style", "default": "solid", "label": "Badge style", "options": [
+          { "value": "solid", "label": "Solid" },
+          { "value": "soft", "label": "Soft" },
+          { "value": "outline", "label": "Outline" },
+          { "value": "pill", "label": "Pill" },
+          { "value": "minimal", "label": "Minimal" }
+        ]},
+        { "type": "checkbox", "id": "show_sale", "default": true, "label": "Show sale badge" },
+        { "type": "checkbox", "id": "show_new", "default": false, "label": "Show new badge" },
+        { "type": "checkbox", "id": "show_low_stock", "default": false, "label": "Show low stock badge" },
+        { "type": "checkbox", "id": "show_preorder", "default": false, "label": "Show pre-order badge" },
+        { "type": "checkbox", "id": "show_coming_soon", "default": false, "label": "Show coming soon badge" },
+        { "type": "text", "id": "badge_1_label", "label": "Custom badge 1" },
+        { "type": "text", "id": "badge_1_type", "default": "custom", "label": "Badge 1 type" },
+        { "type": "text", "id": "badge_2_label", "label": "Custom badge 2" },
+        { "type": "text", "id": "badge_2_type", "default": "custom", "label": "Badge 2 type" },
+        { "type": "text", "id": "badge_3_label", "label": "Custom badge 3" },
+        { "type": "text", "id": "badge_3_type", "default": "custom", "label": "Badge 3 type" }
+      ]
+    },
+    {
+      "type": "promotional_notice",
+      "name": "t:sections.nether_commerce.blocks.promotional_notice.name",
+      "settings": [
+        { "type": "inline_richtext", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "select", "id": "notice_style", "default": "soft", "label": "Style", "options": [
+          { "value": "soft", "label": "Soft" },
+          { "value": "outline", "label": "Outline" },
+          { "value": "solid", "label": "Solid" },
+          { "value": "minimal", "label": "Minimal" }
+        ]},
+        { "type": "select", "id": "icon", "default": "discount", "label": "Icon", "options": [
+          { "value": "discount", "label": "Discount" },
+          { "value": "star", "label": "Star" },
+          { "value": "info", "label": "Info" }
+        ]}
+      ]
+    },
+    {
+      "type": "sales_messaging",
+      "name": "t:sections.nether_commerce.blocks.sales_messaging.name",
+      "limit": 1,
+      "settings": [
+        { "type": "inline_richtext", "id": "heading", "label": "Heading" },
+        { "type": "text", "id": "text", "label": "Text" },
+        { "type": "checkbox", "id": "show_savings", "default": true, "label": "Show savings from compare-at price" }
+      ]
+    },
+    {
+      "type": "announcement",
+      "name": "t:sections.nether_commerce.blocks.announcement.name",
+      "settings": [
+        { "type": "inline_richtext", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "select", "id": "notice_style", "default": "outline", "label": "Style", "options": [
+          { "value": "soft", "label": "Soft" },
+          { "value": "outline", "label": "Outline" },
+          { "value": "solid", "label": "Solid" },
+          { "value": "minimal", "label": "Minimal" }
+        ]},
+        { "type": "select", "id": "icon", "default": "info", "label": "Icon", "options": [
+          { "value": "info", "label": "Info" },
+          { "value": "lightning_bolt", "label": "Lightning" },
+          { "value": "star", "label": "Star" }
+        ]}
+      ]
+    },
+    {
+      "type": "summary",
+      "name": "t:sections.nether_commerce.blocks.summary.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Checkout confidence" },
+        { "type": "select", "id": "layout", "default": "stack", "label": "Layout", "options": [
+          { "value": "stack", "label": "Stack" },
+          { "value": "compact", "label": "Compact" },
+          { "value": "split", "label": "Split" }
+        ]},
+        { "type": "checkbox", "id": "show_secure", "default": true, "label": "Show secure checkout" },
+        { "type": "text", "id": "secure_text", "default": "Secure checkout", "label": "Secure checkout text" },
+        { "type": "checkbox", "id": "show_payment", "default": true, "label": "Show payment methods" },
+        { "type": "text", "id": "payment_heading", "label": "Payment heading" }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "t:sections.nether_commerce.blocks.divider.name",
+      "settings": [
+        { "type": "select", "id": "style", "default": "line", "label": "Style", "options": [
+          { "value": "line", "label": "Line" },
+          { "value": "space", "label": "Space" },
+          { "value": "fade", "label": "Fade" }
+        ]}
+      ]
+    },
+    {
+      "type": "extension_delivery_provider",
+      "name": "t:sections.nether_commerce.blocks.extension_delivery_provider.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "extension_shipping_api",
+      "name": "t:sections.nether_commerce.blocks.extension_shipping_api.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "extension_ai_messaging",
+      "name": "t:sections.nether_commerce.blocks.extension_ai_messaging.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "extension_localization",
+      "name": "t:sections.nether_commerce.blocks.extension_localization.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "extension_preorder",
+      "name": "t:sections.nether_commerce.blocks.extension_preorder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "extension_coming_soon",
+      "name": "t:sections.nether_commerce.blocks.extension_coming_soon.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "extension_shipping_countdown",
+      "name": "t:sections.nether_commerce.blocks.extension_shipping_countdown.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.nether_commerce.presets.name",
+      "blocks": [
+        { "type": "trust" },
+        { "type": "secure_checkout" },
+        { "type": "payment_methods" },
+        { "type": "return_policy" },
+        { "type": "money_back" }
+      ]
+    }
+  ]
+}
+{% endschema %}

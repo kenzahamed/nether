@@ -1,0 +1,61 @@
+{% comment %}
+  Nether Premium Recommendations — toolbar module (strategy note, view all, count).
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - product_count: {Number} Optional visible product count
+  - view_all_url: {String} Optional collection / catalog URL
+{% endcomment %}
+
+{%- if section.settings.nether_show_toolbar -%}
+  {%- liquid
+    assign toolbar_label = section.settings.nether_toolbar_label
+    if toolbar_label == blank
+      assign toolbar_label = 'sections.nether_recommendations.toolbar.label' | t
+    endif
+
+    assign view_all_label = section.settings.nether_view_all_label
+    if view_all_label == blank
+      assign view_all_label = 'sections.nether_recommendations.toolbar.view_all' | t
+    endif
+  -%}
+
+  <div
+    class="nether-recommendations__module nether-recommendations__toolbar"
+    data-nether-recommendations-module="toolbar"
+    data-nether-recommendations-animate
+    data-nether-recommendations-toolbar
+    role="toolbar"
+    aria-label="{{ toolbar_label | escape }}"
+  >
+    <p class="nether-recommendations__toolbar-meta type-body-sm" data-nether-recommendations-count>
+      {%- if product_count != blank and product_count > 0 -%}
+        {{ 'sections.nether_recommendations.toolbar.count' | t: count: product_count }}
+      {%- else -%}
+        {{ 'sections.nether_recommendations.toolbar.ready' | t }}
+      {%- endif -%}
+    </p>
+
+    <div class="nether-recommendations__toolbar-actions">
+      {%- if view_all_url != blank and section.settings.nether_show_view_all -%}
+        {% render 'button',
+          label: view_all_label,
+          link: view_all_url,
+          style: 'text',
+          size: 'small',
+          show_arrow: true,
+          class: 'nether-recommendations__view-all'
+        %}
+      {%- endif -%}
+
+      <span
+        class="nether-recommendations__toolbar-filter"
+        data-nether-recommendations-filter-placeholder
+        hidden
+        aria-hidden="true"
+      >
+        {{ 'sections.nether_recommendations.extensions.filters' | t }}
+      </span>
+    </div>
+  </div>
+{%- endif -%}

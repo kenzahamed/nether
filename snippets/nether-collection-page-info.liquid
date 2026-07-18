@@ -1,0 +1,53 @@
+{% comment %}
+  Collection information module for Nether Premium Collection Page.
+  Displays product count and optional collection metadata.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+  - collection: {Object} Collection object (required)
+  - paginate: {Object} Paginate object (optional)
+{% endcomment %}
+
+{%- liquid
+  assign show_count = block.settings.show_product_count
+  assign show_rules = block.settings.show_collection_rules
+  assign info_label = block.settings.heading
+-%}
+
+<div
+  class="nether-collection-page__module nether-collection-page__module--info"
+  data-nether-collection-page-module="info"
+  data-nether-collection-page-animate
+  {{ block.shopify_attributes }}
+>
+  {%- if info_label != blank -%}
+    <h2 class="nether-collection-page__module-heading type-heading-sm">{{ info_label }}</h2>
+  {%- endif -%}
+
+  <dl class="nether-collection-page__info-list">
+    {%- if show_count -%}
+      <div class="nether-collection-page__info-row">
+        <dt class="nether-collection-page__info-label type-caption">{{ 'sections.nether_collection_page.info.product_count' | t }}</dt>
+        <dd class="nether-collection-page__info-value type-body-sm">
+          {%- if collection.results_count -%}
+            {{ 'templates.search.results_with_count' | t: terms: collection.terms, count: collection.results_count }}
+          {%- elsif collection.products_count == collection.all_products_count -%}
+            {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
+          {%- else -%}
+            {{ 'products.facets.product_count' | t: product_count: collection.products_count, count: collection.all_products_count }}
+          {%- endif -%}
+        </dd>
+      </div>
+    {%- endif -%}
+
+    {%- if show_rules and collection.rules.size > 0 -%}
+      <div class="nether-collection-page__info-row">
+        <dt class="nether-collection-page__info-label type-caption">{{ 'sections.nether_collection_page.info.rules' | t }}</dt>
+        <dd class="nether-collection-page__info-value type-body-sm">
+          {{ 'sections.nether_collection_page.info.automated_collection' | t }}
+        </dd>
+      </div>
+    {%- endif -%}
+  </dl>
+</div>

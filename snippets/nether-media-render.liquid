@@ -1,0 +1,257 @@
+{% comment %}
+  Unified Nether Premium Media renderer for block-level media items.
+  Reuses Dawn deferred-media, ratio, and picture patterns from collection/hero frameworks.
+
+  Accepts:
+  - block: {Object} Media block with standard media settings (required)
+  - section: {Object} Parent section (required)
+  - columns: {Number} Grid columns for responsive sizes (optional)
+  - lazy_load: {Boolean} Lazy load images (default: true)
+  - fetch_priority: {String} Image fetch priority (optional)
+  - enable_parallax: {Boolean} Parallax data attribute (optional, defaults to section setting)
+
+  Usage:
+  {% render 'nether-media-render', block: block, section: section, columns: columns %}
+{% endcomment %}
+
+{%- liquid
+  assign media_type = block.settings.media_type | default: 'image'
+  assign desktop_image = block.settings.image_desktop
+  assign mobile_image = block.settings.image_mobile | default: desktop_image
+  assign shopify_video = block.settings.video
+  assign video_url = block.settings.video_url
+  assign poster_image = block.settings.poster_image | default: desktop_image
+  assign video_description = block.settings.video_description | default: block.settings.title
+  assign video_loop = block.settings.video_loop
+  assign block_image_ratio = block.settings.image_ratio | default: 'default'
+  if block_image_ratio == 'default'
+    assign image_ratio = section.settings.nether_image_ratio | default: 'portrait'
+  else
+    assign image_ratio = block_image_ratio
+  endif
+  assign columns_count = columns | default: section.settings.nether_columns_desktop | default: 3
+  assign is_lazy = lazy_load | default: true
+  assign fetch_priority_value = fetch_priority | default: 'auto'
+  assign use_parallax = enable_parallax | default: section.settings.nether_enable_parallax
+
+  assign ratio = 1
+  if desktop_image != blank and image_ratio == 'portrait'
+    assign ratio = 0.8
+  elsif desktop_image != blank and image_ratio == 'landscape'
+    assign ratio = 1.4
+  elsif desktop_image != blank and image_ratio == 'adapt'
+    assign ratio = desktop_image.aspect_ratio
+  elsif image_ratio == 'square'
+    assign ratio = 1
+  endif
+  if ratio == 0 or ratio == null
+    assign ratio = 1
+  endif
+
+  assign widths = '165, 330, 535, 750, 1000, 1500, 2000, 3000'
+  assign sizes = '(min-width: ' | append: settings.page_width | append: 'px) ' | append: settings.page_width | minus: 100 | divided_by: columns_count | append: 'px, (min-width: 750px) calc((100vw - 10rem) / ' | append: columns_count | append: '), calc(100vw - 3rem)'
+
+  assign poster_alt = poster_image.alt | default: video_description
+  assign desktop_alt = desktop_image.alt | default: block.settings.title
+-%}
+
+<div
+  class="nether-media-card__media ratio"
+  style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+  data-nether-media-render
+  data-nether-media-media-type="{{ media_type }}"
+  {% if use_parallax %}data-nether-media-parallax{% endif %}
+>
+  <div
+    class="nether-media-card__media-inner media media--transparent media--hover-effect global-media-settings"
+    data-nether-media-media-inner
+  >
+    {%- case media_type -%}
+      {%- when 'background_video' -%}
+        {%- if shopify_video != blank -%}
+          <div data-nether-media-bg-video>
+            {{
+              shopify_video
+              | video_tag:
+                image_size: '1500x',
+                autoplay: true,
+                loop: video_loop,
+                muted: true,
+                controls: false,
+                playsinline: true,
+                class: 'nether-media-card__video nether-media-card__video--background'
+            }}
+          </div>
+        {%- elsif video_url != blank -%}
+          {%- if video_url.type == 'youtube' -%}
+            <iframe
+              src="https://www.youtube.com/embed/{{ video_url.id }}?autoplay=1&mute=1&controls=0&loop=1&playlist={{ video_url.id }}&playsinline=1"
+              class="nether-media-card__video nether-media-card__video--iframe"
+              allow="autoplay; encrypted-media"
+              title="{{ video_description | escape }}"
+              loading="lazy"
+            ></iframe>
+          {%- elsif video_url.type == 'vimeo' -%}
+            <iframe
+              src="https://player.vimeo.com/video/{{ video_url.id }}?autoplay=1&muted=1&background=1&loop=1"
+              class="nether-media-card__video nether-media-card__video--iframe"
+              allow="autoplay; encrypted-media"
+              title="{{ video_description | escape }}"
+              loading="lazy"
+            ></iframe>
+          {%- endif -%}
+        {%- elsif poster_image != blank -%}
+          {{
+            poster_image
+            | image_url: width: 2000
+            | image_tag:
+              widths: widths,
+              sizes: sizes,
+              alt: poster_alt,
+              loading: is_lazy,
+              fetchpriority: fetch_priority_value
+          }}
+        {%- else -%}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+
+      {%- when 'video' -%}
+        {%- if shopify_video != blank -%}
+          <deferred-media class="nether-media-card__deferred-media" data-media-id="{{ shopify_video.id }}">
+            <button
+              type="button"
+              class="deferred-media__poster nether-media-card__video-poster"
+              aria-label="{{ 'sections.video.load_video' | t: description: video_description | default: shopify_video.alt | escape }}"
+            >
+              {%- if poster_image != blank -%}
+                {{
+                  poster_image
+                  | image_url: width: 2000
+                  | image_tag:
+                    widths: widths,
+                    sizes: sizes,
+                    alt: poster_alt,
+                    loading: is_lazy,
+                    fetchpriority: fetch_priority_value
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+              <span class="deferred-media__poster-button motion-reduce" data-nether-media-play>
+                <span class="svg-wrapper">
+                  {{- 'icon-play.svg' | inline_asset_content -}}
+                </span>
+              </span>
+            </button>
+            <template>
+              {{
+                shopify_video
+                | video_tag:
+                  image_size: '1500x',
+                  autoplay: true,
+                  loop: video_loop,
+                  muted: false,
+                  controls: true,
+                  playsinline: true,
+                  class: 'nether-media-card__video'
+              }}
+            </template>
+          </deferred-media>
+        {%- elsif video_url != blank -%}
+          <deferred-media class="nether-media-card__deferred-media" data-media-id="{{ video_url.id }}">
+            <button
+              type="button"
+              class="deferred-media__poster nether-media-card__video-poster"
+              aria-label="{{ 'sections.video.load_video' | t: description: video_description | escape }}"
+            >
+              {%- if poster_image != blank -%}
+                {{
+                  poster_image
+                  | image_url: width: 2000
+                  | image_tag:
+                    widths: widths,
+                    sizes: sizes,
+                    alt: poster_alt,
+                    loading: is_lazy,
+                    fetchpriority: fetch_priority_value
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+              <span class="deferred-media__poster-button motion-reduce" data-nether-media-play>
+                <span class="svg-wrapper">
+                  {{- 'icon-play.svg' | inline_asset_content -}}
+                </span>
+              </span>
+            </button>
+            <template>
+              {%- if video_url.type == 'youtube' -%}
+                {{
+                  video_url
+                  | external_video_url: autoplay: true, loop: video_loop, playlist: video_url.id
+                  | external_video_tag: class: 'nether-media-card__video nether-media-card__video--iframe'
+                }}
+              {%- else -%}
+                {{
+                  video_url
+                  | external_video_url: autoplay: true, loop: video_loop
+                  | external_video_tag: class: 'nether-media-card__video nether-media-card__video--iframe'
+                }}
+              {%- endif -%}
+            </template>
+          </deferred-media>
+        {%- elsif desktop_image != blank -%}
+          {{
+            desktop_image
+            | image_url: width: 2000
+            | image_tag:
+              widths: widths,
+              sizes: sizes,
+              alt: desktop_alt,
+              loading: is_lazy,
+              fetchpriority: fetch_priority_value
+          }}
+        {%- else -%}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+
+      {%- else -%}
+        {%- if desktop_image != blank -%}
+          <picture>
+            {%- if mobile_image != blank and mobile_image != desktop_image -%}
+              <source
+                media="(max-width: 749px)"
+                srcset="
+                  {%- if mobile_image.width >= 330 -%}{{ mobile_image | image_url: width: 330 }} 330w,{%- endif -%}
+                  {%- if mobile_image.width >= 535 -%}{{ mobile_image | image_url: width: 535 }} 535w,{%- endif -%}
+                  {%- if mobile_image.width >= 750 -%}{{ mobile_image | image_url: width: 750 }} 750w,{%- endif -%}
+                  {{ mobile_image | image_url }} {{ mobile_image.width }}w
+                "
+                sizes="{{ sizes }}"
+              >
+            {%- endif -%}
+            {{
+              desktop_image
+              | image_url: width: 2000
+              | image_tag:
+                widths: widths,
+                sizes: sizes,
+                alt: desktop_alt,
+                loading: is_lazy,
+                fetchpriority: fetch_priority_value
+            }}
+          </picture>
+        {%- else -%}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+    {%- endcase -%}
+  </div>
+
+  {%- comment -%} Future-ready slot for AR / 3D model integrations {%- endcomment -%}
+  <div
+    class="nether-media-card__model-slot"
+    data-nether-media-future
+    {% if block.settings.ar_url != blank %}data-nether-media-ar-url="{{ block.settings.ar_url | escape }}"{% endif %}
+    hidden
+  ></div>
+</div>

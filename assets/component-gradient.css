@@ -1,0 +1,690 @@
+/* =============================================================================
+ * Nether Premium Gradient Utilities System
+ * Extends Dawn / Nether color architecture — do not duplicate base.css .gradient
+ * or replace .card--gradient-border in component-card-premium.css.
+ * Types: linear, radial, conic, mesh, overlay, text, border, button, hero, card
+ * Merchant control: --gradient-intensity, --gradient-angle, --gradient-overlay-opacity
+ * Namespace: .grad-* (does not replace Dawn .gradient class)
+ * ============================================================================= */
+
+:root {
+  /* ── Global merchant multipliers (wire to theme settings in future) ─────────── */
+  --gradient-intensity: 1;
+  --gradient-angle: 135deg;
+  --gradient-angle-vertical: 180deg;
+  --gradient-overlay-opacity: 1;
+
+  /* ── Color stop tokens (reuse Dawn color channels) ───────────────────────────── */
+  --grad-color-start: var(--color-background);
+  --grad-color-mid: var(--color-button);
+  --grad-color-end: var(--color-foreground);
+  --grad-color-accent: var(--color-link);
+  --grad-color-shadow: var(--color-shadow);
+  --grad-color-contrast: var(--color-background-contrast);
+
+  /* ── Alpha tokens (scale with intensity / overlay opacity) ─────────────────── */
+  --grad-alpha-strong: calc(0.85 * var(--gradient-intensity));
+  --grad-alpha-medium: calc(0.55 * var(--gradient-intensity));
+  --grad-alpha-soft: calc(0.3 * var(--gradient-intensity));
+  --grad-alpha-faint: calc(0.12 * var(--gradient-intensity));
+  --grad-overlay-alpha: calc(0.55 * var(--gradient-overlay-opacity) * var(--gradient-intensity));
+
+  /* ── Composed gradient recipes ─────────────────────────────────────────────── */
+  --grad-linear-brand: linear-gradient(
+    var(--gradient-angle),
+    rgba(var(--grad-color-start), var(--grad-alpha-strong)) 0%,
+    rgba(var(--grad-color-mid), var(--grad-alpha-medium)) 50%,
+    rgba(var(--grad-color-end), var(--grad-alpha-soft)) 100%
+  );
+
+  --grad-linear-subtle: linear-gradient(
+    var(--gradient-angle),
+    rgba(var(--grad-color-start), 1) 0%,
+    rgba(var(--grad-color-contrast), var(--grad-alpha-faint)) 100%
+  );
+
+  --grad-linear-accent: linear-gradient(
+    var(--gradient-angle),
+    rgba(var(--grad-color-mid), var(--grad-alpha-strong)) 0%,
+    rgba(var(--grad-color-accent), var(--grad-alpha-medium)) 100%
+  );
+
+  --grad-linear-fade-down: linear-gradient(
+    var(--gradient-angle-vertical),
+    rgba(var(--grad-color-shadow), var(--grad-overlay-alpha)) 0%,
+    transparent 100%
+  );
+
+  --grad-linear-fade-up: linear-gradient(
+    to top,
+    rgba(var(--grad-color-shadow), var(--grad-overlay-alpha)) 0%,
+    transparent 60%
+  );
+
+  --grad-radial-glow: radial-gradient(
+    circle at 50% 50%,
+    rgba(var(--grad-color-mid), var(--grad-alpha-soft)) 0%,
+    transparent 70%
+  );
+
+  --grad-radial-corner: radial-gradient(
+    circle at 100% 0%,
+    rgba(var(--grad-color-accent), var(--grad-alpha-medium)) 0%,
+    transparent 55%
+  );
+
+  --grad-radial-vignette: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(var(--grad-color-shadow), var(--grad-overlay-alpha)) 100%
+  );
+
+  --grad-conic-brand: conic-gradient(
+    from var(--gradient-angle) at 50% 50%,
+    rgba(var(--grad-color-start), var(--grad-alpha-faint)) 0deg,
+    rgba(var(--grad-color-mid), var(--grad-alpha-soft)) 120deg,
+    rgba(var(--grad-color-accent), var(--grad-alpha-soft)) 240deg,
+    rgba(var(--grad-color-start), var(--grad-alpha-faint)) 360deg
+  );
+
+  --grad-mesh-brand:
+    radial-gradient(at 20% 30%, rgba(var(--grad-color-mid), var(--grad-alpha-soft)) 0%, transparent 50%),
+    radial-gradient(at 80% 20%, rgba(var(--grad-color-accent), var(--grad-alpha-faint)) 0%, transparent 50%),
+    radial-gradient(at 60% 80%, rgba(var(--grad-color-end), var(--grad-alpha-faint)) 0%, transparent 50%);
+
+  --grad-mesh-hero:
+    radial-gradient(at 0% 0%, rgba(var(--grad-color-mid), var(--grad-alpha-medium)) 0%, transparent 45%),
+    radial-gradient(at 100% 0%, rgba(var(--grad-color-accent), var(--grad-alpha-soft)) 0%, transparent 40%),
+    radial-gradient(at 50% 100%, rgba(var(--grad-color-shadow), var(--grad-overlay-alpha)) 0%, transparent 55%);
+
+  --grad-text-brand: linear-gradient(
+    var(--gradient-angle),
+    rgb(var(--grad-color-mid)) 0%,
+    rgb(var(--grad-color-accent)) 100%
+  );
+
+  --grad-text-foreground: linear-gradient(
+    var(--gradient-angle),
+    rgb(var(--grad-color-end)) 0%,
+    rgba(var(--grad-color-end), 0.55) 100%
+  );
+
+  --grad-border-brand: linear-gradient(
+    var(--gradient-angle),
+    rgba(var(--grad-color-end), var(--grad-alpha-soft)),
+    rgba(var(--grad-color-mid), var(--grad-alpha-medium)),
+    rgba(var(--grad-color-end), var(--grad-alpha-faint))
+  );
+
+  --grad-button-brand: linear-gradient(
+    var(--gradient-angle),
+    rgba(var(--grad-color-mid), 1) 0%,
+    rgba(var(--grad-color-accent), var(--grad-alpha-strong)) 100%
+  );
+
+  --grad-hero-dramatic: linear-gradient(
+    var(--gradient-angle-vertical),
+    rgba(var(--grad-color-shadow), calc(var(--grad-overlay-alpha) + 0.15)) 0%,
+    rgba(var(--grad-color-shadow), var(--grad-alpha-soft)) 40%,
+    transparent 100%
+  );
+
+  --grad-card-surface: linear-gradient(
+    var(--gradient-angle),
+    rgba(var(--grad-color-start), 1) 0%,
+    rgba(var(--grad-color-mid), var(--grad-alpha-faint)) 100%
+  );
+
+  /* ── Animated-ready tokens (no keyframes yet) ────────────────────────────────── */
+  --grad-ready-size: 200% 100%;
+  --grad-ready-position: 0% 50%;
+  --grad-ready-shimmer-angle: 90deg;
+}
+
+/* ── Background: Linear ──────────────────────────────────────────────────────── */
+
+.grad-linear-brand {
+  background-image: var(--grad-linear-brand);
+  background-color: rgb(var(--grad-color-start));
+}
+
+.grad-linear-subtle {
+  background-image: var(--grad-linear-subtle);
+  background-color: rgb(var(--grad-color-start));
+}
+
+.grad-linear-accent {
+  background-image: var(--grad-linear-accent);
+  background-color: rgb(var(--grad-color-start));
+}
+
+.grad-linear-fade-down {
+  background-image: var(--grad-linear-fade-down);
+}
+
+.grad-linear-fade-up {
+  background-image: var(--grad-linear-fade-up);
+}
+
+/* ── Background: Radial ──────────────────────────────────────────────────────── */
+
+.grad-radial-glow {
+  background-color: rgb(var(--grad-color-start));
+  background-image: var(--grad-radial-glow);
+}
+
+.grad-radial-corner {
+  background-color: rgb(var(--grad-color-start));
+  background-image: var(--grad-radial-corner);
+}
+
+.grad-radial-vignette {
+  background-image: var(--grad-radial-vignette);
+}
+
+/* ── Background: Conic ───────────────────────────────────────────────────────── */
+
+.grad-conic-brand {
+  background-color: rgb(var(--grad-color-start));
+  background-image: var(--grad-conic-brand);
+}
+
+/* ── Background: Mesh-inspired ───────────────────────────────────────────────── */
+
+.grad-mesh-brand {
+  background-color: rgb(var(--grad-color-start));
+  background-image: var(--grad-mesh-brand);
+}
+
+.grad-mesh-hero {
+  background-color: rgb(var(--grad-color-start));
+  background-image: var(--grad-mesh-hero);
+}
+
+/* ── Overlay gradients (direct fill) ─────────────────────────────────────────── */
+
+.grad-overlay-bottom {
+  background-image: var(--grad-linear-fade-up);
+}
+
+.grad-overlay-top {
+  background-image: var(--grad-linear-fade-down);
+}
+
+.grad-overlay-vignette {
+  background-image: var(--grad-radial-vignette);
+}
+
+.grad-overlay-brand {
+  background-image: linear-gradient(
+    to top,
+    rgba(var(--grad-color-mid), var(--grad-alpha-medium)) 0%,
+    transparent 65%
+  );
+}
+
+/* ── Overlay gradients (pseudo-element layer) ────────────────────────────────── */
+
+.grad-overlay-layer {
+  position: relative;
+  isolation: isolate;
+}
+
+.grad-overlay-layer--bottom::after,
+.grad-overlay-layer--top::after,
+.grad-overlay-layer--vignette::after,
+.grad-overlay-layer--brand::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.grad-overlay-layer--bottom::after {
+  background-image: var(--grad-linear-fade-up);
+}
+
+.grad-overlay-layer--top::after {
+  background-image: var(--grad-linear-fade-down);
+}
+
+.grad-overlay-layer--vignette::after {
+  background-image: var(--grad-radial-vignette);
+}
+
+.grad-overlay-layer--brand::after {
+  background-image: linear-gradient(
+    to top,
+    rgba(var(--grad-color-mid), var(--grad-alpha-medium)) 0%,
+    transparent 65%
+  );
+}
+
+/* ── Text gradients ──────────────────────────────────────────────────────────── */
+
+.grad-text-brand,
+.grad-text-accent,
+.grad-text-foreground {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: rgb(var(--grad-color-end));
+}
+
+.grad-text-brand {
+  background-image: var(--grad-text-brand);
+}
+
+.grad-text-accent {
+  background-image: var(--grad-linear-accent);
+}
+
+.grad-text-foreground {
+  background-image: var(--grad-text-foreground);
+}
+
+/* ── Border gradients (mask technique — extends card--gradient-border pattern) ── */
+
+.grad-border-brand,
+.grad-border-accent,
+.grad-border-subtle {
+  position: relative;
+  isolation: isolate;
+}
+
+.grad-border-brand::before,
+.grad-border-accent::before,
+.grad-border-subtle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: max(var(--border-width, 1px), 1px);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.grad-border-brand::before {
+  background: var(--grad-border-brand);
+}
+
+.grad-border-accent::before {
+  background: linear-gradient(
+    var(--gradient-angle),
+    rgba(var(--grad-color-mid), var(--grad-alpha-medium)),
+    rgba(var(--grad-color-accent), var(--grad-alpha-strong)),
+    rgba(var(--grad-color-mid), var(--grad-alpha-soft))
+  );
+}
+
+.grad-border-subtle::before {
+  background: linear-gradient(
+    var(--gradient-angle),
+    rgba(var(--grad-color-end), var(--grad-alpha-faint)),
+    rgba(var(--grad-color-end), var(--grad-alpha-soft)),
+    rgba(var(--grad-color-end), var(--grad-alpha-faint))
+  );
+}
+
+/* ── Category: Button gradients ──────────────────────────────────────────────── */
+
+.grad-button-brand,
+.grad-button-accent,
+.grad-button-subtle {
+  --alpha-button-background: 0;
+  background-color: transparent;
+  color: rgb(var(--color-button-text));
+}
+
+.grad-button-brand {
+  background-image: var(--grad-button-brand);
+}
+
+.grad-button-accent {
+  background-image: var(--grad-linear-accent);
+}
+
+.grad-button-subtle {
+  background-image: var(--grad-linear-subtle);
+  color: rgb(var(--grad-color-end));
+}
+
+.button.grad-button-brand:not([disabled]):not([aria-disabled='true']):hover,
+.button.grad-button-accent:not([disabled]):not([aria-disabled='true']):hover {
+  filter: brightness(1.06);
+}
+
+/* ── Category: Card gradients ──────────────────────────────────────────────── */
+
+.grad-card-brand.card--card,
+.grad-card-brand.card--standard .card__inner,
+.card.grad-card-brand,
+.card--standard.grad-card-brand .card__inner {
+  background: var(--grad-card-surface);
+}
+
+.grad-card-accent.card--card,
+.grad-card-accent.card--standard .card__inner,
+.card.grad-card-accent,
+.card--standard.grad-card-accent .card__inner {
+  background: var(--grad-linear-accent);
+}
+
+.grad-card-mesh.card--card,
+.grad-card-mesh.card--standard .card__inner,
+.card.grad-card-mesh,
+.card--standard.grad-card-mesh .card__inner {
+  background-color: rgb(var(--grad-color-start));
+  background-image: var(--grad-mesh-brand);
+}
+
+.grad-card-overlay.card--type-category .card__media + .card__content,
+.grad-card-overlay.card--type-category .card__inner .card__content,
+.card--type-category .card__media + .card__content,
+.card--type-category .card__inner .card__content {
+  background: var(--grad-linear-fade-up);
+}
+
+/* ── Category: Badge gradients ─────────────────────────────────────────────── */
+
+.grad-badge-brand {
+  background-image: var(--grad-button-brand);
+  color: rgb(var(--color-button-text));
+  border-color: transparent;
+}
+
+.grad-badge-accent {
+  background-image: var(--grad-linear-accent);
+  color: rgb(var(--color-button-text));
+  border-color: transparent;
+}
+
+.grad-badge-subtle {
+  background-image: var(--grad-linear-subtle);
+  color: rgb(var(--grad-color-end));
+}
+
+/* ── Category: Hero gradients ────────────────────────────────────────────────── */
+
+.grad-hero-brand,
+.grad-hero-dramatic,
+.grad-hero-mesh,
+.grad-hero-vignette {
+  position: relative;
+}
+
+.grad-hero-brand,
+.grad-hero-mesh {
+  background-color: rgb(var(--grad-color-start));
+  background-image: var(--grad-mesh-hero);
+}
+
+.grad-hero-dramatic {
+  background-image: var(--grad-hero-dramatic);
+}
+
+.grad-hero-vignette {
+  background-image: var(--grad-radial-vignette);
+}
+
+/* ── Hover gradients ─────────────────────────────────────────────────────────── */
+
+@media (hover: hover) and (pointer: fine) {
+  .grad-hover-brand {
+    transition: background-image var(--duration-short) ease, filter var(--duration-short) ease;
+  }
+
+  .grad-hover-brand:hover {
+    background-image: var(--grad-linear-brand);
+    filter: brightness(1.04);
+  }
+
+  .grad-hover-accent:hover {
+    background-image: var(--grad-linear-accent);
+  }
+
+  .grad-hover-glow:hover {
+    background-image: var(--grad-radial-glow), var(--grad-linear-subtle);
+  }
+
+  .grad-hover-text-brand:hover {
+    background-image: var(--grad-text-brand);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .button.grad-hover-button-brand:not([disabled]):not([aria-disabled='true']):hover {
+    background-image: linear-gradient(
+      var(--gradient-angle),
+      rgba(var(--grad-color-accent), 1) 0%,
+      rgba(var(--grad-color-mid), var(--grad-alpha-strong)) 100%
+    );
+  }
+}
+
+/* ── Animated-ready gradients (CSS variables only — no keyframes yet) ────────── */
+
+.grad-ready-linear {
+  background-size: var(--grad-ready-size);
+  background-position: var(--grad-ready-position);
+  --grad-ready-recipe: var(--grad-linear-brand);
+}
+
+.grad-ready-accent {
+  background-size: var(--grad-ready-size);
+  background-position: var(--grad-ready-position);
+  --grad-ready-recipe: var(--grad-linear-accent);
+}
+
+.grad-ready-shimmer {
+  --grad-ready-shimmer: linear-gradient(
+    var(--grad-ready-shimmer-angle),
+    transparent 0%,
+    rgba(var(--grad-color-start), 0.35) 50%,
+    transparent 100%
+  );
+  background-size: var(--grad-ready-size);
+  background-position: var(--grad-ready-position);
+}
+
+.grad-ready-mesh {
+  --grad-ready-mesh-a: 20% 30%;
+  --grad-ready-mesh-b: 80% 20%;
+  --grad-ready-mesh-c: 60% 80%;
+}
+
+.grad-ready-conic {
+  --grad-ready-conic-origin: 50% 50%;
+  --grad-ready-conic-from: var(--gradient-angle);
+}
+
+/* ── Card system bridge (extends .card--gradient-border — does not replace) ─── */
+
+.card--gradient-border.grad-border-accent .card__inner::before {
+  background: linear-gradient(
+    var(--gradient-angle),
+    rgba(var(--grad-color-mid), var(--grad-alpha-medium)),
+    rgba(var(--grad-color-accent), var(--grad-alpha-strong)),
+    rgba(var(--grad-color-end), var(--grad-alpha-soft))
+  );
+}
+
+.card--gradient-border.grad-border-brand .card__inner::before {
+  background: var(--grad-border-brand);
+}
+
+/* ── Glass / Shadow / Radius composition helpers ─────────────────────────────── */
+
+.grad-with-glass {
+  position: relative;
+}
+
+.grad-linear-brand.glass-light,
+.grad-linear-brand.glass-medium,
+.grad-hero-brand.glass-overlay,
+.grad-card-brand.glass-light {
+  /* Compose gradient base with glass surface tokens from component-glass.css */
+  background-blend-mode: normal;
+}
+
+.grad-with-shadow-sm {
+  box-shadow: var(--shadow-level-sm);
+}
+
+.grad-with-shadow-md {
+  box-shadow: var(--shadow-level-md);
+}
+
+.grad-with-shadow-lg {
+  box-shadow: var(--shadow-level-lg);
+}
+
+.grad-radius-inherit {
+  border-radius: inherit;
+}
+
+/* ── Accessibility ───────────────────────────────────────────────────────────── */
+
+.grad-readable,
+.grad-hero-brand.grad-readable,
+.grad-card-brand.grad-readable {
+  color: rgb(var(--grad-color-end));
+}
+
+.grad-readable--on-dark {
+  color: rgb(var(--grad-color-start));
+}
+
+.grad-readable h1,
+.grad-readable h2,
+.grad-readable h3,
+.grad-readable p,
+.grad-readable a,
+.grad-readable .button__label,
+.grad-readable .badge__label {
+  color: inherit;
+}
+
+.grad-text-safe {
+  text-shadow: 0 0.1rem 0.2rem rgba(var(--grad-color-shadow), 0.18);
+}
+
+.grad-overlay-readable {
+  color: rgb(var(--grad-color-start));
+}
+
+.grad-overlay-readable .grad-text-brand,
+.grad-overlay-readable .grad-text-accent {
+  -webkit-text-fill-color: currentColor;
+  background-image: none;
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grad-hover-brand,
+  .grad-hover-accent,
+  .grad-hover-glow,
+  .grad-hover-text-brand,
+  .grad-hover-button-brand,
+  .button.grad-button-brand,
+  .button.grad-button-accent {
+    transition: none;
+  }
+
+  .grad-hover-brand:hover,
+  .grad-hover-accent:hover,
+  .grad-hover-glow:hover,
+  .button.grad-hover-button-brand:not([disabled]):not([aria-disabled='true']):hover,
+  .button.grad-button-brand:not([disabled]):not([aria-disabled='true']):hover {
+    filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .grad-text-brand,
+  .grad-text-accent,
+  .grad-text-foreground {
+    -webkit-text-fill-color: currentColor;
+    background-image: none;
+    color: rgb(var(--grad-color-end));
+    font-weight: 600;
+  }
+
+  .grad-linear-brand,
+  .grad-linear-subtle,
+  .grad-linear-accent,
+  .grad-mesh-brand,
+  .grad-mesh-hero,
+  .grad-hero-brand,
+  .grad-hero-mesh {
+    background-image: none;
+    background-color: rgb(var(--grad-color-start));
+  }
+
+  .grad-overlay-bottom,
+  .grad-overlay-top,
+  .grad-overlay-vignette,
+  .grad-overlay-brand,
+  .grad-overlay-layer--bottom::after,
+  .grad-overlay-layer--top::after,
+  .grad-overlay-layer--vignette::after,
+  .grad-overlay-layer--brand::after {
+    background-image: linear-gradient(
+      to top,
+      rgba(var(--grad-color-shadow), 0.75) 0%,
+      transparent 100%
+    );
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .grad-text-brand,
+  .grad-text-accent,
+  .grad-text-foreground {
+    -webkit-text-fill-color: CanvasText;
+    background-image: none;
+    color: CanvasText;
+  }
+
+  .grad-border-brand::before,
+  .grad-border-accent::before,
+  .grad-border-subtle::before,
+  .card--gradient-border.grad-border-accent .card__inner::before,
+  .card--gradient-border.grad-border-brand .card__inner::before {
+    display: none;
+  }
+
+  .grad-border-brand,
+  .grad-border-accent,
+  .grad-border-subtle,
+  .card--gradient-border.grad-border-accent,
+  .card--gradient-border.grad-border-brand {
+    border: 1px solid CanvasText;
+  }
+
+  .grad-linear-brand,
+  .grad-linear-subtle,
+  .grad-linear-accent,
+  .grad-radial-glow,
+  .grad-radial-corner,
+  .grad-conic-brand,
+  .grad-mesh-brand,
+  .grad-mesh-hero,
+  .grad-button-brand,
+  .grad-button-accent,
+  .grad-badge-brand,
+  .grad-badge-accent,
+  .grad-hero-brand,
+  .grad-hero-mesh {
+    background-image: none;
+    background-color: Canvas;
+    color: CanvasText;
+  }
+}

@@ -1,0 +1,96 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Commerce Badges.
+  Composes the Nether Premium Badge System — does not duplicate badge styles.
+
+  Accepts:
+  - style: {String} Badge style (solid | outline | soft | pill | rounded | minimal)
+  - size: {String} small | medium | large (default: small)
+  - show_sale: {Boolean}
+  - show_new: {Boolean}
+  - show_low_stock: {Boolean}
+  - show_preorder: {Boolean}
+  - show_coming_soon: {Boolean}
+  - product: {Object} Optional for automatic sale/new/stock
+  - badge_1_label, badge_1_type, badge_2_label, badge_2_type, badge_3_label, badge_3_type
+  - class: {String}
+  - attributes: {String}
+  - label: {String} Region aria-label
+{% endcomment %}
+
+{%- liquid
+  assign badge_style = style | default: 'solid'
+  assign badge_size = size | default: 'small'
+  assign region_label = label | default: 'sections.nether_commerce.badges.label' | t
+  assign has_badges = false
+
+  if show_sale and product and product.compare_at_price > product.price
+    assign has_badges = true
+  endif
+  if show_new and product and product.tags contains 'new'
+    assign has_badges = true
+  endif
+  if show_low_stock
+    assign has_badges = true
+  endif
+  if show_preorder
+    assign has_badges = true
+  endif
+  if show_coming_soon
+    assign has_badges = true
+  endif
+  if badge_1_label != blank or badge_2_label != blank or badge_3_label != blank
+    assign has_badges = true
+  endif
+-%}
+
+{%- if has_badges -%}
+  <div
+    class="nether-commerce__badges{% if class != blank %} {{ class }}{% endif %}"
+    data-nether-commerce-module="badges"
+    data-nether-commerce-animate
+    role="list"
+    aria-label="{{ region_label | escape }}"
+    {% if attributes != blank %}{{ attributes }}{% endif %}
+  >
+    {%- if show_sale and product.compare_at_price > product.price -%}
+      <span class="nether-commerce__badge-item" role="listitem">
+        {% render 'badge', type: 'sale', style: badge_style, size: badge_size %}
+      </span>
+    {%- endif -%}
+    {%- if show_new and product.tags contains 'new' -%}
+      <span class="nether-commerce__badge-item" role="listitem">
+        {% render 'badge', type: 'new', style: badge_style, size: badge_size %}
+      </span>
+    {%- endif -%}
+    {%- if show_low_stock -%}
+      <span class="nether-commerce__badge-item" role="listitem">
+        {% render 'badge', type: 'low_stock', style: badge_style, size: badge_size %}
+      </span>
+    {%- endif -%}
+    {%- if show_preorder -%}
+      <span class="nether-commerce__badge-item" role="listitem">
+        {% render 'badge', type: 'pre_order', style: badge_style, size: badge_size %}
+      </span>
+    {%- endif -%}
+    {%- if show_coming_soon -%}
+      <span class="nether-commerce__badge-item" role="listitem">
+        {% render 'badge', type: 'coming_soon', style: badge_style, size: badge_size %}
+      </span>
+    {%- endif -%}
+    {%- if badge_1_label != blank -%}
+      <span class="nether-commerce__badge-item" role="listitem">
+        {% render 'badge', label: badge_1_label, type: badge_1_type | default: 'custom', style: badge_style, size: badge_size %}
+      </span>
+    {%- endif -%}
+    {%- if badge_2_label != blank -%}
+      <span class="nether-commerce__badge-item" role="listitem">
+        {% render 'badge', label: badge_2_label, type: badge_2_type | default: 'custom', style: badge_style, size: badge_size %}
+      </span>
+    {%- endif -%}
+    {%- if badge_3_label != blank -%}
+      <span class="nether-commerce__badge-item" role="listitem">
+        {% render 'badge', label: badge_3_label, type: badge_3_type | default: 'custom', style: badge_style, size: badge_size %}
+      </span>
+    {%- endif -%}
+  </div>
+{%- endif -%}

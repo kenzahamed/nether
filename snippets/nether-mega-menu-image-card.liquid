@@ -1,0 +1,29 @@
+{% comment %}
+  Nether Mega Menu — Image Card block.
+  Reuses Nether Premium Card system.
+
+  Accepts:
+  - block: {Object} Section block
+  - section: {Object} Header section
+{% endcomment %}
+
+{%- if section.settings.nether_mega_enable_images -%}
+  <div class="nether-mega-menu__image-card" data-nether-mega-reveal data-nether-mega-image-reveal>
+    {%- render 'card',
+      type: 'content',
+      style: block.settings.card_style,
+      radius: 'md',
+      shadow: 'sm',
+      image: block.settings.image,
+      image_alt: block.settings.image.alt,
+      link: block.settings.link,
+      heading: block.settings.heading,
+      caption: block.settings.caption,
+      media_aspect_ratio: block.settings.image_ratio,
+      hover: 'zoom,shadow',
+      class: 'nether-mega-menu__image-card-inner'
+    -%}
+  </div>
+{%- elsif request.design_mode -%}
+  <p class="nether-mega-menu__placeholder">{{ 'sections.header.nether_mega_menu.images_disabled' | t }}</p>
+{%- endif -%}

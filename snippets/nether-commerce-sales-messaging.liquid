@@ -1,0 +1,63 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Sales Messaging.
+  Presentation for sale / compare-at messaging; uses Shopify price when product given.
+
+  Accepts:
+  - product: {Object} Optional
+  - heading: {String}
+  - text: {String}
+  - show_savings: {Boolean} Show compare-at savings when on sale
+  - class: {String}
+  - attributes: {String}
+{% endcomment %}
+
+{%- liquid
+  assign on_sale = false
+  assign savings_html = ''
+  if product and product.compare_at_price > product.price
+    assign on_sale = true
+    assign savings = product.compare_at_price | minus: product.price
+    assign savings_money = savings | money
+    assign savings_html = 'sections.nether_commerce.sales.savings_html' | t: amount: savings_money
+  endif
+  assign show_sale_savings = show_savings
+  if show_sale_savings == nil
+    assign show_sale_savings = true
+  endif
+  assign has_content = false
+  if heading != blank or text != blank or on_sale
+    assign has_content = true
+  endif
+-%}
+
+{%- if has_content -%}
+  <div
+    class="nether-commerce__sales{% if class != blank %} {{ class }}{% endif %}"
+    data-nether-commerce-module="sales-messaging"
+    data-nether-commerce-animate
+    role="status"
+    {% if attributes != blank %}{{ attributes }}{% endif %}
+  >
+    {%- if on_sale -%}
+      <span class="nether-commerce__sales-badge">
+        {% render 'badge', type: 'sale', style: 'soft', size: 'small' %}
+      </span>
+    {%- endif -%}
+    {%- if product and product.selected_or_first_available_variant.inventory_management == 'shopify' -%}
+      {%- assign sale_stock_qty = product.selected_or_first_available_variant.inventory_quantity | default: 0 -%}
+      {%- if sale_stock_qty > 0 and sale_stock_qty <= 10 -%}
+        {% render 'nether-commerce-low-stock', quantity: sale_stock_qty, show_quantity: true, show_badge: true %}
+      {%- endif -%}
+    {%- endif -%}
+    <div class="nether-commerce__sales-copy">
+      {%- if heading != blank -%}
+        <p class="nether-commerce__sales-heading type-body-sm">{{ heading }}</p>
+      {%- endif -%}
+      {%- if text != blank -%}
+        <p class="nether-commerce__sales-text type-body-sm">{{ text }}</p>
+      {%- elsif show_sale_savings and on_sale -%}
+        <p class="nether-commerce__sales-text type-body-sm">{{ savings_html }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

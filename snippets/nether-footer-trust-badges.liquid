@@ -1,0 +1,73 @@
+{% comment %}
+  Renders a Nether Premium Footer trust badges placeholder block.
+
+  Accepts:
+  - block: {Object} Theme Editor block
+
+  Usage:
+  {% render 'nether-footer-trust-badges', block: block %}
+{% endcomment %}
+
+{%- if block.settings.heading != blank -%}
+  <h2 class="footer-block__heading inline-richtext nether-footer__heading" id="FooterTrustHeading-{{ block.id }}">
+    {{- block.settings.heading -}}
+  </h2>
+{%- endif -%}
+
+<div class="footer-block__details-content nether-footer__trust" role="group" aria-labelledby="FooterTrustHeading-{{ block.id }}">
+  {%- if block.settings.text != blank -%}
+    <div class="nether-footer__trust-text rte">{{ block.settings.text }}</div>
+  {%- endif -%}
+
+  <ul class="nether-footer__trust-list list-unstyled" role="list">
+    {%- for i in (1..4) -%}
+      {%- liquid
+        case i
+          when 1
+            assign trust_image = block.settings.badge_1_image
+            assign trust_label = block.settings.badge_1_label
+          when 2
+            assign trust_image = block.settings.badge_2_image
+            assign trust_label = block.settings.badge_2_label
+          when 3
+            assign trust_image = block.settings.badge_3_image
+            assign trust_label = block.settings.badge_3_label
+          when 4
+            assign trust_image = block.settings.badge_4_image
+            assign trust_label = block.settings.badge_4_label
+        endcase
+      -%}
+
+      {%- if trust_image != blank or trust_label != blank -%}
+        <li class="nether-footer__trust-item">
+          {%- if trust_image != blank -%}
+            <div class="nether-footer__trust-image">
+              {{
+                trust_image
+                | image_url: width: 200
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '100, 150, 200',
+                  alt: trust_label | default: trust_image.alt | escape
+              }}
+            </div>
+          {%- elsif trust_label != blank -%}
+            {%- render 'badge',
+              label: trust_label,
+              type: 'custom',
+              style: block.settings.badge_style | default: 'soft',
+              size: 'small',
+              uppercase: false
+            -%}
+          {%- endif -%}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+
+  {%- if block.settings.show_app_placeholder -%}
+    <div class="nether-footer__trust-app-slot" data-nether-trust-app-slot>
+      <p class="nether-footer__placeholder caption">{{ 'sections.nether_footer.trust.app_placeholder' | t }}</p>
+    </div>
+  {%- endif -%}
+</div>

@@ -1,0 +1,60 @@
+{% comment %}
+  Future-ready commerce extension points for Nether Premium Product Page.
+  Structural placeholders only — no runtime handlers.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- liquid
+  assign extension_type = block.type
+  assign extension_label = block.settings.label | default: block.settings.heading
+
+  case extension_type
+    when 'wishlist_placeholder'
+      assign extension_icon = 'heart'
+      assign extension_data = 'data-nether-wishlist-placeholder'
+      assign default_label = 'sections.nether_product_page.extensions.wishlist' | t
+    when 'compare_placeholder'
+      assign extension_icon = 'clipboard'
+      assign extension_data = 'data-nether-compare-placeholder'
+      assign default_label = 'sections.nether_product_page.extensions.compare' | t
+    when 'bundles_placeholder'
+      assign extension_icon = 'box'
+      assign extension_data = 'data-nether-bundles-placeholder'
+      assign default_label = 'sections.nether_product_page.extensions.bundles' | t
+    when 'subscriptions_placeholder'
+      assign extension_icon = 'return'
+      assign extension_data = 'data-nether-subscriptions-placeholder'
+      assign default_label = 'sections.nether_product_page.extensions.subscriptions' | t
+    when 'personalization_placeholder'
+      assign extension_icon = 'clipboard'
+      assign extension_data = 'data-nether-personalization-placeholder'
+      assign default_label = 'sections.nether_product_page.extensions.personalization' | t
+    else
+      assign extension_icon = 'info'
+      assign extension_data = 'data-nether-extension-placeholder'
+      assign default_label = 'sections.nether_product_page.extensions.generic' | t
+  endcase
+
+  if extension_label == blank
+    assign extension_label = default_label
+  endif
+-%}
+
+<div
+  class="nether-product-page__module nether-product-page__module--extension nether-product-page__extension nether-product-page__extension--{{ extension_type | replace: '_placeholder', '' }}"
+  data-nether-product-page-module="extension"
+  data-nether-product-page-animate
+  {{ extension_data }}
+  {{ block.shopify_attributes }}
+>
+  <div class="nether-product-page__extension-inner" role="group" aria-label="{{ extension_label | escape }}">
+    {% render 'icon', icon: extension_icon, size: 'sm', decorative: false, label: extension_label %}
+    <span class="nether-product-page__extension-label type-body-sm">{{ extension_label }}</span>
+    {%- if block.settings.text != blank -%}
+      <p class="nether-product-page__extension-text type-body-sm">{{ block.settings.text }}</p>
+    {%- endif -%}
+  </div>
+</div>

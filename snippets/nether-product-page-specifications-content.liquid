@@ -1,0 +1,95 @@
+{% comment %}
+  Inner specifications content for table/list rendering.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - product: {Object} Product object (required)
+  - spec_style: {String} list or table (required)
+{% endcomment %}
+
+{%- if spec_style == 'table' -%}
+  <table class="nether-product-page__spec-table">
+    <caption class="visually-hidden">{{ block.settings.heading | default: 'sections.nether_product_page.specifications.label' | t }}</caption>
+    <tbody>
+      {%- if block.settings.show_vendor and product.vendor != blank -%}
+        <tr>
+          <th scope="row">{{ 'sections.nether_product_page.specifications.vendor' | t }}</th>
+          <td>{{ product.vendor }}</td>
+        </tr>
+      {%- endif -%}
+      {%- if block.settings.show_type and product.type != blank -%}
+        <tr>
+          <th scope="row">{{ 'sections.nether_product_page.specifications.type' | t }}</th>
+          <td>{{ product.type }}</td>
+        </tr>
+      {%- endif -%}
+      {%- if block.settings.show_sku and product.selected_or_first_available_variant.sku != blank -%}
+        <tr>
+          <th scope="row">{{ 'products.product.sku' | t }}</th>
+          <td>{{ product.selected_or_first_available_variant.sku }}</td>
+        </tr>
+      {%- endif -%}
+      {%- for i in (1..3) -%}
+        {%- liquid
+          assign label_key = 'custom_spec_' | append: i | append: '_label'
+          assign value_key = 'custom_spec_' | append: i | append: '_value'
+          assign spec_label = block.settings[label_key]
+          assign spec_value = block.settings[value_key]
+        -%}
+        {%- if spec_label != blank and spec_value != blank -%}
+          <tr>
+            <th scope="row">{{ spec_label }}</th>
+            <td>{{ spec_value }}</td>
+          </tr>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if block.settings.show_tags and product.tags.size > 0 -%}
+        <tr>
+          <th scope="row">{{ 'sections.nether_product_page.specifications.tags' | t }}</th>
+          <td>{{ product.tags | join: ', ' }}</td>
+        </tr>
+      {%- endif -%}
+    </tbody>
+  </table>
+{%- else -%}
+  <dl class="nether-product-page__spec-list">
+    {%- if block.settings.show_vendor and product.vendor != blank -%}
+      <div class="nether-product-page__spec-row">
+        <dt>{{ 'sections.nether_product_page.specifications.vendor' | t }}</dt>
+        <dd>{{ product.vendor }}</dd>
+      </div>
+    {%- endif -%}
+    {%- if block.settings.show_type and product.type != blank -%}
+      <div class="nether-product-page__spec-row">
+        <dt>{{ 'sections.nether_product_page.specifications.type' | t }}</dt>
+        <dd>{{ product.type }}</dd>
+      </div>
+    {%- endif -%}
+    {%- if block.settings.show_sku and product.selected_or_first_available_variant.sku != blank -%}
+      <div class="nether-product-page__spec-row">
+        <dt>{{ 'products.product.sku' | t }}</dt>
+        <dd>{{ product.selected_or_first_available_variant.sku }}</dd>
+      </div>
+    {%- endif -%}
+    {%- for i in (1..3) -%}
+      {%- liquid
+        assign label_key = 'custom_spec_' | append: i | append: '_label'
+        assign value_key = 'custom_spec_' | append: i | append: '_value'
+        assign spec_label = block.settings[label_key]
+        assign spec_value = block.settings[value_key]
+      -%}
+      {%- if spec_label != blank and spec_value != blank -%}
+        <div class="nether-product-page__spec-row">
+          <dt>{{ spec_label }}</dt>
+          <dd>{{ spec_value }}</dd>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if block.settings.show_tags and product.tags.size > 0 -%}
+      <div class="nether-product-page__spec-row">
+        <dt>{{ 'sections.nether_product_page.specifications.tags' | t }}</dt>
+        <dd>{{ product.tags | join: ', ' }}</dd>
+      </div>
+    {%- endif -%}
+  </dl>
+{%- endif -%}

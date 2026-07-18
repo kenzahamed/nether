@@ -1,0 +1,263 @@
+{% comment %}
+  Renders Nether Premium Newsletter & Lead Generation form.
+  Reuses Dawn customer form, Nether Form System, and Button System.
+
+  Accepts:
+  - section: {Object} Newsletter section (required)
+  - block: {Object} newsletter_form block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-newsletter-form', section: section, block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attribute = motion_attr | default: 'data-nether-newsletter-animate'
+  assign form_motion_attr = 'data-nether-newsletter-form-animate'
+
+  assign capture_mode = block.settings.capture_mode | default: 'newsletter'
+  assign form_tags = block.settings.contact_tags | default: 'newsletter'
+
+  case capture_mode
+    when 'lead_capture'
+      if form_tags == blank or form_tags == 'newsletter'
+        assign form_tags = 'lead'
+      endif
+    when 'vip'
+      assign form_tags = 'vip,newsletter'
+    when 'waitlist'
+      assign form_tags = 'waitlist,newsletter'
+    when 'discount'
+      assign form_tags = 'discount,newsletter'
+  endcase
+
+  assign show_name_field = block.settings.show_name_field
+  assign show_consent = block.settings.show_consent_checkbox
+  assign field_size = block.settings.field_size | default: 'medium'
+  assign button_style = block.settings.button_style | default: 'primary'
+  assign button_size = block.settings.button_size | default: 'medium'
+  assign button_label = block.settings.button_label
+  assign secondary_label = block.settings.secondary_button_label
+  assign secondary_link = block.settings.secondary_button_link
+  assign secondary_style = block.settings.secondary_button_style | default: 'secondary'
+  assign show_success_state = block.settings.show_success_state
+  assign privacy_message = block.settings.privacy_message
+  assign integration_provider = block.settings.integration_provider | default: 'shopify'
+  assign integration_list_id = block.settings.integration_list_id
+
+  for companion in section.blocks
+    if companion.type == 'name_field'
+      assign show_name_field = true
+      assign name_block = companion
+    endif
+    if companion.type == 'consent_checkbox'
+      assign show_consent = true
+      assign consent_block = companion
+    endif
+    if companion.type == 'email_field'
+      assign email_block = companion
+    endif
+    if companion.type == 'primary_button' and button_label == blank
+      assign button_label = companion.settings.button_label
+      assign button_style = companion.settings.button_style | default: button_style
+      assign button_size = companion.settings.button_size | default: button_size
+    endif
+    if companion.type == 'secondary_button' and secondary_label == blank and companion.settings.button_label != blank
+      assign secondary_label = companion.settings.button_label
+      assign secondary_link = companion.settings.button_link
+      assign secondary_style = companion.settings.button_style | default: secondary_style
+    endif
+  endfor
+
+  if button_label == blank
+    case capture_mode
+      when 'waitlist'
+        assign button_label = 'sections.nether_newsletter.form.join_waitlist' | t
+      when 'vip'
+        assign button_label = 'sections.nether_newsletter.form.join_vip' | t
+      when 'discount'
+        assign button_label = 'sections.nether_newsletter.form.get_discount' | t
+      when 'lead_capture'
+        assign button_label = 'sections.nether_newsletter.form.submit_lead' | t
+      else
+        assign button_label = 'newsletter.button_label' | t
+    endcase
+  endif
+
+  assign form_id = 'NetherNewsletterForm-' | append: section.id | append: '-' | append: block.id
+  assign email_id = 'NetherNewsletterEmail-' | append: section.id | append: '-' | append: block.id
+  assign name_id = 'NetherNewsletterName-' | append: section.id | append: '-' | append: block.id
+  assign consent_id = 'NetherNewsletterConsent-' | append: section.id | append: '-' | append: block.id
+  assign submit_id = 'NetherNewsletterSubmit-' | append: section.id | append: '-' | append: block.id
+
+  assign email_label = block.settings.email_label
+  if email_label == blank and email_block != blank
+    assign email_label = email_block.settings.label
+  endif
+  if email_label == blank
+    assign email_label = 'newsletter.label' | t
+  endif
+
+  assign name_label = block.settings.name_label
+  if name_label == blank and name_block != blank
+    assign name_label = name_block.settings.label
+  endif
+  if name_label == blank
+    assign name_label = 'sections.nether_newsletter.form.name_label' | t
+  endif
+
+  assign consent_label = block.settings.consent_label
+  if consent_label == blank and consent_block != blank
+    assign consent_label = consent_block.settings.label
+  endif
+  if consent_label == blank
+    assign consent_label = 'sections.nether_newsletter.form.consent_label' | t
+  endif
+
+  assign form_layout = block.settings.form_layout | default: 'stacked'
+  assign form_classes = 'newsletter-form nether-newsletter__form nether-newsletter__form--' | append: capture_mode
+  assign form_classes = form_classes | append: ' nether-newsletter__form--' | append: form_layout
+-%}
+
+<div
+  class="nether-newsletter__form-wrap"
+  {{ motion_attribute }}
+  data-nether-newsletter-form-wrap
+  data-nether-newsletter-role="form"
+  {{ block.shopify_attributes }}
+>
+  {%- form 'customer', id: form_id, class: form_classes, data-nether-newsletter-form: '' -%}
+    <input type="hidden" name="contact[tags]" value="{{ form_tags | escape }}">
+    {%- if block.settings.capture_note != blank -%}
+      <input type="hidden" name="contact[note]" value="{{ block.settings.capture_note | escape }}">
+    {%- endif -%}
+
+    <div
+      class="nether-newsletter__form-fields"
+      data-nether-newsletter-form-fields
+      {{ form_motion_attr }}
+      data-capture-mode="{{ capture_mode }}"
+      {% if integration_provider != 'shopify' %}
+        data-integration-provider="{{ integration_provider }}"
+        {% if integration_list_id != blank %}data-integration-list-id="{{ integration_list_id | escape }}"{% endif %}
+      {% endif %}
+      role="group"
+      aria-label="{{ 'sections.nether_newsletter.form.group_label' | t | escape }}"
+    >
+      {%- if show_name_field -%}
+        <div
+          class="nether-newsletter__field nether-newsletter__field--name"
+          data-nether-newsletter-input-animate
+          data-nether-newsletter-role="name"
+        >
+          {%- render 'form-field',
+            type: 'text',
+            name: 'contact[first_name]',
+            id: name_id,
+            label: name_label,
+            placeholder: name_label,
+            size: field_size,
+            required: block.settings.name_required,
+            autocomplete: 'name',
+            class: 'nether-form-field'
+          -%}
+        </div>
+      {%- endif -%}
+
+      <div
+        class="nether-newsletter__field nether-newsletter__field--email"
+        data-nether-newsletter-input-animate
+        data-nether-newsletter-role="email"
+      >
+        {%- liquid
+          assign email_error_message = ''
+          if form.errors
+            assign email_error_message = form.errors.translated_fields.email | capitalize | append: ' ' | append: form.errors.messages.email
+          endif
+        -%}
+        {%- render 'form-field',
+          type: 'email',
+          name: 'contact[email]',
+          id: email_id,
+          label: email_label,
+          placeholder: email_label,
+          value: form.email,
+          size: field_size,
+          required: true,
+          autocomplete: 'email',
+          error_message: email_error_message,
+          class: 'nether-form-field'
+        -%}
+      </div>
+
+      {%- if show_consent -%}
+        <div
+          class="nether-newsletter__field nether-newsletter__field--consent"
+          data-nether-newsletter-input-animate
+          data-nether-newsletter-role="consent"
+        >
+          {%- render 'form-choice',
+            type: 'checkbox',
+            id: consent_id,
+            label: consent_label,
+            required: block.settings.consent_required,
+            class: 'nether-newsletter__consent'
+          -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div
+      class="nether-newsletter__form-actions"
+      data-nether-newsletter-button-animate
+      data-nether-newsletter-role="submit"
+    >
+      {%- render 'button',
+        label: button_label,
+        type: 'submit',
+        style: button_style,
+        size: button_size,
+        id: submit_id,
+        attributes: 'name="commit"'
+      -%}
+
+      {%- if secondary_label != blank -%}
+        {%- render 'button',
+          label: secondary_label,
+          link: secondary_link,
+          style: secondary_style,
+          size: button_size,
+          disabled: secondary_link == blank
+        -%}
+      {%- endif -%}
+    </div>
+
+    {%- if privacy_message != blank -%}
+      <p
+        class="nether-newsletter__privacy type-caption"
+        data-nether-newsletter-privacy
+        data-nether-newsletter-role="privacy"
+      >
+        {{ privacy_message }}
+      </p>
+    {%- endif -%}
+
+    {%- if show_success_state and form.posted_successfully? -%}
+      <div
+        class="nether-newsletter__success"
+        id="{{ form_id }}-success"
+        data-nether-newsletter-success
+        data-nether-newsletter-role="success"
+        role="status"
+        aria-live="polite"
+        tabindex="-1"
+      >
+        {%- render 'form-message',
+          message: block.settings.success_message | default: 'newsletter.success' | t,
+          type: 'success',
+          id: form_id | append: '-success-message'
+        -%}
+      </div>
+    {%- endif -%}
+  {%- endform -%}
+</div>

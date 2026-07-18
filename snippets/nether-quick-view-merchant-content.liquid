@@ -1,0 +1,16 @@
+{% comment %}
+  Nether Premium Quick View — merchant content area (Theme Editor RTE).
+  Accepts:
+  - section: {Object} Header section (required)
+{% endcomment %}
+
+{%- assign merchant_content = section.settings.nether_quick_view_merchant_content -%}
+
+{%- if merchant_content != blank -%}
+  <div
+    class="nether-quick-view__merchant-content type-body-sm rte"
+    data-nether-quick-view-module="merchant-content"
+  >
+    {{ merchant_content }}
+  </div>
+{%- endif -%}

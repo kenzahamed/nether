@@ -1,0 +1,97 @@
+{% comment %}
+  Nether Premium Recommendations — carousel layout module.
+  Reuses Dawn slider-component (same pattern as Product Showcase).
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - products: {Array} Product list (required)
+  - products_limit: {Number} Max products to show
+{% endcomment %}
+
+{%- liquid
+  assign limit = products_limit | default: section.settings.nether_products_to_show | default: 4
+  assign columns_desktop = section.settings.nether_columns_desktop | default: 4
+  assign columns_mobile = section.settings.nether_columns_mobile | default: '2'
+  assign skip_card_product_styles = false
+  assign card_index = 0
+  assign product_count = 0
+
+  for recommendation in products limit: limit
+    assign product_count = product_count | plus: 1
+  endfor
+-%}
+
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+<slider-component
+  class="nether-recommendations__carousel slider-mobile-gutter"
+  data-nether-recommendations-module="carousel"
+  data-nether-recommendations-carousel
+  data-nether-recommendations-animate
+>
+  <ul
+    id="NetherRecommendationsCarousel-{{ section.id }}"
+    class="nether-recommendations__grid nether-recommendations__grid--carousel grid product-grid grid--peek grid--{{ columns_desktop }}-col-desktop grid--{{ columns_mobile }}-col-tablet-down contains-card contains-card--product slider slider--desktop"
+    role="list"
+    aria-label="{{ 'sections.nether_recommendations.carousel.label' | t }}"
+    data-nether-recommendations-grid
+  >
+    {%- for recommendation in products limit: limit -%}
+      {%- assign card_index = card_index | plus: 1 -%}
+      {%- liquid
+        assign lazy_load = true
+        if card_index <= columns_desktop
+          assign lazy_load = false
+        endif
+      -%}
+      <li
+        id="NetherRecommendationsSlide-{{ section.id }}-{{ card_index }}"
+        class="nether-recommendations__item grid__item slider__slide"
+        data-nether-recommendations-item
+        data-nether-recommendations-animate
+      >
+        {% render 'nether-recommendations-cards',
+          card_product: recommendation,
+          section: section,
+          skip_styles: skip_card_product_styles,
+          lazy_load: lazy_load,
+          index: card_index
+        %}
+      </li>
+      {%- assign skip_card_product_styles = true -%}
+    {%- endfor -%}
+  </ul>
+
+  {%- if product_count > 1 -%}
+    <div class="slider-buttons no-js-hidden">
+      <button
+        type="button"
+        class="slider-button slider-button--prev"
+        name="previous"
+        aria-label="{{ 'general.slider.previous_slide' | t }}"
+        aria-controls="NetherRecommendationsCarousel-{{ section.id }}"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </span>
+      </button>
+      <div class="slider-counter caption">
+        <span class="slider-counter--current">1</span>
+        <span aria-hidden="true"> / </span>
+        <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+        <span class="slider-counter--total">{{ product_count }}</span>
+      </div>
+      <button
+        type="button"
+        class="slider-button slider-button--next"
+        name="next"
+        aria-label="{{ 'general.slider.next_slide' | t }}"
+        aria-controls="NetherRecommendationsCarousel-{{ section.id }}"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </div>
+  {%- endif -%}
+</slider-component>

@@ -1,0 +1,24 @@
+{% comment %}
+  Nether Premium Compare — page header module.
+
+  Accepts:
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- liquid
+  assign heading = section.settings.nether_compare_heading
+  if heading == blank
+    assign heading = 'sections.nether_compare.title' | t
+  endif
+  assign subheading = section.settings.nether_compare_subheading
+-%}
+
+<header class="nether-compare__header" data-nether-compare-animate>
+  <div class="nether-compare__header-copy">
+    <h1 class="nether-compare__heading type-display-sm">{{ heading }}</h1>
+    {%- if subheading != blank -%}
+      <p class="nether-compare__subheading type-body">{{ subheading }}</p>
+    {%- endif -%}
+  </div>
+  {% render 'nether-compare-toolbar', section: section, context: 'page' %}
+</header>

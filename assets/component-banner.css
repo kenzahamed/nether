@@ -1,0 +1,240 @@
+/* =============================================================================
+ * Nether Premium Banner Framework
+ * Extends component-hero.css — load hero styles first. Banner-only modifiers.
+ * ============================================================================= */
+
+nether-banner {
+  display: block;
+  position: relative;
+}
+
+.nether-banner {
+  --nether-banner-min-height: 36rem;
+  --nether-hero-min-height: var(--nether-banner-min-height);
+  --nether-hero-content-padding: 2.4rem;
+  --nether-hero-gap: 2rem;
+}
+
+/* ── Banner height presets ──────────────────────────────────────────────────── */
+
+.nether-banner--height-small {
+  --nether-banner-min-height: 28rem;
+}
+
+.nether-banner--height-medium {
+  --nether-banner-min-height: 36rem;
+}
+
+.nether-banner--height-large {
+  --nether-banner-min-height: 48rem;
+}
+
+.nether-banner--height-adapt {
+  --nether-banner-min-height: auto;
+}
+
+/* ── Banner layout modifiers ────────────────────────────────────────────────── */
+
+.nether-banner--layout-promotional .nether-hero__content {
+  max-width: min(var(--nether-hero-content-width), 72rem);
+}
+
+.nether-banner--layout-collection .nether-hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-shadow), 0.15) 0%,
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+.nether-banner--layout-brand-story .nether-hero__inner {
+  grid-template-columns: 1.1fr 0.9fr;
+}
+
+.nether-banner--layout-brand-story .nether-hero__heading {
+  max-width: 16ch;
+}
+
+.nether-banner--layout-brand-story .nether-hero__text {
+  max-width: 42rem;
+}
+
+.nether-banner--layout-glass .nether-hero__overlay {
+  opacity: calc(var(--nether-hero-overlay-opacity) * 0.5);
+}
+
+.nether-banner--layout-gradient .nether-hero__overlay {
+  background: transparent;
+}
+
+.nether-banner--layout-minimal {
+  --nether-hero-content-padding: 1.6rem;
+  --nether-hero-gap: 1.2rem;
+}
+
+/* ── Floating content card ──────────────────────────────────────────────────── */
+
+.nether-banner__panel--floating {
+  position: relative;
+  z-index: 2;
+  box-shadow: var(--shadow-lg, 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.14));
+}
+
+.nether-banner--floating-card .nether-hero__content-shell {
+  align-items: flex-end;
+  padding-bottom: 3.2rem;
+}
+
+.nether-banner--floating-card .nether-hero__content {
+  max-width: min(48rem, 92%);
+}
+
+/* ── Section dividers ───────────────────────────────────────────────────────── */
+
+.nether-banner__divider {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  pointer-events: none;
+}
+
+.nether-banner__divider--top {
+  margin-bottom: -1px;
+}
+
+.nether-banner__divider--bottom {
+  margin-top: -1px;
+}
+
+.nether-banner__divider--line {
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-banner__divider--wave {
+  height: 3.2rem;
+  background: rgb(var(--color-background));
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+.nether-banner__divider--slant {
+  height: 2.4rem;
+  background: rgb(var(--color-background));
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 100%);
+}
+
+/* ── Countdown placeholder ────────────────────────────────────────────────────── */
+
+.nether-banner__countdown {
+  display: none;
+}
+
+.nether-banner__countdown-slot {
+  min-height: 4rem;
+}
+
+/* ── Collection meta (when collection linked) ─────────────────────────────────── */
+
+.nether-banner__collection-bar {
+  position: absolute;
+  z-index: 3;
+  bottom: 1.6rem;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.nether-banner__collection-bar-inner {
+  pointer-events: auto;
+}
+
+.nether-banner__collection-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nether-banner__collection-link:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.3rem;
+}
+
+/* ── Banner media hover (enhanced via NetherMotion hover presets) ───────────── */
+
+.nether-banner[data-banner-hover='true'] .nether-hero__media-inner {
+  transform-origin: center center;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+
+@media screen and (max-width: 989px) {
+  .nether-banner--layout-brand-story .nether-hero__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-banner--layout-brand-story .nether-hero__media {
+    min-height: 24rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-banner {
+    --nether-hero-content-padding: 1.6rem;
+  }
+
+  .nether-banner--floating-card .nether-hero__content {
+    max-width: 100%;
+  }
+
+  .nether-banner__divider--wave {
+    height: 2rem;
+  }
+}
+
+/* ── Motion hooks (Hero Motion standard — additive Banner selectors) ─────────── */
+
+.nether-banner[data-nether-motion-pending='true'] [data-nether-banner-collection-bar] {
+  opacity: 0;
+}
+
+.nether-banner[data-nether-motion-ready='true'] [data-nether-hero-animate],
+.nether-banner[data-nether-motion-ready='true'] [data-nether-hero-media],
+.nether-banner[data-nether-motion-ready='true'] [data-nether-hero-overlay],
+.nether-banner[data-nether-motion-ready='true'] .nether-hero__shape,
+.nether-banner[data-nether-motion-ready='true'] [data-nether-banner-collection-bar] {
+  will-change: transform, opacity;
+}
+
+.nether-banner[data-nether-motion-ready='true'] .nether-hero__buttons .button,
+.nether-banner[data-nether-motion-ready='true'] .nether-hero__card-slot,
+.nether-banner[data-nether-motion-ready='true'] .nether-banner__collection-link {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-banner[data-nether-motion-pending='true'] [data-nether-banner-collection-bar] {
+    opacity: 1;
+  }
+
+  .nether-banner[data-banner-hover='true'] .nether-hero__media-inner {
+    transform: none;
+  }
+
+  .nether-banner[data-nether-motion-ready='true'] [data-nether-hero-animate],
+  .nether-banner[data-nether-motion-ready='true'] [data-nether-hero-media],
+  .nether-banner[data-nether-motion-ready='true'] [data-nether-hero-overlay],
+  .nether-banner[data-nether-motion-ready='true'] .nether-hero__shape,
+  .nether-banner[data-nether-motion-ready='true'] [data-nether-banner-collection-bar],
+  .nether-banner[data-nether-motion-ready='true'] .nether-hero__buttons .button,
+  .nether-banner[data-nether-motion-ready='true'] .nether-hero__card-slot,
+  .nether-banner[data-nether-motion-ready='true'] .nether-banner__collection-link {
+    will-change: auto;
+  }
+}

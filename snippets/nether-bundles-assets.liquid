@@ -1,0 +1,12 @@
+{% comment %}
+  Loads Nether Bundles framework assets when needed outside the section shell.
+  Safe to render multiple times — browsers cache deferred scripts/styles.
+
+  Usage:
+  {% render 'nether-bundles-assets' %}
+{% endcomment %}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-bundles.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-bundles.js' | asset_url }}" defer="defer"></script>

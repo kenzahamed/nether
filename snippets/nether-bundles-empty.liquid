@@ -1,0 +1,55 @@
+{% comment %}
+  Nether Premium Bundles — empty state module.
+
+  Accepts:
+  - section: {Object} Section object (optional)
+  - context: {String} section | design | api (default: section)
+{% endcomment %}
+
+{%- liquid
+  assign empty_context = context | default: 'section'
+  assign empty_heading = blank
+  assign empty_text = blank
+  assign empty_button_label = blank
+  assign empty_button_link = routes.all_products_collection_url
+
+  if section != blank
+    assign empty_heading = section.settings.nether_empty_heading
+    assign empty_text = section.settings.nether_empty_text
+    assign empty_button_label = section.settings.nether_empty_button_label
+    if section.settings.nether_empty_button_link != blank
+      assign empty_button_link = section.settings.nether_empty_button_link
+    endif
+  endif
+
+  if empty_heading == blank
+    assign empty_heading = 'sections.nether_bundles.empty.heading' | t
+  endif
+  if empty_text == blank
+    if empty_context == 'design'
+      assign empty_text = 'sections.nether_bundles.empty.design_text' | t
+    else
+      assign empty_text = 'sections.nether_bundles.empty.text' | t
+    endif
+  endif
+  if empty_button_label == blank
+    assign empty_button_label = 'general.continue_shopping' | t
+  endif
+-%}
+
+<div
+  class="nether-bundles__module nether-bundles__empty nether-bundles__empty--{{ empty_context }}"
+  data-nether-bundles-module="empty"
+  data-nether-bundles-empty
+  data-nether-bundles-animate
+  role="status"
+>
+  <div class="nether-bundles__empty-content">
+    <span class="nether-bundles__empty-icon" aria-hidden="true">
+      {% render 'icon', icon: 'box', size: 'lg', decorative: true %}
+    </span>
+    <h2 class="nether-bundles__empty-heading type-heading-sm">{{ empty_heading }}</h2>
+    <p class="nether-bundles__empty-text type-body">{{ empty_text }}</p>
+    {% render 'button', label: empty_button_label, link: empty_button_link, style: 'primary', size: 'medium' %}
+  </div>
+</div>

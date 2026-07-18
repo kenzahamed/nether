@@ -1,0 +1,25 @@
+{% comment %}
+  Nether Premium Cart — cart-level discount display.
+
+  Accepts:
+  - context: {String} drawer | page (default: page)
+{% endcomment %}
+
+{%- if cart.cart_level_discount_applications.size > 0 -%}
+  <div
+    class="nether-cart__module nether-cart__module--discounts"
+    data-nether-cart-module="discounts"
+    data-nether-cart-animate
+  >
+    <ul class="discounts list-unstyled nether-cart__discounts" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <li class="discounts__discount discounts__discount--end nether-cart__discount-item">
+          {{- 'icon-discount.svg' | inline_asset_content -}}
+          <span class="nether-cart__discount-label">{{ discount.title | escape }}</span>
+          <span class="nether-cart__discount-amount">(-{{ discount.total_allocated_amount | money }})</span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}
+

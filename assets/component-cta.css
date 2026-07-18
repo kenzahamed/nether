@@ -1,0 +1,332 @@
+/* =============================================================================
+ * Nether Premium CTA & Conversion Framework
+ * Extends component-hero.css — load hero styles first. CTA-only modifiers.
+ * Reuses: Button, Typography, Card, Badge, Glass, Gradient, Shadow, Radius
+ * ============================================================================= */
+
+nether-cta {
+  display: block;
+  position: relative;
+}
+
+.nether-cta {
+  --nether-cta-gap: 3.2rem;
+  --nether-cta-content-padding: 4.8rem;
+  --nether-cta-overlay-opacity: 0.4;
+  --nether-cta-transition-duration: 0.5s;
+  --nether-hero-overlay-opacity: var(--nether-cta-overlay-opacity);
+  --nether-hero-transition-duration: var(--nether-cta-transition-duration);
+  --nether-hero-min-height: auto;
+}
+
+.nether-cta__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nether-cta-gap);
+}
+
+/* ── Typography blocks ─────────────────────────────────────────────────────── */
+
+.nether-cta__eyebrow,
+.nether-cta__heading,
+.nether-cta__subheading,
+.nether-cta__text {
+  margin: 0;
+}
+
+.nether-cta__text {
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-cta__buttons,
+.nether-cta__button-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nether-hero__blocks--align-center .nether-cta__buttons,
+.nether-hero__blocks--align-center .nether-cta__button-block {
+  justify-content: center;
+}
+
+.nether-hero__blocks--align-right .nether-cta__buttons,
+.nether-hero__blocks--align-right .nether-cta__button-block {
+  justify-content: flex-end;
+}
+
+/* ── Spacing presets ─────────────────────────────────────────────────────────── */
+
+.nether-cta--spacing-compact {
+  --nether-cta-gap: 1.6rem;
+  --nether-cta-content-padding: 2.4rem;
+}
+
+.nether-cta--spacing-spacious {
+  --nether-cta-gap: 4.8rem;
+  --nether-cta-content-padding: 6.4rem;
+}
+
+/* ── Layout: centered CTA ────────────────────────────────────────────────────── */
+
+.nether-cta--layout-centered_cta .nether-cta__body {
+  max-width: min(var(--nether-hero-content-width, 72rem), 72rem);
+  margin-inline: auto;
+}
+
+.nether-cta--layout-centered_cta .nether-cta__blocks {
+  text-align: center;
+  align-items: center;
+}
+
+/* ── Layout: editorial & luxury ──────────────────────────────────────────────── */
+
+.nether-cta--layout-editorial_cta .nether-cta__panel--editorial,
+.nether-cta--layout-luxury_cta .nether-cta__panel--editorial {
+  max-width: 52rem;
+}
+
+.nether-cta--layout-luxury_cta .nether-cta__heading {
+  letter-spacing: -0.02em;
+}
+
+.nether-cta--layout-luxury_cta .nether-cta__eyebrow {
+  letter-spacing: 0.16em;
+}
+
+/* ── Layout: minimal ─────────────────────────────────────────────────────────── */
+
+.nether-cta--layout-minimal_cta {
+  --nether-cta-content-padding: 2rem;
+  --nether-cta-gap: 1.2rem;
+}
+
+/* ── Layout: background media ────────────────────────────────────────────────── */
+
+.nether-cta--layout-background_image_cta,
+.nether-cta--layout-background_video_cta {
+  --nether-hero-min-height: 32rem;
+}
+
+.nether-cta--layout-background_image_cta .nether-hero__content,
+.nether-cta--layout-background_video_cta .nether-hero__content {
+  max-width: min(var(--nether-hero-content-width), 64rem);
+}
+
+/* ── Floating card ───────────────────────────────────────────────────────────── */
+
+.nether-cta__panel--floating {
+  position: relative;
+  z-index: 2;
+  box-shadow: var(--shadow-lg, 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.14));
+}
+
+.nether-cta--floating-enabled .nether-hero__content-shell {
+  align-items: flex-end;
+  padding-bottom: 3.2rem;
+}
+
+.nether-cta--floating-enabled .nether-hero__content {
+  max-width: min(48rem, 92%);
+}
+
+/* ── Promotion aside ─────────────────────────────────────────────────────────── */
+
+.nether-cta__inner--promotion {
+  position: relative;
+}
+
+.nether-cta__aside {
+  position: relative;
+  z-index: 3;
+  max-width: 36rem;
+  width: 100%;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-cta__inner--promotion {
+    display: grid;
+    grid-template-columns: 1fr min(36rem, 34%);
+    align-items: center;
+    gap: var(--nether-cta-gap);
+  }
+
+  .nether-cta--layout-product_promotion_cta.nether-hero--split-media-right .nether-cta__inner--promotion,
+  .nether-cta--layout-collection_promotion_cta.nether-hero--split-media-right .nether-cta__inner--promotion {
+    grid-template-columns: min(36rem, 34%) 1fr;
+  }
+
+  .nether-cta--layout-product_promotion_cta.nether-hero--split-media-right .nether-cta__aside,
+  .nether-cta--layout-collection_promotion_cta.nether-hero--split-media-right .nether-cta__aside {
+    order: -1;
+  }
+
+  .nether-cta__inner--promotion .nether-hero__content-shell {
+    grid-column: 1;
+  }
+
+  .nether-cta__aside {
+    margin-inline: auto;
+  }
+}
+
+.nether-cta__aside--glass .card {
+  backdrop-filter: blur(12px);
+}
+
+/* ── Block dividers ──────────────────────────────────────────────────────────── */
+
+.nether-cta__block-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-cta__block-divider--gradient {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--color-foreground), 0.2),
+    transparent
+  );
+}
+
+.nether-cta__block-divider--space {
+  height: 2.4rem;
+  background: transparent;
+}
+
+/* ── Section dividers ────────────────────────────────────────────────────────── */
+
+.nether-cta__divider {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.1);
+}
+
+.nether-cta__divider--gradient {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--color-foreground), 0.18),
+    transparent
+  );
+}
+
+.nether-cta__divider--wave {
+  height: 2.4rem;
+  background: transparent;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 24'%3E%3Cpath fill='black' d='M0 12 Q300 0 600 12 T1200 12 V24 H0Z'/%3E%3C/svg%3E");
+  mask-size: cover;
+  background: rgba(var(--color-foreground), 0.08);
+}
+
+/* ── Countdown placeholder ───────────────────────────────────────────────────── */
+
+.nether-cta__countdown {
+  display: none;
+}
+
+/* ── Responsive tablet ─────────────────────────────────────────────────────── */
+
+@media screen and (max-width: 989px) {
+  .nether-cta--tablet-stacked .nether-hero__inner {
+    flex-direction: column;
+  }
+
+  .nether-cta--tablet-centered .nether-cta__blocks,
+  .nether-cta--tablet-centered .nether-hero__blocks {
+    text-align: center;
+    align-items: center;
+  }
+}
+
+/* ── Responsive mobile ───────────────────────────────────────────────────────── */
+
+@media screen and (max-width: 749px) {
+  .nether-cta--mobile-stacked .nether-hero__inner {
+    flex-direction: column;
+  }
+
+  .nether-cta--mobile-centered .nether-cta__blocks,
+  .nether-cta--mobile-centered .nether-hero__blocks {
+    text-align: center;
+    align-items: center;
+  }
+
+  .nether-cta--mobile-minimal {
+    --nether-cta-content-padding: 1.6rem;
+    --nether-cta-gap: 1rem;
+  }
+
+  .nether-cta__aside {
+    max-width: 100%;
+  }
+}
+
+/* ── Motion hooks (Phase 5.3.8) ─────────────────────────────────────────────── */
+
+.nether-cta[data-nether-motion-pending='true'] [data-nether-cta-animate],
+.nether-cta[data-nether-motion-pending='true'] [data-nether-cta-button-animate],
+.nether-cta[data-nether-motion-pending='true'] [data-nether-cta-card],
+.nether-cta[data-nether-motion-pending='true'] [data-nether-cta-divider] {
+  opacity: 0;
+}
+
+.nether-cta[data-nether-motion-ready='true'] [data-nether-cta-animate],
+.nether-cta[data-nether-motion-ready='true'] [data-nether-cta-button-animate],
+.nether-cta[data-nether-motion-ready='true'] [data-nether-cta-card],
+.nether-cta[data-nether-motion-ready='true'] [data-nether-hero-media],
+.nether-cta[data-nether-motion-ready='true'] [data-nether-hero-overlay],
+.nether-cta[data-nether-motion-ready='true'] .nether-hero__shape {
+  will-change: transform, opacity;
+}
+
+.nether-cta[data-nether-motion-ready='true'] [data-nether-cta-button-animate] .button,
+.nether-cta[data-nether-motion-ready='true'] .nether-cta__button-block .button,
+.nether-cta[data-nether-motion-ready='true'] .nether-cta__buttons .button,
+.nether-cta[data-nether-motion-ready='true'] .nether-hero__trust-item,
+.nether-cta[data-nether-motion-ready='true'] [data-nether-cta-card] .card,
+.nether-cta[data-nether-motion-ready='true'] .nether-cta__promotion-card .card,
+.nether-cta[data-nether-motion-ready='true'] .nether-cta__aside .card {
+  will-change: transform;
+}
+
+/* ── Motion: reduced motion ────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-cta[data-nether-motion-pending='true'] [data-nether-cta-animate],
+  .nether-cta[data-nether-motion-pending='true'] [data-nether-cta-button-animate],
+  .nether-cta[data-nether-motion-pending='true'] [data-nether-cta-card],
+  .nether-cta[data-nether-motion-pending='true'] [data-nether-cta-divider],
+  .nether-cta [data-nether-cta-animate],
+  .nether-cta [data-nether-cta-button-animate],
+  .nether-cta [data-nether-cta-card] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .nether-cta[data-nether-motion-ready='true'] [data-nether-cta-animate],
+  .nether-cta[data-nether-motion-ready='true'] [data-nether-cta-button-animate],
+  .nether-cta[data-nether-motion-ready='true'] [data-nether-cta-card],
+  .nether-cta[data-nether-motion-ready='true'] [data-nether-hero-media],
+  .nether-cta[data-nether-motion-ready='true'] [data-nether-hero-overlay],
+  .nether-cta[data-nether-motion-ready='true'] .nether-hero__shape,
+  .nether-cta[data-nether-motion-ready='true'] [data-nether-cta-button-animate] .button,
+  .nether-cta[data-nether-motion-ready='true'] .nether-cta__button-block .button,
+  .nether-cta[data-nether-motion-ready='true'] .nether-cta__buttons .button,
+  .nether-cta[data-nether-motion-ready='true'] .nether-hero__trust-item,
+  .nether-cta[data-nether-motion-ready='true'] [data-nether-cta-card] .card,
+  .nether-cta[data-nether-motion-ready='true'] .nether-cta__promotion-card .card,
+  .nether-cta[data-nether-motion-ready='true'] .nether-cta__aside .card {
+    will-change: auto;
+  }
+
+  .nether-cta__panel--floating {
+    transform: none;
+  }
+}

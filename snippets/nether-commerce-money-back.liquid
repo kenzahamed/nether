@@ -1,0 +1,16 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Money-back Guarantee.
+
+  Accepts:
+  - heading, text, icon, style, class, attributes, rte
+{% endcomment %}
+
+{% render 'nether-commerce-info-card',
+  heading: heading,
+  text: text,
+  rte: rte,
+  icon: icon | default: 'check_mark',
+  style: style | default: 'card',
+  class: class,
+  attributes: attributes
+%}

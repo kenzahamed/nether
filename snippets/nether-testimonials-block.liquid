@@ -1,0 +1,161 @@
+{% comment %}
+  Central dispatcher for Nether Premium Testimonials section blocks.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - section: {Object} Testimonials section (required)
+  - heading_tag: {String} Primary heading element (default: h2)
+  - context: {String} 'header', 'shell', or 'grid' (optional)
+
+  Usage:
+  {% render 'nether-testimonials-block', block: block, section: section, heading_tag: heading_tag %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign subheading_element = 'h3'
+  if heading_element == 'h3'
+    assign subheading_element = 'h4'
+  endif
+  assign motion_attr = 'data-nether-testimonials-animate'
+-%}
+
+{%- case block.type -%}
+  {%- when '@app' -%}
+    <div
+      class="nether-testimonials__app-block"
+      {{ motion_attr }}
+      data-nether-testimonials-role="app"
+      {{ block.shopify_attributes }}
+    >
+      {% render block %}
+    </div>
+
+  {%- when 'eyebrow' -%}
+    {%- if block.settings.text != blank -%}
+      <p
+        class="nether-testimonials__eyebrow type-overline"
+        {{ motion_attr }}
+        data-nether-testimonials-role="eyebrow"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.text | escape -}}
+      </p>
+    {%- endif -%}
+
+  {%- when 'heading' -%}
+    {%- if block.settings.heading != blank -%}
+      <{{ heading_element }}
+        class="nether-testimonials__heading inline-richtext {{ block.settings.heading_size }}"
+        {{ motion_attr }}
+        data-nether-testimonials-role="heading"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.heading -}}
+      </{{ heading_element }}>
+    {%- endif -%}
+
+  {%- when 'subheading' -%}
+    {%- if block.settings.subheading != blank -%}
+      <{{ subheading_element }}
+        class="nether-testimonials__subheading inline-richtext {{ block.settings.subheading_size }}"
+        {{ motion_attr }}
+        data-nether-testimonials-role="subheading"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.subheading -}}
+      </{{ subheading_element }}>
+    {%- endif -%}
+
+  {%- when 'text' -%}
+    {%- if block.settings.text != blank -%}
+      <div
+        class="nether-testimonials__text rte {{ block.settings.text_style }}"
+        {{ motion_attr }}
+        data-nether-testimonials-role="intro"
+        {{ block.shopify_attributes }}
+      >
+        {{ block.settings.text }}
+      </div>
+    {%- endif -%}
+
+  {%- when 'quote' -%}
+    {%- render 'nether-content-quote', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'author', 'author_image', 'company', 'role' -%}
+    {%- render 'nether-testimonials-author', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'rating' -%}
+    {%- render 'nether-testimonials-rating', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'brand_logo' -%}
+    {%- render 'nether-testimonials-logo', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'statistic' -%}
+    {%- render 'nether-testimonials-stat', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'award', 'certification' -%}
+    {%- render 'nether-testimonials-award', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'press_mention' -%}
+    {%- render 'nether-testimonials-press', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'trust_badge' -%}
+    {%- render 'nether-testimonials-trust', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'video_testimonial' -%}
+    {%- render 'nether-content-video', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'buttons' -%}
+    {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
+      <div
+        class="nether-testimonials__buttons"
+        {{ motion_attr }}
+        data-nether-testimonials-role="buttons"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.button_label_1 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_1,
+            link: block.settings.button_link_1,
+            style: block.settings.button_style_1,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_1 == blank
+          -%}
+        {%- endif -%}
+        {%- if block.settings.button_label_2 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_2,
+            link: block.settings.button_link_2,
+            style: block.settings.button_style_2,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_2 == blank
+          -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  {%- when 'divider' -%}
+    <div
+      class="nether-testimonials__block-divider nether-testimonials__block-divider--{{ block.settings.divider_style | default: 'line' }}"
+      {{ motion_attr }}
+      data-nether-testimonials-divider
+      data-nether-testimonials-role="divider"
+      aria-hidden="true"
+      role="presentation"
+      {{ block.shopify_attributes }}
+    ></div>
+
+  {%- when 'custom_html' -%}
+    {%- render 'nether-content-custom-html', block: block, motion_attr: motion_attr -%}
+
+  {%- when 'customer_testimonial' -%}
+    <div
+      class="nether-testimonials__shell-card"
+      {{ motion_attr }}
+      data-nether-testimonials-role="card"
+      {{ block.shopify_attributes }}
+    >
+      {%- render 'nether-testimonials-card', block: block, section: section, context: 'shell' -%}
+    </div>
+{%- endcase -%}

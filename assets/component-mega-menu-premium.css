@@ -1,0 +1,342 @@
+/* =============================================================================
+ * Nether Premium Mega Menu Framework
+ * Extends Dawn component-mega-menu.css — do not duplicate base mega-menu rules.
+ * ============================================================================= */
+
+.nether-mega-menu {
+  --nether-mega-columns: 4;
+  --nether-mega-column-span: 1;
+  --nether-mega-duration: var(--duration-default, 0.3s);
+  --nether-mega-gap: var(--nether-header-gap, 2rem);
+  --nether-mega-padding-block: 3rem;
+  --nether-mega-padding-inline: 3rem;
+  --nether-mega-radius: var(--radius-md, 0);
+  --nether-mega-shadow: var(--shadow-level-md, 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.12));
+  --nether-mega-overlay: rgba(var(--color-shadow), 0.35);
+  position: relative;
+  display: contents;
+}
+
+.nether-mega-menu__nav {
+  display: contents;
+}
+
+/* ── Overlay ───────────────────────────────────────────────────────────────── */
+
+.nether-mega-menu__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  background: var(--nether-mega-overlay);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--nether-mega-duration) ease, visibility var(--nether-mega-duration) ease;
+}
+
+.nether-mega-menu.is-open .nether-mega-menu__overlay {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ── Premium panel ─────────────────────────────────────────────────────────── */
+
+.nether-mega-menu__content {
+  box-shadow: var(--nether-mega-shadow);
+  border-radius: 0 0 var(--nether-mega-radius) var(--nether-mega-radius);
+}
+
+.nether-mega-menu__panel-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nether-mega-gap);
+  padding-block: var(--nether-mega-padding-block);
+}
+
+/* ── Grid layout ───────────────────────────────────────────────────────────── */
+
+.nether-mega-menu__grid {
+  width: 100%;
+}
+
+.nether-mega-menu__columns {
+  display: grid;
+  gap: 2rem 3rem;
+  grid-template-columns: repeat(var(--nether-mega-columns), minmax(0, 1fr));
+}
+
+.nether-mega-menu__block {
+  grid-column: span min(var(--nether-mega-column-span), var(--nether-mega-columns));
+  min-width: 0;
+}
+
+.nether-mega-menu__list {
+  display: grid;
+  gap: 1.8rem 4rem;
+  grid-template-columns: repeat(var(--nether-mega-columns), minmax(0, 1fr));
+  list-style: none;
+}
+
+.nether-mega-menu__grid--condensed .nether-mega-menu__list {
+  display: block;
+}
+
+/* ── Column headings & links ───────────────────────────────────────────────── */
+
+.nether-mega-menu__column-heading {
+  margin: 0 0 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.nether-mega-menu__column-icon {
+  flex-shrink: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nether-mega-menu__column-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.nether-mega-menu__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.nether-mega-menu__link-icon {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.nether-mega-menu__sublinks {
+  margin-top: 0.4rem;
+  padding-left: 0;
+}
+
+.nether-mega-menu__sublink {
+  font-size: 0.92em;
+  padding-block: 0.4rem;
+}
+
+.nether-mega-menu__link-item + .nether-mega-menu__link-item {
+  margin-top: 0.4rem;
+}
+
+/* ── Media & cards ─────────────────────────────────────────────────────────── */
+
+.nether-mega-menu__media-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nether-mega-menu__media {
+  border-radius: var(--radius-sm, 0);
+  overflow: hidden;
+}
+
+.nether-mega-menu__media-caption {
+  display: block;
+  margin-top: 0.8rem;
+}
+
+.nether-mega-menu__media-subcaption {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.9em;
+  opacity: 0.75;
+}
+
+.nether-mega-menu__card-shell .card-wrapper {
+  margin: 0;
+}
+
+.nether-mega-menu__product-grid {
+  display: grid;
+  gap: 1.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+.nether-mega-menu__product-item .card-wrapper {
+  margin: 0;
+}
+
+.nether-mega-menu__promotion .card-wrapper,
+.nether-mega-menu__image-card .card-wrapper {
+  margin: 0;
+}
+
+/* ── Editorial ─────────────────────────────────────────────────────────────── */
+
+.nether-mega-menu__editorial {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.nether-mega-menu__eyebrow {
+  margin: 0 0 0.4rem;
+  opacity: 0.7;
+}
+
+.nether-mega-menu__editorial-heading {
+  margin: 0 0 0.8rem;
+}
+
+.nether-mega-menu__editorial-text {
+  margin-bottom: 1.2rem;
+}
+
+/* ── Footer & secondary nav ────────────────────────────────────────────────── */
+
+.nether-mega-menu__footer-area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem 2rem;
+  padding-top: 1.6rem;
+  margin-top: 0.4rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-mega-menu__secondary-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 2rem;
+}
+
+.nether-mega-menu__secondary-link {
+  font-size: 0.92em;
+  text-decoration: none;
+}
+
+.nether-mega-menu__secondary-link--active {
+  text-decoration: underline;
+}
+
+.nether-mega-menu__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.6rem;
+  margin-left: auto;
+}
+
+.nether-mega-menu__footer-text {
+  margin: 0;
+  font-size: 0.92em;
+  opacity: 0.75;
+}
+
+/* ── Placeholder (Theme Editor) ────────────────────────────────────────────── */
+
+.nether-mega-menu__placeholder {
+  margin: 0;
+  padding: 1.6rem;
+  border: 0.1rem dashed rgba(var(--color-foreground), 0.2);
+  border-radius: var(--radius-sm, 0);
+  font-size: 0.9em;
+  opacity: 0.7;
+  text-align: center;
+}
+
+/* ── Motion hooks (JS applies transforms; CSS provides fallbacks) ──────────── */
+
+.js .nether-mega-menu[data-nether-motion-ready='true'] .mega-menu__content {
+  opacity: 0;
+  transform: translateY(-1.2rem);
+}
+
+.js .nether-mega-menu[data-nether-motion-ready='true'] .mega-menu[open] .mega-menu__content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nether-mega-menu [data-nether-mega-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+.nether-mega-menu.is-animating [data-nether-mega-reveal] {
+  opacity: 0;
+  transform: translateY(0.8rem);
+}
+
+.nether-mega-menu [data-nether-mega-image-reveal] {
+  overflow: hidden;
+}
+
+.nether-mega-menu [data-nether-mega-image-reveal] img,
+.nether-mega-menu [data-nether-mega-image-reveal] .media {
+  transform: scale(1);
+  transition: transform var(--nether-mega-duration) ease;
+}
+
+.nether-mega-menu.is-animating [data-nether-mega-image-reveal] img {
+  transform: scale(1.04);
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+
+@media screen and (max-width: 989px) {
+  .nether-mega-menu--hide-tablet .nether-mega-menu__nav {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .nether-mega-menu__columns {
+    grid-template-columns: repeat(min(var(--nether-mega-columns), 3), minmax(0, 1fr));
+  }
+
+  .nether-mega-menu__list {
+    grid-template-columns: repeat(min(var(--nether-mega-columns), 3), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-mega-menu--hide-desktop .nether-mega-menu__nav {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-mega-menu__nav {
+    display: none;
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-mega-menu__overlay,
+  .nether-mega-menu [data-nether-mega-image-reveal] img {
+    transition: none;
+  }
+
+  .nether-mega-menu.is-animating [data-nether-mega-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Focus visibility ──────────────────────────────────────────────────────── */
+
+.nether-mega-menu__content:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: -0.2rem;
+}
+
+.nether-mega-menu .mega-menu[open] > summary {
+  text-decoration: underline;
+}

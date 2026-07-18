@@ -1,0 +1,43 @@
+{% comment %}
+  Renders Nether Premium Testimonials trust badge block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-testimonials-trust', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attr = motion_attr | default: 'data-nether-testimonials-animate'
+  assign trust_image = block.settings.image
+  assign trust_label = block.settings.label
+  assign trust_type = block.settings.badge_type | default: 'custom'
+  assign trust_style = block.settings.badge_style | default: 'soft'
+-%}
+
+{%- if trust_image != blank or trust_label != blank -%}
+  <div class="nether-testimonials__trust-item" {{ motion_attr }} {{ block.shopify_attributes }}>
+    {%- if trust_image != blank -%}
+      <div class="nether-testimonials__trust-image">
+        {{
+          trust_image
+          | image_url: width: 200
+          | image_tag:
+            loading: 'lazy',
+            widths: '100, 150, 200',
+            alt: trust_label | default: trust_image.alt | escape
+        }}
+      </div>
+    {%- elsif trust_label != blank -%}
+      {%- render 'badge',
+        label: trust_label,
+        type: trust_type,
+        style: trust_style,
+        size: 'small',
+        uppercase: false
+      -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

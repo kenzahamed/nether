@@ -1,0 +1,63 @@
+{% comment %}
+  Nether Premium Bundles — pricing display module.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - total_price: {Number} Bundle total in cents
+  - compare_total: {Number} Sum of compare-at / separate prices
+  - savings: {Number} Savings in cents
+  - pricing_style: {String} stacked | inline | minimal
+{% endcomment %}
+
+{%- liquid
+  assign style = pricing_style | default: section.settings.nether_pricing_style | default: 'stacked'
+  assign show_savings = section.settings.nether_show_savings | default: true
+  assign currency_code = settings.currency_code_enabled
+
+  assign money_total = total_price | money
+  assign money_compare = compare_total | money
+  assign money_savings = savings | money
+  if currency_code
+    assign money_total = total_price | money_with_currency
+    assign money_compare = compare_total | money_with_currency
+    assign money_savings = savings | money_with_currency
+  endif
+-%}
+
+<div
+  class="nether-bundles__pricing nether-bundles__pricing--{{ style }}"
+  data-nether-bundles-module="pricing"
+  data-nether-bundles-pricing
+  data-nether-bundles-animate
+>
+  <div class="nether-bundles__pricing-row nether-bundles__pricing-row--total">
+    <span class="nether-bundles__pricing-label type-body-sm">{{ 'sections.nether_bundles.pricing.total' | t }}</span>
+    <span class="nether-bundles__pricing-value type-heading-sm" data-nether-bundles-total>{{ money_total }}</span>
+  </div>
+
+  {%- if compare_total > total_price and show_savings -%}
+    <div class="nether-bundles__pricing-row nether-bundles__pricing-row--compare">
+      <span class="nether-bundles__pricing-label type-body-sm">{{ 'sections.nether_bundles.pricing.separate' | t }}</span>
+      <s class="nether-bundles__pricing-compare type-body" data-nether-bundles-compare>{{ money_compare }}</s>
+    </div>
+    <div class="nether-bundles__pricing-row nether-bundles__pricing-row--savings">
+      {%- if section.settings.nether_show_savings_badge -%}
+        {%- assign savings_badge_label = 'sections.nether_bundles.pricing.savings_badge' | t: amount: money_savings -%}
+        <span class="nether-bundles__savings-badge" data-nether-bundles-savings-badge>
+          {% render 'badge',
+            type: 'custom',
+            label: savings_badge_label,
+            style: 'pill',
+            size: 'small',
+            status: 'success'
+          %}
+        </span>
+      {%- else -%}
+        <span class="nether-bundles__pricing-label type-body-sm">{{ 'sections.nether_bundles.pricing.you_save' | t }}</span>
+        <span class="nether-bundles__pricing-savings type-body" data-nether-bundles-savings>{{ money_savings }}</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <span class="visually-hidden" data-nether-bundles-pricing-live aria-live="polite"></span>
+</div>

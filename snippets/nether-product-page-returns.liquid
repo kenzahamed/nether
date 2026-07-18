@@ -1,0 +1,26 @@
+{% comment %}
+  Nether Premium Product Page — Returns information module.
+  Extends shared Commerce Enhancements return-policy component.
+
+  Accepts:
+  - block: {Object} Block object (required)
+{% endcomment %}
+
+{%- if block.settings.heading != blank or block.settings.text != blank -%}
+  <div
+    class="nether-product-page__module nether-product-page__module--returns"
+    data-nether-product-page-module="returns"
+    data-nether-product-page-animate
+    {{ block.shopify_attributes }}
+  >
+    {% render 'nether-commerce-return-policy',
+      heading: block.settings.heading,
+      text: block.settings.text,
+      icon: block.settings.icon | default: 'return',
+      style: 'card',
+      rte: true,
+      class: 'nether-product-page__returns',
+      animate: false
+    %}
+  </div>
+{%- endif -%}

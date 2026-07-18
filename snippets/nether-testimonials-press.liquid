@@ -1,0 +1,54 @@
+{% comment %}
+  Renders Nether Premium Testimonials press mention block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-testimonials-press', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attr = motion_attr | default: 'data-nether-testimonials-animate'
+  assign press_logo = block.settings.logo
+  assign press_publication = block.settings.publication
+  assign press_quote = block.settings.quote
+  assign press_link = block.settings.link
+  assign press_date = block.settings.date
+-%}
+
+{%- if press_logo != blank or press_publication != blank or press_quote != blank -%}
+  <article class="nether-testimonials__press" {{ motion_attr }} {{ block.shopify_attributes }}>
+    {%- if press_link != blank -%}
+      <a class="nether-testimonials__press-link" href="{{ press_link }}" {% if press_publication != blank %}aria-label="{{ 'sections.nether_testimonials.press.read' | t: publication: press_publication }}"{% endif %}>
+    {%- endif -%}
+
+    {%- if press_logo != blank -%}
+      <div class="nether-testimonials__press-logo">
+        {{
+          press_logo
+          | image_url: width: 240
+          | image_tag:
+            loading: 'lazy',
+            widths: '120, 180, 240',
+            alt: press_publication | default: press_logo.alt | escape
+        }}
+      </div>
+    {%- elsif press_publication != blank -%}
+      <p class="nether-testimonials__press-publication type-overline">{{ press_publication | escape }}</p>
+    {%- endif -%}
+
+    {%- if press_quote != blank -%}
+      <blockquote class="nether-testimonials__press-quote type-body-sm">{{ press_quote }}</blockquote>
+    {%- endif -%}
+
+    {%- if press_date != blank -%}
+      <p class="nether-testimonials__press-date type-caption">{{ press_date | escape }}</p>
+    {%- endif -%}
+
+    {%- if press_link != blank -%}
+      </a>
+    {%- endif -%}
+  </article>
+{%- endif -%}

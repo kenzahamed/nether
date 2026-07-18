@@ -1,0 +1,77 @@
+{% comment %}
+  Renders a Nether Premium announcement item.
+
+  Accepts:
+  - block: {Object} Announcement block
+  - layout: {String} center | left | split | icon_text | text_cta
+  - default_icon: {String} Fallback icon name
+  - show_countdown_placeholder: {Boolean}
+{% endcomment %}
+
+{%- liquid
+  assign announcement_text = block.settings.text
+  assign announcement_link = block.settings.link
+  assign announcement_icon = block.settings.icon | default: default_icon
+  assign cta_text = block.settings.cta_text
+  assign cta_link = block.settings.cta_link | default: announcement_link
+  assign has_cta = false
+  assign has_text_link = false
+
+  if cta_text != blank and cta_link != blank
+    assign has_cta = true
+  endif
+
+  if announcement_link != blank and has_cta == false
+    assign has_text_link = true
+  endif
+-%}
+
+<div class="nether-announcement__item nether-announcement__item--{{ layout }}">
+  {%- if has_text_link -%}
+    <a href="{{ announcement_link }}" class="nether-announcement__item-link link link--text focus-inset animate-arrow">
+  {%- endif -%}
+
+  <div class="nether-announcement__message-wrap">
+    {%- if announcement_icon != blank and announcement_icon != 'none' -%}
+      <span class="nether-announcement__icon">
+        {%- render 'icon', icon: announcement_icon, size: 'sm', color: 'inherit' -%}
+      </span>
+    {%- endif -%}
+
+    {%- if block.settings.show_separator -%}
+      <span class="nether-announcement__separator" aria-hidden="true"></span>
+    {%- endif -%}
+
+    {%- if announcement_text != blank -%}
+      <p class="announcement-bar__message nether-announcement__message">
+        <span>{{ announcement_text | escape }}</span>
+        {%- if has_text_link -%}
+          {{- 'icon-arrow.svg' | inline_asset_content -}}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+
+  {%- if show_countdown_placeholder -%}
+    <span class="nether-announcement__countdown-placeholder" data-nether-countdown-placeholder hidden>
+      {{ 'sections.announcements.countdown_placeholder' | t }}
+    </span>
+  {%- endif -%}
+
+  {%- if has_cta -%}
+    <div class="nether-announcement__cta-wrap">
+      {%- render 'button',
+        label: cta_text,
+        link: cta_link,
+        style: 'secondary',
+        size: 'small',
+        class: 'nether-announcement__cta',
+        aria_label: cta_text
+      -%}
+    </div>
+  {%- endif -%}
+
+  {%- if has_text_link -%}
+    </a>
+  {%- endif -%}
+</div>

@@ -1,0 +1,21 @@
+{% comment %}
+  Optional section divider for Nether Premium Banner.
+
+  Accepts:
+  - section: {Object} Banner section (required)
+  - position: {String} top or bottom (required)
+
+  Usage:
+  {% render 'nether-banner-divider', section: section, position: 'bottom' %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_banner_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-banner__divider nether-banner__divider--{{ divider_position }} nether-banner__divider--{{ divider_style }}"
+  aria-hidden="true"
+  role="presentation"
+></div>

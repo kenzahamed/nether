@@ -1,0 +1,839 @@
+{% comment %}
+  Nether Premium Recommendations Commerce Framework — section orchestrator.
+  Extends Dawn product-recommendations / related-products / complementary-products.
+  Does not replace Shopify Product Recommendations API or Dawn <product-recommendations>.
+{% endcomment %}
+
+{% render 'nether-recommendations-assets' %}
+
+{%- if section.settings.nether_enable_wishlist_cards -%}
+  {% render 'nether-wishlist-assets' %}
+{%- endif -%}
+{%- if section.settings.nether_enable_compare_cards -%}
+  {% render 'nether-compare-assets' %}
+{%- endif -%}
+{%- if section.settings.nether_enable_quick_view_cards -%}
+  {% render 'nether-quick-view-assets' %}
+{%- endif -%}
+
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-icon.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-typography.css' | asset_url | stylesheet_tag }}
+{{ 'component-shadow.css' | asset_url | stylesheet_tag }}
+{{ 'component-radius.css' | asset_url | stylesheet_tag }}
+
+{%- if section.settings.nether_enable_glass -%}
+  {{ 'component-glass.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+{%- if section.settings.nether_enable_gradient -%}
+  {{ 'component-gradient.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+{%- if section.settings.nether_image_shape == 'blob' -%}
+  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+{%- if section.settings.nether_quick_add != 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  {%- if section.settings.nether_quick_add == 'standard' -%}
+    <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+{%- endif -%}
+
+{%- liquid
+  case section.settings.nether_animation_speed
+    when 'slow'
+      assign nether_animation_duration = 0.8
+    when 'fast'
+      assign nether_animation_duration = 0.3
+    else
+      assign nether_animation_duration = 0.5
+  endcase
+
+  assign strategy = section.settings.nether_recommendation_source | default: 'related'
+  assign layout = section.settings.nether_layout | default: 'grid'
+  assign products_limit = section.settings.nether_products_to_show | default: 4
+  assign gap = section.settings.nether_gap | default: 24
+
+  assign uses_api = false
+  if strategy == 'related' or strategy == 'complementary'
+    assign uses_api = true
+  endif
+
+  assign uses_collection = false
+  if strategy == 'collection' or strategy == 'trending' or strategy == 'new_arrivals' or strategy == 'best_sellers'
+    assign uses_collection = true
+  endif
+
+  assign is_future_strategy = false
+  if strategy == 'frequently_bought' or strategy == 'recently_viewed' or strategy == 'recently_purchased' or strategy == 'for_you'
+    assign is_future_strategy = true
+  endif
+
+  assign seed_product = section.settings.product
+  if seed_product == blank and product != blank
+    assign seed_product = product
+  endif
+
+  assign seed_product_id = blank
+  if seed_product != blank
+    assign seed_product_id = seed_product.id
+  elsif cart.items.first
+    assign seed_product_id = cart.items.first.product_id
+  endif
+
+  assign recommendation_url = routes.product_recommendations_url | append: '?limit=' | append: products_limit
+  if strategy == 'complementary'
+    assign recommendation_url = recommendation_url | append: '&intent=complementary'
+  endif
+
+  assign source_collection = section.settings.collection
+  assign source_products = nil
+  assign collection_count = 0
+  assign view_all_url = blank
+
+  if uses_collection and source_collection != blank
+    assign source_products = source_collection.products
+    if strategy == 'new_arrivals'
+      assign source_products = source_collection.products | sort: 'published_at' | reverse
+    endif
+    assign collection_count = source_products.size
+    if collection_count > products_limit
+      assign collection_count = products_limit
+    endif
+    assign view_all_url = source_collection.url
+  endif
+
+  case strategy
+    when 'related'
+      assign strategy_label = 'sections.nether_recommendations.strategies.related' | t
+    when 'complementary'
+      assign strategy_label = 'sections.nether_recommendations.strategies.complementary' | t
+    when 'trending'
+      assign strategy_label = 'sections.nether_recommendations.strategies.trending' | t
+    when 'new_arrivals'
+      assign strategy_label = 'sections.nether_recommendations.strategies.new_arrivals' | t
+    when 'best_sellers'
+      assign strategy_label = 'sections.nether_recommendations.strategies.best_sellers' | t
+    when 'collection'
+      assign strategy_label = 'sections.nether_recommendations.strategies.collection' | t
+    when 'frequently_bought'
+      assign strategy_label = 'sections.nether_recommendations.strategies.frequently_bought' | t
+    when 'recently_viewed'
+      assign strategy_label = 'sections.nether_recommendations.strategies.recently_viewed' | t
+    when 'recently_purchased'
+      assign strategy_label = 'sections.nether_recommendations.strategies.recently_purchased' | t
+    when 'for_you'
+      assign strategy_label = 'sections.nether_recommendations.strategies.for_you' | t
+    else
+      assign strategy_label = 'sections.nether_recommendations.strategies.generic' | t
+  endcase
+
+  assign nether_class_list = 'nether-recommendations'
+  assign nether_class_list = nether_class_list | append: ' nether-recommendations--layout-' | append: layout
+  assign nether_class_list = nether_class_list | append: ' nether-recommendations--source-' | append: strategy
+  assign nether_class_list = nether_class_list | append: ' nether-recommendations--card-' | append: section.settings.nether_card_style
+  assign nether_class_list = nether_class_list | append: ' nether-recommendations--desktop-' | append: section.settings.nether_layout_desktop
+  assign nether_class_list = nether_class_list | append: ' nether-recommendations--tablet-' | append: section.settings.nether_layout_tablet
+  assign nether_class_list = nether_class_list | append: ' nether-recommendations--mobile-' | append: section.settings.nether_layout_mobile
+
+  if section.settings.nether_enable_glass
+    assign nether_class_list = nether_class_list | append: ' nether-recommendations--glass-enabled'
+  endif
+  if section.settings.nether_enable_gradient
+    assign nether_class_list = nether_class_list | append: ' nether-recommendations--gradient-enabled'
+  endif
+  if section.settings.nether_full_width
+    assign nether_class_list = nether_class_list | append: ' nether-recommendations--full-width'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .nether-recommendations {
+    --nether-recommendations-gap: {{ gap }}px;
+    --nether-recommendations-columns-desktop: {{ section.settings.nether_columns_desktop | default: 4 }};
+    --nether-recommendations-columns-tablet: {{ section.settings.nether_columns_tablet | default: 2 }};
+    --nether-recommendations-columns-mobile: {{ section.settings.nether_columns_mobile | default: 2 }};
+    --nether-recommendations-transition-duration: {{ nether_animation_duration }}s;
+  }
+{%- endstyle -%}
+
+{%- if uses_api -%}
+  <product-recommendations
+    class="nether-recommendations__api related-products{% if strategy == 'complementary' %} complementary-products{% endif %}"
+    data-url="{{ recommendation_url }}"
+    data-section-id="{{ section.id }}"
+    {% if seed_product_id != blank %}data-product-id="{{ seed_product_id }}"{% endif %}
+  >
+    <nether-recommendations
+      id="NetherRecommendations-{{ section.id }}"
+      class="{{ nether_class_list }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient"
+      data-nether-motion="recommendations"
+      data-section-id="{{ section.id }}"
+      data-animation-style="{{ section.settings.nether_animation_style }}"
+      data-animation-duration="{{ nether_animation_duration }}"
+      data-nether-motion-plugins="scrollTrigger"
+      data-recommendation-source="{{ strategy }}"
+      data-layout="{{ layout }}"
+      role="region"
+      aria-label="{{ section.settings.nether_aria_label | default: strategy_label | escape }}"
+    >
+      <div class="nether-recommendations__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+        {%- if recommendations.performed and recommendations.products_count > 0 -%}
+          {% render 'nether-recommendations-body',
+            section: section,
+            products: recommendations.products,
+            products_limit: products_limit,
+            product_count: recommendations.products_count,
+            strategy: strategy,
+            strategy_label: strategy_label,
+            view_all_url: view_all_url
+          %}
+        {%- elsif request.design_mode -%}
+          {% render 'nether-recommendations-body',
+            section: section,
+            products: nil,
+            products_limit: products_limit,
+            product_count: 0,
+            strategy: strategy,
+            strategy_label: strategy_label,
+            show_empty: true,
+            empty_context: 'design'
+          %}
+        {%- else -%}
+          {% render 'nether-recommendations-body',
+            section: section,
+            products: nil,
+            products_limit: products_limit,
+            product_count: 0,
+            strategy: strategy,
+            strategy_label: strategy_label,
+            show_empty: true,
+            empty_context: 'api'
+          %}
+        {%- endif -%}
+      </div>
+    </nether-recommendations>
+  </product-recommendations>
+
+{%- elsif uses_collection -%}
+  <nether-recommendations
+    id="NetherRecommendations-{{ section.id }}"
+    class="{{ nether_class_list }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient"
+    data-nether-motion="recommendations"
+    data-section-id="{{ section.id }}"
+    data-animation-style="{{ section.settings.nether_animation_style }}"
+    data-animation-duration="{{ nether_animation_duration }}"
+    data-nether-motion-plugins="scrollTrigger"
+    data-recommendation-source="{{ strategy }}"
+    data-layout="{{ layout }}"
+    role="region"
+    aria-label="{{ section.settings.nether_aria_label | default: strategy_label | escape }}"
+  >
+    <div class="nether-recommendations__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+      {%- if collection_count > 0 -%}
+        {% render 'nether-recommendations-body',
+          section: section,
+          products: source_products,
+          products_limit: products_limit,
+          product_count: collection_count,
+          strategy: strategy,
+          strategy_label: strategy_label,
+          view_all_url: view_all_url
+        %}
+      {%- else -%}
+        {% render 'nether-recommendations-body',
+          section: section,
+          products: nil,
+          products_limit: products_limit,
+          product_count: 0,
+          strategy: strategy,
+          strategy_label: strategy_label,
+          show_empty: true,
+          empty_context: 'section'
+        %}
+      {%- endif -%}
+    </div>
+  </nether-recommendations>
+
+{%- elsif is_future_strategy -%}
+  <nether-recommendations
+    id="NetherRecommendations-{{ section.id }}"
+    class="{{ nether_class_list }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient"
+    data-nether-motion="recommendations"
+    data-section-id="{{ section.id }}"
+    data-animation-style="{{ section.settings.nether_animation_style }}"
+    data-animation-duration="{{ nether_animation_duration }}"
+    data-nether-motion-plugins="scrollTrigger"
+    data-recommendation-source="{{ strategy }}"
+    data-layout="{{ layout }}"
+    role="region"
+    aria-label="{{ section.settings.nether_aria_label | default: strategy_label | escape }}"
+  >
+    <div class="nether-recommendations__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+      {% render 'nether-recommendations-header', section: section, strategy_label: strategy_label %}
+      {% render 'nether-recommendations-extensions', type: strategy, section: section %}
+      {%- for block in section.blocks -%}
+        {% render 'nether-recommendations-block', block: block, section: section %}
+      {%- endfor -%}
+    </div>
+  </nether-recommendations>
+
+{%- else -%}
+  <nether-recommendations
+    id="NetherRecommendations-{{ section.id }}"
+    class="{{ nether_class_list }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient"
+    data-nether-motion="recommendations"
+    data-section-id="{{ section.id }}"
+    data-animation-style="{{ section.settings.nether_animation_style }}"
+    data-animation-duration="{{ nether_animation_duration }}"
+    data-nether-motion-plugins="scrollTrigger"
+    data-recommendation-source="{{ strategy }}"
+    data-layout="{{ layout }}"
+    role="region"
+    aria-label="{{ section.settings.nether_aria_label | default: strategy_label | escape }}"
+  >
+    <div class="nether-recommendations__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+      {% render 'nether-recommendations-body',
+        section: section,
+        products: nil,
+        products_limit: products_limit,
+        product_count: 0,
+        strategy: strategy,
+        strategy_label: strategy_label,
+        show_empty: true,
+        empty_context: 'section'
+      %}
+    </div>
+  </nether-recommendations>
+{%- endif -%}
+
+{%- if section.settings.nether_image_shape == 'arch' -%}
+  {{ 'mask-arch.svg' | inline_asset_content }}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.nether_recommendations.name",
+  "tag": "section",
+  "class": "section section-nether-recommendations",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.nether_recommendations.settings.paragraph.content"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_recommendations.settings.framework.content"
+    },
+    {
+      "type": "select",
+      "id": "nether_recommendation_source",
+      "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.label",
+      "info": "t:sections.nether_recommendations.settings.nether_recommendation_source.info",
+      "default": "related",
+      "options": [
+        { "value": "related", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__1.label" },
+        { "value": "complementary", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__2.label" },
+        { "value": "collection", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__3.label" },
+        { "value": "trending", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__4.label" },
+        { "value": "new_arrivals", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__5.label" },
+        { "value": "best_sellers", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__6.label" },
+        { "value": "frequently_bought", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__7.label" },
+        { "value": "recently_viewed", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__8.label" },
+        { "value": "recently_purchased", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__9.label" },
+        { "value": "for_you", "label": "t:sections.nether_recommendations.settings.nether_recommendation_source.options__10.label" }
+      ]
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:sections.nether_recommendations.settings.product.label",
+      "info": "t:sections.nether_recommendations.settings.product.info"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.nether_recommendations.settings.collection.label",
+      "info": "t:sections.nether_recommendations.settings.collection.info"
+    },
+    {
+      "type": "range",
+      "id": "nether_products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.nether_recommendations.settings.nether_products_to_show.label"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout",
+      "label": "t:sections.nether_recommendations.settings.nether_layout.label",
+      "default": "grid",
+      "options": [
+        { "value": "grid", "label": "t:sections.nether_recommendations.settings.nether_layout.options__1.label" },
+        { "value": "carousel", "label": "t:sections.nether_recommendations.settings.nether_layout.options__2.label" },
+        { "value": "editorial", "label": "t:sections.nether_recommendations.settings.nether_layout.options__3.label" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "nether_columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.nether_recommendations.settings.nether_columns_desktop.label"
+    },
+    {
+      "type": "range",
+      "id": "nether_columns_tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "label": "t:sections.nether_recommendations.settings.nether_columns_tablet.label"
+    },
+    {
+      "type": "select",
+      "id": "nether_columns_mobile",
+      "label": "t:sections.nether_recommendations.settings.nether_columns_mobile.label",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "t:sections.nether_recommendations.settings.nether_columns_mobile.options__1.label" },
+        { "value": "2", "label": "t:sections.nether_recommendations.settings.nether_columns_mobile.options__2.label" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "nether_gap",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24,
+      "label": "t:sections.nether_recommendations.settings.nether_gap.label"
+    },
+    {
+      "type": "select",
+      "id": "nether_card_style",
+      "label": "t:sections.nether_recommendations.settings.nether_card_style.label",
+      "default": "medium",
+      "options": [
+        { "value": "small", "label": "t:sections.nether_recommendations.settings.nether_card_style.options__1.label" },
+        { "value": "medium", "label": "t:sections.nether_recommendations.settings.nether_card_style.options__2.label" },
+        { "value": "large", "label": "t:sections.nether_recommendations.settings.nether_card_style.options__3.label" },
+        { "value": "editorial", "label": "t:sections.nether_recommendations.settings.nether_card_style.options__4.label" },
+        { "value": "minimal", "label": "t:sections.nether_recommendations.settings.nether_card_style.options__5.label" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_full_width",
+      "label": "t:sections.nether_recommendations.settings.nether_full_width.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_recommendations.settings.content.content"
+    },
+    {
+      "type": "text",
+      "id": "nether_eyebrow",
+      "label": "t:sections.nether_recommendations.settings.nether_eyebrow.label"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "nether_heading",
+      "label": "t:sections.nether_recommendations.settings.nether_heading.label",
+      "default": "You may also like"
+    },
+    {
+      "type": "text",
+      "id": "nether_subheading",
+      "label": "t:sections.nether_recommendations.settings.nether_subheading.label"
+    },
+    {
+      "type": "select",
+      "id": "nether_heading_level",
+      "label": "t:sections.nether_recommendations.settings.nether_heading_level.label",
+      "default": "h2",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_strategy_badge",
+      "label": "t:sections.nether_recommendations.settings.nether_show_strategy_badge.label",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "nether_card_badge_label",
+      "label": "t:sections.nether_recommendations.settings.nether_card_badge_label.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_toolbar",
+      "label": "t:sections.nether_recommendations.settings.nether_show_toolbar.label",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "nether_toolbar_label",
+      "label": "t:sections.nether_recommendations.settings.nether_toolbar_label.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_view_all",
+      "label": "t:sections.nether_recommendations.settings.nether_show_view_all.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "nether_view_all_label",
+      "label": "t:sections.nether_recommendations.settings.nether_view_all_label.label"
+    },
+    {
+      "type": "text",
+      "id": "nether_aria_label",
+      "label": "t:sections.nether_recommendations.settings.nether_aria_label.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_recommendations.settings.cards.content"
+    },
+    {
+      "type": "select",
+      "id": "nether_image_ratio",
+      "label": "t:sections.nether_recommendations.settings.nether_image_ratio.label",
+      "default": "adapt",
+      "options": [
+        { "value": "adapt", "label": "t:sections.nether_recommendations.settings.nether_image_ratio.options__1.label" },
+        { "value": "portrait", "label": "t:sections.nether_recommendations.settings.nether_image_ratio.options__2.label" },
+        { "value": "square", "label": "t:sections.nether_recommendations.settings.nether_image_ratio.options__3.label" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_image_shape",
+      "label": "t:sections.all.image_shape.label",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "t:sections.all.image_shape.options__1.label" },
+        { "value": "arch", "label": "t:sections.all.image_shape.options__2.label" },
+        { "value": "blob", "label": "t:sections.all.image_shape.options__3.label" },
+        { "value": "chevronleft", "label": "t:sections.all.image_shape.options__4.label" },
+        { "value": "chevronright", "label": "t:sections.all.image_shape.options__5.label" },
+        { "value": "diamond", "label": "t:sections.all.image_shape.options__6.label" },
+        { "value": "parallelogram", "label": "t:sections.all.image_shape.options__7.label" },
+        { "value": "round", "label": "t:sections.all.image_shape.options__8.label" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_secondary_image",
+      "label": "t:sections.nether_recommendations.settings.nether_show_secondary_image.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_vendor",
+      "label": "t:sections.nether_recommendations.settings.nether_show_vendor.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_show_rating",
+      "label": "t:sections.nether_recommendations.settings.nether_show_rating.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "nether_quick_add",
+      "label": "t:sections.nether_recommendations.settings.nether_quick_add.label",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "t:sections.nether_recommendations.settings.nether_quick_add.options__1.label" },
+        { "value": "standard", "label": "t:sections.nether_recommendations.settings.nether_quick_add.options__2.label" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_wishlist_cards",
+      "label": "t:sections.nether_recommendations.settings.nether_enable_wishlist_cards.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_compare_cards",
+      "label": "t:sections.nether_recommendations.settings.nether_enable_compare_cards.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_quick_view_cards",
+      "label": "t:sections.nether_recommendations.settings.nether_enable_quick_view_cards.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_recommendations.settings.empty.content"
+    },
+    {
+      "type": "text",
+      "id": "nether_empty_heading",
+      "label": "t:sections.nether_recommendations.settings.nether_empty_heading.label"
+    },
+    {
+      "type": "textarea",
+      "id": "nether_empty_text",
+      "label": "t:sections.nether_recommendations.settings.nether_empty_text.label"
+    },
+    {
+      "type": "text",
+      "id": "nether_empty_button_label",
+      "label": "t:sections.nether_recommendations.settings.nether_empty_button_label.label"
+    },
+    {
+      "type": "url",
+      "id": "nether_empty_button_link",
+      "label": "t:sections.nether_recommendations.settings.nether_empty_button_link.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_recommendations.settings.visual.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_glass",
+      "label": "t:sections.nether_recommendations.settings.nether_enable_glass.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_gradient",
+      "label": "t:sections.nether_recommendations.settings.nether_enable_gradient.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_recommendations.settings.motion.content"
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_style",
+      "label": "t:sections.nether_recommendations.settings.nether_animation_style.label",
+      "default": "stagger",
+      "options": [
+        { "value": "none", "label": "t:sections.nether_recommendations.settings.nether_animation_style.options__1.label" },
+        { "value": "fade", "label": "t:sections.nether_recommendations.settings.nether_animation_style.options__2.label" },
+        { "value": "slide", "label": "t:sections.nether_recommendations.settings.nether_animation_style.options__3.label" },
+        { "value": "stagger", "label": "t:sections.nether_recommendations.settings.nether_animation_style.options__4.label" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_speed",
+      "label": "t:sections.nether_recommendations.settings.nether_animation_speed.label",
+      "default": "default",
+      "options": [
+        { "value": "fast", "label": "t:sections.nether_recommendations.settings.nether_animation_speed.options__1.label" },
+        { "value": "default", "label": "t:sections.nether_recommendations.settings.nether_animation_speed.options__2.label" },
+        { "value": "slow", "label": "t:sections.nether_recommendations.settings.nether_animation_speed.options__3.label" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_recommendations.settings.responsive.content"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_desktop",
+      "label": "t:sections.nether_recommendations.settings.nether_layout_desktop.label",
+      "default": "standard",
+      "options": [
+        { "value": "standard", "label": "t:sections.nether_recommendations.settings.nether_layout_desktop.options__1.label" },
+        { "value": "compact", "label": "t:sections.nether_recommendations.settings.nether_layout_desktop.options__2.label" },
+        { "value": "spacious", "label": "t:sections.nether_recommendations.settings.nether_layout_desktop.options__3.label" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_tablet",
+      "label": "t:sections.nether_recommendations.settings.nether_layout_tablet.label",
+      "default": "standard",
+      "options": [
+        { "value": "standard", "label": "t:sections.nether_recommendations.settings.nether_layout_tablet.options__1.label" },
+        { "value": "compact", "label": "t:sections.nether_recommendations.settings.nether_layout_tablet.options__2.label" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_mobile",
+      "label": "t:sections.nether_recommendations.settings.nether_layout_mobile.label",
+      "default": "stacked",
+      "options": [
+        { "value": "stacked", "label": "t:sections.nether_recommendations.settings.nether_layout_mobile.options__1.label" },
+        { "value": "compact", "label": "t:sections.nether_recommendations.settings.nether_layout_mobile.options__2.label" }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "info": "t:sections.all.colors.has_cards_info",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "merchant_content",
+      "name": "t:sections.nether_recommendations.blocks.merchant_content.name",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:sections.nether_recommendations.blocks.settings.heading" },
+        { "type": "richtext", "id": "content", "label": "t:sections.nether_recommendations.blocks.settings.content" },
+        { "type": "page", "id": "page", "label": "t:sections.nether_recommendations.blocks.settings.page" },
+        { "type": "textarea", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "frequently_bought_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.frequently_bought_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "recently_viewed_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.recently_viewed_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "recently_purchased_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.recently_purchased_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "for_you_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.for_you_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "ai_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.ai_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "personalization_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.personalization_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "analytics_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.analytics_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "merchandising_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.merchandising_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "ab_testing_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.ab_testing_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "collection_cards_placeholder",
+      "name": "t:sections.nether_recommendations.blocks.collection_cards_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_recommendations.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_recommendations.blocks.settings.text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.nether_recommendations.presets.name",
+      "settings": {
+        "nether_recommendation_source": "related",
+        "nether_layout": "grid",
+        "nether_heading": "You may also like",
+        "nether_products_to_show": 4,
+        "nether_columns_desktop": 4
+      }
+    }
+  ]
+}
+{% endschema %}

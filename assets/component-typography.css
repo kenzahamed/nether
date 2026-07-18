@@ -1,0 +1,490 @@
+/* =============================================================================
+ * Nether Premium Typography System
+ * Extends Dawn's typography — do not duplicate base.css rules.
+ * Uses theme font settings via --font-body-* and --font-heading-* tokens.
+ * ============================================================================= */
+
+:root {
+  /* ── Line-height scale ─────────────────────────────────────────────────── */
+  --type-leading-tight: 1.15;
+  --type-leading-snug: calc(1 + 0.3 / max(1, var(--font-heading-scale)));
+  --type-leading-normal: calc(1 + 0.5 / var(--font-body-scale));
+  --type-leading-relaxed: calc(1 + 0.8 / var(--font-body-scale));
+
+  /* ── Letter-spacing scale ────────────────────────────────────────────────── */
+  --type-tracking-tighter: -0.02em;
+  --type-tracking-tight: calc(var(--font-heading-scale) * 0.02rem);
+  --type-tracking-normal: 0.06rem;
+  --type-tracking-wide: 0.1rem;
+  --type-tracking-wider: 0.13rem;
+  --type-tracking-widest: 0.18rem;
+
+  /* ── Font weight scale ───────────────────────────────────────────────────── */
+  --type-weight-light: 300;
+  --type-weight-regular: var(--font-body-weight);
+  --type-weight-medium: 500;
+  --type-weight-semibold: 600;
+  --type-weight-bold: var(--font-body-weight-bold);
+
+  /* ── Vertical rhythm spacing ─────────────────────────────────────────────── */
+  --type-space-xs: 0.4rem;
+  --type-space-sm: 0.8rem;
+  --type-space-md: 1.6rem;
+  --type-space-lg: 2.4rem;
+  --type-space-xl: 3.2rem;
+  --type-space-2xl: 4.8rem;
+
+  /* ── Readable measure ────────────────────────────────────────────────────── */
+  --type-measure: 65ch;
+  --type-measure-narrow: 45ch;
+  --type-measure-wide: 80ch;
+}
+
+/* ── Shared heading base (composes with Dawn h1–h5 rules) ──────────────────── */
+
+.type-display-xl,
+.type-display-lg,
+.type-h1,
+.type-h2,
+.type-h3,
+.type-h4,
+.type-h5,
+.type-h6 {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  color: rgb(var(--color-foreground));
+  word-break: break-word;
+}
+
+/* ── Display XL (extends .hxxl) ──────────────────────────────────────────── */
+
+.type-display-xl {
+  font-size: clamp(
+    calc(var(--font-heading-scale) * 5.6rem),
+    14vw,
+    calc(var(--font-heading-scale) * 7.2rem)
+  );
+  font-weight: var(--font-heading-weight);
+  letter-spacing: var(--type-tracking-tighter);
+  line-height: var(--type-leading-tight);
+}
+
+/* ── Display Large (extends .hxl) ─────────────────────────────────────────── */
+
+.type-display-lg {
+  font-size: calc(var(--font-heading-scale) * 5rem);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: calc(var(--font-heading-scale) * 0.06rem);
+  line-height: var(--type-leading-snug);
+}
+
+@media screen and (min-width: 750px) {
+  .type-display-lg {
+    font-size: calc(var(--font-heading-scale) * 6.2rem);
+  }
+}
+
+/* ── Heading 1 (extends .h1) ─────────────────────────────────────────────── */
+
+.type-h1 {
+  font-size: calc(var(--font-heading-scale) * 3rem);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: calc(var(--font-heading-scale) * 0.06rem);
+  line-height: var(--type-leading-snug);
+}
+
+@media screen and (min-width: 750px) {
+  .type-h1 {
+    font-size: calc(var(--font-heading-scale) * 4rem);
+  }
+}
+
+/* ── Heading 2 (extends .h2) ─────────────────────────────────────────────── */
+
+.type-h2 {
+  font-size: calc(var(--font-heading-scale) * 2rem);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: calc(var(--font-heading-scale) * 0.06rem);
+  line-height: var(--type-leading-snug);
+}
+
+@media screen and (min-width: 750px) {
+  .type-h2 {
+    font-size: calc(var(--font-heading-scale) * 2.4rem);
+  }
+}
+
+/* ── Heading 3 (extends .h3) ─────────────────────────────────────────────── */
+
+.type-h3 {
+  font-size: calc(var(--font-heading-scale) * 1.7rem);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: calc(var(--font-heading-scale) * 0.06rem);
+  line-height: var(--type-leading-snug);
+}
+
+@media screen and (min-width: 750px) {
+  .type-h3 {
+    font-size: calc(var(--font-heading-scale) * 1.8rem);
+  }
+}
+
+/* ── Heading 4 (extends .h4) ─────────────────────────────────────────────── */
+
+.type-h4 {
+  font-size: calc(var(--font-heading-scale) * 1.5rem);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: calc(var(--font-heading-scale) * 0.06rem);
+  line-height: var(--type-leading-snug);
+}
+
+/* ── Heading 5 (extends .h5) ─────────────────────────────────────────────── */
+
+.type-h5 {
+  font-size: calc(var(--font-heading-scale) * 1.2rem);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: calc(var(--font-heading-scale) * 0.06rem);
+  line-height: var(--type-leading-snug);
+}
+
+@media screen and (min-width: 750px) {
+  .type-h5 {
+    font-size: calc(var(--font-heading-scale) * 1.3rem);
+  }
+}
+
+/* ── Heading 6 (extends Dawn h6 with full sizing) ──────────────────────────── */
+
+.type-h6,
+h6.type-h6 {
+  font-size: calc(var(--font-heading-scale) * 1.1rem);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: var(--type-tracking-wide);
+  line-height: var(--type-leading-normal);
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+@media screen and (min-width: 750px) {
+  .type-h6,
+  h6.type-h6 {
+    font-size: calc(var(--font-heading-scale) * 1.2rem);
+  }
+}
+
+/* ── Large Body ────────────────────────────────────────────────────────────── */
+
+.type-body-lg {
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+  font-size: clamp(1.5rem, 0.5vw + 1.3rem, 1.7rem);
+  letter-spacing: var(--type-tracking-normal);
+  line-height: var(--type-leading-relaxed);
+  color: rgb(var(--color-foreground));
+}
+
+/* ── Body (extends .text-body) ─────────────────────────────────────────────── */
+
+.type-body {
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+  font-size: 1.5rem;
+  letter-spacing: var(--type-tracking-normal);
+  line-height: var(--type-leading-relaxed);
+  color: rgb(var(--color-foreground));
+}
+
+@media screen and (min-width: 750px) {
+  .type-body {
+    font-size: 1.6rem;
+  }
+}
+
+/* ── Small Body ────────────────────────────────────────────────────────────── */
+
+.type-body-sm {
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+  font-size: 1.3rem;
+  letter-spacing: var(--type-tracking-tight);
+  line-height: var(--type-leading-normal);
+  color: rgba(var(--color-foreground), 0.85);
+}
+
+/* ── Caption (extends .caption) ───────────────────────────────────────────── */
+
+.type-caption {
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+  font-size: 1rem;
+  letter-spacing: 0.07rem;
+  line-height: calc(1 + 0.7 / var(--font-body-scale));
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+@media screen and (min-width: 750px) {
+  .type-caption {
+    font-size: 1.2rem;
+  }
+}
+
+/* ── Overline (extends .caption-with-letter-spacing) ─────────────────────────── */
+
+.type-overline {
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+  font-size: 1rem;
+  letter-spacing: var(--type-tracking-wider);
+  line-height: var(--type-leading-normal);
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground), 0.7);
+}
+
+/* ── Label (extends .caption-large / form labels) ──────────────────────────── */
+
+.type-label {
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+  font-size: 1.3rem;
+  letter-spacing: 0.04rem;
+  line-height: var(--type-leading-normal);
+  color: rgb(var(--color-foreground));
+}
+
+/* =============================================================================
+ * Font weight utilities
+ * Note: Dawn's .light sets opacity — use .type-weight-light for font weight.
+ * ============================================================================= */
+
+.type-weight-light {
+  font-weight: var(--type-weight-light);
+}
+
+.type-weight-regular {
+  font-weight: var(--type-weight-regular);
+}
+
+.type-weight-medium {
+  font-weight: var(--type-weight-medium);
+}
+
+.type-weight-semibold {
+  font-weight: var(--type-weight-semibold);
+}
+
+.type-weight-bold {
+  font-weight: var(--type-weight-bold);
+}
+
+/* =============================================================================
+ * Line-height utilities
+ * ============================================================================= */
+
+.type-leading-tight {
+  line-height: var(--type-leading-tight);
+}
+
+.type-leading-snug {
+  line-height: var(--type-leading-snug);
+}
+
+.type-leading-normal {
+  line-height: var(--type-leading-normal);
+}
+
+.type-leading-relaxed {
+  line-height: var(--type-leading-relaxed);
+}
+
+/* =============================================================================
+ * Letter-spacing utilities
+ * ============================================================================= */
+
+.type-tracking-tighter {
+  letter-spacing: var(--type-tracking-tighter);
+}
+
+.type-tracking-tight {
+  letter-spacing: var(--type-tracking-tight);
+}
+
+.type-tracking-normal {
+  letter-spacing: var(--type-tracking-normal);
+}
+
+.type-tracking-wide {
+  letter-spacing: var(--type-tracking-wide);
+}
+
+.type-tracking-wider {
+  letter-spacing: var(--type-tracking-wider);
+}
+
+.type-tracking-widest {
+  letter-spacing: var(--type-tracking-widest);
+}
+
+/* =============================================================================
+ * Text transform utilities
+ * ============================================================================= */
+
+.type-uppercase {
+  text-transform: uppercase;
+}
+
+.type-lowercase {
+  text-transform: lowercase;
+}
+
+.type-capitalize {
+  text-transform: capitalize;
+}
+
+.type-normal-case {
+  text-transform: none;
+}
+
+/* =============================================================================
+ * Text alignment utilities (complements Dawn .left / .center / .right)
+ * ============================================================================= */
+
+.type-align-left {
+  text-align: left;
+}
+
+.type-align-center {
+  text-align: center;
+}
+
+.type-align-right {
+  text-align: right;
+}
+
+/* =============================================================================
+ * Truncation & line clamp
+ * ============================================================================= */
+
+.type-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.type-clamp-2,
+.type-clamp-3,
+.type-clamp-4,
+.type-clamp-5 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.type-clamp-2 {
+  -webkit-line-clamp: 2;
+}
+
+.type-clamp-3 {
+  -webkit-line-clamp: 3;
+}
+
+.type-clamp-4 {
+  -webkit-line-clamp: 4;
+}
+
+.type-clamp-5 {
+  -webkit-line-clamp: 5;
+}
+
+/* =============================================================================
+ * Text balance & readable measure
+ * ============================================================================= */
+
+.type-balance {
+  text-wrap: balance;
+}
+
+.type-pretty {
+  text-wrap: pretty;
+}
+
+.type-measure {
+  max-width: var(--type-measure);
+}
+
+.type-measure-narrow {
+  max-width: var(--type-measure-narrow);
+}
+
+.type-measure-wide {
+  max-width: var(--type-measure-wide);
+}
+
+/* =============================================================================
+ * Vertical rhythm
+ * ============================================================================= */
+
+.type-stack > * + * {
+  margin-top: var(--type-space-md);
+}
+
+.type-stack-sm > * + * {
+  margin-top: var(--type-space-sm);
+}
+
+.type-stack-lg > * + * {
+  margin-top: var(--type-space-lg);
+}
+
+.type-stack-xl > * + * {
+  margin-top: var(--type-space-xl);
+}
+
+.type-prose {
+  max-width: var(--type-measure);
+  line-height: var(--type-leading-relaxed);
+}
+
+.type-prose > * + * {
+  margin-top: var(--type-space-md);
+}
+
+.type-prose > h1,
+.type-prose > h2,
+.type-prose > h3,
+.type-prose > h4,
+.type-prose > h5,
+.type-prose > h6 {
+  margin-top: var(--type-space-lg);
+  margin-bottom: var(--type-space-sm);
+}
+
+/* =============================================================================
+ * Font family utilities
+ * ============================================================================= */
+
+.type-heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+}
+
+.type-body-font {
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+}
+
+/* =============================================================================
+ * Muted text
+ * ============================================================================= */
+
+.type-muted {
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.type-subtle {
+  color: rgba(var(--color-foreground), 0.55);
+}

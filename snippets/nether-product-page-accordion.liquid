@@ -1,0 +1,38 @@
+{% comment %}
+  Nether Premium Product Page — Styled collapsible tab module.
+  Extends Dawn accordion pattern — preserves native details/summary semantics.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- liquid
+  assign accordion_style = section.settings.nether_accordion_style | default: 'classic'
+  assign tab_heading = block.settings.heading | default: block.settings.page.title
+-%}
+
+{%- if tab_heading != blank -%}
+  <div
+    class="nether-product-page__module nether-product-page__module--accordion nether-product-page__accordion--{{ accordion_style }} product__accordion accordion quick-add-hidden"
+    data-nether-product-page-module="details"
+    data-nether-product-page-animate
+    {{ block.shopify_attributes }}
+  >
+    <details id="Details-{{ block.id }}-{{ section.id }}">
+      <summary>
+        <div class="summary__title">
+          {% render 'icon-accordion', icon: block.settings.icon %}
+          <h2 class="h4 accordion__title inline-richtext">
+            {{ tab_heading | escape }}
+          </h2>
+        </div>
+        {{- 'icon-caret.svg' | inline_asset_content -}}
+      </summary>
+      <div class="accordion__content rte" id="ProductAccordion-{{ block.id }}-{{ section.id }}">
+        {{ block.settings.content }}
+        {{ block.settings.page.content }}
+      </div>
+    </details>
+  </div>
+{%- endif -%}

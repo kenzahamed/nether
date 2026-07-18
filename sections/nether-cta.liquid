@@ -1,0 +1,956 @@
+{{ 'component-hero.css' | asset_url | stylesheet_tag }}
+{{ 'component-cta.css' | asset_url | stylesheet_tag }}
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-icon.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-typography.css' | asset_url | stylesheet_tag }}
+{{ 'component-card-premium.css' | asset_url | stylesheet_tag }}
+{{ 'component-shadow.css' | asset_url | stylesheet_tag }}
+{{ 'component-radius.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-hero.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-cta.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.nether_enable_glass -%}
+  {{ 'component-glass.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if section.settings.nether_enable_gradient -%}
+  {{ 'component-gradient.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- liquid
+  assign nether_layout = section.settings.nether_layout | default: 'centered_cta'
+  assign nether_content_width = section.settings.nether_content_width | default: 'medium'
+  assign nether_content_position = section.settings.nether_content_position | default: 'middle-center'
+
+  assign uses_hero_shell = false
+  assign uses_section_media = false
+  assign uses_promotion_aside = false
+
+  case nether_layout
+    when 'editorial_cta'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'editorial'
+    when 'centered_cta'
+      assign uses_hero_shell = false
+      assign nether_hero_layout = 'classic'
+    when 'split_cta', 'image_cta'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'split'
+    when 'background_image_cta', 'background_video_cta'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'overlay'
+    when 'product_promotion_cta'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign uses_promotion_aside = true
+      assign nether_hero_layout = 'split'
+    when 'collection_promotion_cta'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign uses_promotion_aside = true
+      assign nether_hero_layout = 'split'
+    when 'minimal_cta'
+      assign uses_hero_shell = true
+      assign nether_hero_layout = 'minimal'
+    when 'luxury_cta'
+      assign uses_hero_shell = true
+      assign uses_section_media = true
+      assign nether_hero_layout = 'editorial'
+  endcase
+
+  case section.settings.nether_animation_speed
+    when 'slow'
+      assign nether_animation_duration = 0.8
+    when 'fast'
+      assign nether_animation_duration = 0.3
+    else
+      assign nether_animation_duration = 0.5
+  endcase
+
+  assign enable_glass = section.settings.nether_enable_glass
+  assign enable_gradient = section.settings.nether_enable_gradient
+  if nether_layout == 'luxury_cta'
+    assign enable_glass = true
+  endif
+  if nether_layout == 'background_image_cta' or nether_layout == 'background_video_cta'
+    assign enable_gradient = true
+  endif
+
+  assign nether_class_list = 'nether-cta nether-hero'
+  assign nether_class_list = nether_class_list | append: ' nether-cta--layout-' | append: nether_layout
+  if uses_hero_shell
+    assign nether_class_list = nether_class_list | append: ' nether-hero--layout-' | append: nether_hero_layout
+  endif
+  assign nether_class_list = nether_class_list | append: ' nether-hero--width-' | append: nether_content_width
+  assign nether_class_list = nether_class_list | append: ' nether-hero--position-' | append: nether_content_position
+  assign nether_class_list = nether_class_list | append: ' nether-hero--desktop-' | append: section.settings.nether_layout_desktop
+  assign nether_class_list = nether_class_list | append: ' nether-hero--tablet-' | append: section.settings.nether_layout_tablet
+  assign nether_class_list = nether_class_list | append: ' nether-hero--mobile-' | append: section.settings.nether_layout_mobile
+  assign nether_class_list = nether_class_list | append: ' nether-cta--spacing-' | append: section.settings.nether_spacing_preset
+  assign nether_class_list = nether_class_list | append: ' nether-cta--background-' | append: section.settings.nether_background_style
+
+  if enable_glass
+    assign nether_class_list = nether_class_list | append: ' nether-hero--glass-enabled nether-cta--glass-enabled'
+  endif
+
+  if enable_gradient
+    assign nether_class_list = nether_class_list | append: ' nether-hero--gradient-enabled'
+  endif
+
+  if section.settings.nether_media_position == 'right'
+    assign nether_class_list = nether_class_list | append: ' nether-hero--split-media-right'
+  endif
+
+  if section.settings.nether_enable_floating_card
+    assign nether_class_list = nether_class_list | append: ' nether-cta--floating-enabled'
+  endif
+
+  case section.settings.nether_layout_tablet
+    when 'stacked'
+      assign nether_class_list = nether_class_list | append: ' nether-cta--tablet-stacked'
+    when 'centered'
+      assign nether_class_list = nether_class_list | append: ' nether-cta--tablet-centered'
+  endcase
+
+  case section.settings.nether_layout_mobile
+    when 'stacked'
+      assign nether_class_list = nether_class_list | append: ' nether-cta--mobile-stacked'
+    when 'centered'
+      assign nether_class_list = nether_class_list | append: ' nether-cta--mobile-centered'
+    when 'minimal'
+      assign nether_class_list = nether_class_list | append: ' nether-cta--mobile-minimal'
+  endcase
+
+  assign overlay_classes = 'nether-hero__overlay'
+  if enable_gradient
+    case section.settings.nether_gradient_style
+      when 'dramatic'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-dramatic'
+      when 'vignette'
+        assign overlay_classes = overlay_classes | append: ' grad-hero-vignette'
+      when 'fade-down'
+        assign overlay_classes = overlay_classes | append: ' grad-linear-fade-down'
+      else
+        assign overlay_classes = overlay_classes | append: ' grad-hero-brand'
+    endcase
+  endif
+
+  assign heading_tag = 'h2'
+  if section.settings.nether_heading_level == 'h3'
+    assign heading_tag = 'h3'
+  endif
+
+  assign needs_deferred_media = false
+  if section.settings.nether_cta_media_type == 'video' or nether_layout == 'background_video_cta'
+    assign needs_deferred_media = true
+  endif
+  for block in section.blocks
+    if block.type == 'video'
+      assign needs_deferred_media = true
+      break
+    endif
+  endfor
+
+  case section.settings.nether_spacing_preset
+    when 'compact'
+      assign spacing_block = 1.6
+      assign spacing_inline = 2.4
+    when 'spacious'
+      assign spacing_block = 4.8
+      assign spacing_inline = 6.4
+    else
+      assign spacing_block = 3.2
+      assign spacing_inline = 4.8
+  endcase
+-%}
+
+{%- if needs_deferred_media -%}
+  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .nether-cta {
+    --nether-cta-overlay-opacity: {{ section.settings.nether_overlay_opacity | divided_by: 100.0 }};
+    --nether-cta-transition-duration: {{ nether_animation_duration }}s;
+    --nether-hero-overlay-opacity: {{ section.settings.nether_overlay_opacity | divided_by: 100.0 }};
+    --nether-hero-transition-duration: {{ nether_animation_duration }}s;
+    --nether-cta-gap: {{ spacing_block }}rem;
+    --nether-cta-content-padding: {{ spacing_inline }}rem;
+    --nether-hero-content-padding: var(--nether-cta-content-padding);
+    --nether-hero-gap: var(--nether-cta-gap);
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  {%- if uses_section_media and section.settings.nether_cta_image_desktop != blank -%}
+    #NetherCta-{{ section.id }} .nether-hero__media::before {
+      padding-bottom: {{ 1 | divided_by: section.settings.nether_cta_image_desktop.aspect_ratio | times: 100 }}%;
+      content: '';
+      display: block;
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+{%- if section.settings.nether_show_divider_top -%}
+  {%- render 'nether-cta-divider', section: section, position: 'top' -%}
+{%- endif -%}
+
+<nether-cta
+  id="NetherCta-{{ section.id }}"
+  class="{{ nether_class_list }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient"
+  data-section-id="{{ section.id }}"
+  data-nether-motion="cta"
+  data-cta-layout="{{ nether_layout }}"
+  data-nether-cta-layout="{{ nether_layout }}"
+  {% if uses_hero_shell %}data-nether-hero-layout="{{ nether_hero_layout }}"{% endif %}
+  {% if section.settings.nether_enable_parallax or section.settings.nether_enable_button_reveal or section.settings.nether_enable_card_reveal %}data-nether-motion-plugins="scrollTrigger"{% endif %}
+  data-animation-style="{{ section.settings.nether_animation_style }}"
+  data-animation-duration="{{ nether_animation_duration }}"
+  data-enable-parallax="{{ section.settings.nether_enable_parallax }}"
+  data-button-reveal="{{ section.settings.nether_enable_button_reveal }}"
+  data-card-reveal="{{ section.settings.nether_enable_card_reveal }}"
+  data-hover-reveal="{{ section.settings.nether_enable_hover_reveal }}"
+  {% if section.settings.nether_enable_floating_card %}data-floating-enabled="true"{% endif %}
+  {% if section.settings.nether_enable_analytics %}data-nether-cta-analytics="true"{% endif %}
+  {% if section.settings.nether_popup_target != blank %}data-nether-cta-popup-target="{{ section.settings.nether_popup_target | escape }}"{% endif %}
+  role="region"
+  aria-label="{{ section.settings.nether_aria_label | default: 'sections.nether_cta.aria_label' | t | escape }}"
+>
+  <div class="nether-cta__inner nether-hero__inner{% if uses_promotion_aside %} nether-cta__inner--promotion{% endif %}">
+    {%- if uses_section_media -%}
+      {%- render 'nether-hero-media', section: section, adapter: 'cta' -%}
+
+      {%- if section.settings.nether_enable_image_overlay or enable_gradient -%}
+        <div class="{{ overlay_classes }}" data-nether-hero-overlay data-nether-cta-overlay aria-hidden="true"></div>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if uses_hero_shell -%}
+      {%- render 'nether-cta-content', section: section, heading_tag: heading_tag -%}
+    {%- else -%}
+      <div class="nether-cta__body page-width" data-nether-cta-content data-nether-hero-content>
+        <div class="nether-cta__blocks nether-hero__blocks nether-hero__blocks--align-{{ section.settings.nether_content_alignment | default: 'center' }}">
+          {%- for block in section.blocks -%}
+            {%- render 'nether-cta-block',
+              block: block,
+              section: section,
+              heading_tag: heading_tag
+            -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if uses_promotion_aside -%}
+      {%- render 'nether-cta-aside', section: section -%}
+    {%- endif -%}
+  </div>
+</nether-cta>
+
+{%- if section.settings.nether_show_divider_bottom -%}
+  {%- render 'nether-cta-divider', section: section, position: 'bottom' -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Nether CTA",
+  "tag": "section",
+  "class": "section section-nether-cta",
+  "max_blocks": 24,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Nether CTA & conversion framework"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout",
+      "label": "Layout",
+      "default": "centered_cta",
+      "options": [
+        { "value": "editorial_cta", "label": "Editorial CTA" },
+        { "value": "centered_cta", "label": "Centered CTA" },
+        { "value": "split_cta", "label": "Split CTA" },
+        { "value": "image_cta", "label": "Image CTA" },
+        { "value": "background_image_cta", "label": "Background image CTA" },
+        { "value": "background_video_cta", "label": "Background video CTA" },
+        { "value": "product_promotion_cta", "label": "Product promotion CTA" },
+        { "value": "collection_promotion_cta", "label": "Collection promotion CTA" },
+        { "value": "minimal_cta", "label": "Minimal CTA" },
+        { "value": "luxury_cta", "label": "Luxury CTA" }
+      ]
+    },
+    {
+      "type": "product",
+      "id": "nether_cta_product",
+      "label": "Featured product"
+    },
+    {
+      "type": "collection",
+      "id": "nether_cta_collection",
+      "label": "Featured collection"
+    },
+    {
+      "type": "text",
+      "id": "nether_cta_aside_cta_label",
+      "label": "Promotion aside button label"
+    },
+    {
+      "type": "select",
+      "id": "nether_content_width",
+      "label": "Content width",
+      "default": "medium",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "full", "label": "Full" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_media_position",
+      "label": "Media position",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_content_position",
+      "label": "Content position",
+      "default": "middle-center",
+      "options": [
+        { "value": "top-left", "label": "Top left" },
+        { "value": "top-center", "label": "Top center" },
+        { "value": "top-right", "label": "Top right" },
+        { "value": "middle-left", "label": "Middle left" },
+        { "value": "middle-center", "label": "Middle center" },
+        { "value": "middle-right", "label": "Middle right" },
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-center", "label": "Bottom center" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_content_alignment",
+      "label": "Content alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_background_style",
+      "label": "Background style",
+      "default": "solid",
+      "options": [
+        { "value": "solid", "label": "Solid" },
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" },
+        { "value": "gradient", "label": "Gradient" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_spacing_preset",
+      "label": "Spacing preset",
+      "default": "default",
+      "options": [
+        { "value": "compact", "label": "Compact" },
+        { "value": "default", "label": "Default" },
+        { "value": "spacious", "label": "Spacious" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_heading_level",
+      "label": "Primary heading level",
+      "default": "h2",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "nether_aria_label",
+      "label": "Accessibility label",
+      "default": "Call to action"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section media"
+    },
+    {
+      "type": "select",
+      "id": "nether_cta_media_type",
+      "label": "Media type",
+      "default": "image",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" },
+        { "value": "background_video", "label": "Background video" }
+      ]
+    },
+    { "type": "image_picker", "id": "nether_cta_image_desktop", "label": "Desktop image" },
+    { "type": "image_picker", "id": "nether_cta_image_mobile", "label": "Mobile image" },
+    { "type": "video", "id": "nether_cta_video", "label": "Shopify-hosted video" },
+    { "type": "video_url", "id": "nether_cta_video_url", "label": "External video URL", "accept": ["youtube", "vimeo"] },
+    { "type": "image_picker", "id": "nether_cta_poster_image", "label": "Poster image" },
+    { "type": "text", "id": "nether_cta_video_description", "label": "Video description" },
+    { "type": "checkbox", "id": "nether_cta_video_loop", "default": true, "label": "Loop video" },
+    { "type": "checkbox", "id": "nether_cta_enable_blur", "default": false, "label": "Background blur" },
+    {
+      "type": "header",
+      "content": "Visual features"
+    },
+    { "type": "range", "id": "nether_overlay_opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "label": "Overlay opacity", "default": 40 },
+    { "type": "checkbox", "id": "nether_enable_image_overlay", "default": true, "label": "Enable image overlay" },
+    { "type": "checkbox", "id": "nether_enable_glass", "default": false, "label": "Enable glass panel" },
+    {
+      "type": "select",
+      "id": "nether_glass_style",
+      "label": "Glass style",
+      "default": "medium",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "heavy", "label": "Heavy" },
+        { "value": "frosted", "label": "Frosted" }
+      ]
+    },
+    { "type": "checkbox", "id": "nether_enable_gradient", "default": false, "label": "Enable gradient panel" },
+    {
+      "type": "select",
+      "id": "nether_gradient_style",
+      "label": "Gradient style",
+      "default": "brand",
+      "options": [
+        { "value": "brand", "label": "Brand" },
+        { "value": "dramatic", "label": "Dramatic" },
+        { "value": "vignette", "label": "Vignette" },
+        { "value": "fade-down", "label": "Fade down" }
+      ]
+    },
+    { "type": "checkbox", "id": "nether_enable_floating_card", "default": false, "label": "Floating card" },
+    { "type": "checkbox", "id": "nether_show_divider_top", "default": false, "label": "Top divider" },
+    { "type": "checkbox", "id": "nether_show_divider_bottom", "default": false, "label": "Bottom divider" },
+    {
+      "type": "select",
+      "id": "nether_divider_style",
+      "label": "Divider style",
+      "default": "line",
+      "options": [
+        { "value": "line", "label": "Line" },
+        { "value": "gradient", "label": "Gradient" },
+        { "value": "wave", "label": "Wave" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_style",
+      "label": "Animation style",
+      "default": "fade",
+      "options": [
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide", "label": "Slide" },
+        { "value": "scale", "label": "Scale" },
+        { "value": "stagger", "label": "Stagger" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_speed",
+      "label": "Animation speed",
+      "default": "medium",
+      "options": [
+        { "value": "slow", "label": "Slow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "fast", "label": "Fast" }
+      ]
+    },
+    { "type": "checkbox", "id": "nether_enable_button_reveal", "default": true, "label": "Button reveal animation" },
+    { "type": "checkbox", "id": "nether_enable_card_reveal", "default": true, "label": "Card reveal animation" },
+    { "type": "checkbox", "id": "nether_enable_hover_reveal", "default": true, "label": "Hover reveal animation" },
+    { "type": "checkbox", "id": "nether_enable_parallax", "default": false, "label": "Enable parallax", "info": "Subtle media parallax on scroll. Respects reduced motion preferences." },
+    {
+      "type": "header",
+      "content": "Integrations"
+    },
+    { "type": "checkbox", "id": "nether_enable_analytics", "default": false, "label": "Enable analytics hooks" },
+    { "type": "text", "id": "nether_popup_target", "label": "Popup target ID", "info": "Future-ready popup integration identifier." },
+    {
+      "type": "header",
+      "content": "Responsive layouts"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_desktop",
+      "label": "Desktop layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "editorial", "label": "Editorial emphasis" },
+        { "value": "compact", "label": "Compact" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_tablet",
+      "label": "Tablet layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_mobile",
+      "label": "Mobile layout",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "centered", "label": "Centered" },
+        { "value": "minimal", "label": "Minimal" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "settings": [{ "type": "text", "id": "text", "label": "Text" }]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Discover something extraordinary" },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "default": "h1",
+          "options": [
+            { "value": "h2", "label": "Small" },
+            { "value": "h1", "label": "Medium" },
+            { "value": "h0", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "settings": [
+        { "type": "inline_richtext", "id": "subheading", "label": "Subheading" },
+        {
+          "type": "select",
+          "id": "subheading_size",
+          "label": "Subheading size",
+          "default": "h3",
+          "options": [
+            { "value": "h4", "label": "Small" },
+            { "value": "h3", "label": "Medium" },
+            { "value": "h2", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Rich text",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text" },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "default": "body",
+          "options": [
+            { "value": "body", "label": "Body" },
+            { "value": "subtitle", "label": "Subtitle" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video" },
+        { "type": "video_url", "id": "video_url", "label": "External video URL", "accept": ["youtube", "vimeo"] },
+        { "type": "image_picker", "id": "poster_image", "label": "Poster image" }
+      ]
+    },
+    {
+      "type": "primary_button",
+      "name": "Primary CTA button",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" },
+            { "value": "arrow", "label": "Arrow" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        },
+        { "type": "text", "id": "analytics_event", "label": "Analytics event name" },
+        { "type": "text", "id": "popup_target", "label": "Popup target ID" }
+      ]
+    },
+    {
+      "type": "secondary_button",
+      "name": "Secondary CTA button",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "button_label", "label": "Button label" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "secondary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" },
+            { "value": "text", "label": "Text" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Dual CTA buttons",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "button_label_1", "label": "Primary button label", "default": "Shop now" },
+        { "type": "url", "id": "button_link_1", "label": "Primary button link" },
+        {
+          "type": "select",
+          "id": "button_style_1",
+          "label": "Primary button style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" }
+          ]
+        },
+        { "type": "text", "id": "button_label_2", "label": "Secondary button label" },
+        { "type": "url", "id": "button_link_2", "label": "Secondary button link" },
+        {
+          "type": "select",
+          "id": "button_style_2",
+          "label": "Secondary button style",
+          "default": "secondary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "outline", "label": "Outline" },
+            { "value": "text", "label": "Text" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Button size",
+          "default": "medium",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "trust_badge",
+      "name": "Trust badge",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "image_picker", "id": "badge_1_image", "label": "Badge 1 image" },
+        { "type": "text", "id": "badge_1_label", "label": "Badge 1 label" },
+        { "type": "image_picker", "id": "badge_2_image", "label": "Badge 2 image" },
+        { "type": "text", "id": "badge_2_label", "label": "Badge 2 label" },
+        { "type": "image_picker", "id": "badge_3_image", "label": "Badge 3 image" },
+        { "type": "text", "id": "badge_3_label", "label": "Badge 3 label" },
+        { "type": "image_picker", "id": "badge_4_image", "label": "Badge 4 image" },
+        { "type": "text", "id": "badge_4_label", "label": "Badge 4 label" }
+      ]
+    },
+    {
+      "type": "statistic",
+      "name": "Statistic",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value" },
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    },
+    {
+      "type": "feature_list",
+      "name": "Feature list",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "text", "id": "feature_1", "label": "Feature 1" },
+        { "type": "text", "id": "feature_2", "label": "Feature 2" },
+        { "type": "text", "id": "feature_3", "label": "Feature 3" },
+        { "type": "text", "id": "feature_4", "label": "Feature 4" }
+      ]
+    },
+    {
+      "type": "promotion_card",
+      "name": "Promotion card",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "richtext", "id": "description", "label": "Description" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url", "id": "link", "label": "Card link" },
+        { "type": "text", "id": "cta_label", "label": "CTA label" },
+        { "type": "url", "id": "cta_link", "label": "CTA link" },
+        {
+          "type": "select",
+          "id": "cta_style",
+          "label": "CTA style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "text", "label": "Text" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "card_style",
+          "label": "Card style",
+          "default": "elevated",
+          "options": [
+            { "value": "default", "label": "Default" },
+            { "value": "elevated", "label": "Elevated" },
+            { "value": "glass", "label": "Glass" },
+            { "value": "editorial", "label": "Editorial" }
+          ]
+        },
+        { "type": "text", "id": "icon", "label": "Icon name" },
+        { "type": "text", "id": "hover_effects", "label": "Hover effects", "default": "lift,shadow" },
+        {
+          "type": "select",
+          "id": "card_radius",
+          "label": "Card radius",
+          "default": "lg",
+          "options": [
+            { "value": "sm", "label": "Small" },
+            { "value": "md", "label": "Medium" },
+            { "value": "lg", "label": "Large" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "card_shadow",
+          "label": "Card shadow",
+          "default": "md",
+          "options": [
+            { "value": "sm", "label": "Small" },
+            { "value": "md", "label": "Medium" },
+            { "value": "lg", "label": "Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "product_promotion",
+      "name": "Product promotion",
+      "limit": 2,
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "image_picker", "id": "image", "label": "Image override" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "text", "id": "text", "label": "Text" },
+        { "type": "url", "id": "link", "label": "Link override" },
+        { "type": "text", "id": "link_label", "label": "Link label", "default": "View product" }
+      ]
+    },
+    {
+      "type": "collection_promotion",
+      "name": "Collection promotion",
+      "limit": 2,
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Image override" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "text", "id": "text", "label": "Text" },
+        { "type": "url", "id": "link", "label": "Link override" },
+        { "type": "text", "id": "link_label", "label": "Link label", "default": "Explore collection" }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": [
+        {
+          "type": "select",
+          "id": "divider_style",
+          "label": "Divider style",
+          "default": "line",
+          "options": [
+            { "value": "line", "label": "Line" },
+            { "value": "gradient", "label": "Gradient" },
+            { "value": "space", "label": "Space" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "custom_html",
+      "name": "Custom HTML",
+      "settings": [{ "type": "html", "id": "html", "label": "HTML" }]
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nether CTA",
+      "blocks": [
+        { "type": "eyebrow" },
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "buttons" },
+        { "type": "trust_badge" }
+      ]
+    },
+    {
+      "name": "Nether luxury CTA",
+      "settings": {
+        "nether_layout": "luxury_cta",
+        "nether_enable_glass": true,
+        "nether_enable_floating_card": true
+      },
+      "blocks": [
+        { "type": "eyebrow" },
+        { "type": "heading" },
+        { "type": "subheading" },
+        { "type": "buttons" },
+        { "type": "statistic" }
+      ]
+    },
+    {
+      "name": "Nether promotion CTA",
+      "settings": {
+        "nether_layout": "product_promotion_cta",
+        "nether_enable_gradient": true
+      },
+      "blocks": [
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "primary_button" },
+        { "type": "secondary_button" }
+      ]
+    }
+  ]
+}
+{% endschema %}

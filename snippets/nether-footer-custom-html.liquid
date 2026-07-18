@@ -1,0 +1,27 @@
+{% comment %}
+  Renders a Nether Premium Footer custom HTML placeholder block.
+
+  Accepts:
+  - block: {Object} Theme Editor block
+
+  Usage:
+  {% render 'nether-footer-custom-html', block: block %}
+{% endcomment %}
+
+{%- if block.settings.heading != blank -%}
+  <h2 class="footer-block__heading inline-richtext nether-footer__heading" id="FooterCustomHeading-{{ block.id }}">
+    {{- block.settings.heading -}}
+  </h2>
+{%- endif -%}
+
+<div class="footer-block__details-content nether-footer__custom-html" role="group" aria-labelledby="FooterCustomHeading-{{ block.id }}">
+  {%- if block.settings.custom_html != blank -%}
+    <div class="nether-footer__custom-content rte">
+      {{ block.settings.custom_html }}
+    </div>
+  {%- else -%}
+    <div class="nether-footer__placeholder nether-footer__custom-placeholder" data-nether-custom-html-slot>
+      <p class="caption">{{ 'sections.nether_footer.html_placeholder' | t }}</p>
+    </div>
+  {%- endif -%}
+</div>

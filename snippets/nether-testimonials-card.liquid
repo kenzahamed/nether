@@ -1,0 +1,134 @@
+{% comment %}
+  Renders a Nether Premium Testimonials card for grid/carousel/magazine layouts.
+
+  Accepts:
+  - block: {Object} Testimonial block (required)
+  - section: {Object} Testimonials section (required)
+  - columns: {Number} Grid columns for image sizes (optional)
+  - lazy_load: {Boolean} Lazy load images (default: true)
+  - is_featured: {Boolean} Featured card in magazine layout (default: false)
+  - card_index: {Number} Card index for layout modifiers (optional)
+  - context: {String} 'grid' or 'shell' (optional)
+
+  Usage:
+  {% render 'nether-testimonials-card', block: block, section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign is_lazy = lazy_load | default: true
+  assign is_featured_card = is_featured | default: false
+  assign card_style = section.settings.nether_card_style | default: 'medium'
+  assign alignment = section.settings.nether_content_alignment | default: 'left'
+  assign enable_glass = section.settings.nether_enable_glass
+  assign enable_gradient = section.settings.nether_enable_gradient
+  assign hover_effect = section.settings.nether_hover_effect | default: 'lift'
+  assign motion_attr = 'data-nether-testimonials-animate'
+
+  assign card_classes = 'nether-testimonials-card'
+  assign card_classes = card_classes | append: ' nether-testimonials-card--style-' | append: card_style
+  assign card_classes = card_classes | append: ' nether-testimonials-card--align-' | append: alignment
+
+  if is_featured_card
+    assign card_classes = card_classes | append: ' nether-testimonials-card--featured'
+  endif
+
+  if enable_glass
+    assign card_classes = card_classes | append: ' nether-testimonials-card--glass'
+  endif
+
+  if enable_gradient
+    assign card_classes = card_classes | append: ' nether-testimonials-card--gradient'
+  endif
+
+  if section.settings.nether_enable_floating_cards
+    assign card_classes = card_classes | append: ' nether-testimonials-card--floating'
+  endif
+
+  case hover_effect
+    when 'scale'
+      assign card_classes = card_classes | append: ' card-hover-scale'
+    when 'shadow'
+      assign card_classes = card_classes | append: ' card-hover-shadow'
+    when 'glow'
+      assign card_classes = card_classes | append: ' card-hover-glow'
+    when 'reveal'
+      assign card_classes = card_classes | append: ' nether-testimonials-card--hover-reveal'
+    when 'lift'
+      assign card_classes = card_classes | append: ' card-hover-lift'
+  endcase
+
+  assign quote_text = block.settings.quote
+  assign author_name = block.settings.author
+  assign author_image = block.settings.author_image
+  assign company = block.settings.company
+  assign role = block.settings.role
+  assign show_rating = block.settings.show_rating
+  assign rating_value = block.settings.rating | default: 5
+
+  assign is_video = false
+  if block.type == 'video_testimonial'
+    assign is_video = true
+  endif
+-%}
+
+<article
+  class="{{ card_classes }}"
+  data-nether-testimonials-card
+  data-nether-testimonials-role="card"
+  {% if context != 'shell' %}{{ motion_attr }}{% endif %}
+  {{ block.shopify_attributes }}
+>
+  <div class="nether-testimonials-card__inner card card--card">
+    {%- if is_video -%}
+      <div class="nether-testimonials-card__media" data-nether-testimonials-role="video">
+        {%- render 'nether-content-video', block: block, motion_attr: '' -%}
+      </div>
+    {%- elsif author_image != blank -%}
+      {%- liquid
+        assign card_avatar_alt = author_name | default: author_image.alt | escape
+        assign image_loading = 'lazy'
+        if is_lazy == false
+          assign image_loading = 'eager'
+        endif
+      -%}
+      <div class="nether-testimonials-card__avatar" data-nether-testimonials-avatar data-nether-testimonials-role="avatar">
+        {{
+          author_image
+          | image_url: width: 160
+          | image_tag:
+            loading: image_loading,
+            widths: '80, 120, 160',
+            alt: card_avatar_alt,
+            class: 'nether-testimonials-card__avatar-image'
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="nether-testimonials-card__content">
+      {%- if show_rating and rating_value > 0 -%}
+        {%- render 'nether-testimonials-rating', block: block, motion_attr: '' -%}
+      {%- endif -%}
+
+      {%- if quote_text != blank -%}
+        <blockquote class="nether-testimonials-card__quote type-body-lg" data-nether-testimonials-quote data-nether-testimonials-role="quote">
+          <span class="nether-testimonials-card__quote-mark" aria-hidden="true">&ldquo;</span>
+          {{ quote_text }}
+        </blockquote>
+      {%- endif -%}
+
+      {%- if author_name != blank or role != blank or company != blank -%}
+        <footer class="nether-testimonials-card__footer">
+          {%- if author_name != blank -%}
+            <cite class="nether-testimonials-card__author type-label">{{ author_name | escape }}</cite>
+          {%- endif -%}
+          {%- if role != blank -%}
+            <p class="nether-testimonials-card__role type-caption">{{ role | escape }}</p>
+          {%- endif -%}
+          {%- if company != blank -%}
+            <p class="nether-testimonials-card__company type-caption">{{ company | escape }}</p>
+          {%- endif -%}
+        </footer>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

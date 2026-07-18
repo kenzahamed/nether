@@ -1,0 +1,885 @@
+/* =============================================================================
+ * Nether Premium Product Showcase Framework
+ * Extends Dawn featured-collection / card-product — scoped to .nether-product
+ * Reuses: Card Premium, Typography, Button, Badge, Glass, Gradient, Shadow, Radius
+ * ============================================================================= */
+
+.nether-product {
+  --nether-product-gap: 2.4rem;
+  --nether-product-columns-desktop: 3;
+  --nether-product-columns-tablet: 2;
+  --nether-product-columns-mobile: 1;
+  --nether-product-overlay-opacity: 0.35;
+  --nether-product-transition-duration: 0.5s;
+  display: block;
+  position: relative;
+}
+
+.nether-product__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+/* ── Section header ────────────────────────────────────────────────────────── */
+
+.nether-product__header {
+  margin-bottom: 0;
+}
+
+.nether-product__header-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 72rem;
+}
+
+.nether-product__header-inner--align-center {
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.nether-product__header-inner--align-right {
+  margin-inline-start: auto;
+  text-align: right;
+  align-items: flex-end;
+}
+
+.nether-product__eyebrow {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.62);
+}
+
+.nether-product__heading {
+  margin: 0;
+}
+
+.nether-product__subheading {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-product__text {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-product__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nether-product__view-all {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6rem;
+}
+
+/* ── Grid system ───────────────────────────────────────────────────────────── */
+
+.nether-product__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--nether-product-columns-mobile), minmax(0, 1fr));
+  gap: var(--nether-product-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nether-product__item {
+  min-width: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-product__grid {
+    grid-template-columns: repeat(var(--nether-product-columns-tablet), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-product__grid {
+    grid-template-columns: repeat(var(--nether-product-columns-desktop), minmax(0, 1fr));
+  }
+}
+
+/* ── Layout: Editorial grid ────────────────────────────────────────────────── */
+
+.nether-product--layout-editorial_grid .nether-product__item:nth-child(3n + 1) {
+  grid-column: span 1;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-product--layout-editorial_grid .nether-product__item:nth-child(4n + 1) {
+    grid-column: span 2;
+  }
+
+  .nether-product--desktop-editorial .nether-product__item:nth-child(odd) .nether-product-card__heading {
+    font-size: calc(var(--font-heading-scale) * 2.8rem);
+  }
+}
+
+/* ── Layout: Luxury grid ───────────────────────────────────────────────────── */
+
+.nether-product--layout-luxury_grid .nether-product-card__inner {
+  box-shadow: 0 1.6rem 4rem rgba(var(--color-shadow), 0.08);
+}
+
+.nether-product--layout-luxury_grid .nether-product-card__content {
+  padding: 2.4rem;
+}
+
+/* ── Layout: Masonry grid ──────────────────────────────────────────────────── */
+
+@media screen and (min-width: 750px) {
+  .nether-product--layout-masonry_grid .nether-product__grid {
+    grid-auto-rows: 8px;
+  }
+
+  .nether-product--layout-masonry_grid .nether-product__item:nth-child(6n + 1) {
+    grid-row: span 34;
+  }
+
+  .nether-product--layout-masonry_grid .nether-product__item:nth-child(6n + 2) {
+    grid-row: span 28;
+  }
+
+  .nether-product--layout-masonry_grid .nether-product__item:nth-child(6n + 3) {
+    grid-row: span 32;
+  }
+
+  .nether-product--layout-masonry_grid .nether-product__item:nth-child(6n + 4) {
+    grid-row: span 26;
+  }
+
+  .nether-product--layout-masonry_grid .nether-product__item:nth-child(6n + 5) {
+    grid-row: span 30;
+  }
+
+  .nether-product--layout-masonry_grid .nether-product__item:nth-child(6n + 6) {
+    grid-row: span 28;
+  }
+
+  .nether-product--layout-masonry_grid .nether-product-card,
+  .nether-product--layout-masonry_grid .nether-product-card__link,
+  .nether-product--layout-masonry_grid .nether-product-card__inner {
+    height: 100%;
+  }
+}
+
+/* ── Layout: Magazine ──────────────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-product--layout-magazine .nether-product__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .nether-product--layout-magazine .nether-product__item--featured {
+    grid-column: span 7;
+    grid-row: span 2;
+  }
+
+  .nether-product--layout-magazine .nether-product__item:not(.nether-product__item--featured) {
+    grid-column: span 5;
+  }
+
+  .nether-product--layout-magazine .nether-product__item:nth-child(3) {
+    grid-column: span 5;
+  }
+
+  .nether-product--layout-magazine .nether-product__item:nth-child(4) {
+    grid-column: span 7;
+  }
+}
+
+/* ── Layout: Split collection ──────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-product--layout-split_product .nether-product__grid {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: stretch;
+  }
+
+  .nether-product--layout-split_product .nether-product__item--featured {
+    grid-row: span 2;
+  }
+
+  .nether-product--layout-split_product .nether-product__item:not(.nether-product__item--featured) {
+    grid-column: 2;
+  }
+}
+
+/* ── Layout: Card layout ───────────────────────────────────────────────────── */
+
+.nether-product--layout-card_grid .nether-product-card__inner {
+  background: rgb(var(--color-background));
+  border-radius: var(--text-boxes-radius, 1rem);
+  overflow: hidden;
+}
+
+.nether-product--layout-card_grid .nether-product-card__content {
+  position: relative;
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  margin-top: -2rem;
+  margin-inline: 1.6rem;
+  padding: 1.6rem;
+  border-radius: calc(var(--text-boxes-radius, 1rem) * 0.75);
+  box-shadow: 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.08);
+}
+
+/* ── Layout: Minimal grid ──────────────────────────────────────────────────── */
+
+.nether-product--layout-minimal_layout .nether-product-card__overlay,
+.nether-product--layout-minimal_layout .nether-product-card__glass-panel {
+  display: none;
+}
+
+.nether-product--layout-minimal_layout .nether-product-card__content {
+  position: relative;
+  padding: 1.2rem 0 0;
+  color: rgb(var(--color-foreground));
+}
+
+.nether-product--layout-minimal_layout .nether-product-card__inner {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ── Layout: Horizontal scroll ─────────────────────────────────────────────── */
+
+.nether-product--layout-horizontal_scroll .nether-product__grid--horizontal {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--page-width-margin, 1.5rem);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 0.8rem;
+}
+
+.nether-product--layout-horizontal_scroll .nether-product__item {
+  flex: 0 0 min(78vw, 32rem);
+  scroll-snap-align: start;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-product--layout-horizontal_scroll .nether-product__item {
+    flex-basis: min(42vw, 36rem);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-product--layout-horizontal_scroll .nether-product__item {
+    flex-basis: calc((100% - (var(--nether-product-gap) * (var(--nether-product-columns-desktop) - 1))) / var(--nether-product-columns-desktop));
+  }
+}
+
+/* ── Layout: Carousel ready ────────────────────────────────────────────────── */
+
+.nether-product--layout-carousel .nether-product__slider {
+  position: relative;
+}
+
+.nether-product--layout-carousel .nether-product__grid {
+  display: flex;
+  flex-wrap: inherit;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nether-product--layout-carousel .nether-product__item {
+  flex: 0 0 calc((100% - (var(--nether-product-gap) * (var(--nether-product-columns-mobile) - 1))) / var(--nether-product-columns-mobile));
+  scroll-snap-align: start;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-product--layout-carousel .nether-product__item {
+    flex-basis: calc((100% - (var(--nether-product-gap) * (var(--nether-product-columns-tablet) - 1))) / var(--nether-product-columns-tablet));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-product--layout-carousel .nether-product__item {
+    flex-basis: calc((100% - (var(--nether-product-gap) * (var(--nether-product-columns-desktop) - 1))) / var(--nether-product-columns-desktop));
+  }
+}
+
+/* ── Responsive layout modifiers ───────────────────────────────────────────── */
+
+@media screen and (max-width: 989px) {
+  .nether-product--tablet-stacked .nether-product__grid,
+  .nether-product--tablet-centered .nether-product__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-product--tablet-centered .nether-product__header-inner {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-product--mobile-stacked .nether-product__grid,
+  .nether-product--mobile-centered .nether-product__grid,
+  .nether-product--mobile-minimal .nether-product__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-product--mobile-centered .nether-product__header-inner {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  .nether-product--mobile-minimal .nether-product-card__description,
+  .nether-product--mobile-minimal .nether-product-card__stats,
+  .nether-product--mobile-minimal .nether-product-card__cta {
+    display: none;
+  }
+}
+
+.nether-product--desktop-compact .nether-product__inner {
+  gap: 2.4rem;
+}
+
+.nether-product--full-width .nether-product__inner {
+  max-width: none;
+}
+
+/* ── Collection card ───────────────────────────────────────────────────────── */
+
+.nether-product-card {
+  position: relative;
+  height: 100%;
+}
+
+.nether-product-card__link {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  border-radius: inherit;
+}
+
+.nether-product-card__link:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.55);
+  outline-offset: 0.3rem;
+}
+
+.nether-product-card__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--text-boxes-radius, 1rem);
+  border: 0;
+}
+
+.nether-product-card__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.nether-product-card__media-inner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nether-product-card__media img,
+.nether-product-card__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nether-product-card__video--iframe {
+  border: 0;
+}
+
+.nether-product-card__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--nether-product-overlay-opacity);
+  background: rgba(var(--color-shadow), 0.45);
+  z-index: 1;
+}
+
+.nether-product-card__glass-panel {
+  position: absolute;
+  inset: auto 1.2rem 1.2rem;
+  height: 40%;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: calc(var(--text-boxes-radius, 1rem) * 0.75);
+}
+
+.nether-product-card__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 2rem;
+  color: rgb(var(--color-background));
+  transition: transform var(--nether-product-transition-duration) ease, opacity var(--nether-product-transition-duration) ease;
+}
+
+.nether-product-card--position-top-left .nether-product-card__content {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.nether-product-card--position-top-center .nether-product-card__content {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+}
+
+.nether-product-card--position-top-right .nether-product-card__content {
+  justify-content: flex-start;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.nether-product-card--position-middle-left .nether-product-card__content {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.nether-product-card--position-middle-center .nether-product-card__content {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.nether-product-card--position-middle-right .nether-product-card__content {
+  justify-content: center;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.nether-product-card--position-bottom-left .nether-product-card__content {
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.nether-product-card--position-bottom-center .nether-product-card__content {
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+}
+
+.nether-product-card--position-bottom-right .nether-product-card__content {
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.nether-product-card--align-center .nether-product-card__information {
+  text-align: center;
+}
+
+.nether-product-card--align-right .nether-product-card__information {
+  text-align: right;
+}
+
+.nether-product-card__label {
+  margin: 0;
+  color: rgba(var(--color-background), 0.78);
+}
+
+.nether-product-card__badge {
+  margin-bottom: 0.4rem;
+}
+
+.nether-product-card__heading {
+  margin: 0;
+  color: inherit;
+}
+
+.nether-product-card__description {
+  margin: 0;
+  color: rgba(var(--color-background), 0.86);
+}
+
+.nether-product-card__description p {
+  margin: 0;
+}
+
+.nether-product-card__count {
+  margin: 0;
+  color: rgba(var(--color-background), 0.72);
+}
+
+.nether-product-card__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 1.6rem;
+}
+
+.nether-product-card__stat-value {
+  margin: 0;
+}
+
+.nether-product-card__stat-label {
+  margin: 0.2rem 0 0;
+  color: rgba(var(--color-background), 0.72);
+}
+
+.nether-product-card__cta {
+  margin-top: auto;
+  padding-top: 0.8rem;
+}
+
+.nether-product-card__cta-text {
+  pointer-events: none;
+  color: inherit;
+}
+
+/* ── Card sizes ────────────────────────────────────────────────────────────── */
+
+.nether-product-card--size-small .nether-product-card__content {
+  padding: 1.4rem;
+}
+
+.nether-product-card--size-small .nether-product-card__heading {
+  font-size: calc(var(--font-heading-scale) * 1.6rem);
+}
+
+.nether-product-card--size-large .nether-product-card__content {
+  padding: 3.2rem;
+}
+
+.nether-product-card--size-large .nether-product-card__heading {
+  font-size: calc(var(--font-heading-scale) * 3.2rem);
+}
+
+.nether-product-card--size-editorial .nether-product-card__heading {
+  font-family: var(--font-heading-family);
+  letter-spacing: calc(var(--font-heading-scale) * 0.04rem);
+}
+
+/* ── Floating cards ────────────────────────────────────────────────────────── */
+
+.nether-product--floating-enabled .nether-product-card--floating {
+  transform: translateY(0);
+  transition: transform var(--nether-product-transition-duration) ease;
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .nether-product--floating-enabled .nether-product-card--floating:hover {
+    transform: translateY(-0.6rem);
+  }
+}
+
+/* ── Hover reveal ──────────────────────────────────────────────────────────── */
+
+.nether-product-card--hover-reveal .nether-product-card__description,
+.nether-product-card--hover-reveal .nether-product-card__stats,
+.nether-product-card--hover-reveal .nether-product-card__cta {
+  opacity: 0;
+  transform: translateY(1.2rem);
+  transition: opacity var(--nether-product-transition-duration) ease, transform var(--nether-product-transition-duration) ease;
+}
+
+.nether-product-card--hover-reveal:hover .nether-product-card__description,
+.nether-product-card--hover-reveal:hover .nether-product-card__stats,
+.nether-product-card--hover-reveal:hover .nether-product-card__cta,
+.nether-product-card--hover-reveal:focus-within .nether-product-card__description,
+.nether-product-card--hover-reveal:focus-within .nether-product-card__stats,
+.nether-product-card--hover-reveal:focus-within .nether-product-card__cta,
+.nether-product-card--motion-reduced .nether-product-card__description,
+.nether-product-card--motion-reduced .nether-product-card__stats,
+.nether-product-card--motion-reduced .nether-product-card__cta {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Category highlight ────────────────────────────────────────────────────── */
+
+.nether-product-highlight {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.2rem 1.6rem;
+  border-radius: var(--text-boxes-radius, 1rem);
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+.nether-product-highlight__media {
+  flex: 0 0 5.6rem;
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.nether-product-highlight__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nether-product-highlight__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.nether-product-highlight__eyebrow,
+.nether-product-highlight__title,
+.nether-product-highlight__text {
+  margin: 0;
+}
+
+.nether-product-highlight__link {
+  margin-top: 0.4rem;
+}
+
+/* ── Section dividers ──────────────────────────────────────────────────────── */
+
+.nether-product__divider {
+  width: 100%;
+  pointer-events: none;
+}
+
+.nether-product__divider--line {
+  height: 0.1rem;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-product__divider--gradient {
+  height: 0.2rem;
+  background: linear-gradient(90deg, transparent, rgba(var(--color-foreground), 0.2), transparent);
+}
+
+.nether-product__divider--wave {
+  height: 1.6rem;
+  background: linear-gradient(180deg, transparent, rgba(var(--color-foreground), 0.06));
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath fill='%23000' d='M0 20 Q300 40 600 20 T1200 20 V40 H0Z'/%3E%3C/svg%3E");
+  mask-size: cover;
+}
+
+.nether-product__divider--top {
+  margin-bottom: 2.4rem;
+}
+
+.nether-product__divider--bottom {
+  margin-top: 2.4rem;
+}
+
+/* ── Motion Framework (Phase 5.3.10) — pending / ready / reduced-motion ───── */
+
+.nether-product:not([data-nether-motion-ready='true']) [data-nether-product-animate] {
+  opacity: 1;
+}
+
+nether-product[data-nether-motion-pending='true'] .nether-product__header [data-nether-product-animate],
+nether-product[data-nether-motion-pending='true'] [data-nether-product-item],
+nether-product[data-nether-motion-pending='true'] [data-nether-product-nav-control],
+nether-product[data-nether-motion-pending='true'] .nether-product__view-all,
+nether-product[data-nether-motion-pending='true'] .nether-product-highlight {
+  opacity: 0;
+}
+
+nether-product[data-nether-motion-ready='true'] .nether-product__header [data-nether-product-animate],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-item],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-card],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-media],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-badge],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-title],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-price],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-rating],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-cta],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-actions],
+nether-product[data-nether-motion-ready='true'] [data-nether-product-trust] {
+  will-change: transform, opacity;
+}
+
+nether-product[data-nether-motion-ready='true'] .nether-product__buttons .button,
+nether-product[data-nether-motion-ready='true'] .nether-product__view-all .button,
+nether-product[data-nether-motion-ready='true'] [data-nether-product-nav-control],
+nether-product[data-nether-motion-ready='true'] .nether-product-card__actions .button,
+nether-product[data-nether-motion-ready='true'] .nether-product-card__actions .nether-product-card__action {
+  will-change: transform;
+}
+
+nether-product[data-nether-motion-ready='true'].nether-product--floating-enabled .nether-product-card--floating .nether-product-card__inner {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-product-card__content,
+  .nether-product-card--hover-reveal .nether-product-card__description,
+  .nether-product-card--hover-reveal .nether-product-card__stats,
+  .nether-product-card--hover-reveal .nether-product-card__cta,
+  .nether-product--floating-enabled .nether-product-card--floating {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  nether-product[data-nether-motion-pending='true'] .nether-product__header [data-nether-product-animate],
+  nether-product[data-nether-motion-pending='true'] [data-nether-product-item],
+  nether-product[data-nether-motion-pending='true'] [data-nether-product-nav-control],
+  nether-product[data-nether-motion-pending='true'] .nether-product__view-all,
+  nether-product[data-nether-motion-pending='true'] .nether-product-highlight {
+    opacity: 1;
+  }
+
+  nether-product[data-nether-motion-ready='true'] .nether-product__header [data-nether-product-animate],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-item],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-card],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-media],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-badge],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-title],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-price],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-rating],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-cta],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-actions],
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-trust],
+  nether-product[data-nether-motion-ready='true'] .nether-product__buttons .button,
+  nether-product[data-nether-motion-ready='true'] .nether-product__view-all .button,
+  nether-product[data-nether-motion-ready='true'] [data-nether-product-nav-control],
+  nether-product[data-nether-motion-ready='true'] .nether-product-card__actions .button,
+  nether-product[data-nether-motion-ready='true'] .nether-product-card__actions .nether-product-card__action {
+    will-change: auto;
+  }
+}
+
+/* ── Placeholder state ─────────────────────────────────────────────────────── */
+
+.nether-product-card--placeholder .nether-product-card__content {
+  position: relative;
+  color: rgb(var(--color-foreground));
+  padding: 1.6rem;
+}
+
+.nether-product__grid--placeholder .nether-product-card__content {
+  position: relative;
+  color: rgb(var(--color-foreground));
+}
+
+/* ── Dawn card grid integration ────────────────────────────────────────────── */
+
+.nether-product__grid--dawn {
+  list-style: none;
+}
+
+.nether-product__dawn-card {
+  height: 100%;
+}
+
+.nether-product--layout-card_grid .nether-product__dawn-card .card-wrapper,
+.nether-product--layout-minimal_layout .nether-product__dawn-card .card-wrapper {
+  height: 100%;
+}
+
+.nether-product--layout-card_grid .nether-product-card__overlay,
+.nether-product--layout-card_grid .nether-product-card__glass-panel {
+  display: none;
+}
+
+/* ── Product card commerce fields ──────────────────────────────────────────── */
+
+.nether-product-card__price {
+  margin-top: 0.4rem;
+}
+
+.nether-product-card__price .price {
+  color: inherit;
+}
+
+.nether-product-card__savings {
+  margin: 0.2rem 0 0;
+  color: rgba(var(--color-background), 0.78);
+}
+
+.nether-product-card__rating {
+  margin-top: 0.4rem;
+}
+
+.nether-product-card__rating-placeholder {
+  margin: 0.4rem 0 0;
+  color: rgba(var(--color-background), 0.62);
+}
+
+.nether-product-card__stock {
+  margin: 0.4rem  0 0;
+  color: rgba(var(--color-background), 0.72);
+}
+
+.nether-product-card__secondary-image {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--nether-product-transition-duration) ease;
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .nether-product-card__media-inner:hover .nether-product-card__secondary-image {
+    opacity: 1;
+  }
+}
+
+.nether-product-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.2rem 1.2rem;
+  position: relative;
+  z-index: 3;
+}
+
+.nether-product-card__action--placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  background: rgba(var(--color-background), 0.12);
+  color: rgb(var(--color-foreground));
+  opacity: 0.72;
+}
+
+.nether-product--layout-minimal_layout .nether-product-card__content {
+  position: relative;
+  padding: 1.2rem 0 0;
+  color: rgb(var(--color-foreground));
+}
+
+.nether-product--layout-minimal_layout .nether-product-card__savings,
+.nether-product--layout-minimal_layout .nether-product-card__stock,
+.nether-product--layout-minimal_layout .nether-product-card__rating-placeholder {
+  color: rgba(var(--color-foreground), 0.72);
+}
+
+.nether-product-card--promotional .nether-product-card__content {
+  color: rgb(var(--color-background));
+}
+
+.nether-product-card__link .nether-product-card__actions {
+  pointer-events: auto;
+}
+
+.nether-product-card__inner:has(.nether-product-card__actions) .nether-product-card__link {
+  display: block;
+}
+
+.nether-product-card__actions .button {
+  pointer-events: auto;
+}
+

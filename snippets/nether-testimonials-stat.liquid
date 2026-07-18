@@ -1,0 +1,41 @@
+{% comment %}
+  Renders Nether Premium Testimonials single statistic block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-testimonials-stat', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attr = motion_attr | default: 'data-nether-testimonials-animate'
+  assign stat_value = block.settings.value
+  assign stat_label = block.settings.label
+  assign stat_prefix = block.settings.prefix
+  assign stat_suffix = block.settings.suffix
+  assign counter_value = stat_value | replace: ',', '' | replace: '+', '' | replace: '%', '' | plus: 0
+-%}
+
+{%- if stat_value != blank or stat_label != blank -%}
+  <div class="nether-testimonials__stat" {{ motion_attr }} data-nether-testimonials-stat {{ block.shopify_attributes }}>
+    {%- if stat_value != blank -%}
+      <p
+        class="nether-testimonials__stat-value type-display-lg"
+        data-nether-testimonials-counter
+        data-counter-value="{{ counter_value }}"
+        data-counter-prefix="{{ stat_prefix | escape }}"
+        data-counter-suffix="{{ stat_suffix | escape }}"
+        data-counter-display="{{ stat_value | escape }}"
+      >
+        {%- if stat_prefix != blank -%}<span class="nether-testimonials__stat-prefix">{{ stat_prefix | escape }}</span>{%- endif -%}
+        <span class="nether-testimonials__stat-number">{{ stat_value | escape }}</span>
+        {%- if stat_suffix != blank -%}<span class="nether-testimonials__stat-suffix">{{ stat_suffix | escape }}</span>{%- endif -%}
+      </p>
+    {%- endif -%}
+    {%- if stat_label != blank -%}
+      <p class="nether-testimonials__stat-label type-caption">{{ stat_label | escape }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

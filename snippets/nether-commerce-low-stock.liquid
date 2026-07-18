@@ -1,0 +1,37 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Low Stock Messaging.
+  Composes Inventory Status copy with optional Badge System low_stock badge.
+
+  Accepts:
+  - quantity: {Number}
+  - show_quantity: {Boolean}
+  - show_badge: {Boolean} (default: true)
+  - class: {String}
+{% endcomment %}
+
+{%- liquid
+  assign show_qty = show_quantity
+  assign enable_badge = show_badge
+  if enable_badge == nil
+    assign enable_badge = true
+  endif
+-%}
+
+<div
+  class="nether-commerce__low-stock{% if class != blank %} {{ class }}{% endif %}"
+  data-nether-commerce-module="low-stock"
+  data-nether-commerce-animate
+  role="status"
+>
+  {% render 'nether-commerce-icon', icon: 'inventory_status', size: 'sm', decorative: true %}
+  <span class="nether-commerce__low-stock-text type-body-sm">
+    {%- if show_qty and quantity != blank -%}
+      {{ 'products.product.inventory_low_stock_show_count' | t: quantity: quantity }}
+    {%- else -%}
+      {{ 'products.product.inventory_low_stock' | t }}
+    {%- endif -%}
+  </span>
+  {%- if enable_badge -%}
+    {% render 'badge', type: 'low_stock', style: 'soft', size: 'small' %}
+  {%- endif -%}
+</div>

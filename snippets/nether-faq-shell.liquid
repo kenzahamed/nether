@@ -1,0 +1,72 @@
+{% comment %}
+  Renders Nether Premium FAQ hero-composed shell for editorial/minimal layouts.
+
+  Accepts:
+  - section: {Object} FAQ section (required)
+  - heading_tag: {String} Primary heading element (default: h2)
+
+  Usage:
+  {% render 'nether-faq-shell', section: section, heading_tag: heading_tag %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign alignment = section.settings.nether_content_alignment | default: 'left'
+  assign panel_classes = 'nether-hero__panel nether-faq__panel color-' | append: section.settings.color_scheme | append: ' gradient'
+
+  if section.settings.nether_enable_glass
+    case section.settings.nether_glass_style
+      when 'light'
+        assign panel_classes = panel_classes | append: ' nether-hero__panel--glass glass-hero-light'
+      when 'heavy'
+        assign panel_classes = panel_classes | append: ' nether-hero__panel--glass glass-hero-heavy'
+      when 'frosted'
+        assign panel_classes = panel_classes | append: ' nether-hero__panel--glass glass-hero-frosted'
+      else
+        assign panel_classes = panel_classes | append: ' nether-hero__panel--glass glass-hero-medium'
+    endcase
+  endif
+
+  if section.settings.nether_enable_floating_cards
+    assign panel_classes = panel_classes | append: ' nether-faq__panel--floating'
+  endif
+
+  assign shell_block_types = 'eyebrow,heading,subheading,text,icon,image,video,button,buttons,divider,callout_card,tip,warning,contact_cta,support_cta,category,custom_html,@app' | split: ','
+-%}
+
+<div class="nether-hero__content-shell page-width">
+  <div class="nether-hero__content nether-faq__content" data-nether-faq-shell>
+    <div class="{{ panel_classes }}" data-nether-faq-content-panel>
+      <div class="nether-hero__blocks nether-faq__blocks nether-hero__blocks--align-{{ alignment }}">
+        {%- for block in section.blocks -%}
+          {%- if shell_block_types contains block.type -%}
+            {%- render 'nether-faq-block',
+              block: block,
+              section: section,
+              heading_tag: heading_element,
+              context: 'shell'
+            -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- render 'nether-faq-search', section: section -%}
+
+      {%- if section.settings.nether_show_expand_controls -%}
+        <div class="nether-faq__controls" data-nether-faq-controls>
+          <button type="button" class="nether-faq__control link" data-nether-faq-expand-all>
+            {{- 'sections.nether_faq.controls.expand_all' | t -}}
+          </button>
+          <span class="nether-faq__control-separator" aria-hidden="true">·</span>
+          <button type="button" class="nether-faq__control link" data-nether-faq-collapse-all>
+            {{- 'sections.nether_faq.controls.collapse_all' | t -}}
+          </button>
+        </div>
+      {%- endif -%}
+
+      <div class="nether-faq__shell-list" data-nether-faq-list>
+        {%- render 'nether-faq-list', section: section, context: 'shell' -%}
+      </div>
+    </div>
+  </div>
+</div>

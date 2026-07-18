@@ -1,0 +1,246 @@
+/* Nether Premium Recommendations Commerce Framework
+   Extends Dawn related/complementary product grids — scoped styles only. */
+
+.nether-recommendations {
+  --nether-recommendations-gap: 2.4rem;
+  --nether-recommendations-transition-duration: 0.5s;
+  display: block;
+  position: relative;
+}
+
+.nether-recommendations__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nether-recommendations-gap);
+}
+
+.nether-recommendations__api {
+  display: block;
+}
+
+.nether-recommendations__module {
+  width: 100%;
+}
+
+.nether-recommendations__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.2rem 2rem;
+}
+
+.nether-recommendations__header-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 48rem;
+}
+
+.nether-recommendations__eyebrow {
+  margin: 0;
+  opacity: 0.72;
+}
+
+.nether-recommendations__heading {
+  margin: 0;
+}
+
+.nether-recommendations__subheading {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.nether-recommendations__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.4rem;
+  transition: opacity var(--nether-recommendations-transition-duration) ease,
+    transform var(--nether-recommendations-transition-duration) ease;
+}
+
+.nether-recommendations__toolbar-meta {
+  margin: 0;
+  opacity: 0.72;
+}
+
+.nether-recommendations__toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nether-recommendations__grid {
+  --grid-horizontal-spacing: var(--nether-recommendations-gap);
+  --grid-vertical-spacing: var(--nether-recommendations-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nether-recommendations__item {
+  transition: transform calc(var(--nether-recommendations-transition-duration) * 0.7) ease;
+}
+
+.nether-recommendations__item--hover {
+  transform: translateY(-0.2rem);
+}
+
+.nether-recommendations__item--featured {
+  grid-column: span 2;
+}
+
+@media screen and (max-width: 749px) {
+  .nether-recommendations__item--featured {
+    grid-column: span 1;
+  }
+}
+
+.nether-recommendations__card {
+  position: relative;
+  height: 100%;
+}
+
+.nether-recommendations__card-badge {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  left: 1rem;
+  pointer-events: none;
+}
+
+.nether-recommendations__carousel {
+  display: block;
+}
+
+.nether-recommendations__empty {
+  padding: 3.2rem 1.6rem;
+  text-align: center;
+  border: 1px dashed rgba(var(--color-foreground), 0.16);
+  border-radius: var(--radius-md, 0.8rem);
+  background: rgba(var(--color-foreground), 0.02);
+}
+
+.nether-recommendations__empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.nether-recommendations__empty-heading,
+.nether-recommendations__empty-text {
+  margin: 0;
+}
+
+.nether-recommendations__empty-text {
+  opacity: 0.8;
+}
+
+.nether-recommendations__extension {
+  padding: 1.2rem 1.4rem;
+  border: 1px dashed rgba(var(--color-foreground), 0.16);
+  border-radius: var(--radius-md, 0.8rem);
+  background: rgba(var(--color-foreground), 0.02);
+}
+
+.nether-recommendations__extension-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.2rem;
+}
+
+.nether-recommendations__extension-label {
+  margin: 0;
+}
+
+.nether-recommendations__extension-text {
+  margin: 0;
+  flex-basis: 100%;
+  opacity: 0.72;
+}
+
+.nether-recommendations__merchant-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.nether-recommendations__merchant-heading,
+.nether-recommendations__merchant-text {
+  margin: 0;
+}
+
+/* Card density */
+.nether-recommendations--card-small .nether-recommendations__grid {
+  --nether-recommendations-gap: 1.2rem;
+}
+
+.nether-recommendations--card-large .nether-recommendations__grid,
+.nether-recommendations--card-editorial .nether-recommendations__grid {
+  --nether-recommendations-gap: 3.2rem;
+}
+
+.nether-recommendations--card-minimal .card__inner {
+  box-shadow: none;
+}
+
+/* Spacing presets */
+.nether-recommendations--desktop-compact .nether-recommendations__inner,
+.nether-recommendations--tablet-compact .nether-recommendations__inner,
+.nether-recommendations--mobile-compact .nether-recommendations__inner {
+  gap: calc(var(--nether-recommendations-gap) * 0.75);
+}
+
+.nether-recommendations--desktop-spacious .nether-recommendations__inner {
+  gap: calc(var(--nether-recommendations-gap) * 1.35);
+}
+
+/* Visual accents — reuse design tokens / utility systems when enabled */
+.nether-recommendations--glass-enabled .nether-recommendations__header,
+.nether-recommendations--glass-enabled .nether-recommendations__toolbar {
+  border-radius: var(--radius-md, 0.8rem);
+}
+
+.nether-recommendations--gradient-enabled .nether-recommendations__heading {
+  background-image: var(--gradient-base-background-1, none);
+}
+
+.nether-recommendations--full-width .nether-recommendations__inner {
+  max-width: none;
+}
+
+.nether-recommendations--motion-reduced [data-nether-recommendations-animate] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-recommendations__item,
+  .nether-recommendations__toolbar {
+    transition: none;
+  }
+
+  .nether-recommendations__item--hover {
+    transform: none;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-recommendations__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nether-recommendations--mobile-stacked .nether-recommendations__toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

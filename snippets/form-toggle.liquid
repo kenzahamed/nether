@@ -1,0 +1,57 @@
+{% comment %}
+  Renders a Nether Premium toggle switch.
+
+  Accepts:
+  - name: {String} Input name attribute
+  - id: {String} Input id (required)
+  - label: {String} Toggle label text
+  - value: {String} Value when on (default: '1')
+  - checked: {Boolean} Checked state (default: false)
+  - disabled: {Boolean} Disabled state (default: false)
+  - helper_text: {String} Helper text below toggle
+  - class: {String} Additional CSS classes
+  - attributes: {String} Additional input HTML attributes
+  - shopify_attributes: {String} Theme Editor block attributes
+
+  Usage:
+  {% render 'form-toggle',
+    id: 'marketing-opt-in',
+    name: 'contact[accepts_marketing]',
+    label: 'Subscribe to marketing emails'
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign toggle_value = value | default: '1'
+  assign is_checked = checked | default: false, allow_false: true
+  assign is_disabled = disabled | default: false, allow_false: true
+
+  assign toggle_classes = 'form-toggle'
+  if class != blank
+    assign toggle_classes = toggle_classes | append: ' ' | append: class
+  endif
+-%}
+
+<div class="{{ toggle_classes }}" {{ shopify_attributes }}>
+  <input
+    type="checkbox"
+    class="form-toggle__input"
+    role="switch"
+    {% if id != blank %}id="{{ id }}"{% endif %}
+    {% if name != blank %}name="{{ name }}"{% endif %}
+    value="{{ toggle_value | escape }}"
+    {% if is_checked %}checked{% endif %}
+    {% if is_disabled %}disabled{% endif %}
+    {{ attributes }}
+  >
+  <label class="form-toggle__label" {% if id != blank %}for="{{ id }}"{% endif %}>
+    <span class="form-toggle__track" aria-hidden="true"></span>
+    {%- if label != blank -%}
+      <span class="form-toggle__text type-body-sm">{{ label | escape }}</span>
+    {%- endif -%}
+  </label>
+</div>
+
+{%- if helper_text != blank -%}
+  <p class="form-field__helper type-caption">{{ helper_text | escape }}</p>
+{%- endif -%}

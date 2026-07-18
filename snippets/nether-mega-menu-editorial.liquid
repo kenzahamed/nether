@@ -1,0 +1,52 @@
+{% comment %}
+  Nether Mega Menu — Editorial Content block.
+  Reuses Nether Typography and optional image.
+
+  Accepts:
+  - block: {Object} Section block
+  - section: {Object} Header section
+{% endcomment %}
+
+<div class="nether-mega-menu__editorial" data-nether-mega-reveal>
+  {%- if block.settings.image != blank and section.settings.nether_mega_enable_images -%}
+    <div class="nether-mega-menu__editorial-media" data-nether-mega-image-reveal>
+      {%- if block.settings.link != blank -%}
+        <a href="{{ block.settings.link }}" class="nether-mega-menu__media-link">
+      {%- endif -%}
+      <div class="nether-mega-menu__media media">
+        {{
+          block.settings.image
+          | image_url: width: 800
+          | image_tag:
+            loading: 'lazy',
+            widths: '200, 400, 600, 800',
+            sizes: '(min-width: 990px) 320px, 50vw',
+            alt: block.settings.image.alt | default: block.settings.heading
+        }}
+      </div>
+      {%- if block.settings.link != blank -%}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="nether-mega-menu__editorial-content">
+    {%- if block.settings.eyebrow != blank -%}
+      <p class="nether-mega-menu__eyebrow caption-with-letter-spacing">{{ block.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if block.settings.heading != blank -%}
+      <p class="nether-mega-menu__editorial-heading h3">{{ block.settings.heading | escape }}</p>
+    {%- endif -%}
+    {%- if block.settings.text != blank -%}
+      <div class="nether-mega-menu__editorial-text rte">{{ block.settings.text }}</div>
+    {%- endif -%}
+    {%- if block.settings.link_label != blank and block.settings.link != blank -%}
+      {%- render 'button',
+        label: block.settings.link_label,
+        link: block.settings.link,
+        style: block.settings.button_style,
+        size: 'small'
+      -%}
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,108 @@
+{% comment %}
+  Central dispatcher for Nether Premium Media header blocks.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - section: {Object} Media section (required)
+  - heading_tag: {String} Primary heading element (default: h2)
+
+  Usage:
+  {% render 'nether-media-block', block: block, section: section, heading_tag: 'h2' %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign subheading_element = 'h3'
+  if heading_element == 'h3'
+    assign subheading_element = 'h4'
+  endif
+-%}
+
+{%- case block.type -%}
+  {%- when '@app' -%}
+    <div
+      class="nether-media__app-block"
+      data-nether-media-animate
+      data-nether-media-role="app"
+      {{ block.shopify_attributes }}
+    >
+      {% render block %}
+    </div>
+
+  {%- when 'eyebrow' -%}
+    {%- if block.settings.text != blank -%}
+      <p
+        class="nether-media__eyebrow type-overline"
+        data-nether-media-animate
+        data-nether-media-role="eyebrow"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.text | escape -}}
+      </p>
+    {%- endif -%}
+
+  {%- when 'heading' -%}
+    {%- if block.settings.heading != blank -%}
+      <{{ heading_element }}
+        class="nether-media__heading inline-richtext {{ block.settings.heading_size }}"
+        data-nether-media-animate
+        data-nether-media-role="heading"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.heading -}}
+      </{{ heading_element }}>
+    {%- endif -%}
+
+  {%- when 'subheading' -%}
+    {%- if block.settings.subheading != blank -%}
+      <{{ subheading_element }}
+        class="nether-media__subheading inline-richtext {{ block.settings.subheading_size }}"
+        data-nether-media-animate
+        data-nether-media-role="subheading"
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.subheading -}}
+      </{{ subheading_element }}>
+    {%- endif -%}
+
+  {%- when 'text' -%}
+    {%- if block.settings.text != blank -%}
+      <div
+        class="nether-media__text rte {{ block.settings.text_style }}"
+        data-nether-media-animate
+        data-nether-media-role="text"
+        {{ block.shopify_attributes }}
+      >
+        {{ block.settings.text }}
+      </div>
+    {%- endif -%}
+
+  {%- when 'buttons' -%}
+    {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
+      <div
+        class="nether-media__buttons"
+        data-nether-media-animate
+        data-nether-media-role="buttons"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.button_label_1 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_1,
+            link: block.settings.button_link_1,
+            style: block.settings.button_style_1,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_1 == blank
+          -%}
+        {%- endif -%}
+        {%- if block.settings.button_label_2 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_2,
+            link: block.settings.button_link_2,
+            style: block.settings.button_style_2,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_2 == blank
+          -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+{%- endcase -%}

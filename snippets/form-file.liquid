@@ -1,0 +1,84 @@
+{% comment %}
+  Renders a Nether Premium styled file upload (styling only — native input behaviour).
+
+  Accepts:
+  - name: {String} Input name attribute
+  - id: {String} Input id (auto-generated from name if blank)
+  - label: {String} Trigger button label (default: 'Choose file')
+  - accept: {String} Accept attribute, e.g. 'image/*,.pdf'
+  - multiple: {Boolean} Allow multiple files (default: false)
+  - required: {Boolean} Required field (default: false)
+  - disabled: {Boolean} Disabled state (default: false)
+  - placeholder: {String} Empty filename placeholder (default: 'No file chosen')
+  - button_style: {String} Button style passed to Button System (default: secondary)
+  - button_size: {String} Button size passed to Button System (default: small)
+  - helper_text: {String} Helper text below field
+  - error_message: {String} Error validation message
+  - class: {String} Additional CSS classes
+  - attributes: {String} Additional input HTML attributes
+  - shopify_attributes: {String} Theme Editor block attributes
+
+  Usage:
+  {% render 'form-file',
+    name: 'contact[attachment]',
+    label: 'Upload resume',
+    accept: '.pdf,.doc,.docx'
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign field_id = id
+  if field_id == blank and name != blank
+    assign field_id = name | handleize | append: '-file'
+  endif
+
+  assign trigger_label = label | default: 'Choose file'
+  assign empty_placeholder = placeholder | default: 'No file chosen'
+  assign btn_style = button_style | default: 'secondary'
+  assign btn_size = button_size | default: 'small'
+  assign is_required = required | default: false, allow_false: true
+  assign is_disabled = disabled | default: false, allow_false: true
+  assign is_multiple = multiple | default: false, allow_false: true
+
+  assign file_classes = 'form-file'
+  if class != blank
+    assign file_classes = file_classes | append: ' ' | append: class
+  endif
+
+  assign error_id = field_id | append: '-error'
+-%}
+
+<form-file class="{{ file_classes }}" {{ shopify_attributes }}>
+  <input
+    type="file"
+    class="form-file__input"
+    {% if field_id != blank %}id="{{ field_id }}"{% endif %}
+    {% if name != blank %}name="{{ name }}"{% endif %}
+    {% if accept != blank %}accept="{{ accept }}"{% endif %}
+    {% if is_multiple %}multiple{% endif %}
+    {% if is_required %}required aria-required="true"{% endif %}
+    {% if is_disabled %}disabled{% endif %}
+    {{ attributes }}
+  >
+
+  <label
+    class="form-file__trigger button button--{{ btn_style }} button--{{ btn_size }}"
+    {% if field_id != blank %}for="{{ field_id }}"{% endif %}
+  >
+    {{ trigger_label | escape }}
+  </label>
+
+  <span
+    class="form-file__name type-body-sm is-empty"
+    data-form-file-name
+    data-placeholder="{{ empty_placeholder | escape }}"
+  ></span>
+</form-file>
+
+{%- if helper_text != blank -%}
+  <p class="form-field__helper type-caption">{{ helper_text | escape }}</p>
+{%- endif -%}
+
+{%- if error_message != blank -%}
+  {% render 'form-message', message: error_message, type: 'error', id: error_id %}
+{%- endif -%}

@@ -1,0 +1,361 @@
+{% comment %}
+  Central dispatcher for Nether Premium Product Page commerce modules.
+  Extends Dawn main-product blocks — preserves native commerce IDs and custom elements.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+  - product: {Object} Product object (required)
+  - product_form_id: {String} Product form ID (required)
+{% endcomment %}
+
+{%- case block.type -%}
+  {%- when '@app' -%}
+    <div class="nether-product-page__module nether-product-page__module--app" data-nether-product-page-animate {{ block.shopify_attributes }}>
+      {% render block %}
+    </div>
+
+  {%- when 'text' -%}
+    <p
+      class="nether-product-page__module nether-product-page__module--text product__text inline-richtext{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}"
+      data-nether-product-page-module="info"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      {{- block.settings.text -}}
+    </p>
+
+  {%- when 'title' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--title product__title"
+      data-nether-product-page-module="info"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      <h1>{{ product.title | escape }}</h1>
+      <a href="{{ product.url }}" class="product__title">
+        <span class="h1">{{ product.title | escape }}</span>
+      </a>
+    </div>
+
+  {%- when 'price' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--price"
+      data-nether-product-page-module="pricing"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      <div id="price-{{ section.id }}" role="status">
+        {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: 'price--large' -%}
+      </div>
+      {%- if product.quantity_price_breaks_configured? -%}
+        <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
+          <span>{{ 'products.product.volume_pricing.note' | t }}</span>
+        </div>
+      {%- endif -%}
+      {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
+        <div class="product__tax caption rte">
+          {%- if cart.duties_included and cart.taxes_included -%}
+            {{ 'products.product.duties_and_taxes_included' | t }}
+          {%- elsif cart.taxes_included -%}
+            {{ 'products.product.taxes_included' | t }}
+          {%- elsif cart.duties_included -%}
+            {{ 'products.product.duties_included' | t }}
+          {%- endif -%}
+          {%- if shop.shipping_policy.body != blank -%}
+            {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div>
+        {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+        {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          {{ form | payment_terms }}
+        {%- endform -%}
+      </div>
+    </div>
+
+  {%- when 'sku' -%}
+    <p
+      class="nether-product-page__module nether-product-page__module--sku product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
+      id="Sku-{{ section.id }}"
+      role="status"
+      data-nether-product-page-module="info"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
+      {{- product.selected_or_first_available_variant.sku -}}
+    </p>
+
+  {%- when 'inventory' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--inventory"
+      data-nether-product-page-module="inventory"
+      data-nether-product-page-animate
+    >
+      {% render 'nether-commerce-inventory-status',
+        product: product,
+        section: section,
+        block: block,
+        show_progress: false,
+        show_badge: false,
+        class: 'nether-product-page__inventory'
+      %}
+    </div>
+
+  {%- when 'description' -%}
+    {%- if product.description != blank -%}
+      <div
+        class="nether-product-page__module nether-product-page__module--description product__description rte quick-add-hidden"
+        data-nether-product-page-module="details"
+        data-nether-product-page-animate
+        {{ block.shopify_attributes }}
+      >
+        {{ product.description }}
+      </div>
+    {%- endif -%}
+
+  {%- when 'custom_liquid' -%}
+    <div class="nether-product-page__module nether-product-page__module--custom" data-nether-product-page-animate {{ block.shopify_attributes }}>
+      {{ block.settings.custom_liquid }}
+    </div>
+
+  {%- when 'collapsible_tab' -%}
+    {% render 'nether-product-page-accordion', block: block, section: section %}
+
+  {%- when 'quantity_selector' -%}
+    {% render 'nether-product-page-quantity', block: block, section: section, product: product, product_form_id: product_form_id %}
+
+  {%- when 'popup' -%}
+    <modal-opener
+      class="nether-product-page__module nether-product-page__module--popup product-popup-modal__opener quick-add-hidden"
+      data-nether-product-page-animate
+      data-modal="#PopupModal-{{ block.id }}"
+      {{ block.shopify_attributes }}
+    >
+      <button id="ProductPopup-{{ block.id }}" class="product-popup-modal__button link" type="button" aria-haspopup="dialog">
+        {{ block.settings.text | default: block.settings.page.title | escape }}
+      </button>
+    </modal-opener>
+
+  {%- when 'share' -%}
+    <div class="nether-product-page__module nether-product-page__module--share" data-nether-product-page-module="share" data-nether-product-page-animate>
+      {% liquid
+        assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin
+        render 'share-button', block: block, share_link: share_url
+      %}
+    </div>
+
+  {%- when 'disclosures' -%}
+    <div class="nether-product-page__module nether-product-page__module--disclosures" data-nether-product-page-animate>
+      {%- render 'product-disclosures',
+        product: product,
+        heading: block.settings.heading,
+        heading_size: block.settings.heading_size,
+        open_by_default: block.settings.open_by_default,
+        block: block,
+        surface: 'product_page'
+      -%}
+    </div>
+
+  {%- when 'variant_picker' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--variants"
+      data-nether-product-page-module="variants"
+      data-nether-product-page-animate
+    >
+      {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+    </div>
+
+  {%- when 'buy_buttons' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--purchase"
+      data-nether-product-page-module="purchase"
+      data-nether-product-page-purchase-anchor
+      data-nether-product-page-animate
+    >
+      {%- render 'buy-buttons',
+        block: block,
+        product: product,
+        product_form_id: product_form_id,
+        section_id: section.id,
+        show_pickup_availability: true
+      -%}
+    </div>
+
+  {%- when 'rating' -%}
+    {%- if product.metafields.reviews.rating.value != blank -%}
+      <div class="nether-product-page__module nether-product-page__module--rating rating-wrapper" data-nether-product-page-animate {{ block.shopify_attributes }}>
+        {% liquid
+          assign rating_decimal = 0
+          assign decimal = product.metafields.reviews.rating.value.rating | modulo: 1
+          if decimal >= 0.3 and decimal <= 0.7
+            assign rating_decimal = 0.5
+          elsif decimal > 0.7
+            assign rating_decimal = 1
+          endif
+        %}
+        <div
+          class="rating"
+          role="img"
+          aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}"
+        >
+          <span
+            aria-hidden="true"
+            class="rating-star"
+            style="--rating: {{ product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+          ></span>
+        </div>
+        <p class="rating-text caption">
+          <span aria-hidden="true">
+            {{- product.metafields.reviews.rating.value }} / {{ product.metafields.reviews.rating.value.scale_max -}}
+          </span>
+        </p>
+        <p class="rating-count caption">
+          <span aria-hidden="true">({{ product.metafields.reviews.rating_count }})</span>
+          <span class="visually-hidden">
+            {{- product.metafields.reviews.rating_count }} {{ 'accessibility.total_reviews' | t -}}
+          </span>
+        </p>
+      </div>
+    {%- endif -%}
+
+  {%- when 'complementary' -%}
+    {% render 'nether-product-page-complementary', block: block, section: section, product: product %}
+
+  {%- when 'icon-with-text' -%}
+    <div class="nether-product-page__module nether-product-page__module--icon-text" data-nether-product-page-animate {{ block.shopify_attributes }}>
+      {% render 'icon-with-text', block: block %}
+    </div>
+
+  {%- when 'product_badges' -%}
+    {% render 'nether-product-page-badges', block: block, product: product %}
+
+  {%- when 'trust_badges' -%}
+    {% render 'nether-product-page-trust', block: block %}
+
+  {%- when 'shipping_info' -%}
+    {% render 'nether-product-page-shipping', block: block %}
+
+  {%- when 'returns_info' -%}
+    {% render 'nether-product-page-returns', block: block %}
+
+  {%- when 'product_highlights' -%}
+    {% render 'nether-product-page-highlights', block: block %}
+
+  {%- when 'specifications' -%}
+    {% render 'nether-product-page-specifications', block: block, product: product, section: section %}
+
+  {%- when 'delivery_estimate' -%}
+    {% render 'nether-product-page-delivery-estimate', block: block %}
+
+  {%- when 'warranty_info' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--warranty"
+      data-nether-product-page-module="warranty"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      {% render 'nether-commerce-warranty',
+        heading: block.settings.heading,
+        text: block.settings.text,
+        icon: block.settings.icon,
+        style: 'card',
+        rte: true
+      %}
+    </div>
+
+  {%- when 'money_back' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--money-back"
+      data-nether-product-page-module="money-back"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      {% render 'nether-commerce-money-back',
+        heading: block.settings.heading,
+        text: block.settings.text,
+        icon: block.settings.icon,
+        style: 'card',
+        rte: true
+      %}
+    </div>
+
+  {%- when 'payment_methods' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--payment"
+      data-nether-product-page-module="payment"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      {% render 'nether-commerce-payment-methods', heading: block.settings.heading, block: block %}
+    </div>
+
+  {%- when 'promotional_notice' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--notice"
+      data-nether-product-page-module="notice"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      {% render 'nether-commerce-promotional-notice',
+        heading: block.settings.heading,
+        text: block.settings.text,
+        notice_style: block.settings.notice_style,
+        icon: block.settings.icon,
+        rte: true
+      %}
+    </div>
+
+  {%- when 'merchant_content' -%}
+    {% render 'nether-product-page-merchant-content', block: block, section: section %}
+
+  {%- when 'related_products' -%}
+    {% render 'nether-product-page-related', block: block, section: section, product: product %}
+
+  {%- when 'wishlist_placeholder' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--wishlist nether-product-page__wishlist"
+      data-nether-product-page-module="wishlist"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      {% render 'nether-wishlist-button',
+        product: product,
+        style: 'text',
+        size: 'md',
+        context: 'product',
+        label_add: block.settings.label
+      %}
+      {%- if block.settings.text != blank -%}
+        <p class="nether-product-page__wishlist-text type-body-sm">{{ block.settings.text }}</p>
+      {%- endif -%}
+    </div>
+
+  {%- when 'compare_placeholder' -%}
+    <div
+      class="nether-product-page__module nether-product-page__module--compare nether-product-page__compare"
+      data-nether-product-page-module="compare"
+      data-nether-product-page-animate
+      {{ block.shopify_attributes }}
+    >
+      {% render 'nether-compare-button',
+        product: product,
+        style: 'text',
+        size: 'md',
+        context: 'product',
+        label_add: block.settings.label
+      %}
+      {%- if block.settings.text != blank -%}
+        <p class="nether-product-page__compare-text type-body-sm">{{ block.settings.text }}</p>
+      {%- endif -%}
+    </div>
+
+  {%- when 'bundles_placeholder' -%}
+    {% render 'nether-product-page-bundles', block: block, section: section, product: product %}
+
+  {%- when 'subscriptions_placeholder', 'personalization_placeholder' -%}
+    {% render 'nether-product-page-extensions', block: block, section: section %}
+{%- endcase -%}

@@ -1,0 +1,64 @@
+{% comment %}
+  Nether Premium Wishlist — empty state module.
+
+  Accepts:
+  - section: {Object} Section object (optional — uses settings when present)
+  - context: {String} drawer | page (default: page)
+
+  Usage:
+  {% render 'nether-wishlist-empty', context: 'drawer', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign wishlist_context = context | default: 'page'
+  assign empty_heading = blank
+  assign empty_text = blank
+  assign empty_button_label = blank
+  assign empty_button_link = routes.all_products_collection_url
+
+  if section != blank
+    assign empty_heading = section.settings.nether_wishlist_empty_heading
+    assign empty_text = section.settings.nether_wishlist_empty_text
+    assign empty_button_label = section.settings.nether_wishlist_empty_button_label
+    if section.settings.nether_wishlist_empty_button_link != blank
+      assign empty_button_link = section.settings.nether_wishlist_empty_button_link
+    endif
+  endif
+
+  if empty_heading == blank
+    assign empty_heading = 'sections.nether_wishlist.empty.heading' | t
+  endif
+  if empty_text == blank
+    assign empty_text = 'sections.nether_wishlist.empty.text' | t
+  endif
+  if empty_button_label == blank
+    assign empty_button_label = 'general.continue_shopping' | t
+  endif
+-%}
+
+<div
+  class="nether-wishlist__module nether-wishlist__empty nether-wishlist__empty--{{ wishlist_context }}"
+  data-nether-wishlist-empty
+  data-nether-wishlist-animate
+  role="status"
+>
+  <div class="nether-wishlist__empty-content">
+    <span class="nether-wishlist__empty-icon" aria-hidden="true">
+      {% render 'icon', icon: 'heart', size: 'lg', decorative: true %}
+    </span>
+    <h2 class="nether-wishlist__empty-heading type-heading-sm">{{ empty_heading }}</h2>
+    <p class="nether-wishlist__empty-text type-body">{{ empty_text }}</p>
+    {% render 'button', label: empty_button_label, link: empty_button_link, style: 'primary', size: 'medium' %}
+
+    {%- if shop.customer_accounts_enabled and customer == null -%}
+      <div class="nether-wishlist__empty-login" data-nether-wishlist-sync-placeholder>
+        <p class="nether-wishlist__empty-login-title type-body-sm">
+          {{ 'sections.nether_wishlist.empty.login_title' | t }}
+        </p>
+        <p class="nether-wishlist__empty-login-text type-body-sm">
+          {{ 'sections.nether_wishlist.empty.login_html' | t: link: routes.account_login_url }}
+        </p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

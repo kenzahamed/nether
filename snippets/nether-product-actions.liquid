@@ -1,0 +1,95 @@
+{% comment %}
+  Renders secondary product actions for Nether Premium Product overlay cards.
+
+  Wishlist uses the Premium Wishlist button when enabled.
+  Compare uses the Premium Compare button when enabled (or show placeholder setting with card enable).
+  Quick View uses the Premium Quick View trigger when enabled.
+  Dawn quick_add on overlay layouts links to the product page when Quick View is off
+  (full quick-add via card-product on card grid layouts).
+
+  Accepts:
+  - card_product: {Object} Product object (required)
+  - section: {Object} Product section (required)
+
+  Usage:
+  {% render 'nether-product-actions', card_product: card_product, section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign quick_add = section.settings.nether_quick_add | default: 'none'
+  assign show_wishlist = section.settings.nether_show_wishlist_placeholder
+  if section.settings.nether_enable_wishlist_cards
+    assign show_wishlist = true
+  endif
+  assign show_compare = section.settings.nether_show_compare_placeholder
+  if section.settings.nether_enable_compare_cards
+    assign show_compare = true
+  endif
+  assign show_quick_view = section.settings.nether_enable_quick_view_cards
+  assign compare_label = 'sections.header.compare_placeholder' | t
+-%}
+
+<div
+  class="nether-product-card__actions"
+  role="group"
+  aria-label="{{ 'sections.nether_product.actions.label' | t }}"
+  data-nether-product-actions
+  data-nether-product-role="actions"
+>
+  {%- if show_quick_view and card_product != blank -%}
+    {% render 'nether-quick-view-trigger',
+      product: card_product,
+      style: 'overlay',
+      size: 'sm',
+      context: 'card',
+      class: 'nether-product-card__action'
+    %}
+  {%- elsif quick_add != 'none' and card_product != blank -%}
+    {%- liquid
+      assign quick_add_label = 'products.product.view_full_details' | t
+      if card_product.variants_count > 1
+        assign quick_add_label = 'products.product.choose_options' | t
+      elsif card_product.available == false
+        assign quick_add_label = 'products.product.sold_out' | t
+      endif
+    -%}
+    {%- render 'button',
+      label: quick_add_label,
+      link: card_product.url,
+      style: 'secondary',
+      size: 'small',
+      disabled: card_product.available == false
+    -%}
+  {%- endif -%}
+
+  {%- if show_wishlist and card_product != blank -%}
+    {% render 'nether-wishlist-button',
+      product: card_product,
+      style: 'icon',
+      size: 'sm',
+      context: 'card',
+      class: 'nether-product-card__action'
+    %}
+  {%- endif -%}
+
+  {%- if show_compare and card_product != blank -%}
+    {% render 'nether-compare-button',
+      product: card_product,
+      style: 'icon',
+      size: 'sm',
+      context: 'card',
+      class: 'nether-product-card__action'
+    %}
+  {%- elsif show_compare -%}
+    <span
+      class="nether-product-card__action nether-product-card__action--placeholder"
+      role="img"
+      aria-label="{{ compare_label }}"
+      aria-disabled="true"
+      data-nether-compare-placeholder
+      tabindex="-1"
+    >
+      {% render 'icon', icon: 'clipboard', size: 'sm', decorative: false, label: compare_label %}
+    </span>
+  {%- endif -%}
+</div>

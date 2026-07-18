@@ -1,0 +1,26 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Secure Checkout messaging.
+
+  Accepts:
+  - text: {String} Secure checkout message
+  - icon: {String} Icon name (default: lock)
+  - class: {String}
+  - attributes: {String}
+{% endcomment %}
+
+{%- liquid
+  assign secure_text = text
+  assign secure_icon = icon | default: 'lock'
+-%}
+
+{%- if secure_text != blank -%}
+  <p
+    class="nether-commerce__secure type-body-sm{% if class != blank %} {{ class }}{% endif %}"
+    data-nether-commerce-module="secure-checkout"
+    data-nether-commerce-animate
+    {% if attributes != blank %}{{ attributes }}{% endif %}
+  >
+    {% render 'nether-commerce-icon', icon: secure_icon, size: 'xs', decorative: true %}
+    <span class="nether-commerce__secure-text">{{ secure_text }}</span>
+  </p>
+{%- endif -%}

@@ -1,0 +1,56 @@
+{% comment %}
+  Renders Nether Premium Testimonials author block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-testimonials-author', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attr = motion_attr | default: 'data-nether-testimonials-animate'
+  assign author_name = block.settings.author
+  assign author_image = block.settings.author_image
+  assign company = block.settings.company
+  assign role = block.settings.role
+-%}
+
+{%- if author_name != blank or author_image != blank or company != blank or role != blank -%}
+  <div
+    class="nether-testimonials__author"
+    {{ motion_attr }}
+    data-nether-testimonials-role="author"
+    {{ block.shopify_attributes }}
+  >
+    {%- if author_image != blank -%}
+      {%- liquid
+        assign author_avatar_alt = author_name | default: author_image.alt | escape
+      -%}
+      <div class="nether-testimonials__author-image" data-nether-testimonials-avatar data-nether-testimonials-role="avatar">
+        {{
+          author_image
+          | image_url: width: 160
+          | image_tag:
+            loading: 'lazy',
+            widths: '80, 120, 160',
+            alt: author_avatar_alt,
+            class: 'nether-testimonials__author-avatar'
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="nether-testimonials__author-meta">
+      {%- if author_name != blank -%}
+        <p class="nether-testimonials__author-name type-label">{{ author_name | escape }}</p>
+      {%- endif -%}
+      {%- if role != blank -%}
+        <p class="nether-testimonials__author-role type-caption">{{ role | escape }}</p>
+      {%- endif -%}
+      {%- if company != blank -%}
+        <p class="nether-testimonials__author-company type-caption">{{ company | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

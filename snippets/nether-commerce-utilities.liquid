@@ -1,0 +1,51 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — utility region helpers.
+  Use for consistent ARIA live regions, sr-only labels, and meter shells.
+
+  Accepts:
+  - utility: {String} region | sr_label | meter_shell (default: region)
+  - id: {String} Element id
+  - label: {String} Accessible label / text
+  - live: {String} polite | assertive | off (default: polite for region)
+  - class: {String} Extra classes
+  - content: {String} Inner HTML (optional; prefer capture + render for complex content)
+{% endcomment %}
+
+{%- liquid
+  assign utility_type = utility | default: 'region'
+  assign live_mode = live | default: 'polite'
+-%}
+
+{%- case utility_type -%}
+  {%- when 'sr_label' -%}
+    <span class="visually-hidden nether-commerce__sr-label{% if class != blank %} {{ class }}{% endif %}"{% if id != blank %} id="{{ id }}"{% endif %}>
+      {{ label }}
+    </span>
+
+  {%- when 'meter_shell' -%}
+    <div
+      class="nether-commerce__meter{% if class != blank %} {{ class }}{% endif %}"
+      data-nether-commerce-module="meter"
+      role="progressbar"
+      {% if id != blank %}id="{{ id }}"{% endif %}
+      {% if label != blank %}aria-label="{{ label | escape }}"{% endif %}
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+      data-nether-commerce-meter
+    >
+      <span class="nether-commerce__meter-fill" data-nether-commerce-meter-fill style="--nether-commerce-meter-progress: 0%;"></span>
+    </div>
+
+  {%- else -%}
+    <div
+      class="nether-commerce__region{% if class != blank %} {{ class }}{% endif %}"
+      data-nether-commerce-module="region"
+      role="region"
+      {% if id != blank %}id="{{ id }}"{% endif %}
+      {% if label != blank %}aria-label="{{ label | escape }}"{% endif %}
+      {% if live_mode != 'off' %}aria-live="{{ live_mode }}"{% endif %}
+    >
+      {{ content }}
+    </div>
+{%- endcase -%}

@@ -1,0 +1,42 @@
+{% comment %}
+  Nether Premium Product Page — Product badges module.
+  Extends shared Commerce Enhancements badges (composes Nether Badge System).
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - product: {Object} Product object (required)
+{% endcomment %}
+
+{%- liquid
+  assign badge_1_label = block.settings.badge_1_label
+  assign badge_2_label = block.settings.badge_2_label
+  assign badge_3_label = block.settings.badge_3_label
+  assign show_sale_badge = block.settings.show_sale_badge
+  assign show_new_badge = block.settings.show_new_badge
+  assign badges_label = 'sections.nether_product_page.badges.label' | t
+-%}
+
+{%- if badge_1_label != blank or badge_2_label != blank or badge_3_label != blank or show_sale_badge or show_new_badge -%}
+  <div
+    class="nether-product-page__module nether-product-page__module--badges"
+    data-nether-product-page-module="badges"
+    data-nether-product-page-animate
+    {{ block.shopify_attributes }}
+  >
+    {% render 'nether-commerce-badges',
+      product: product,
+      style: block.settings.badge_style,
+      size: 'small',
+      show_sale: show_sale_badge,
+      show_new: show_new_badge,
+      badge_1_label: badge_1_label,
+      badge_1_type: block.settings.badge_1_type,
+      badge_2_label: badge_2_label,
+      badge_2_type: block.settings.badge_2_type,
+      badge_3_label: badge_3_label,
+      badge_3_type: block.settings.badge_3_type,
+      class: 'nether-product-page__badges',
+      label: badges_label
+    %}
+  </div>
+{%- endif -%}

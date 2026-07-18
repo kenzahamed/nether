@@ -1,0 +1,422 @@
+<style>
+  #shopify-section-{{ section.id }} .caterpillar-slider__wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: {{ section.settings.background_color }};
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .caterpillar-slider__wrapper {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+    min-height: clamp(200px, 40vw, 480px);
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 0 clamp(3.5rem, 8vw, 6rem);
+    box-sizing: border-box;
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__slide {
+    flex-shrink: 0;
+    width: clamp(110px, 16vw, 200px);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    will-change: transform;
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__slide.is-active {
+    width: clamp(190px, 30vw, 400px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__image,
+  #shopify-section-{{ section.id }} .caterpillar-slider__placeholder {
+    display: block;
+    width: 100%;
+    height: clamp(150px, 26vw, 340px);
+    object-fit: cover;
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__slide.is-active .caterpillar-slider__image,
+  #shopify-section-{{ section.id }} .caterpillar-slider__slide.is-active .caterpillar-slider__placeholder {
+    height: clamp(210px, 36vw, 460px);
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__nav {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 clamp(0.75rem, 3vw, 2rem);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__prev,
+  #shopify-section-{{ section.id }} .caterpillar-slider__next {
+    pointer-events: auto;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.92);
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__prev:hover,
+  #shopify-section-{{ section.id }} .caterpillar-slider__next:hover {
+    background-color: #ffffff;
+    transform: scale(1.05);
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__prev:active,
+  #shopify-section-{{ section.id }} .caterpillar-slider__next:active {
+    transform: scale(0.95);
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__prev .svg-wrapper {
+    transform: rotate(90deg);
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__next .svg-wrapper {
+    transform: rotate(-90deg);
+  }
+
+  #shopify-section-{{ section.id }} .caterpillar-slider__empty {
+    text-align: center;
+    padding: 2rem;
+    opacity: 0.6;
+  }
+</style>
+
+<div class="caterpillar-slider__wrapper" data-nether-motion data-nether-motion-plugins="flip">
+  {%- if section.blocks.size > 0 -%}
+    <div class="caterpillar-slider__container" data-caterpillar-container>
+      {%- assign center_index = section.blocks.size | divided_by: 2 -%}
+      {%- for block in section.blocks -%}
+        <div
+          class="caterpillar-slider__slide{% if forloop.index0 == center_index %} is-active{% endif %}"
+          data-flip-id="slide-{{ block.id }}"
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.image != blank -%}
+            {%- liquid
+              assign alt_text = block.settings.image_alt
+              if alt_text == blank
+                assign alt_text = block.settings.image.alt
+              endif
+            -%}
+            {{
+              block.settings.image
+              | image_url: width: 900
+              | image_tag:
+                loading: 'lazy',
+                alt: alt_text,
+                class: 'caterpillar-slider__image',
+                widths: '200, 400, 600, 800, 900',
+                sizes: '(min-width: 990px) 400px, (min-width: 750px) 30vw, 45vw'
+            }}
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'caterpillar-slider__placeholder' }}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.blocks.size > 1 -%}
+      <div class="caterpillar-slider__nav">
+        <button
+          type="button"
+          class="caterpillar-slider__prev"
+          aria-label="Previous slide"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </button>
+        <button
+          type="button"
+          class="caterpillar-slider__next"
+          aria-label="Next slide"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+    {%- endif -%}
+  {%- else -%}
+    <p class="caterpillar-slider__empty">Add image blocks to build your caterpillar slider.</p>
+  {%- endif -%}
+</div>
+
+<script>
+  (function () {
+    const SECTION_ID = '{{ section.id }}';
+    const SECTION_SELECTOR = '#shopify-section-' + SECTION_ID;
+
+    let cleanupHandlers = null;
+
+    function destroyCaterpillarSlider() {
+      if (!cleanupHandlers) return;
+
+      cleanupHandlers.prevHandler &&
+        cleanupHandlers.prevBtn &&
+        cleanupHandlers.prevBtn.removeEventListener('click', cleanupHandlers.prevHandler);
+      cleanupHandlers.nextHandler &&
+        cleanupHandlers.nextBtn &&
+        cleanupHandlers.nextBtn.removeEventListener('click', cleanupHandlers.nextHandler);
+
+      if (typeof gsap !== 'undefined' && cleanupHandlers.slides) {
+        gsap.killTweensOf(cleanupHandlers.slides);
+      }
+
+      cleanupHandlers = null;
+    }
+
+    function initCaterpillarSlider() {
+      destroyCaterpillarSlider();
+
+      const root = document.querySelector(SECTION_SELECTOR);
+      if (!root || typeof gsap === 'undefined') return;
+
+      const container = root.querySelector('[data-caterpillar-container]');
+      const prevBtn = root.querySelector('.caterpillar-slider__prev');
+      const nextBtn = root.querySelector('.caterpillar-slider__next');
+
+      if (!container) return;
+
+      let slides = gsap.utils.toArray(container.querySelectorAll('.caterpillar-slider__slide'));
+      if (slides.length < 2) return;
+
+      const prefersReducedMotion =
+        window.NetherMotion && typeof window.NetherMotion.prefersReducedMotion === 'function'
+          ? window.NetherMotion.prefersReducedMotion()
+          : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function setActiveSlide(target) {
+        slides.forEach(function (slide) {
+          slide.classList.remove('is-active');
+        });
+        target.classList.add('is-active');
+      }
+
+      function refreshSlides() {
+        slides = gsap.utils.toArray(container.querySelectorAll('.caterpillar-slider__slide'));
+      }
+
+      setActiveSlide(slides[Math.floor(slides.length / 2)]);
+
+      function advance(direction) {
+        if (direction === 1) {
+          const first = slides[0];
+          first.classList.remove('is-active');
+          container.appendChild(first);
+        } else {
+          const last = slides[slides.length - 1];
+          last.classList.remove('is-active');
+          container.prepend(last);
+        }
+
+        refreshSlides();
+        setActiveSlide(slides[Math.floor(slides.length / 2)]);
+      }
+
+      if (prefersReducedMotion || typeof Flip === 'undefined') {
+        function onPrevReduced() {
+          advance(-1);
+        }
+
+        function onNextReduced() {
+          advance(1);
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', onPrevReduced);
+        if (nextBtn) nextBtn.addEventListener('click', onNextReduced);
+
+        cleanupHandlers = {
+          prevBtn: prevBtn,
+          nextBtn: nextBtn,
+          prevHandler: onPrevReduced,
+          nextHandler: onNextReduced,
+          slides: slides,
+        };
+        return;
+      }
+
+      let isAnimating = false;
+
+      function advanceAnimated(direction) {
+        if (isAnimating) return;
+
+        isAnimating = true;
+        const state = Flip.getState(slides);
+
+        advance(direction);
+
+        Flip.from(state, {
+          targets: slides,
+          duration: 0.8,
+          ease: 'power2.inOut',
+          absolute: true,
+          stagger: 0.04,
+          onComplete: function () {
+            isAnimating = false;
+          },
+        });
+      }
+
+      function onPrev() {
+        advanceAnimated(-1);
+      }
+
+      function onNext() {
+        advanceAnimated(1);
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', onPrev);
+      if (nextBtn) nextBtn.addEventListener('click', onNext);
+
+      cleanupHandlers = {
+        prevBtn: prevBtn,
+        nextBtn: nextBtn,
+        prevHandler: onPrev,
+        nextHandler: onNext,
+        slides: slides,
+      };
+    }
+
+    function boot() {
+      if (!window.NetherMotion || typeof window.NetherMotion.load !== 'function') return;
+
+      window.NetherMotion.load(['flip']).then(function () {
+        initCaterpillarSlider();
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
+
+    if (window.NetherMotion && typeof window.NetherMotion.registerSection === 'function') {
+      window.NetherMotion.registerSection(SECTION_ID, {
+        init: function () {
+          boot();
+        },
+        destroy: function () {
+          destroyCaterpillarSlider();
+        },
+      });
+    }
+
+    document.addEventListener('shopify:section:load', function (event) {
+      if (event.detail.sectionId === SECTION_ID) {
+        boot();
+      }
+    });
+
+    document.addEventListener('shopify:section:unload', function (event) {
+      if (event.detail.sectionId === SECTION_ID) {
+        destroyCaterpillarSlider();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "GSAP Caterpillar Slider",
+  "tag": "section",
+  "class": "section-gsap-caterpillar-slider",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f4f4f4"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Slide image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text",
+          "info": "Describe the image for screen readers and SEO."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GSAP Caterpillar Slider",
+      "category": "Custom",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

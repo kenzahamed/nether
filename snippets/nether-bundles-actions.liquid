@@ -1,0 +1,57 @@
+{% comment %}
+  Nether Premium Bundles — add-to-cart actions.
+  Uses Shopify /cart/add.js with items[] — does not replace product-form.
+
+  Accepts:
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- liquid
+  assign button_label = section.settings.nether_add_label
+  if button_label == blank
+    assign button_label = 'sections.nether_bundles.actions.add' | t
+  endif
+  assign drawer_label = 'sections.nether_bundles.actions.open_summary' | t
+-%}
+
+<div
+  class="nether-bundles__actions"
+  data-nether-bundles-module="actions"
+  data-nether-bundles-actions
+>
+  <div class="nether-bundles__actions-primary">
+    <button
+      type="button"
+      class="button button--primary button--medium nether-bundles__add"
+      data-nether-bundles-add
+      aria-describedby="NetherBundlesStatus-{{ section.id }}"
+    >
+      <span data-nether-bundles-add-label>{{ button_label }}</span>
+      <span class="loading__spinner hidden" data-nether-bundles-spinner>
+        <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+          <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+        </svg>
+      </span>
+    </button>
+  </div>
+
+  {%- if section.settings.nether_enable_drawer -%}
+    <button
+      type="button"
+      class="button button--ghost button--medium nether-bundles__drawer-trigger"
+      data-nether-bundles-drawer-open
+      aria-haspopup="dialog"
+    >
+      {{ drawer_label }}
+    </button>
+  {%- endif -%}
+
+  <p
+    id="NetherBundlesStatus-{{ section.id }}"
+    class="nether-bundles__status visually-hidden"
+    data-nether-bundles-status
+    role="status"
+    aria-live="polite"
+  ></p>
+  <p class="nether-bundles__error type-body-sm" data-nether-bundles-error hidden></p>
+</div>

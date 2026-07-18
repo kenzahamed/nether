@@ -1,0 +1,487 @@
+/* =============================================================================
+ * Nether Premium Wishlist Commerce Framework
+ * Reuses design tokens, buttons, icons, shadows, radius, glass, and motion.
+ * ============================================================================= */
+
+nether-wishlist-drawer,
+nether-wishlist-page,
+nether-wishlist-button {
+  --nether-wishlist-drawer-width: 42rem;
+  --nether-wishlist-header-offset: var(--header-height, 0px);
+  --nether-wishlist-announcement-offset: var(--nether-header-announcement-offset, 0px);
+  --nether-wishlist-duration: var(--duration-default, 0.3s);
+  --nether-wishlist-shadow: var(--shadow-level-md, 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.12));
+  --nether-wishlist-radius: var(--radius-md, 0.8rem);
+  --nether-wishlist-gap: 1.6rem;
+  --nether-wishlist-heart-active: rgb(var(--color-foreground));
+  display: block;
+}
+
+/* -----------------------------------------------------------------------------
+ * Toggle button
+ * -------------------------------------------------------------------------- */
+
+.nether-wishlist-button {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.nether-wishlist-button__control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    color var(--nether-wishlist-duration) ease,
+    transform var(--nether-wishlist-duration) ease,
+    opacity var(--nether-wishlist-duration) ease;
+}
+
+.nether-wishlist-button__control--icon {
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+}
+
+.nether-wishlist-button__icon {
+  display: inline-flex;
+  transition: transform var(--nether-wishlist-duration) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nether-wishlist-button.is-active .nether-wishlist-button__icon,
+.nether-wishlist-button[aria-pressed='true'] .nether-wishlist-button__icon,
+.nether-wishlist-button.is-active .nether-wishlist-button__control {
+  color: var(--nether-wishlist-heart-active);
+}
+
+.nether-wishlist-button.is-active .nether-wishlist-button__icon svg path,
+.nether-wishlist-button.is-active .nether-wishlist-button__icon svg {
+  fill: currentColor;
+}
+
+.nether-wishlist-button__control:hover .nether-wishlist-button__icon,
+.nether-wishlist-button__control:focus-visible .nether-wishlist-button__icon {
+  transform: scale(1.08);
+}
+
+.nether-wishlist-button.is-busy .nether-wishlist-button__control {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.nether-wishlist-button--sm .nether-wishlist-button__control {
+  min-width: 3.6rem;
+  min-height: 3.6rem;
+}
+
+.nether-product-card__actions .nether-wishlist-button,
+.card__wishlist .nether-wishlist-button {
+  position: relative;
+  z-index: 2;
+}
+
+.card__wishlist {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+
+.card__inner:has(> .card__wishlist) {
+  position: relative;
+}
+
+/* -----------------------------------------------------------------------------
+ * Header trigger + count
+ * -------------------------------------------------------------------------- */
+
+.nether-wishlist-trigger {
+  position: relative;
+}
+
+.nether-wishlist-count:not([hidden]) {
+  display: flex;
+}
+
+.nether-wishlist-count[hidden] {
+  display: none !important;
+}
+
+/* -----------------------------------------------------------------------------
+ * Drawer
+ * -------------------------------------------------------------------------- */
+
+.nether-wishlist-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.nether-wishlist-drawer.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.nether-wishlist-drawer.is-visible .nether-wishlist-drawer__panel {
+  visibility: visible;
+}
+
+.nether-wishlist-drawer__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--color-foreground), 0.45);
+  opacity: 0;
+  transition: opacity var(--nether-wishlist-duration) ease;
+}
+
+.nether-wishlist-drawer__overlay--disabled {
+  background: transparent;
+  pointer-events: none;
+}
+
+.nether-wishlist-drawer.is-visible .nether-wishlist-drawer__overlay:not(.nether-wishlist-drawer__overlay--disabled) {
+  opacity: 1;
+}
+
+.nether-wishlist-drawer__panel {
+  position: absolute;
+  top: var(--nether-wishlist-announcement-offset);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(var(--nether-wishlist-drawer-width), 100vw);
+  height: calc(100% - var(--nether-wishlist-announcement-offset));
+  max-height: 100dvh;
+  background: rgb(var(--color-background));
+  border-left: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  box-shadow: var(--nether-wishlist-shadow);
+  visibility: hidden;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform var(--nether-wishlist-duration) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nether-wishlist-drawer--minimal .nether-wishlist-drawer__panel {
+  box-shadow: none;
+}
+
+.nether-wishlist-drawer--editorial .nether-wishlist-drawer__panel {
+  border-left-width: 0;
+}
+
+.nether-wishlist-drawer.is-visible:not([data-nether-motion-ready]) .nether-wishlist-drawer__panel,
+.nether-wishlist-drawer.is-open:not(.is-visible) .nether-wishlist-drawer__panel {
+  transform: translateX(0);
+}
+
+.nether-wishlist-drawer__header {
+  flex: 0 0 auto;
+  padding: 1.5rem 2rem 1rem;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-wishlist-drawer__header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.nether-wishlist-drawer__title {
+  margin: 0;
+}
+
+.nether-wishlist-drawer__close {
+  position: static;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
+}
+
+.nether-wishlist-drawer__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.5rem 2rem 2rem;
+}
+
+.nether-wishlist-drawer__list,
+.nether-wishlist-page__list {
+  display: grid;
+  gap: var(--nether-wishlist-gap);
+}
+
+.nether-wishlist-drawer__list[hidden],
+.nether-wishlist-page__list[hidden],
+.nether-wishlist__empty[hidden],
+.nether-wishlist-drawer__footer[hidden] {
+  display: none !important;
+}
+
+.nether-wishlist-drawer__footer {
+  flex: 0 0 auto;
+  padding: 1.5rem 2rem 2rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+/* -----------------------------------------------------------------------------
+ * Page
+ * -------------------------------------------------------------------------- */
+
+.nether-wishlist-page {
+  display: block;
+}
+
+.nether-wishlist__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.6rem;
+  margin-bottom: 2.4rem;
+}
+
+.nether-wishlist__heading {
+  margin: 0 0 0.8rem;
+}
+
+.nether-wishlist__subheading {
+  margin: 0;
+  max-width: 48rem;
+  opacity: 0.8;
+}
+
+.nether-wishlist-page__layout {
+  display: grid;
+  gap: var(--nether-wishlist-gap, 2.4rem);
+}
+
+.nether-wishlist-page--desktop-split .nether-wishlist-page__layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media screen and (min-width: 990px) {
+  .nether-wishlist-page--desktop-split .nether-wishlist-page__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 28rem);
+    align-items: start;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .nether-wishlist-page--tablet-stacked .nether-wishlist-page__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nether-wishlist-page__list--grid {
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-wishlist-page__list--grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-wishlist-page__list--grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nether-wishlist-page--desktop-split .nether-wishlist-page__list--grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.nether-wishlist-page__list--list,
+.nether-wishlist-page__list--editorial {
+  grid-template-columns: 1fr;
+}
+
+.nether-wishlist-page__sidebar {
+  display: grid;
+  gap: 1.2rem;
+}
+
+/* -----------------------------------------------------------------------------
+ * Toolbar / empty / card / extensions
+ * -------------------------------------------------------------------------- */
+
+.nether-wishlist__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nether-wishlist__toolbar-count {
+  margin: 0;
+}
+
+.nether-wishlist__toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.nether-wishlist__toolbar-action[hidden],
+.nether-wishlist__toolbar-share[hidden] {
+  display: none !important;
+}
+
+.nether-wishlist__empty {
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.nether-wishlist__empty-icon {
+  display: inline-flex;
+  margin-bottom: 1.2rem;
+  opacity: 0.55;
+}
+
+.nether-wishlist__empty-heading {
+  margin: 0 0 0.8rem;
+}
+
+.nether-wishlist__empty-text {
+  margin: 0 auto 2rem;
+  max-width: 36rem;
+  opacity: 0.8;
+}
+
+.nether-wishlist__empty-login {
+  margin-top: 2.4rem;
+}
+
+.nether-wishlist__empty-login-title {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+
+.nether-wishlist__empty-login-text {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.nether-wishlist-card {
+  display: grid;
+  grid-template-columns: 9.6rem minmax(0, 1fr);
+  gap: 1.2rem;
+  padding: 1.2rem;
+  background: rgba(var(--color-background), 1);
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-wishlist-card--page {
+  height: 100%;
+}
+
+.nether-wishlist-page__list--grid .nether-wishlist-card--page {
+  grid-template-columns: 1fr;
+}
+
+.nether-wishlist-card__media {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--nether-wishlist-radius);
+  background: rgba(var(--color-foreground), 0.04);
+  aspect-ratio: 1 / 1;
+}
+
+.nether-wishlist-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nether-wishlist-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.nether-wishlist-card__vendor[hidden],
+.nether-wishlist-card__availability[hidden] {
+  display: none !important;
+}
+
+.nether-wishlist-card__title {
+  margin: 0;
+}
+
+.nether-wishlist-card__price {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+
+.nether-wishlist-card__price s {
+  opacity: 0.55;
+}
+
+.nether-wishlist-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: auto;
+  padding-top: 0.4rem;
+}
+
+.nether-wishlist__extension {
+  padding: 1.2rem;
+  border: 0.1rem dashed rgba(var(--color-foreground), 0.18);
+  border-radius: var(--nether-wishlist-radius);
+}
+
+.nether-wishlist__extension-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.nether-wishlist__extension-text {
+  flex: 1 1 100%;
+  margin: 0;
+  opacity: 0.75;
+}
+
+.nether-wishlist__merchant-content {
+  padding: 1.2rem 0;
+}
+
+.nether-wishlist__merchant-heading {
+  margin: 0 0 0.8rem;
+}
+
+/* -----------------------------------------------------------------------------
+ * Reduced motion
+ * -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-wishlist-drawer__panel,
+  .nether-wishlist-drawer__overlay,
+  .nether-wishlist-button__control,
+  .nether-wishlist-button__icon {
+    transition: none !important;
+  }
+
+  .nether-wishlist-drawer.is-open .nether-wishlist-drawer__panel {
+    transform: none;
+  }
+}

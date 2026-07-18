@@ -1,0 +1,33 @@
+{% comment %}
+  Renders Nether Premium Footer payment method icons.
+  Extends shared Commerce Enhancements payment-methods component.
+  Uses Shopify shop.enabled_payment_types.
+
+  Accepts:
+  - block: {Object} Theme Editor block (optional)
+  - heading: {String} Optional heading
+  - heading_tag: {String} Heading element tag (default: h2)
+  - class: {String} Additional classes
+
+  Usage:
+  {% render 'nether-footer-payment', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign block_heading = heading
+  if block_heading == blank and block != blank
+    assign block_heading = block.settings.heading
+  endif
+-%}
+
+<div class="nether-footer__payment{% if class != blank %} {{ class }}{% endif %}">
+  {% render 'nether-commerce-payment-methods',
+    heading: block_heading,
+    heading_tag: heading_element,
+    heading_class: 'footer-block__heading inline-richtext nether-footer__heading visually-hidden',
+    list_class: 'nether-footer__payment-list',
+    class: 'nether-footer__payment-shared',
+    block: block
+  %}
+</div>

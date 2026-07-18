@@ -1,0 +1,45 @@
+{% comment %}
+  Nether Premium Cart — drawer footer modules.
+  Preserves Dawn .drawer__footer and .cart-drawer__footer structure.
+
+  Accepts:
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+<div class="drawer__footer nether-cart__drawer-footer">
+  {% render 'nether-cart-notes', section: section, context: 'drawer', note_id: 'CartDrawer-Note' %}
+
+  {%- for block in section.blocks -%}
+    {%- unless block.type == 'recommendations' or block.type == 'merchant_content' -%}
+      {% render 'nether-cart-block', block: block, section: section, zone: 'drawer_footer' %}
+    {%- endunless -%}
+  {%- endfor -%}
+
+  {%- if section.settings.nether_enable_gift_wrap -%}
+    {% render 'nether-cart-gift-wrap', section: section %}
+  {%- endif -%}
+
+  {%- if section.settings.nether_enable_trust -%}
+    {% render 'nether-cart-trust', section: section %}
+  {%- endif -%}
+
+  <div class="cart-drawer__footer nether-cart__drawer-summary js-contents">
+    {% render 'nether-cart-shipping-progress', section: section, context: 'drawer' %}
+    {% render 'nether-cart-discounts', context: 'drawer' %}
+    {% render 'nether-cart-totals', context: 'drawer' %}
+  </div>
+
+  <div class="cart__ctas nether-cart__drawer-checkout">
+    <button
+      type="submit"
+      id="CartDrawer-Checkout"
+      class="cart__checkout-button button"
+      name="checkout"
+      form="CartDrawer-Form"
+      {% if cart == empty %}disabled{% endif %}
+    >
+      {{ 'sections.cart.checkout' | t }}
+    </button>
+  </div>
+</div>
+

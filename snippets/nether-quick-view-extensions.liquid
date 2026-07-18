@@ -1,0 +1,71 @@
+{% comment %}
+  Future-ready commerce extension points for Nether Premium Quick View.
+  Structural placeholders only — no runtime handlers.
+
+  Accepts:
+  - type: {String} Extension key (optional)
+  - label: {String} Accessible label override (optional)
+  - text: {String} Supporting copy (optional)
+
+  Usage:
+  {% render 'nether-quick-view-extensions', type: 'recently_viewed' %}
+{% endcomment %}
+
+{%- liquid
+  assign extension_type = type | default: 'generic'
+  assign extension_label = label
+
+  case extension_type
+    when 'recently_viewed'
+      assign extension_icon = 'stopwatch'
+      assign extension_data = 'data-nether-quick-view-recently-viewed'
+      assign default_label = 'sections.nether_quick_view.extensions.recently_viewed' | t
+    when 'personalization'
+      assign extension_icon = 'silhouette'
+      assign extension_data = 'data-nether-quick-view-personalization'
+      assign default_label = 'sections.nether_quick_view.extensions.personalization' | t
+    when 'bundles'
+      assign extension_icon = 'box'
+      assign extension_data = 'data-nether-quick-view-bundles'
+      assign default_label = 'sections.nether_quick_view.extensions.bundles' | t
+    when 'upsells'
+      assign extension_icon = 'price-tag'
+      assign extension_data = 'data-nether-quick-view-upsells'
+      assign default_label = 'sections.nether_quick_view.extensions.upsells' | t
+    when 'recommendations'
+      assign extension_icon = 'star'
+      assign extension_data = 'data-nether-quick-view-recommendations'
+      assign default_label = 'sections.nether_quick_view.extensions.recommendations' | t
+    when 'analytics'
+      assign extension_icon = 'info'
+      assign extension_data = 'data-nether-quick-view-analytics'
+      assign default_label = 'sections.nether_quick_view.extensions.analytics' | t
+    when 'image_zoom'
+      assign extension_icon = 'zoom'
+      assign extension_data = 'data-nether-quick-view-image-zoom'
+      assign default_label = 'sections.nether_quick_view.extensions.image_zoom' | t
+    else
+      assign extension_icon = 'info'
+      assign extension_data = 'data-nether-quick-view-extension'
+      assign default_label = 'sections.nether_quick_view.extensions.generic' | t
+  endcase
+
+  if extension_label == blank
+    assign extension_label = default_label
+  endif
+-%}
+
+<div
+  class="nether-quick-view__extension nether-quick-view__extension--{{ extension_type }}"
+  data-nether-quick-view-module="extension"
+  {{ extension_data }}
+  hidden
+>
+  <div class="nether-quick-view__extension-inner" role="group" aria-label="{{ extension_label | escape }}">
+    {% render 'icon', icon: extension_icon, size: 'sm', decorative: false, label: extension_label %}
+    <span class="nether-quick-view__extension-label type-body-sm">{{ extension_label }}</span>
+    {%- if text != blank -%}
+      <p class="nether-quick-view__extension-text type-body-sm">{{ text }}</p>
+    {%- endif -%}
+  </div>
+</div>

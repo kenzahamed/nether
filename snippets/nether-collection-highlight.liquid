@@ -1,0 +1,74 @@
+{% comment %}
+  Renders a Nether Premium Collection category highlight block.
+
+  Accepts:
+  - block: {Object} Category highlight block (required)
+  - section: {Object} Collection section (required)
+
+  Usage:
+  {% render 'nether-collection-highlight', block: block, section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign highlight_collection = block.settings.collection
+  assign highlight_image = block.settings.image
+  if highlight_image == blank and highlight_collection != blank
+    if highlight_collection.featured_image != blank
+      assign highlight_image = highlight_collection.featured_image
+    elsif highlight_collection.image != blank
+      assign highlight_image = highlight_collection.image
+    endif
+  endif
+
+  assign highlight_title = block.settings.heading
+  if highlight_title == blank and highlight_collection != blank
+    assign highlight_title = highlight_collection.title
+  endif
+
+  assign highlight_link = block.settings.link
+  if highlight_link == blank and highlight_collection != blank
+    assign highlight_link = highlight_collection.url
+  endif
+-%}
+
+<div
+  class="nether-collection-highlight"
+  data-nether-collection-animate
+  data-nether-collection-role="highlight"
+  {{ block.shopify_attributes }}
+>
+  {%- if highlight_image != blank -%}
+    <div class="nether-collection-highlight__media">
+      {{
+        highlight_image
+        | image_url: width: 800
+        | image_tag:
+          widths: '165, 330, 535, 750, 800',
+          sizes: '(min-width: 990px) 280px, 200px',
+          alt: highlight_image.alt | default: highlight_title,
+          loading: 'lazy',
+          class: 'motion-reduce'
+      }}
+    </div>
+  {%- endif -%}
+
+  <div class="nether-collection-highlight__content">
+    {%- if block.settings.eyebrow != blank -%}
+      <p class="nether-collection-highlight__eyebrow type-overline">{{ block.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+
+    {%- if highlight_title != blank -%}
+      <p class="nether-collection-highlight__title type-heading-sm">{{ highlight_title | escape }}</p>
+    {%- endif -%}
+
+    {%- if block.settings.text != blank -%}
+      <p class="nether-collection-highlight__text type-body-sm">{{ block.settings.text | escape }}</p>
+    {%- endif -%}
+
+    {%- if highlight_link != blank and block.settings.link_label != blank -%}
+      <a class="nether-collection-highlight__link link underlined-link" href="{{ highlight_link }}">
+        {{- block.settings.link_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</div>

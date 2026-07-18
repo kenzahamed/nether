@@ -1,0 +1,70 @@
+{% comment %}
+  Renders a Nether Premium Product highlight block.
+
+  Accepts:
+  - block: {Object} Product highlight block (required)
+  - section: {Object} Product section (required)
+
+  Usage:
+  {% render 'nether-product-highlight', block: block, section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign highlight_product = block.settings.product
+  assign highlight_image = block.settings.image
+  if highlight_image == blank and highlight_product != blank and highlight_product.featured_media != blank
+    assign highlight_image = highlight_product.featured_media.preview_image
+  endif
+
+  assign highlight_title = block.settings.heading
+  if highlight_title == blank and highlight_product != blank
+    assign highlight_title = highlight_product.title
+  endif
+
+  assign highlight_link = block.settings.link
+  if highlight_link == blank and highlight_product != blank
+    assign highlight_link = highlight_product.url
+  endif
+-%}
+
+<div
+  class="nether-product-highlight"
+  data-nether-product-animate
+  data-nether-product-role="highlight"
+  {{ block.shopify_attributes }}
+>
+  {%- if highlight_image != blank -%}
+    <div class="nether-product-highlight__media">
+      {{
+        highlight_image
+        | image_url: width: 800
+        | image_tag:
+          widths: '165, 330, 535, 750, 800',
+          sizes: '(min-width: 990px) 280px, 200px',
+          alt: highlight_image.alt | default: highlight_title,
+          loading: 'lazy',
+          class: 'motion-reduce'
+      }}
+    </div>
+  {%- endif -%}
+
+  <div class="nether-product-highlight__content">
+    {%- if block.settings.eyebrow != blank -%}
+      <p class="nether-product-highlight__eyebrow type-overline">{{ block.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+
+    {%- if highlight_title != blank -%}
+      <p class="nether-product-highlight__title type-heading-sm">{{ highlight_title | escape }}</p>
+    {%- endif -%}
+
+    {%- if block.settings.text != blank -%}
+      <p class="nether-product-highlight__text type-body-sm">{{ block.settings.text | escape }}</p>
+    {%- endif -%}
+
+    {%- if highlight_link != blank and block.settings.link_label != blank -%}
+      <a class="nether-product-highlight__link link underlined-link" href="{{ highlight_link }}">
+        {{- block.settings.link_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</div>

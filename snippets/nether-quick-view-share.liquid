@@ -1,0 +1,14 @@
+{% comment %}
+  Nether Premium Quick View — share control (Web Share API / copy URL extension).
+{% endcomment %}
+
+<button
+  type="button"
+  class="nether-quick-view__share button button--ghost button--small"
+  data-nether-quick-view-share
+  aria-label="{{ 'sections.nether_quick_view.actions.share' | t }}"
+  hidden
+>
+  {% render 'icon', icon: 'share', size: 'sm', decorative: true %}
+  <span class="nether-quick-view__share-label">{{ 'sections.nether_quick_view.actions.share' | t }}</span>
+</button>

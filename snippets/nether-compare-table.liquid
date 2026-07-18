@@ -1,0 +1,45 @@
+{% comment %}
+  Nether Premium Compare — comparison table shell.
+  Client-side renderer fills [data-nether-compare-table] from NetherCompare items.
+
+  Accepts:
+  - context: {String} drawer | page (default: page)
+  - table_style: {String} standard | minimal | editorial (optional)
+  - highlight_differences: {Boolean} Highlight differing attribute rows (optional)
+
+  Usage:
+  {% render 'nether-compare-table', context: 'page', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign compare_context = context | default: 'page'
+  assign compare_table_style = table_style
+  if compare_table_style == blank and section != blank
+    assign compare_table_style = section.settings.nether_compare_table_style | default: 'standard'
+  endif
+  assign compare_table_style = compare_table_style | default: 'standard'
+
+  assign highlight = highlight_differences
+  if highlight == nil and section != blank
+    assign highlight = section.settings.nether_compare_highlight_differences
+  endif
+  if highlight == nil
+    assign highlight = true
+  endif
+-%}
+
+<div
+  class="nether-compare__module nether-compare-table nether-compare-table--{{ compare_context }} nether-compare-table--{{ compare_table_style }}"
+  data-nether-compare-table-shell
+  data-nether-compare-animate
+  data-highlight-differences="{{ highlight }}"
+  hidden
+>
+  <div class="nether-compare-table__scroll" tabindex="0" role="region" aria-label="{{ 'sections.nether_compare.table.label' | t }}">
+    <table class="nether-compare-table__grid" data-nether-compare-table>
+      <caption class="visually-hidden">{{ 'sections.nether_compare.table.caption' | t }}</caption>
+      <thead data-nether-compare-table-head></thead>
+      <tbody data-nether-compare-table-body></tbody>
+    </table>
+  </div>
+</div>

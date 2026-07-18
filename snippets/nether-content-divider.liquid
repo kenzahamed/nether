@@ -1,0 +1,21 @@
+{% comment %}
+  Optional section divider for Nether Premium Content Framework.
+
+  Accepts:
+  - section: {Object} Content section (required)
+  - position: {String} top or bottom (required)
+
+  Usage:
+  {% render 'nether-content-divider', section: section, position: 'bottom' %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_content_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-content__divider nether-content__divider--{{ divider_position }} nether-content__divider--{{ divider_style }}"
+  aria-hidden="true"
+  role="presentation"
+></div>

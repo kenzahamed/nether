@@ -1,0 +1,61 @@
+{% comment %}
+  Nether Premium Cart — order notes module.
+  Preserves Dawn <cart-note> custom element and native /cart/update.js behavior.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - context: {String} drawer | page (default: page)
+  - form_id: {String} Form id attribute (default: cart)
+  - note_id: {String} Textarea id (default: Cart-note)
+{% endcomment %}
+
+{%- liquid
+  assign cart_context = context | default: 'page'
+  assign cart_form_id = form_id | default: 'cart'
+  assign cart_note_id = note_id | default: 'Cart-note'
+  assign enable_notes = section.settings.nether_enable_notes
+
+  if enable_notes == nil and settings.show_cart_note
+    assign enable_notes = true
+  endif
+-%}
+
+{%- if enable_notes -%}
+  <div
+    class="nether-cart__module nether-cart__module--notes nether-cart__notes nether-cart__notes--{{ cart_context }}"
+    data-nether-cart-module="notes"
+    data-nether-cart-animate
+  >
+    {%- if cart_context == 'drawer' -%}
+      <details id="Details-NetherCartNote-{{ cart_context }}" class="nether-cart__notes-details">
+        <summary>
+          <span class="summary__title type-body-sm">
+            {{ 'sections.cart.note' | t }}
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </summary>
+        <cart-note class="cart__note field">
+          <label class="visually-hidden" for="{{ cart_note_id }}">{{ 'sections.cart.note' | t }}</label>
+          <textarea
+            id="{{ cart_note_id }}"
+            class="text-area text-area--resize-vertical field__input"
+            name="note"
+            placeholder="{{ 'sections.cart.note' | t }}"
+          >{{ cart.note }}</textarea>
+        </cart-note>
+      </details>
+    {%- else -%}
+      <cart-note class="cart__note field">
+        <label class="type-body-sm" for="{{ cart_note_id }}">{{ 'sections.cart.note' | t }}</label>
+        <textarea
+          class="text-area field__input"
+          name="note"
+          form="{{ cart_form_id }}"
+          id="{{ cart_note_id }}"
+          placeholder="{{ 'sections.cart.note' | t }}"
+        >{{ cart.note }}</textarea>
+      </cart-note>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+

@@ -1,0 +1,37 @@
+{% comment %}
+  Collection description module for Nether Premium Collection Page.
+  Renders native collection.description with merchant styling options.
+
+  Accepts:
+  - block: {Object} Block object (optional)
+  - section: {Object} Section object (required)
+  - collection: {Object} Collection object (required)
+{% endcomment %}
+
+{%- liquid
+  assign description_style = section.settings.nether_description_style | default: 'default'
+  if block != blank and block.settings.style != blank
+    assign description_style = block.settings.style
+  endif
+
+  assign show_description = section.settings.nether_show_collection_description
+  if block != blank
+    assign show_description = true
+  endif
+-%}
+
+{%- if show_description and collection.description != blank -%}
+  <div
+    class="nether-collection-page__module nether-collection-page__module--description nether-collection-page__description nether-collection-page__description--{{ description_style }}"
+    data-nether-collection-page-module="description"
+    data-nether-collection-page-animate
+    {% if block != blank %}{{ block.shopify_attributes }}{% endif %}
+  >
+    {%- if block.settings.heading != blank -%}
+      <h2 class="nether-collection-page__module-heading type-heading-sm">{{ block.settings.heading }}</h2>
+    {%- endif -%}
+    <div class="nether-collection-page__description-content rte">
+      {{ collection.description }}
+    </div>
+  </div>
+{%- endif -%}

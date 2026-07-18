@@ -1,0 +1,75 @@
+{% comment %}
+  Nether Premium Wishlist — header trigger with live count bubble.
+
+  Accepts:
+  - label: {String} Accessible label override (optional)
+  - show_count: {Boolean} Show count bubble (optional, section setting fallback)
+  - desktop: {Boolean} Show on desktop (optional)
+  - tablet: {Boolean} Show on tablet (optional)
+  - mobile: {Boolean} Show on mobile (optional)
+  - button_style: {String} icon style variant (optional)
+
+  Usage:
+  {% render 'nether-wishlist-trigger' %}
+{% endcomment %}
+
+{%- liquid
+  assign trigger_label = label | default: 'sections.nether_wishlist.title' | t
+  assign show_count_bubble = show_count
+  if show_count_bubble == nil
+    assign show_count_bubble = section.settings.nether_wishlist_show_count
+  endif
+
+  assign show_desktop = desktop
+  assign show_tablet = tablet
+  assign show_mobile = mobile
+  if show_desktop == nil
+    assign show_desktop = section.settings.nether_wishlist_desktop
+  endif
+  if show_tablet == nil
+    assign show_tablet = section.settings.nether_wishlist_tablet
+  endif
+  if show_mobile == nil
+    assign show_mobile = section.settings.nether_wishlist_mobile
+  endif
+
+  assign trigger_classes = 'header__icon nether-header__action nether-wishlist-trigger link focus-inset'
+  unless show_desktop
+    assign trigger_classes = trigger_classes | append: ' small-hide medium-hide'
+  endunless
+  if show_desktop and show_tablet == false
+    assign trigger_classes = trigger_classes | append: ' medium-hide'
+  endif
+  unless show_mobile
+    assign trigger_classes = trigger_classes | append: ' large-up-hide'
+  endunless
+
+  if button_style != blank
+    assign trigger_classes = trigger_classes | append: ' nether-wishlist-trigger--' | append: button_style
+  elsif section.settings.nether_wishlist_button_style != blank
+    assign trigger_classes = trigger_classes | append: ' nether-wishlist-trigger--' | append: section.settings.nether_wishlist_button_style
+  endif
+-%}
+
+<button
+  type="button"
+  class="{{ trigger_classes }}"
+  aria-haspopup="dialog"
+  aria-controls="nether-wishlist-drawer"
+  aria-expanded="false"
+  data-nether-wishlist-open
+  data-prevent-hide
+>
+  {% render 'icon', icon: 'heart', size: 'md', decorative: false, label: trigger_label %}
+  <span class="visually-hidden">{{ trigger_label }}</span>
+  <span
+    class="nether-wishlist-count cart-count-bubble{% unless show_count_bubble %} visually-hidden{% endunless %}"
+    data-nether-wishlist-count
+    hidden
+  >
+    <span aria-hidden="true" data-nether-wishlist-count-value>0</span>
+    <span class="visually-hidden" data-nether-wishlist-count-label>
+      {{ 'sections.nether_wishlist.count' | t: count: 0 }}
+    </span>
+  </span>
+</button>

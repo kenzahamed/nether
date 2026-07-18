@@ -1,0 +1,605 @@
+/* =============================================================================
+ * Nether Premium Compare Commerce Framework
+ * Reuses design tokens, buttons, icons, shadows, radius, glass, and motion.
+ * ============================================================================= */
+
+nether-compare-drawer,
+nether-compare-page,
+nether-compare-button {
+  --nether-compare-drawer-width: 48rem;
+  --nether-compare-header-offset: var(--header-height, 0px);
+  --nether-compare-announcement-offset: var(--nether-header-announcement-offset, 0px);
+  --nether-compare-duration: var(--duration-default, 0.3s);
+  --nether-compare-shadow: var(--shadow-level-md, 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.12));
+  --nether-compare-radius: var(--radius-md, 0.8rem);
+  --nether-compare-gap: 1.6rem;
+  --nether-compare-active: rgb(var(--color-foreground));
+  --nether-compare-diff-bg: rgba(var(--color-foreground), 0.04);
+  display: block;
+}
+
+/* -----------------------------------------------------------------------------
+ * Toggle button
+ * -------------------------------------------------------------------------- */
+
+.nether-compare-button {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.nether-compare-button__control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    color var(--nether-compare-duration) ease,
+    transform var(--nether-compare-duration) ease,
+    opacity var(--nether-compare-duration) ease;
+}
+
+.nether-compare-button__control--icon {
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+}
+
+.nether-compare-button__icon {
+  display: inline-flex;
+  transition: transform var(--nether-compare-duration) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nether-compare-button.is-active .nether-compare-button__icon,
+.nether-compare-button.is-active .nether-compare-button__control {
+  color: var(--nether-compare-active);
+}
+
+.nether-compare-button.is-active .nether-compare-button__icon svg path,
+.nether-compare-button.is-active .nether-compare-button__icon svg {
+  fill: currentColor;
+}
+
+.nether-compare-button__control:hover .nether-compare-button__icon,
+.nether-compare-button__control:focus-visible .nether-compare-button__icon {
+  transform: scale(1.08);
+}
+
+.nether-compare-button.is-busy .nether-compare-button__control {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.nether-compare-button--sm .nether-compare-button__control {
+  min-width: 3.6rem;
+  min-height: 3.6rem;
+}
+
+.nether-product-card__actions .nether-compare-button,
+.card__compare .nether-compare-button {
+  position: relative;
+  z-index: 2;
+}
+
+.card__compare {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+
+.card__inner:has(> .card__wishlist) .card__compare {
+  right: 5.2rem;
+}
+
+.card__inner:has(> .card__compare) {
+  position: relative;
+}
+
+/* -----------------------------------------------------------------------------
+ * Header trigger + count
+ * -------------------------------------------------------------------------- */
+
+.nether-compare-trigger {
+  position: relative;
+}
+
+.nether-compare-count:not([hidden]) {
+  display: flex;
+}
+
+.nether-compare-count[hidden] {
+  display: none !important;
+}
+
+/* -----------------------------------------------------------------------------
+ * Drawer
+ * -------------------------------------------------------------------------- */
+
+.nether-compare-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.nether-compare-drawer.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.nether-compare-drawer.is-visible .nether-compare-drawer__panel {
+  visibility: visible;
+}
+
+.nether-compare-drawer__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--color-foreground), 0.45);
+  opacity: 0;
+  transition: opacity var(--nether-compare-duration) ease;
+}
+
+.nether-compare-drawer__overlay--disabled {
+  background: transparent;
+  pointer-events: none;
+}
+
+.nether-compare-drawer.is-visible .nether-compare-drawer__overlay:not(.nether-compare-drawer__overlay--disabled) {
+  opacity: 1;
+}
+
+.nether-compare-drawer__panel {
+  position: absolute;
+  top: var(--nether-compare-announcement-offset);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(var(--nether-compare-drawer-width), 100vw);
+  height: calc(100% - var(--nether-compare-announcement-offset));
+  max-height: 100dvh;
+  background: rgb(var(--color-background));
+  border-left: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  box-shadow: var(--nether-compare-shadow);
+  visibility: hidden;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform var(--nether-compare-duration) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nether-compare-drawer--minimal .nether-compare-drawer__panel {
+  box-shadow: none;
+}
+
+.nether-compare-drawer--editorial .nether-compare-drawer__panel {
+  border-left-width: 0;
+}
+
+.nether-compare-drawer.is-visible:not([data-nether-motion-ready]) .nether-compare-drawer__panel,
+.nether-compare-drawer.is-open:not(.is-visible) .nether-compare-drawer__panel {
+  transform: translateX(0);
+}
+
+.nether-compare-drawer__header {
+  flex: 0 0 auto;
+  padding: 1.5rem 2rem 1rem;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-compare-drawer__header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.nether-compare-drawer__title {
+  margin: 0;
+}
+
+.nether-compare-drawer__close {
+  position: static;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
+}
+
+.nether-compare-drawer__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.5rem 2rem 2rem;
+}
+
+.nether-compare-drawer__list,
+.nether-compare-page__list {
+  display: grid;
+  gap: var(--nether-compare-gap);
+}
+
+.nether-compare-drawer__list[hidden],
+.nether-compare-page__list[hidden],
+.nether-compare__empty[hidden],
+.nether-compare-drawer__footer[hidden],
+.nether-compare-table[hidden] {
+  display: none !important;
+}
+
+.nether-compare-drawer__footer {
+  flex: 0 0 auto;
+  padding: 1.5rem 2rem 2rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+/* -----------------------------------------------------------------------------
+ * Page
+ * -------------------------------------------------------------------------- */
+
+.nether-compare-page {
+  display: block;
+}
+
+.nether-compare__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.6rem;
+  margin-bottom: 2.4rem;
+}
+
+.nether-compare__heading {
+  margin: 0 0 0.8rem;
+}
+
+.nether-compare__subheading {
+  margin: 0;
+  max-width: 48rem;
+  opacity: 0.8;
+}
+
+.nether-compare-page__layout {
+  display: grid;
+  gap: var(--nether-compare-gap, 2.4rem);
+}
+
+.nether-compare-page--desktop-split .nether-compare-page__layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media screen and (min-width: 990px) {
+  .nether-compare-page--desktop-split .nether-compare-page__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 28rem);
+    align-items: start;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .nether-compare-page--tablet-stacked .nether-compare-page__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nether-compare-page__list--cards {
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-compare-page__list--cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-compare-page__list--cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nether-compare-page--desktop-split .nether-compare-page__list--cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.nether-compare-page__list--table,
+.nether-compare-page__list--editorial {
+  grid-template-columns: 1fr;
+}
+
+.nether-compare-page--layout-table .nether-compare-page__list {
+  display: none !important;
+}
+
+.nether-compare-page--layout-cards .nether-compare-table {
+  margin-top: 2.4rem;
+}
+
+.nether-compare-page__sidebar {
+  display: grid;
+  gap: 1.2rem;
+}
+
+/* -----------------------------------------------------------------------------
+ * Toolbar / empty / card / extensions
+ * -------------------------------------------------------------------------- */
+
+.nether-compare__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nether-compare__toolbar-count {
+  margin: 0;
+}
+
+.nether-compare__toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.nether-compare__toolbar-action[hidden],
+.nether-compare__toolbar-share[hidden] {
+  display: none !important;
+}
+
+.nether-compare__empty {
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.nether-compare__empty-icon {
+  display: inline-flex;
+  margin-bottom: 1.2rem;
+  opacity: 0.55;
+}
+
+.nether-compare__empty-heading {
+  margin: 0 0 0.8rem;
+}
+
+.nether-compare__empty-text {
+  margin: 0 auto 2rem;
+  max-width: 36rem;
+  opacity: 0.8;
+}
+
+.nether-compare__empty-login {
+  margin-top: 2.4rem;
+}
+
+.nether-compare__empty-login-title {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+
+.nether-compare__empty-login-text {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.nether-compare-card {
+  display: grid;
+  grid-template-columns: 9.6rem minmax(0, 1fr);
+  gap: 1.2rem;
+  padding: 1.2rem;
+  background: rgba(var(--color-background), 1);
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-compare-card--page {
+  height: 100%;
+}
+
+.nether-compare-page__list--cards .nether-compare-card--page {
+  grid-template-columns: 1fr;
+}
+
+.nether-compare-card__media {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--nether-compare-radius);
+  background: rgba(var(--color-foreground), 0.04);
+  aspect-ratio: 1 / 1;
+}
+
+.nether-compare-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nether-compare-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.nether-compare-card__vendor[hidden],
+.nether-compare-card__availability[hidden] {
+  display: none !important;
+}
+
+.nether-compare-card__title {
+  margin: 0;
+}
+
+.nether-compare-card__price {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+
+.nether-compare-card__price s {
+  opacity: 0.55;
+}
+
+.nether-compare-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: auto;
+  padding-top: 0.4rem;
+}
+
+.nether-compare__extension,
+.nether-compare__attributes {
+  padding: 1.2rem;
+  border: 0.1rem dashed rgba(var(--color-foreground), 0.18);
+  border-radius: var(--nether-compare-radius);
+}
+
+.nether-compare__extension-inner,
+.nether-compare__attributes-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.nether-compare__extension-text,
+.nether-compare__attributes-text {
+  flex: 1 1 100%;
+  margin: 0;
+  opacity: 0.75;
+}
+
+.nether-compare__merchant-content {
+  padding: 1.2rem 0;
+}
+
+.nether-compare__merchant-heading {
+  margin: 0 0 0.8rem;
+}
+
+/* -----------------------------------------------------------------------------
+ * Compare table
+ * -------------------------------------------------------------------------- */
+
+.nether-compare-table {
+  margin-top: var(--nether-compare-gap, 1.6rem);
+}
+
+.nether-compare-table__scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  border-radius: var(--nether-compare-radius);
+}
+
+.nether-compare-table--minimal .nether-compare-table__scroll {
+  border: 0;
+  border-radius: 0;
+}
+
+.nether-compare-table--editorial .nether-compare-table__scroll {
+  border-width: 0.2rem;
+}
+
+.nether-compare-table__grid {
+  width: 100%;
+  min-width: 48rem;
+  border-collapse: collapse;
+  background: rgb(var(--color-background));
+}
+
+.nether-compare-table__grid th,
+.nether-compare-table__grid td {
+  padding: 1.2rem 1.4rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-compare-table__grid th:not(:last-child),
+.nether-compare-table__grid td:not(:last-child) {
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.06);
+}
+
+.nether-compare-table__attr-label {
+  width: 14rem;
+  min-width: 12rem;
+  font-weight: 600;
+  background: rgba(var(--color-foreground), 0.03);
+}
+
+.nether-compare-table__product-head {
+  min-width: 16rem;
+}
+
+.nether-compare-table__product-media {
+  display: block;
+  width: 7.2rem;
+  height: 7.2rem;
+  margin-bottom: 0.8rem;
+  overflow: hidden;
+  border-radius: var(--nether-compare-radius);
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+.nether-compare-table__product-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nether-compare-table__product-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.4rem;
+  line-height: 1.3;
+}
+
+.nether-compare-table__product-price {
+  margin: 0 0 0.8rem;
+  font-size: 1.3rem;
+}
+
+.nether-compare-table__row.is-different {
+  background: var(--nether-compare-diff-bg);
+}
+
+.nether-compare-table__row.is-different .nether-compare-table__cell {
+  font-weight: 500;
+}
+
+.nether-compare-table__remove {
+  min-height: 3.6rem;
+}
+
+.nether-compare-drawer .nether-compare-table {
+  margin-top: 2rem;
+}
+
+.nether-compare-drawer .nether-compare-table__grid {
+  min-width: 36rem;
+}
+
+/* -----------------------------------------------------------------------------
+ * Reduced motion
+ * -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-compare-drawer__panel,
+  .nether-compare-drawer__overlay,
+  .nether-compare-button__control,
+  .nether-compare-button__icon {
+    transition: none !important;
+  }
+
+  .nether-compare-drawer.is-open .nether-compare-drawer__panel {
+    transform: none;
+  }
+}

@@ -1,0 +1,23 @@
+{% comment %}
+  Optional section divider for Nether Premium Media Framework.
+
+  Accepts:
+  - section: {Object} Media section (required)
+  - position: {String} top or bottom (required)
+
+  Usage:
+  {% render 'nether-media-divider', section: section, position: 'bottom' %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-media__divider nether-media__divider--{{ divider_position }} nether-media__divider--{{ divider_style }}"
+  aria-hidden="true"
+  role="presentation"
+  data-nether-media-divider
+  data-nether-media-role="divider"
+></div>

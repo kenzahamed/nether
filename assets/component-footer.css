@@ -1,0 +1,391 @@
+/* =============================================================================
+ * Nether Premium Footer Framework
+ * Extends Dawn footer architecture — do not duplicate section-footer.css rules.
+ * ============================================================================= */
+
+nether-footer {
+  display: block;
+}
+
+.nether-footer {
+  --nether-footer-gap: var(--grid-desktop-horizontal-spacing, 2rem);
+  --nether-footer-column-gap: var(--nether-footer-gap);
+  --nether-footer-row-gap: calc(var(--nether-footer-gap) * 2);
+  --nether-footer-padding-top: 3.6rem;
+  --nether-footer-padding-bottom: 3.6rem;
+  --nether-footer-divider-opacity: 0.08;
+  --nether-footer-block-spacing: 4rem;
+  --nether-footer-bottom-gap: 1.5rem;
+  --nether-footer-logo-width: 120px;
+  --nether-footer-transition-duration: var(--duration-default, 0.3s);
+}
+
+.nether-footer .footer {
+  position: relative;
+}
+
+.nether-footer .footer-block__heading,
+.nether-footer .nether-footer__heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+}
+
+/* ── Spacing presets ───────────────────────────────────────────────────────── */
+
+.nether-footer--spacing-compact {
+  --nether-footer-gap: 1.2rem;
+  --nether-footer-row-gap: 2.4rem;
+  --nether-footer-block-spacing: 2.4rem;
+}
+
+.nether-footer--spacing-relaxed {
+  --nether-footer-gap: 3.2rem;
+  --nether-footer-row-gap: 4.8rem;
+  --nether-footer-block-spacing: 5.6rem;
+}
+
+/* ── Background styles ─────────────────────────────────────────────────────── */
+
+.nether-footer--bg-subtle .footer {
+  background-image: linear-gradient(
+    180deg,
+    rgba(var(--color-foreground), 0.02) 0%,
+    rgba(var(--color-background), 1) 100%
+  );
+}
+
+.nether-footer--bg-contrast .footer {
+  border-top: 0.1rem solid rgba(var(--color-foreground), var(--nether-footer-divider-opacity));
+}
+
+.nether-footer--bg-solid .footer {
+  background-image: none;
+}
+
+.nether-footer--divider .footer__content-top {
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), var(--nether-footer-divider-opacity));
+}
+
+.nether-footer--divider .footer__content-bottom {
+  border-top-color: rgba(var(--color-foreground), var(--nether-footer-divider-opacity));
+}
+
+/* ── Glass + gradient integration ──────────────────────────────────────────── */
+
+.nether-footer--glass-enabled .footer.glass-drawer-medium,
+.nether-footer--glass-enabled .footer {
+  background-color: rgba(var(--glass-tint-light), var(--glass-bg-opacity-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+.nether-footer--gradient-enabled .footer.grad-linear-subtle {
+  background-color: transparent;
+}
+
+/* ── Grid layouts ──────────────────────────────────────────────────────────── */
+
+.nether-footer__content-top {
+  display: block;
+}
+
+.nether-footer .footer__blocks-wrapper {
+  column-gap: var(--nether-footer-column-gap);
+  row-gap: var(--nether-footer-row-gap);
+}
+
+.nether-footer__grid--2-col {
+  --nether-footer-columns: 2;
+}
+
+.nether-footer__grid--3-col {
+  --nether-footer-columns: 3;
+}
+
+.nether-footer__grid--4-col {
+  --nether-footer-columns: 4;
+}
+
+.nether-footer__grid--5-col {
+  --nether-footer-columns: 5;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-footer__grid--2-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nether-footer__grid--3-col {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nether-footer__grid--4-col {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .nether-footer__grid--5-col {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .nether-footer--tablet-compact .footer__blocks-wrapper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nether-footer--tablet-stacked .footer__blocks-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nether-footer-block-spacing);
+  }
+
+  .nether-footer--tablet-stacked .footer-block.grid__item {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-footer--mobile-stacked .footer .grid,
+  .nether-footer--mobile-default .footer .grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nether-footer-block-spacing);
+  }
+
+  .nether-footer--mobile-stacked .footer-block.grid__item,
+  .nether-footer--mobile-default .footer-block.grid__item {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nether-footer--mobile-compact .footer__blocks-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .nether-footer--mobile-compact .footer-block.grid__item {
+    margin: 0;
+    width: auto;
+  }
+}
+
+/* ── Section logo ──────────────────────────────────────────────────────────── */
+
+.nether-footer__section-logo {
+  margin-bottom: var(--nether-footer-block-spacing);
+}
+
+.nether-footer__section-logo .nether-footer__logo-image {
+  width: min(100%, var(--nether-footer-logo-width));
+  height: auto;
+}
+
+/* ── Blocks ────────────────────────────────────────────────────────────────── */
+
+.nether-footer__block {
+  min-width: 0;
+}
+
+.nether-footer__contact-list,
+.nether-footer__nav-list,
+.nether-footer__trust-list,
+.nether-footer__payment-list {
+  margin: 0;
+  padding: 0;
+}
+
+.nether-footer__contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.nether-footer__contact-item:last-child {
+  margin-bottom: 0;
+}
+
+.nether-footer__contact-icon {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.nether-footer__address {
+  font-style: normal;
+}
+
+.nether-footer__newsletter-text {
+  margin-bottom: 1.6rem;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.nether-footer__newsletter-actions {
+  margin-top: 1.2rem;
+}
+
+.nether-footer__newsletter-form .newsletter-form__field-wrapper {
+  max-width: 100%;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-footer__newsletter-form .newsletter-form__field-wrapper {
+    max-width: 36rem;
+  }
+}
+
+.nether-footer__trust-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem 1.6rem;
+}
+
+.nether-footer__trust-image img {
+  display: block;
+  max-height: 4rem;
+  width: auto;
+  height: auto;
+}
+
+.nether-footer__placeholder {
+  padding: 1.6rem;
+  border: 0.1rem dashed rgba(var(--color-foreground), 0.2);
+  border-radius: var(--buttons-radius, 0.4rem);
+  color: rgba(var(--color-foreground), 0.6);
+  text-align: center;
+}
+
+.nether-footer__app-block {
+  min-height: 0;
+}
+
+/* ── Newsletter + social column ────────────────────────────────────────────── */
+
+.nether-footer .footer-block--newsletter {
+  margin-top: var(--nether-footer-block-spacing);
+  gap: var(--nether-footer-gap);
+}
+
+@media screen and (min-width: 750px) {
+  .nether-footer .footer-block--newsletter {
+    margin-top: 3rem;
+  }
+}
+
+/* ── Bottom bar ────────────────────────────────────────────────────────────── */
+
+.nether-footer__bottom-row {
+  align-items: flex-end;
+}
+
+.nether-footer__copyright-row--split {
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--nether-footer-bottom-gap);
+}
+
+.nether-footer__copyright-row--left .footer__copyright {
+  text-align: left;
+}
+
+.nether-footer__bottom-social .footer__list-social {
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 749px) {
+  .nether-footer__copyright-row--split {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .nether-footer__bottom-social .footer__list-social {
+    justify-content: center;
+  }
+}
+
+/* ── Desktop layout presets ────────────────────────────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .nether-footer--desktop-compact .footer__content-top {
+    padding-bottom: 3rem;
+  }
+
+  .nether-footer--desktop-stacked .footer-block--newsletter {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-footer .scroll-trigger.animate--slide-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .nether-footer * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Mobile accordion ──────────────────────────────────────────────────────── */
+
+.nether-footer__accordion-trigger {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.2rem 0;
+  border: 0;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), var(--nether-footer-divider-opacity));
+  background: transparent;
+  color: rgb(var(--color-foreground));
+  cursor: pointer;
+  text-align: left;
+}
+
+.nether-footer__accordion-trigger .svg-wrapper {
+  width: 1.2rem;
+  transition: transform var(--nether-footer-transition-duration) ease;
+}
+
+.nether-footer__accordion-trigger[aria-expanded='true'] .svg-wrapper {
+  transform: rotate(180deg);
+}
+
+@media screen and (max-width: 749px) {
+  .nether-footer--mobile-accordion .nether-footer__accordion-trigger {
+    display: flex;
+  }
+
+  .nether-footer--mobile-accordion .nether-footer__accordion-desktop {
+    display: none;
+  }
+
+  .nether-footer--mobile-accordion .nether-footer__accordion-panel:not([hidden]) {
+    padding: 1.6rem 0 2.4rem;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .nether-footer--mobile-accordion .nether-footer__accordion-trigger,
+  .nether-footer--mobile-accordion .nether-footer__accordion-panel {
+    display: none !important;
+  }
+}
+
+/* ── Focus styles ──────────────────────────────────────────────────────────── */
+
+.nether-footer a:focus-visible,
+.nether-footer button:focus-visible,
+.nether-footer input:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.2rem;
+}

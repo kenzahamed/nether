@@ -1,0 +1,53 @@
+{% comment %}
+  Nether Premium Cart — premium empty cart experience.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - context: {String} drawer | page (default: page)
+{% endcomment %}
+
+{%- liquid
+  assign cart_context = context | default: 'page'
+  assign empty_heading = section.settings.nether_empty_heading
+  assign empty_text = section.settings.nether_empty_text
+  assign empty_button_label = section.settings.nether_empty_button_label
+  assign empty_button_link = section.settings.nether_empty_button_link | default: routes.all_products_collection_url
+
+  if empty_heading == blank
+    assign empty_heading = 'sections.cart.empty' | t
+  endif
+  if empty_button_label == blank
+    assign empty_button_label = 'general.continue_shopping' | t
+  endif
+-%}
+
+<div
+  class="nether-cart__module nether-cart__module--empty nether-cart__empty nether-cart__empty--{{ cart_context }}"
+  data-nether-cart-module="empty"
+  data-nether-cart-animate
+  role="status"
+>
+  <div class="nether-cart__empty-content">
+    <h2 class="nether-cart__empty-heading type-heading-sm">{{ empty_heading }}</h2>
+    {%- if empty_text != blank -%}
+      <p class="nether-cart__empty-text type-body">{{ empty_text }}</p>
+    {%- endif -%}
+    {% render 'button', label: empty_button_label, link: empty_button_link, style: 'primary', size: 'medium' %}
+
+    {%- if shop.customer_accounts_enabled and customer == null -%}
+      <div class="nether-cart__empty-login">
+        <p class="nether-cart__empty-login-title type-body-sm">{{ 'sections.cart.login.title' | t }}</p>
+        <p class="nether-cart__empty-login-text type-body-sm">
+          {{ 'sections.cart.login.paragraph_html' | t: link: routes.account_login_url }}
+        </p>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- if cart_context == 'drawer' and settings.cart_drawer_collection != blank -%}
+    <div class="nether-cart__empty-collection">
+      {% render 'card-collection', card_collection: settings.cart_drawer_collection, columns: 1 %}
+    </div>
+  {%- endif -%}
+</div>
+

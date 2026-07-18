@@ -1,0 +1,446 @@
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+{{ 'component-icon.css' | asset_url | stylesheet_tag }}
+{{ 'component-typography.css' | asset_url | stylesheet_tag }}
+{{ 'component-shadow.css' | asset_url | stylesheet_tag }}
+{{ 'component-radius.css' | asset_url | stylesheet_tag }}
+{{ 'component-compare.css' | asset_url | stylesheet_tag }}
+
+{%- if section.settings.nether_enable_glass -%}
+  {{ 'component-glass.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if section.settings.nether_enable_gradient -%}
+  {{ 'component-gradient.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<script src="{{ 'nether-commerce-interaction.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-compare.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  case section.settings.nether_animation_speed
+    when 'slow'
+      assign nether_animation_duration = 0.8
+    when 'fast'
+      assign nether_animation_duration = 0.3
+    else
+      assign nether_animation_duration = 0.5
+  endcase
+
+  assign layout = section.settings.nether_layout | default: 'table'
+  assign nether_class_list = 'nether-compare-page'
+  assign nether_class_list = nether_class_list | append: ' nether-compare-page--layout-' | append: layout
+  assign nether_class_list = nether_class_list | append: ' nether-compare-page--desktop-' | append: section.settings.nether_layout_desktop
+  assign nether_class_list = nether_class_list | append: ' nether-compare-page--tablet-' | append: section.settings.nether_layout_tablet
+  assign nether_class_list = nether_class_list | append: ' nether-compare-page--mobile-' | append: section.settings.nether_layout_mobile
+
+  if section.settings.nether_enable_glass
+    assign nether_class_list = nether_class_list | append: ' nether-compare-page--glass-enabled'
+  endif
+
+  if section.settings.nether_enable_gradient
+    assign nether_class_list = nether_class_list | append: ' nether-compare-page--gradient-enabled'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .nether-compare-page {
+    --nether-compare-gap: {{ section.settings.nether_content_gap }}px;
+    --nether-compare-transition-duration: {{ nether_animation_duration }}s;
+  }
+{%- endstyle -%}
+
+<nether-compare-page
+  class="{{ nether_class_list }} section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
+  data-nether-motion="compare-page"
+  data-section-id="{{ section.id }}"
+  data-animation-style="{{ section.settings.nether_animation_style }}"
+  data-animation-duration="{{ nether_animation_duration }}"
+  data-page-layout="{{ layout }}"
+  data-table-style="{{ section.settings.nether_compare_table_style | default: 'standard' }}"
+  data-highlight-differences="{{ section.settings.nether_compare_highlight_differences }}"
+  data-max-items="{{ section.settings.nether_compare_max_items | default: 4 }}"
+  data-show-count="{{ section.settings.nether_compare_show_count }}"
+>
+  <script type="application/json" data-nether-compare-i18n>
+    {
+      "title": {{ 'sections.nether_compare.title' | t | json }},
+      "countOne": {{ 'sections.nether_compare.count.one' | t | json }},
+      "countOther": {{ 'sections.nether_compare.count.other' | t | json }},
+      "add": {{ 'sections.nether_compare.actions.add' | t | json }},
+      "remove": {{ 'sections.nether_compare.actions.remove' | t | json }},
+      "clear": {{ 'sections.nether_compare.actions.clear' | t | json }},
+      "moveToCart": {{ 'sections.nether_compare.actions.move_to_cart' | t | json }},
+      "moving": {{ 'sections.nether_compare.actions.moving' | t | json }},
+      "moved": {{ 'sections.nether_compare.actions.moved' | t | json }},
+      "unavailable": {{ 'sections.nether_compare.availability.unavailable' | t | json }},
+      "available": {{ 'sections.nether_compare.availability.available' | t | json }},
+      "error": {{ 'sections.nether_compare.errors.generic' | t | json }},
+      "full": {{ 'sections.nether_compare.errors.full' | t | json }},
+      "liveAdd": {{ 'sections.nether_compare.live.added' | t | json }},
+      "liveRemove": {{ 'sections.nether_compare.live.removed' | t | json }},
+      "liveFull": {{ 'sections.nether_compare.live.full' | t | json }},
+      "attributeLabel": {{ 'sections.nether_compare.table.attribute' | t | json }},
+      "productLabel": {{ 'sections.nether_compare.table.product' | t | json }}
+    }
+  </script>
+
+  <div class="page-width">
+    {% render 'nether-compare-header', section: section %}
+
+    <div class="nether-compare-page__layout">
+      <div class="nether-compare-page__main" data-nether-compare-body>
+        {% render 'nether-compare-empty', section: section, context: 'page' %}
+
+        <div
+          class="nether-compare-page__list nether-compare-page__list--{{ layout }}"
+          data-nether-compare-list
+          role="list"
+          aria-label="{{ 'sections.nether_compare.list_label' | t }}"
+          hidden
+        ></div>
+
+        {% render 'nether-compare-card', context: 'page' %}
+        {% render 'nether-compare-table',
+          context: 'page',
+          table_style: section.settings.nether_compare_table_style,
+          highlight_differences: section.settings.nether_compare_highlight_differences
+        %}
+      </div>
+
+      <aside class="nether-compare-page__sidebar" data-nether-compare-sidebar>
+        {%- for block in section.blocks -%}
+          {% render 'nether-compare-block', block: block, section: section %}
+        {%- endfor -%}
+      </aside>
+    </div>
+
+    <div class="visually-hidden" data-nether-compare-live role="status" aria-live="polite"></div>
+  </div>
+</nether-compare-page>
+
+{% schema %}
+{
+  "name": "t:sections.nether_compare_page.name",
+  "tag": "section",
+  "class": "section section-nether-compare-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.nether_compare_page.settings.framework.content"
+    },
+    {
+      "type": "text",
+      "id": "nether_compare_heading",
+      "label": "t:sections.nether_compare_page.settings.nether_compare_heading.label",
+      "default": "Compare"
+    },
+    {
+      "type": "text",
+      "id": "nether_compare_subheading",
+      "label": "t:sections.nether_compare_page.settings.nether_compare_subheading.label"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout",
+      "label": "t:sections.nether_compare_page.settings.nether_layout.label",
+      "default": "table",
+      "options": [
+        { "value": "table", "label": "t:sections.nether_compare_page.settings.nether_layout.options__1.label" },
+        { "value": "cards", "label": "t:sections.nether_compare_page.settings.nether_layout.options__2.label" },
+        { "value": "editorial", "label": "t:sections.nether_compare_page.settings.nether_layout.options__3.label" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_compare_table_style",
+      "label": "t:sections.nether_compare_page.settings.nether_compare_table_style.label",
+      "default": "standard",
+      "options": [
+        { "value": "standard", "label": "t:sections.nether_compare_page.settings.nether_compare_table_style.options__1.label" },
+        { "value": "minimal", "label": "t:sections.nether_compare_page.settings.nether_compare_table_style.options__2.label" },
+        { "value": "editorial", "label": "t:sections.nether_compare_page.settings.nether_compare_table_style.options__3.label" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_compare_highlight_differences",
+      "label": "t:sections.nether_compare_page.settings.nether_compare_highlight_differences.label",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "nether_compare_max_items",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "t:sections.nether_compare_page.settings.nether_compare_max_items.label",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "nether_content_gap",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.nether_compare_page.settings.nether_content_gap.label",
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_compare_show_count",
+      "label": "t:sections.nether_compare_page.settings.nether_compare_show_count.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_compare_page.settings.empty.content"
+    },
+    {
+      "type": "text",
+      "id": "nether_compare_empty_heading",
+      "label": "t:sections.nether_compare_page.settings.nether_compare_empty_heading.label"
+    },
+    {
+      "type": "textarea",
+      "id": "nether_compare_empty_text",
+      "label": "t:sections.nether_compare_page.settings.nether_compare_empty_text.label"
+    },
+    {
+      "type": "text",
+      "id": "nether_compare_empty_button_label",
+      "label": "t:sections.nether_compare_page.settings.nether_compare_empty_button_label.label"
+    },
+    {
+      "type": "url",
+      "id": "nether_compare_empty_button_link",
+      "label": "t:sections.nether_compare_page.settings.nether_compare_empty_button_link.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_compare_page.settings.visual.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_glass",
+      "label": "t:sections.nether_compare_page.settings.nether_enable_glass.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_gradient",
+      "label": "t:sections.nether_compare_page.settings.nether_enable_gradient.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_compare_page.settings.motion.content"
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_style",
+      "label": "t:sections.nether_compare_page.settings.nether_animation_style.label",
+      "default": "fade",
+      "options": [
+        { "value": "none", "label": "t:sections.nether_compare_page.settings.nether_animation_style.options__1.label" },
+        { "value": "fade", "label": "t:sections.nether_compare_page.settings.nether_animation_style.options__2.label" },
+        { "value": "rise", "label": "t:sections.nether_compare_page.settings.nether_animation_style.options__3.label" },
+        { "value": "stagger", "label": "t:sections.nether_compare_page.settings.nether_animation_style.options__4.label" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_speed",
+      "label": "t:sections.nether_compare_page.settings.nether_animation_speed.label",
+      "default": "default",
+      "options": [
+        { "value": "fast", "label": "t:sections.nether_compare_page.settings.nether_animation_speed.options__1.label" },
+        { "value": "default", "label": "t:sections.nether_compare_page.settings.nether_animation_speed.options__2.label" },
+        { "value": "slow", "label": "t:sections.nether_compare_page.settings.nether_animation_speed.options__3.label" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_compare_page.settings.responsive.content"
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_desktop",
+      "label": "t:sections.nether_compare_page.settings.nether_layout_desktop.label",
+      "default": "split",
+      "options": [
+        { "value": "split", "label": "t:sections.nether_compare_page.settings.nether_layout_desktop.options__1.label" },
+        { "value": "stacked", "label": "t:sections.nether_compare_page.settings.nether_layout_desktop.options__2.label" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_tablet",
+      "label": "t:sections.nether_compare_page.settings.nether_layout_tablet.label",
+      "default": "stacked",
+      "options": [
+        { "value": "split", "label": "t:sections.nether_compare_page.settings.nether_layout_tablet.options__1.label" },
+        { "value": "stacked", "label": "t:sections.nether_compare_page.settings.nether_layout_tablet.options__2.label" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_layout_mobile",
+      "label": "t:sections.nether_compare_page.settings.nether_layout_mobile.label",
+      "default": "stacked",
+      "options": [
+        { "value": "stacked", "label": "t:sections.nether_compare_page.settings.nether_layout_mobile.options__1.label" },
+        { "value": "compact", "label": "t:sections.nether_compare_page.settings.nether_layout_mobile.options__2.label" }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "attributes",
+      "name": "t:sections.nether_compare_page.blocks.attributes.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "recently_compared_placeholder",
+      "name": "t:sections.nether_compare_page.blocks.recently_compared_placeholder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "sharing_placeholder",
+      "name": "t:sections.nether_compare_page.blocks.sharing_placeholder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "sync_placeholder",
+      "name": "t:sections.nether_compare_page.blocks.sync_placeholder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "account_placeholder",
+      "name": "t:sections.nether_compare_page.blocks.account_placeholder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "guest_placeholder",
+      "name": "t:sections.nether_compare_page.blocks.guest_placeholder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "apps_placeholder",
+      "name": "t:sections.nether_compare_page.blocks.apps_placeholder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "analytics_placeholder",
+      "name": "t:sections.nether_compare_page.blocks.analytics_placeholder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "notifications_placeholder",
+      "name": "t:sections.nether_compare_page.blocks.notifications_placeholder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "recommendations_placeholder",
+      "name": "t:sections.nether_compare_page.blocks.recommendations_placeholder.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.nether_compare_page.blocks.settings.label" },
+        { "type": "text", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    },
+    {
+      "type": "merchant_content",
+      "name": "t:sections.nether_compare_page.blocks.merchant_content.name",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:sections.nether_compare_page.blocks.settings.heading" },
+        { "type": "richtext", "id": "text", "label": "t:sections.nether_compare_page.blocks.settings.text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.nether_compare_page.presets.name",
+      "blocks": [
+        { "type": "attributes" },
+        { "type": "recommendations_placeholder" },
+        { "type": "sharing_placeholder" }
+      ]
+    }
+  ]
+}
+{% endschema %}

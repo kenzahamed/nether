@@ -1,0 +1,23 @@
+{% comment %}
+  Optional section divider for Nether Premium Product Showcase.
+
+  Accepts:
+  - section: {Object} Product section (required)
+  - position: {String} top or bottom (required)
+
+  Usage:
+  {% render 'nether-product-divider', section: section, position: 'bottom' %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = section.settings.nether_divider_style | default: 'line'
+-%}
+
+<div
+  class="nether-product__divider nether-product__divider--{{ divider_position }} nether-product__divider--{{ divider_style }}"
+  aria-hidden="true"
+  role="presentation"
+  data-nether-product-divider
+  data-nether-product-role="divider"
+></div>

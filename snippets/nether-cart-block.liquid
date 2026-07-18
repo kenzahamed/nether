@@ -1,0 +1,50 @@
+{% comment %}
+  Nether Premium Cart — block dispatcher.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+  - zone: {String} summary | footer | drawer_footer (optional)
+{% endcomment %}
+
+{%- case block.type -%}
+  {%- when '@app' -%}
+    <div class="nether-cart__module nether-cart__module--app" data-nether-cart-animate {{ block.shopify_attributes }}>
+      {% render block %}
+    </div>
+
+  {%- when 'merchant_content' -%}
+    {% render 'nether-cart-merchant-content', block: block %}
+
+  {%- when 'recommendations' -%}
+    {% render 'nether-cart-recommendations', block: block, section: section %}
+
+  {%- when 'trust_badges' -%}
+    {% render 'nether-cart-trust', section: section, block: block %}
+
+  {%- when 'payment_methods' -%}
+    <div class="nether-cart__module nether-cart__module--payment" data-nether-cart-animate {{ block.shopify_attributes }}>
+      {% render 'nether-commerce-payment-methods', heading: block.settings.heading, block: block %}
+    </div>
+
+  {%- when 'promotional_notice' -%}
+    <div class="nether-cart__module nether-cart__module--notice" data-nether-cart-animate {{ block.shopify_attributes }}>
+      {% render 'nether-commerce-promotional-notice',
+        heading: block.settings.heading,
+        text: block.settings.text,
+        notice_style: block.settings.notice_style,
+        icon: block.settings.icon,
+        rte: true
+      %}
+    </div>
+
+  {%- when 'gift_wrap' -%}
+    {% render 'nether-cart-gift-wrap', section: section, block: block %}
+
+  {%- when 'bundles_placeholder' -%}
+    {% render 'nether-cart-bundles', block: block, section: section %}
+
+  {%- when 'upsells_placeholder', 'cross_sells_placeholder', 'loyalty_placeholder', 'gift_cards_placeholder', 'subscriptions_placeholder', 'coupon_placeholder', 'analytics_placeholder' -%}
+    {% render 'nether-cart-extensions', block: block %}
+{%- endcase -%}
+

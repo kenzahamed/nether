@@ -1,0 +1,126 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Inventory Status.
+  Preserves Dawn/Shopify inventory contracts for variant section refresh.
+
+  Accepts:
+  - product: {Object} (required)
+  - section: {Object} (required for Inventory-{id})
+  - block: {Object} Optional (inventory_threshold, show_inventory_quantity, text_style)
+  - threshold: {Number} Low-stock threshold (default: block setting or 10)
+  - show_quantity: {Boolean}
+  - show_progress: {Boolean} Render stock progress when low stock
+  - show_badge: {Boolean} Compose low-stock badge
+  - class: {String}
+  - attributes: {String}
+{% endcomment %}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign inventory_threshold = threshold
+  if inventory_threshold == blank and block
+    assign inventory_threshold = block.settings.inventory_threshold
+  endif
+  if inventory_threshold == blank
+    assign inventory_threshold = 10
+  endif
+
+  assign show_qty = show_quantity
+  if show_qty == nil and block
+    assign show_qty = block.settings.show_inventory_quantity
+  endif
+
+  assign text_style = ''
+  if block and block.settings.text_style == 'uppercase'
+    assign text_style = ' caption-with-letter-spacing'
+  elsif block and block.settings.text_style == 'subtitle'
+    assign text_style = ' subtitle'
+  endif
+
+  assign inventory_id = 'Inventory-' | append: section.id
+  assign inventory_managed = false
+  if variant.inventory_management == 'shopify'
+    assign inventory_managed = true
+  endif
+
+  assign stock_state = 'unknown'
+  assign stock_qty = variant.inventory_quantity | default: 0
+  if inventory_managed
+    if stock_qty > 0
+      if stock_qty <= inventory_threshold
+        assign stock_state = 'low'
+      else
+        assign stock_state = 'in_stock'
+      endif
+    else
+      if variant.inventory_policy == 'continue'
+        assign stock_state = 'backorder'
+      else
+        assign stock_state = 'out_of_stock'
+      endif
+    endif
+  endif
+-%}
+
+<p
+  class="nether-commerce__inventory product__inventory{{ text_style }}{% unless inventory_managed %} visibility-hidden{% endunless %}{% if class != blank %} {{ class }}{% endif %}"
+  id="{{ inventory_id }}"
+  role="status"
+  data-nether-commerce-module="inventory"
+  data-nether-commerce-inventory-state="{{ stock_state }}"
+  data-nether-commerce-animate
+  {% if attributes != blank %}{{ attributes }}{% endif %}
+  {% if block %}{{ block.shopify_attributes }}{% endif %}
+>
+  {%- if inventory_managed -%}
+    {%- case stock_state -%}
+      {%- when 'low' -%}
+        <span class="nether-commerce__inventory-icon nether-commerce__inventory-icon--warning svg-wrapper" style="color: rgb(238, 148, 65)">
+          {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+        </span>
+        {%- if show_qty -%}
+          {{- 'products.product.inventory_low_stock_show_count' | t: quantity: stock_qty -}}
+        {%- else -%}
+          {{- 'products.product.inventory_low_stock' | t -}}
+        {%- endif -%}
+        {%- if show_badge -%}
+          <span class="nether-commerce__inventory-badge">
+            {% render 'badge', type: 'low_stock', style: 'soft', size: 'small' %}
+          </span>
+        {%- endif -%}
+      {%- when 'in_stock' -%}
+        <span class="nether-commerce__inventory-icon nether-commerce__inventory-icon--success svg-wrapper" style="color: rgb(62, 214, 96)">
+          {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+        </span>
+        {%- if show_qty -%}
+          {{- 'products.product.inventory_in_stock_show_count' | t: quantity: stock_qty -}}
+        {%- else -%}
+          {{- 'products.product.inventory_in_stock' | t -}}
+        {%- endif -%}
+      {%- when 'backorder' -%}
+        <span class="nether-commerce__inventory-icon nether-commerce__inventory-icon--success svg-wrapper" style="color: rgb(62, 214, 96)">
+          {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+        </span>
+        {{- 'products.product.inventory_out_of_stock_continue_selling' | t -}}
+        {%- comment -%} Extension: coming soon / pre-order messaging hooks {%- endcomment -%}
+        <span data-nether-commerce-backorder-extension hidden></span>
+      {%- when 'out_of_stock' -%}
+        <span class="nether-commerce__inventory-icon nether-commerce__inventory-icon--muted svg-wrapper" style="color: rgb(200, 200, 200)">
+          {{- 'icon-inventory-status.svg' | inline_asset_content -}}
+        </span>
+        {{- 'products.product.inventory_out_of_stock' | t -}}
+        {%- if show_badge -%}
+          <span class="nether-commerce__inventory-badge">
+            {% render 'badge', type: 'out_of_stock', style: 'soft', size: 'small' %}
+          </span>
+        {%- endif -%}
+    {%- endcase -%}
+  {%- endif -%}
+</p>
+
+{%- if show_progress and stock_state == 'low' and inventory_managed -%}
+  {% render 'nether-commerce-stock-progress',
+    quantity: stock_qty,
+    threshold: inventory_threshold,
+    id: inventory_id
+  %}
+{%- endif -%}

@@ -1,0 +1,277 @@
+/* =============================================================================
+ * Nether Premium Search Drawer Framework
+ * Extends Dawn drawer / search patterns — reuses design tokens.
+ * ============================================================================= */
+
+nether-search-drawer {
+  --nether-search-drawer-width: 48rem;
+  --nether-search-header-offset: var(--header-height, 0px);
+  --nether-search-announcement-offset: var(--nether-header-announcement-offset, 0px);
+  --nether-search-drawer-duration: var(--duration-default, 0.3s);
+  --nether-search-drawer-shadow: var(--shadow-level-md, 0 0.8rem 2.4rem rgba(var(--color-shadow), 0.12));
+  --nether-search-drawer-radius: var(--radius-md, 0);
+  display: block;
+}
+
+.nether-search-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.nether-search-drawer.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.nether-search-drawer.is-visible .nether-search-drawer__panel {
+  visibility: visible;
+}
+
+.nether-search-drawer__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--color-foreground), 0.45);
+  opacity: 0;
+  transition: opacity var(--nether-search-drawer-duration) ease;
+}
+
+.nether-search-drawer__overlay--disabled {
+  background: transparent;
+  pointer-events: none;
+}
+
+.nether-search-drawer.is-visible .nether-search-drawer__overlay:not(.nether-search-drawer__overlay--disabled) {
+  opacity: 1;
+}
+
+.nether-search-drawer__panel {
+  position: absolute;
+  top: var(--nether-search-announcement-offset);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(var(--nether-search-drawer-width), 100vw);
+  height: calc(100% - var(--nether-search-announcement-offset));
+  max-height: 100dvh;
+  background: rgb(var(--color-background));
+  border-left: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  box-shadow: var(--nether-search-drawer-shadow);
+  visibility: hidden;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform var(--nether-search-drawer-duration) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nether-search-drawer.is-visible:not([data-nether-motion-ready]) .nether-search-drawer__panel,
+.nether-search-drawer.is-open:not(.is-visible) .nether-search-drawer__panel {
+  transform: translateX(0);
+}
+
+.nether-search-drawer__header {
+  flex: 0 0 auto;
+  padding: 1.5rem 2rem 0;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-search-drawer__header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.nether-search-drawer__title {
+  margin: 0;
+}
+
+.nether-search-drawer__close {
+  position: static;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
+}
+
+.nether-search-drawer__form {
+  display: block;
+  padding-bottom: 1.5rem;
+}
+
+.nether-search-drawer__field {
+  margin: 0;
+}
+
+.nether-search-drawer__results-shell {
+  position: relative;
+  margin-top: 1rem;
+  max-height: calc(100dvh - 22rem - var(--nether-search-announcement-offset));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nether-search-drawer__empty {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.nether-search-drawer__empty[hidden] {
+  display: none;
+}
+
+.nether-search-drawer__empty-text {
+  margin: 0;
+  color: rgba(var(--color-foreground), 0.72);
+}
+
+.nether-search-drawer__predictive,
+.nether-search-drawer .predictive-search {
+  display: none;
+  position: static;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  overflow: visible;
+}
+
+nether-predictive-search[open] .nether-search-drawer__predictive,
+nether-predictive-search[loading] .nether-search-drawer__predictive,
+nether-predictive-search[open] .predictive-search,
+nether-predictive-search[loading] .predictive-search {
+  display: block;
+}
+
+.nether-search-drawer__results-shell.has-query .nether-search-drawer__empty {
+  display: none;
+}
+
+.nether-search-drawer__results-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0.5rem 0 1rem;
+  border-bottom: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-search-drawer__results-groups {
+    flex-direction: row;
+  }
+}
+
+.nether-search-drawer__result-group {
+  flex: 1 1 auto;
+}
+
+.nether-search-drawer__result-heading {
+  margin: 0 0 0.8rem;
+}
+
+.nether-search-drawer__results-list {
+  margin: 0;
+  padding: 0;
+}
+
+.nether-search-result__link {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.8rem 0;
+  text-decoration: none;
+}
+
+.nether-search-result__link--product {
+  align-items: flex-start;
+}
+
+.nether-search-result__media {
+  flex: 0 0 5rem;
+  width: 5rem;
+}
+
+.nether-search-result__image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm, 0.4rem);
+  object-fit: cover;
+}
+
+.nether-search-result__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nether-search-result__title {
+  margin: 0;
+}
+
+.nether-search-result__meta {
+  display: block;
+  margin-top: 0.2rem;
+  color: rgba(var(--color-foreground), 0.62);
+}
+
+.nether-search-result__vendor {
+  margin-bottom: 0.2rem;
+}
+
+.nether-search-drawer__no-results {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.nether-search-drawer__no-results-text {
+  margin: 0;
+}
+
+.nether-search-drawer__search-for {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-search-drawer__footer {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding: 1.5rem 2rem 2rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-search-drawer__footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.nether-search-drawer__trigger {
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .nether-search-drawer__panel {
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .nether-search-drawer__header,
+  .nether-search-drawer__footer {
+    padding-inline: 1.5rem;
+  }
+}
+
+.nether-search-drawer[data-nether-motion-ready='true'] .nether-search-drawer__panel,
+.nether-search-drawer[data-nether-motion-ready='true'] .nether-search-drawer__overlay {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-search-drawer__panel,
+  .nether-search-drawer__overlay {
+    transition: none;
+  }
+}

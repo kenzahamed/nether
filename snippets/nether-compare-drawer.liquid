@@ -1,0 +1,142 @@
+{% comment %}
+  Nether Premium Compare Drawer — search-drawer / wishlist-drawer pattern shell.
+  Guest compare UI with attribute table + move-to-cart via Shopify /cart/add.js.
+  Does not replace Product Form, Cart, Variants, or Checkout.
+
+  Accepts:
+  - section: {Object} Header section object (required)
+  - color_scheme: {String} Color scheme id (optional)
+  - animation_duration: {Number} Animation duration in seconds (optional)
+
+  Usage:
+  {% render 'nether-compare-drawer', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign drawer_color_scheme = color_scheme | default: section.settings.color_scheme
+  assign drawer_style = section.settings.nether_compare_drawer_style | default: 'standard'
+  assign button_style = section.settings.nether_compare_button_style | default: 'icon'
+  assign table_style = section.settings.nether_compare_table_style | default: 'standard'
+  assign max_items = section.settings.nether_compare_max_items | default: 4
+
+  case section.settings.nether_compare_animation_speed
+    when 'fast'
+      assign compare_animation_duration = 0.15
+    when 'slow'
+      assign compare_animation_duration = 0.5
+    else
+      assign compare_animation_duration = animation_duration | default: 0.3
+  endcase
+
+  assign compare_page_url = section.settings.nether_compare_page_url
+-%}
+
+<nether-compare-drawer
+  id="nether-compare-drawer"
+  class="nether-compare-drawer nether-compare-drawer--{{ drawer_style }} color-{{ drawer_color_scheme }} gradient"
+  data-section-id="{{ section.id }}"
+  data-enable-overlay="{{ section.settings.nether_compare_enable_overlay }}"
+  data-desktop="{{ section.settings.nether_compare_desktop }}"
+  data-tablet="{{ section.settings.nether_compare_tablet }}"
+  data-mobile="{{ section.settings.nether_compare_mobile }}"
+  data-animation-style="{{ section.settings.nether_compare_animation_style | default: 'slide' }}"
+  data-animation-duration="{{ compare_animation_duration }}"
+  data-drawer-width="{{ section.settings.nether_compare_drawer_width | default: 480 }}"
+  data-drawer-style="{{ drawer_style }}"
+  data-button-style="{{ button_style }}"
+  data-table-style="{{ table_style }}"
+  data-highlight-differences="{{ section.settings.nether_compare_highlight_differences }}"
+  data-max-items="{{ max_items }}"
+  data-show-count="{{ section.settings.nether_compare_show_count }}"
+  data-nether-motion="compare-drawer"
+  hidden
+>
+  <script type="application/json" data-nether-compare-i18n>
+    {
+      "title": {{ 'sections.nether_compare.title' | t | json }},
+      "countOne": {{ 'sections.nether_compare.count.one' | t | json }},
+      "countOther": {{ 'sections.nether_compare.count.other' | t | json }},
+      "add": {{ 'sections.nether_compare.actions.add' | t | json }},
+      "remove": {{ 'sections.nether_compare.actions.remove' | t | json }},
+      "clear": {{ 'sections.nether_compare.actions.clear' | t | json }},
+      "moveToCart": {{ 'sections.nether_compare.actions.move_to_cart' | t | json }},
+      "moving": {{ 'sections.nether_compare.actions.moving' | t | json }},
+      "moved": {{ 'sections.nether_compare.actions.moved' | t | json }},
+      "unavailable": {{ 'sections.nether_compare.availability.unavailable' | t | json }},
+      "available": {{ 'sections.nether_compare.availability.available' | t | json }},
+      "error": {{ 'sections.nether_compare.errors.generic' | t | json }},
+      "full": {{ 'sections.nether_compare.errors.full' | t | json }},
+      "liveAdd": {{ 'sections.nether_compare.live.added' | t | json }},
+      "liveRemove": {{ 'sections.nether_compare.live.removed' | t | json }},
+      "liveFull": {{ 'sections.nether_compare.live.full' | t | json }},
+      "attributeLabel": {{ 'sections.nether_compare.table.attribute' | t | json }},
+      "productLabel": {{ 'sections.nether_compare.table.product' | t | json }}
+    }
+  </script>
+
+  <div
+    class="nether-compare-drawer__overlay{% unless section.settings.nether_compare_enable_overlay %} nether-compare-drawer__overlay--disabled{% endunless %}"
+    data-nether-compare-overlay
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="nether-compare-drawer__panel{% if section.settings.nether_compare_enable_glass %} glass-card-light{% endif %}"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="NetherCompareDrawer-Title"
+    tabindex="-1"
+    data-nether-compare-panel
+  >
+    <header class="nether-compare-drawer__header">
+      <div class="nether-compare-drawer__header-inner">
+        <h2 id="NetherCompareDrawer-Title" class="nether-compare-drawer__title h3">
+          {{ 'sections.nether_compare.title' | t }}
+        </h2>
+        <button
+          type="button"
+          class="nether-compare-drawer__close drawer__close"
+          data-nether-compare-close
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+      {% render 'nether-compare-toolbar', section: section, context: 'drawer', page_url: compare_page_url %}
+    </header>
+
+    <div class="nether-compare-drawer__body" data-nether-compare-body>
+      {% render 'nether-compare-empty', section: section, context: 'drawer' %}
+
+      <div
+        class="nether-compare-drawer__list"
+        data-nether-compare-list
+        role="list"
+        aria-label="{{ 'sections.nether_compare.list_label' | t }}"
+        hidden
+      ></div>
+
+      {% render 'nether-compare-card', context: 'drawer' %}
+      {% render 'nether-compare-table',
+        context: 'drawer',
+        table_style: table_style,
+        highlight_differences: section.settings.nether_compare_highlight_differences
+      %}
+    </div>
+
+    <footer class="nether-compare-drawer__footer" data-nether-compare-footer hidden>
+      {%- if compare_page_url != blank -%}
+        {% render 'button',
+          label: 'sections.nether_compare.actions.view_page' | t,
+          link: compare_page_url,
+          style: 'secondary',
+          size: 'medium',
+          full_width: true
+        %}
+      {%- endif -%}
+      <div class="nether-compare-drawer__status visually-hidden" data-nether-compare-live role="status" aria-live="polite"></div>
+    </footer>
+  </div>
+</nether-compare-drawer>

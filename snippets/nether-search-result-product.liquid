@@ -1,0 +1,72 @@
+{% comment %}
+  Renders a Nether Premium predictive search product card.
+
+  Accepts:
+  - product: {Object} Product resource
+  - index: {Number} Loop index for unique ids
+  - show_vendor: {Boolean} Show vendor (default: settings.predictive_search_show_vendor)
+  - show_price: {Boolean} Show price (default: settings.predictive_search_show_price)
+
+  Usage:
+  {% render 'nether-search-result-product', product: product, index: forloop.index %}
+{% endcomment %}
+
+{%- liquid
+  if show_vendor == nil
+    assign show_vendor = settings.predictive_search_show_vendor
+  endif
+
+  if show_price == nil
+    assign show_price = settings.predictive_search_show_price
+  endif
+-%}
+
+<li
+  id="predictive-search-option-product-{{ index }}"
+  class="nether-search-result nether-search-result--product predictive-search__list-item"
+  role="option"
+  aria-selected="false"
+>
+  <product-component view-event-payload="{{ product | standard_event_data: 'view', context: 'search' | escape }}">
+    <div class="nether-search-result__row">
+      <a
+        href="{{ product.url }}"
+        class="nether-search-result__link nether-search-result__link--product predictive-search__item predictive-search__item--link-with-thumbnail link link--text"
+        tabindex="-1"
+      >
+        {%- if product.featured_media != blank -%}
+          <div class="nether-search-result__media">
+            <img
+              class="nether-search-result__image predictive-search__image"
+              src="{{ product.featured_media | image_url: width: 150 }}"
+              alt="{{ product.featured_media.alt | escape }}"
+              width="50"
+              height="{{ 50 | divided_by: product.featured_media.preview_image.aspect_ratio }}"
+              loading="lazy"
+            >
+          </div>
+        {%- endif -%}
+        <div class="nether-search-result__content predictive-search__item-content{% unless show_vendor or show_price %} predictive-search__item-content--centered{% endunless %}">
+          {%- if show_vendor -%}
+            <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+            <div class="nether-search-result__vendor predictive-search__item-vendor caption-with-letter-spacing">
+              {{ product.vendor }}
+            </div>
+          {%- endif -%}
+          <p class="nether-search-result__title predictive-search__item-heading h5">{{ product.title | escape }}</p>
+          {%- if show_price -%}
+            {% render 'price', product: product, use_variant: true, show_badges: false, price_class: 'nether-search-result__price' %}
+          {%- endif -%}
+        </div>
+      </a>
+      <div class="nether-search-result__quick-view">
+        {% render 'nether-quick-view-trigger',
+          product: product,
+          style: 'icon',
+          size: 'sm',
+          context: 'search'
+        %}
+      </div>
+    </div>
+  </product-component>
+</li>

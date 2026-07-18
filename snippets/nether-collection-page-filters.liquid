@@ -1,0 +1,28 @@
+{% comment %}
+  Filters module — wraps Dawn facets snippet inside Nether presentation shell.
+  Preserves native Storefront Filtering, sorting, and AJAX contracts.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - collection: {Object} Collection object (required)
+  - paginate: {Object} Paginate object (required)
+{% endcomment %}
+
+{%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+  <aside
+    aria-labelledby="verticalTitle"
+    class="nether-collection-page__filters facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+    id="main-collection-filters"
+    data-id="{{ section.id }}"
+    data-nether-collection-page-filters
+    data-nether-collection-page-animate
+  >
+    {% render 'facets',
+      results: collection,
+      enable_filtering: section.settings.enable_filtering,
+      enable_sorting: section.settings.enable_sorting,
+      filter_type: section.settings.filter_type,
+      paginate: paginate
+    %}
+  </aside>
+{%- endif -%}

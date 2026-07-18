@@ -1,0 +1,36 @@
+{% comment %}
+  Nether Premium Bundles — block dispatcher.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+{%- case block.type -%}
+  {%- when '@app' -%}
+    <div
+      class="nether-bundles__module nether-bundles__module--app"
+      data-nether-bundles-animate
+      {{ block.shopify_attributes }}
+    >
+      {% render block %}
+    </div>
+
+  {%- when 'merchant_content' -%}
+    {% render 'nether-bundles-merchant-content', block: block %}
+
+  {%- when 'bundle_product' -%}
+    {% comment %} Handled in body/grid collection — attributes preserved on card. {% endcomment %}
+
+  {%- when 'build_your_own_placeholder',
+    'subscription_placeholder',
+    'ai_placeholder',
+    'dynamic_merchandising_placeholder',
+    'inventory_placeholder',
+    'discount_placeholder',
+    'personalization_placeholder',
+    'analytics_placeholder',
+    'loyalty_placeholder'
+  -%}
+    {% render 'nether-bundles-extensions', block: block, section: section %}
+{%- endcase -%}

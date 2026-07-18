@@ -1,0 +1,86 @@
+{% comment %}
+  Nether Premium Compare — future extension points (architecture only).
+
+  Accepts:
+  - block: {Object} Block object (optional)
+  - section: {Object} Section object (optional)
+  - type: {String} Extension type override when block is absent
+
+  Usage:
+  {% render 'nether-compare-extensions', type: 'sharing' %}
+{% endcomment %}
+
+{%- liquid
+  assign extension_type = type
+  if block != blank
+    assign extension_type = block.type | default: extension_type
+  endif
+  assign extension_type = extension_type | default: 'generic'
+  assign extension_type = extension_type | replace: '_placeholder', '' | replace: 'compare_', ''
+
+  case extension_type
+    when 'sharing', 'share'
+      assign extension_data = 'data-nether-compare-share-placeholder'
+      assign extension_icon = 'share'
+      assign default_label = 'sections.nether_compare.extensions.sharing' | t
+    when 'sync', 'synchronization'
+      assign extension_data = 'data-nether-compare-sync-placeholder'
+      assign extension_icon = 'return'
+      assign default_label = 'sections.nether_compare.extensions.sync' | t
+    when 'customer', 'account'
+      assign extension_data = 'data-nether-compare-account-placeholder'
+      assign extension_icon = 'account'
+      assign default_label = 'sections.nether_compare.extensions.account' | t
+    when 'guest', 'local_storage'
+      assign extension_data = 'data-nether-compare-guest-placeholder'
+      assign extension_icon = 'box'
+      assign default_label = 'sections.nether_compare.extensions.guest' | t
+    when 'app', 'apps'
+      assign extension_data = 'data-nether-compare-app-placeholder'
+      assign extension_icon = 'box'
+      assign default_label = 'sections.nether_compare.extensions.apps' | t
+    when 'analytics'
+      assign extension_data = 'data-nether-compare-analytics-placeholder'
+      assign extension_icon = 'info'
+      assign default_label = 'sections.nether_compare.extensions.analytics' | t
+    when 'notifications'
+      assign extension_data = 'data-nether-compare-notifications-placeholder'
+      assign extension_icon = 'chat-bubble'
+      assign default_label = 'sections.nether_compare.extensions.notifications' | t
+    when 'recommendations', 'recommend'
+      assign extension_data = 'data-nether-compare-recommendations-placeholder'
+      assign extension_icon = 'heart'
+      assign default_label = 'sections.nether_compare.extensions.recommendations' | t
+    when 'recently', 'recently_compared'
+      assign extension_data = 'data-nether-compare-recently-placeholder'
+      assign extension_icon = 'clipboard'
+      assign default_label = 'sections.nether_compare.extensions.recently' | t
+    else
+      assign extension_data = 'data-nether-compare-extension-placeholder'
+      assign extension_icon = 'info'
+      assign default_label = 'sections.nether_compare.extensions.generic' | t
+  endcase
+
+  assign extension_label = default_label
+  if block != blank and block.settings.label != blank
+    assign extension_label = block.settings.label
+  elsif block != blank and block.settings.heading != blank
+    assign extension_label = block.settings.heading
+  endif
+-%}
+
+<div
+  class="nether-compare__module nether-compare__extension nether-compare__extension--{{ extension_type }}"
+  data-nether-compare-module="extension"
+  data-nether-compare-animate
+  {{ extension_data }}
+  {% if block != blank %}{{ block.shopify_attributes }}{% endif %}
+>
+  <div class="nether-compare__extension-inner" role="group" aria-label="{{ extension_label | escape }}">
+    {% render 'icon', icon: extension_icon, size: 'sm', decorative: false, label: extension_label %}
+    <span class="nether-compare__extension-label type-body-sm">{{ extension_label }}</span>
+    {%- if block != blank and block.settings.text != blank -%}
+      <p class="nether-compare__extension-text type-body-sm">{{ block.settings.text }}</p>
+    {%- endif -%}
+  </div>
+</div>

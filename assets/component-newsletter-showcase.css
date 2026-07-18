@@ -1,0 +1,348 @@
+/* =============================================================================
+ * Nether Premium Newsletter & Lead Generation Framework
+ * Extends component-hero.css and Dawn newsletter form patterns.
+ * Reuses: Form, Button, Typography, Card, Badge, Glass, Gradient, Shadow, Radius
+ * ============================================================================= */
+
+nether-newsletter {
+  display: block;
+  position: relative;
+}
+
+.nether-newsletter {
+  --nether-newsletter-gap: 2.4rem;
+  --nether-newsletter-overlay-opacity: 0.4;
+  --nether-newsletter-transition-duration: 0.5s;
+  --nether-hero-overlay-opacity: var(--nether-newsletter-overlay-opacity);
+  --nether-hero-transition-duration: var(--nether-newsletter-transition-duration);
+  --nether-hero-min-height: auto;
+}
+
+.nether-newsletter__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nether-newsletter-gap);
+}
+
+/* ── Typography blocks ─────────────────────────────────────────────────────── */
+
+.nether-newsletter__eyebrow,
+.nether-newsletter__heading,
+.nether-newsletter__subheading,
+.nether-newsletter__text {
+  margin: 0;
+}
+
+.nether-newsletter__text {
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.nether-newsletter__buttons,
+.nether-newsletter__button-block,
+.nether-newsletter__form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nether-hero__blocks--align-center .nether-newsletter__buttons,
+.nether-hero__blocks--align-center .nether-newsletter__form-actions {
+  justify-content: center;
+}
+
+.nether-hero__blocks--align-right .nether-newsletter__buttons,
+.nether-hero__blocks--align-right .nether-newsletter__form-actions {
+  justify-content: flex-end;
+}
+
+/* ── Layout: centered signup ───────────────────────────────────────────────── */
+
+.nether-newsletter--layout-centered_signup .nether-newsletter__body {
+  max-width: min(var(--nether-hero-content-width, 72rem), 72rem);
+  margin-inline: auto;
+}
+
+.nether-newsletter--layout-centered_signup .nether-newsletter__blocks {
+  text-align: center;
+  align-items: center;
+}
+
+/* ── Layout: magazine ──────────────────────────────────────────────────────── */
+
+.nether-newsletter--layout-magazine_layout .nether-newsletter__panel--magazine {
+  display: grid;
+  gap: 2.4rem;
+}
+
+@media screen and (min-width: 990px) {
+  .nether-newsletter--layout-magazine_layout .nether-newsletter__panel--magazine {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+  }
+
+  .nether-newsletter--layout-magazine_layout .nether-newsletter__form-wrap {
+    justify-self: end;
+    width: min(100%, 44rem);
+  }
+}
+
+/* ── Layout: VIP membership ────────────────────────────────────────────────── */
+
+.nether-newsletter--layout-vip_membership .nether-newsletter__panel--card {
+  border: 1px solid rgba(var(--color-foreground), 0.08);
+}
+
+.nether-newsletter--layout-vip_membership .nether-newsletter__eyebrow {
+  letter-spacing: 0.18em;
+}
+
+/* ── Layout: waitlist ──────────────────────────────────────────────────────── */
+
+.nether-newsletter--layout-early_access_waitlist .nether-newsletter__countdown {
+  margin-block-end: 1.6rem;
+}
+
+/* ── Layout: minimal ───────────────────────────────────────────────────────── */
+
+.nether-newsletter--layout-minimal_layout {
+  --nether-hero-content-padding: 1.6rem;
+  --nether-hero-gap: 1.2rem;
+}
+
+/* ── Floating card ─────────────────────────────────────────────────────────── */
+
+.nether-newsletter__panel--floating {
+  transform: translateY(-1.2rem);
+}
+
+/* ── Form ──────────────────────────────────────────────────────────────────── */
+
+.nether-newsletter__form-wrap {
+  width: 100%;
+}
+
+.nether-newsletter__form {
+  width: 100%;
+  max-width: 48rem;
+}
+
+.nether-hero__blocks--align-center .nether-newsletter__form {
+  margin-inline: auto;
+}
+
+.nether-newsletter__form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+}
+
+.nether-newsletter__form--inline .nether-newsletter__form-fields {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.nether-newsletter__form--inline .nether-newsletter__field--email,
+.nether-newsletter__form--inline .nether-newsletter__field--name {
+  flex: 1 1 18rem;
+}
+
+.nether-newsletter__form--inline .nether-newsletter__form-actions {
+  flex: 0 0 auto;
+}
+
+.nether-newsletter__field {
+  width: 100%;
+}
+
+.nether-newsletter__consent .form-choice__text {
+  text-align: start;
+}
+
+.nether-newsletter__privacy {
+  margin: 1.2rem 0 0;
+  color: rgba(var(--color-foreground), 0.65);
+  max-width: 42rem;
+}
+
+.nether-hero__blocks--align-center .nether-newsletter__privacy {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.nether-newsletter__success {
+  margin-top: 1.6rem;
+}
+
+/* ── Block divider ─────────────────────────────────────────────────────────── */
+
+.nether-newsletter__block-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-newsletter__block-divider--gradient {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(var(--color-foreground), 0.28), transparent);
+}
+
+.nether-newsletter__block-divider--space {
+  height: 2.4rem;
+  background: transparent;
+}
+
+/* ── Section divider ───────────────────────────────────────────────────────── */
+
+.nether-newsletter__divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+.nether-newsletter__divider--gradient {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(var(--color-foreground), 0.28), transparent);
+}
+
+.nether-newsletter__divider--wave {
+  height: 2.4rem;
+  background: transparent;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 24'%3E%3Cpath fill='black' d='M0 12c150-12 300 12 450 0s300-12 450 0 300 12 450 0v12H0z'/%3E%3C/svg%3E");
+  mask-size: cover;
+  background-color: rgba(var(--color-foreground), 0.12);
+}
+
+/* ── Countdown placeholder ─────────────────────────────────────────────────── */
+
+.nether-newsletter__countdown-label {
+  margin: 0 0 0.8rem;
+}
+
+.nether-newsletter__countdown-slot {
+  min-height: 4.8rem;
+  border: 1px dashed rgba(var(--color-foreground), 0.2);
+  border-radius: var(--radius-md, 0.8rem);
+}
+
+/* ── Responsive layout modifiers ───────────────────────────────────────────── */
+
+@media screen and (max-width: 989px) {
+  .nether-newsletter--tablet-stacked .nether-hero__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-newsletter--tablet-centered .nether-newsletter__blocks {
+    text-align: center;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .nether-newsletter--mobile-stacked .nether-hero__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-newsletter--mobile-centered .nether-newsletter__blocks {
+    text-align: center;
+    align-items: center;
+  }
+
+  .nether-newsletter--mobile-minimal {
+    --nether-hero-content-padding: 1.2rem;
+  }
+
+  .nether-newsletter__form--inline .nether-newsletter__form-fields {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ── Motion hooks (Phase 5.3.7) ─────────────────────────────────────────────── */
+
+.nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-animate],
+.nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-form-animate],
+.nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-input-animate],
+.nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-button-animate],
+.nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-success],
+.nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-privacy],
+.nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-divider] {
+  opacity: 0;
+}
+
+.nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-animate],
+.nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-form-wrap],
+.nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-input-animate],
+.nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-button-animate],
+.nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-success],
+.nether-newsletter[data-nether-motion-ready='true'] [data-nether-hero-media],
+.nether-newsletter[data-nether-motion-ready='true'] [data-nether-hero-overlay],
+.nether-newsletter[data-nether-motion-ready='true'] .nether-hero__shape {
+  will-change: transform, opacity;
+}
+
+.nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-button-animate] .button,
+.nether-newsletter[data-nether-motion-ready='true'] .nether-newsletter__button-block .button,
+.nether-newsletter[data-nether-motion-ready='true'] .nether-newsletter__buttons .button,
+.nether-newsletter[data-nether-motion-ready='true'] .nether-hero__trust-item {
+  will-change: transform;
+}
+
+/* ── Motion: reduced motion ────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-animate],
+  .nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-form-animate],
+  .nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-input-animate],
+  .nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-button-animate],
+  .nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-success],
+  .nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-privacy],
+  .nether-newsletter[data-nether-motion-pending='true'] [data-nether-newsletter-divider],
+  .nether-newsletter [data-nether-newsletter-animate],
+  .nether-newsletter [data-nether-newsletter-form-animate],
+  .nether-newsletter [data-nether-newsletter-input-animate],
+  .nether-newsletter [data-nether-newsletter-button-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-animate],
+  .nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-form-wrap],
+  .nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-input-animate],
+  .nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-button-animate],
+  .nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-success],
+  .nether-newsletter[data-nether-motion-ready='true'] [data-nether-hero-media],
+  .nether-newsletter[data-nether-motion-ready='true'] [data-nether-hero-overlay],
+  .nether-newsletter[data-nether-motion-ready='true'] .nether-hero__shape,
+  .nether-newsletter[data-nether-motion-ready='true'] [data-nether-newsletter-button-animate] .button,
+  .nether-newsletter[data-nether-motion-ready='true'] .nether-newsletter__button-block .button,
+  .nether-newsletter[data-nether-motion-ready='true'] .nether-newsletter__buttons .button,
+  .nether-newsletter[data-nether-motion-ready='true'] .nether-hero__trust-item {
+    will-change: auto;
+  }
+
+  .nether-newsletter__panel--floating {
+    transform: none;
+  }
+}
+
+/* ── Trust badges in newsletter context ────────────────────────────────────── */
+
+.nether-newsletter .nether-hero__trust {
+  width: 100%;
+}
+
+.nether-newsletter .nether-hero__trust-list {
+  justify-content: inherit;
+}
+
+.nether-hero__blocks--align-center .nether-newsletter .nether-hero__trust-list {
+  justify-content: center;
+}
+
+/* ── Statistics in newsletter context ──────────────────────────────────────── */
+
+.nether-newsletter .nether-hero__stat {
+  width: 100%;
+}

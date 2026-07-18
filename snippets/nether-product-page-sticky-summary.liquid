@@ -1,0 +1,60 @@
+{% comment %}
+  Nether Premium Product Page — Sticky purchase summary bar.
+  Mirrors live price/title and triggers native add-to-cart form.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - product: {Object} Product object (required)
+  - product_form_id: {String} Product form ID (required)
+{% endcomment %}
+
+{%- if section.settings.nether_enable_sticky_summary -%}
+  <div
+    class="nether-product-page__sticky-summary"
+    data-nether-product-page-sticky
+    data-nether-product-page-animate
+    hidden
+    role="region"
+    aria-label="{{ 'sections.nether_product_page.sticky.label' | t }}"
+  >
+    <div class="nether-product-page__sticky-inner page-width">
+      <div class="nether-product-page__sticky-media">
+        {%- if product.featured_media -%}
+          {{
+            product.featured_media
+            | image_url: width: 120
+            | image_tag:
+              loading: 'lazy',
+              widths: '60, 120',
+              sizes: '60px',
+              alt: product.featured_media.alt | escape
+          }}
+        {%- endif -%}
+      </div>
+      <div class="nether-product-page__sticky-copy">
+        <p class="nether-product-page__sticky-title type-body-sm">{{ product.title | escape }}</p>
+        <div class="nether-product-page__sticky-price" data-nether-product-page-sticky-price>
+          {%- render 'price', product: product, use_variant: true, show_badges: false, price_class: 'price--small' -%}
+        </div>
+      </div>
+      <div class="nether-product-page__sticky-actions">
+        <button
+          type="submit"
+          name="add"
+          class="button button--primary"
+          form="{{ product_form_id }}"
+          {% if product.selected_or_first_available_variant.available == false %}
+            disabled
+          {% endif %}
+          data-nether-product-page-sticky-submit
+        >
+          {%- if product.selected_or_first_available_variant.available -%}
+            {{ 'products.product.add_to_cart' | t }}
+          {%- else -%}
+            {{ 'products.product.sold_out' | t }}
+          {%- endif -%}
+        </button>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

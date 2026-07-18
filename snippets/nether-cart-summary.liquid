@@ -1,0 +1,70 @@
+{% comment %}
+  Nether Premium Cart — cart summary sidebar module.
+  Preserves Dawn #main-cart-footer and .js-contents for Section Rendering API.
+
+  Accepts:
+  - section: {Object} Section object (required)
+{% endcomment %}
+
+<aside
+  class="nether-cart__module nether-cart__module--summary nether-cart__summary{% if section.settings.nether_enable_sticky_summary %} nether-cart__summary--sticky{% endif %}"
+  data-nether-cart-module="summary"
+  data-nether-cart-animate
+  aria-label="{{ 'sections.nether_cart.summary.label' | t }}"
+>
+  <div
+    class="gradient color-{{ section.settings.color_scheme }} nether-cart__summary-inner{% if cart == empty %} is-empty{% endif %}"
+    id="main-cart-footer"
+    data-id="{{ section.id }}"
+  >
+    <div class="cart__blocks nether-cart__summary-blocks">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render 'nether-cart-block', block: block, section: section, zone: 'summary' %}
+
+          {%- when 'subtotal' -%}
+            <div class="nether-cart__summary-block js-contents" {{ block.shopify_attributes }}>
+              {% render 'nether-cart-shipping-progress', section: section, context: 'page' %}
+              {% render 'nether-cart-discounts', context: 'page' %}
+              {% render 'nether-cart-totals', context: 'page' %}
+            </div>
+
+          {%- when 'buttons' -%}
+            {% render 'nether-cart-notes', section: section, context: 'page', form_id: 'cart', note_id: 'Cart-note' %}
+            <div class="cart__ctas nether-cart__checkout" {{ block.shopify_attributes }}>
+              <button
+                type="submit"
+                id="checkout"
+                class="cart__checkout-button button"
+                name="checkout"
+                {% if cart == empty %}disabled{% endif %}
+                form="cart"
+              >
+                {{ 'sections.cart.checkout' | t }}
+              </button>
+            </div>
+            {%- if additional_checkout_buttons -%}
+              <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+                {{ content_for_additional_checkout_buttons }}
+              </div>
+            {%- endif -%}
+
+          {%- when 'trust_badges', 'gift_wrap' -%}
+            {% render 'nether-cart-block', block: block, section: section, zone: 'summary' %}
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {%- if section.settings.nether_enable_trust -%}
+        {% render 'nether-cart-trust', section: section %}
+      {%- endif -%}
+
+      {%- if section.settings.nether_enable_gift_wrap -%}
+        {% render 'nether-cart-gift-wrap', section: section %}
+      {%- endif -%}
+
+      <div id="cart-errors" role="alert"></div>
+    </div>
+  </div>
+</aside>
+

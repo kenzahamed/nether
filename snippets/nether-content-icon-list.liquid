@@ -1,0 +1,101 @@
+{% comment %}
+  Renders Nether Premium Content icon list block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+
+  Usage:
+  {% render 'nether-content-icon-list', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign has_items = false
+  for i in (1..6)
+    case i
+      when 1
+        if block.settings.item_1_label != blank
+          assign has_items = true
+        endif
+      when 2
+        if block.settings.item_2_label != blank
+          assign has_items = true
+        endif
+      when 3
+        if block.settings.item_3_label != blank
+          assign has_items = true
+        endif
+      when 4
+        if block.settings.item_4_label != blank
+          assign has_items = true
+        endif
+      when 5
+        if block.settings.item_5_label != blank
+          assign has_items = true
+        endif
+      when 6
+        if block.settings.item_6_label != blank
+          assign has_items = true
+        endif
+    endcase
+  endfor
+
+  assign columns = block.settings.columns | default: 3
+-%}
+
+{%- if has_items -%}
+  <ul
+    class="nether-content__icon-list nether-content__icon-list--cols-{{ columns }}"
+    data-nether-content-animate
+    data-nether-hero-animate
+    data-nether-hero-role="icons"
+    role="list"
+    {{ block.shopify_attributes }}
+  >
+    {%- for i in (1..6) -%}
+      {%- liquid
+        case i
+          when 1
+            assign item_label = block.settings.item_1_label
+            assign item_text = block.settings.item_1_text
+            assign item_icon = block.settings.item_1_icon
+          when 2
+            assign item_label = block.settings.item_2_label
+            assign item_text = block.settings.item_2_text
+            assign item_icon = block.settings.item_2_icon
+          when 3
+            assign item_label = block.settings.item_3_label
+            assign item_text = block.settings.item_3_text
+            assign item_icon = block.settings.item_3_icon
+          when 4
+            assign item_label = block.settings.item_4_label
+            assign item_text = block.settings.item_4_text
+            assign item_icon = block.settings.item_4_icon
+          when 5
+            assign item_label = block.settings.item_5_label
+            assign item_text = block.settings.item_5_text
+            assign item_icon = block.settings.item_5_icon
+          when 6
+            assign item_label = block.settings.item_6_label
+            assign item_text = block.settings.item_6_text
+            assign item_icon = block.settings.item_6_icon
+        endcase
+      -%}
+
+      {%- if item_label != blank -%}
+        <li class="nether-content__icon-list-item">
+          {%- if item_icon != blank and item_icon != 'none' -%}
+            <span class="nether-content__icon-list-icon" aria-hidden="true">
+              {%- render 'icon', icon: item_icon, size: 'md', color: 'link' -%}
+            </span>
+          {%- endif -%}
+          <div class="nether-content__icon-list-copy">
+            <p class="nether-content__icon-list-label type-body-sm">{{ item_label | escape }}</p>
+            {%- if item_text != blank -%}
+              <p class="nether-content__icon-list-text type-caption">{{ item_text | escape }}</p>
+            {%- endif -%}
+          </div>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

@@ -1,0 +1,75 @@
+{% comment %}
+  Nether Premium Compare — header trigger with live count bubble.
+
+  Accepts:
+  - label: {String} Accessible label override (optional)
+  - show_count: {Boolean} Show count bubble (optional, section setting fallback)
+  - desktop: {Boolean} Show on desktop (optional)
+  - tablet: {Boolean} Show on tablet (optional)
+  - mobile: {Boolean} Show on mobile (optional)
+  - button_style: {String} icon style variant (optional)
+
+  Usage:
+  {% render 'nether-compare-trigger' %}
+{% endcomment %}
+
+{%- liquid
+  assign trigger_label = label | default: 'sections.nether_compare.title' | t
+  assign show_count_bubble = show_count
+  if show_count_bubble == nil
+    assign show_count_bubble = section.settings.nether_compare_show_count
+  endif
+
+  assign show_desktop = desktop
+  assign show_tablet = tablet
+  assign show_mobile = mobile
+  if show_desktop == nil
+    assign show_desktop = section.settings.nether_compare_desktop
+  endif
+  if show_tablet == nil
+    assign show_tablet = section.settings.nether_compare_tablet
+  endif
+  if show_mobile == nil
+    assign show_mobile = section.settings.nether_compare_mobile
+  endif
+
+  assign trigger_classes = 'header__icon nether-header__action nether-compare-trigger link focus-inset'
+  unless show_desktop
+    assign trigger_classes = trigger_classes | append: ' small-hide medium-hide'
+  endunless
+  if show_desktop and show_tablet == false
+    assign trigger_classes = trigger_classes | append: ' medium-hide'
+  endif
+  unless show_mobile
+    assign trigger_classes = trigger_classes | append: ' large-up-hide'
+  endunless
+
+  if button_style != blank
+    assign trigger_classes = trigger_classes | append: ' nether-compare-trigger--' | append: button_style
+  elsif section.settings.nether_compare_button_style != blank
+    assign trigger_classes = trigger_classes | append: ' nether-compare-trigger--' | append: section.settings.nether_compare_button_style
+  endif
+-%}
+
+<button
+  type="button"
+  class="{{ trigger_classes }}"
+  aria-haspopup="dialog"
+  aria-controls="nether-compare-drawer"
+  aria-expanded="false"
+  data-nether-compare-open
+  data-prevent-hide
+>
+  {% render 'icon', icon: 'clipboard', size: 'md', decorative: false, label: trigger_label %}
+  <span class="visually-hidden">{{ trigger_label }}</span>
+  <span
+    class="nether-compare-count cart-count-bubble{% unless show_count_bubble %} visually-hidden{% endunless %}"
+    data-nether-compare-count
+    hidden
+  >
+    <span aria-hidden="true" data-nether-compare-count-value>0</span>
+    <span class="visually-hidden" data-nether-compare-count-label>
+      {{ 'sections.nether_compare.count' | t: count: 0 }}
+    </span>
+  </span>
+</button>

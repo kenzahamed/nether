@@ -1,0 +1,21 @@
+{% comment %}
+  Renders Nether Premium Content custom HTML placeholder block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+
+  Usage:
+  {% render 'nether-content-custom-html', block: block %}
+{% endcomment %}
+
+{%- if block.settings.html != blank -%}
+  <div
+    class="nether-content__custom-html"
+    data-nether-content-animate
+    data-nether-hero-animate
+    data-nether-hero-role="content"
+    {{ block.shopify_attributes }}
+  >
+    {{ block.settings.html }}
+  </div>
+{%- endif -%}

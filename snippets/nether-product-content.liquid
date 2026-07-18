@@ -1,0 +1,43 @@
+{% comment %}
+  Renders Nether Premium Product section header content.
+
+  Accepts:
+  - section: {Object} Product section (required)
+  - heading_tag: {String} Primary heading element (default: h2)
+
+  Usage:
+  {% render 'nether-product-content', section: section, heading_tag: heading_tag %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_element = heading_tag | default: 'h2'
+  assign alignment = section.settings.nether_content_alignment | default: 'left'
+  assign has_header_blocks = false
+
+  for block in section.blocks
+    case block.type
+      when 'eyebrow', 'heading', 'subheading', 'text', 'buttons', 'product_highlight'
+        assign has_header_blocks = true
+    endcase
+  endfor
+-%}
+
+{%- if has_header_blocks -%}
+  <div class="nether-product__header page-width" data-nether-product-header>
+    <div
+      class="nether-product__header-inner nether-product__header-inner--align-{{ alignment }}"
+      data-nether-product-panel
+    >
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'eyebrow', 'heading', 'subheading', 'text', 'buttons', 'product_highlight', '@app' -%}
+            {%- render 'nether-product-block',
+              block: block,
+              section: section,
+              heading_tag: heading_element
+            -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}

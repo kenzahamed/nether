@@ -1,0 +1,235 @@
+{%- render 'nether-cart-drawer', section: section -%}
+
+{% schema %}
+{
+  "name": "t:sections.nether_cart_drawer.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.nether_cart_drawer.settings.framework_header.content"
+    },
+    {
+      "type": "select",
+      "id": "nether_drawer_style",
+      "label": "t:sections.nether_cart_drawer.settings.nether_drawer_style.label",
+      "default": "standard",
+      "options": [
+        { "value": "standard", "label": "t:sections.nether_cart_drawer.settings.nether_drawer_style.options__1.label" },
+        { "value": "wide", "label": "t:sections.nether_cart_drawer.settings.nether_drawer_style.options__2.label" },
+        { "value": "minimal", "label": "t:sections.nether_cart_drawer.settings.nether_drawer_style.options__3.label" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "nether_drawer_heading",
+      "label": "t:sections.nether_cart_drawer.settings.nether_drawer_heading.label",
+      "default": "Cart"
+    },
+    {
+      "type": "text",
+      "id": "nether_drawer_aria_label",
+      "label": "t:sections.nether_cart_drawer.settings.nether_drawer_aria_label.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_cart_drawer.settings.commerce_header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_shipping_progress",
+      "label": "t:sections.nether_cart_drawer.settings.nether_enable_shipping_progress.label",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "nether_free_shipping_threshold",
+      "label": "t:sections.nether_cart_drawer.settings.nether_free_shipping_threshold.label",
+      "default": 100,
+      "info": "t:sections.nether_cart_drawer.settings.nether_free_shipping_threshold.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_notes",
+      "label": "t:sections.nether_cart_drawer.settings.nether_enable_notes.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_cart_drawer.settings.empty_header.content"
+    },
+    {
+      "type": "text",
+      "id": "nether_empty_heading",
+      "label": "t:sections.nether_cart_drawer.settings.nether_empty_heading.label"
+    },
+    {
+      "type": "textarea",
+      "id": "nether_empty_text",
+      "label": "t:sections.nether_cart_drawer.settings.nether_empty_text.label"
+    },
+    {
+      "type": "text",
+      "id": "nether_empty_button_label",
+      "label": "t:sections.nether_cart_drawer.settings.nether_empty_button_label.label"
+    },
+    {
+      "type": "url",
+      "id": "nether_empty_button_link",
+      "label": "t:sections.nether_cart_drawer.settings.nether_empty_button_link.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_cart_drawer.settings.trust_header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_trust",
+      "label": "t:sections.nether_cart_drawer.settings.nether_enable_trust.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "nether_trust_heading",
+      "label": "t:sections.nether_cart_drawer.settings.nether_trust_heading.label",
+      "default": "Secure checkout"
+    },
+    {
+      "type": "textarea",
+      "id": "nether_trust_text",
+      "label": "t:sections.nether_cart_drawer.settings.nether_trust_text.label"
+    },
+    {
+      "type": "text",
+      "id": "nether_secure_checkout_text",
+      "label": "t:sections.nether_cart_drawer.settings.nether_secure_checkout_text.label",
+      "default": "Payments are encrypted and secure."
+    },
+    {
+      "type": "select",
+      "id": "nether_trust_icon",
+      "label": "t:sections.nether_cart_drawer.settings.nether_trust_icon.label",
+      "default": "lock",
+      "options": [
+        { "value": "lock", "label": "Lock" },
+        { "value": "check_mark", "label": "Check mark" },
+        { "value": "heart", "label": "Heart" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_cart_drawer.settings.visual_header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_enable_glass",
+      "label": "t:sections.nether_cart_drawer.settings.nether_enable_glass.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.nether_cart_drawer.settings.motion_header.content"
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_style",
+      "label": "t:sections.nether_cart_drawer.settings.nether_animation_style.label",
+      "default": "slide",
+      "options": [
+        { "value": "none", "label": "t:sections.nether_cart_drawer.settings.nether_animation_style.options__1.label" },
+        { "value": "fade", "label": "t:sections.nether_cart_drawer.settings.nether_animation_style.options__2.label" },
+        { "value": "slide", "label": "t:sections.nether_cart_drawer.settings.nether_animation_style.options__3.label" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "nether_animation_speed",
+      "label": "t:sections.nether_cart_drawer.settings.nether_animation_speed.label",
+      "default": "normal",
+      "options": [
+        { "value": "slow", "label": "t:sections.nether_cart_drawer.settings.nether_animation_speed.options__1.label" },
+        { "value": "normal", "label": "t:sections.nether_cart_drawer.settings.nether_animation_speed.options__2.label" },
+        { "value": "fast", "label": "t:sections.nether_cart_drawer.settings.nether_animation_speed.options__3.label" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_badges",
+      "name": "t:sections.nether_cart_drawer.blocks.trust_badges.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:sections.nether_cart_drawer.blocks.trust_badges.settings.heading.label" },
+        { "type": "textarea", "id": "text", "label": "t:sections.nether_cart_drawer.blocks.trust_badges.settings.text.label" },
+        { "type": "text", "id": "secure_text", "label": "t:sections.nether_cart_drawer.blocks.trust_badges.settings.secure_text.label" },
+        { "type": "select", "id": "icon", "label": "t:sections.nether_cart_drawer.blocks.trust_badges.settings.icon.label", "default": "lock", "options": [
+          { "value": "lock", "label": "Lock" },
+          { "value": "check_mark", "label": "Check mark" },
+          { "value": "heart", "label": "Heart" }
+        ]}
+      ]
+    },
+    {
+      "type": "payment_methods",
+      "name": "t:sections.nether_cart_drawer.blocks.payment_methods.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:sections.nether_cart_drawer.blocks.payment_methods.settings.heading.label", "default": "Payment methods" }
+      ]
+    },
+    {
+      "type": "promotional_notice",
+      "name": "t:sections.nether_cart_drawer.blocks.promotional_notice.name",
+      "settings": [
+        { "type": "inline_richtext", "id": "heading", "label": "t:sections.nether_cart_drawer.blocks.promotional_notice.settings.heading.label" },
+        { "type": "richtext", "id": "text", "label": "t:sections.nether_cart_drawer.blocks.promotional_notice.settings.text.label" },
+        { "type": "select", "id": "notice_style", "default": "soft", "label": "Style", "options": [
+          { "value": "soft", "label": "Soft" },
+          { "value": "outline", "label": "Outline" },
+          { "value": "solid", "label": "Solid" },
+          { "value": "minimal", "label": "Minimal" }
+        ]},
+        { "type": "select", "id": "icon", "default": "discount", "label": "Icon", "options": [
+          { "value": "discount", "label": "Discount" },
+          { "value": "star", "label": "Star" },
+          { "value": "info", "label": "Info" }
+        ]}
+      ]
+    },
+    {
+      "type": "bundles_placeholder",
+      "name": "t:sections.nether_cart_drawer.blocks.bundles_placeholder.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Complete your order" },
+        { "type": "text", "id": "text", "label": "Description" },
+        {
+          "type": "select",
+          "id": "strategy",
+          "label": "Bundle strategy",
+          "default": "frequently_bought",
+          "options": [
+            { "value": "frequently_bought", "label": "Frequently bought together" },
+            { "value": "complete_the_look", "label": "Complete the look" },
+            { "value": "curated", "label": "Curated bundle" }
+          ]
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Bundle products",
+          "limit": 4
+        },
+        {
+          "type": "checkbox",
+          "id": "include_current_product",
+          "label": "Include first cart product",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}
+

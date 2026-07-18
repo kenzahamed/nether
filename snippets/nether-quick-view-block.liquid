@@ -1,0 +1,36 @@
+{% comment %}
+  Architectural module notes for Quick View commerce zones.
+  Product media / information / pricing / variants / quantity / buy buttons
+  are provided by lazy-loaded Dawn product-info + Nether Product Page Framework.
+  These snippets document composition contracts and apply data-module hooks.
+
+  Accepts:
+  - module: {String} media | information | pricing | variants | quantity | buy
+{% endcomment %}
+
+{%- liquid
+  assign module_key = module | default: 'information'
+-%}
+
+<div
+  class="nether-quick-view__module-hook nether-quick-view__module-hook--{{ module_key }}"
+  data-nether-quick-view-module="{{ module_key }}"
+  data-nether-quick-view-reuse="product-page"
+  hidden
+  aria-hidden="true"
+>
+  {%- case module_key -%}
+    {%- when 'media' -%}
+      {{ 'sections.nether_quick_view.modules.media' | t }}
+    {%- when 'pricing' -%}
+      {{ 'sections.nether_quick_view.modules.pricing' | t }}
+    {%- when 'variants' -%}
+      {{ 'sections.nether_quick_view.modules.variants' | t }}
+    {%- when 'quantity' -%}
+      {{ 'sections.nether_quick_view.modules.quantity' | t }}
+    {%- when 'buy' -%}
+      {{ 'sections.nether_quick_view.modules.buy' | t }}
+    {%- else -%}
+      {{ 'sections.nether_quick_view.modules.information' | t }}
+  {%- endcase -%}
+</div>

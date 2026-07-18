@@ -1,0 +1,22 @@
+{% comment %}
+  Estimated delivery messaging for Nether Premium Product Page.
+  Uses shared Commerce Enhancements estimated-delivery module.
+  Merchant-authored heading/text only — Shopify shipping remains source of truth.
+
+  Accepts:
+  - block: {Object} Block object (required)
+{% endcomment %}
+
+<div
+  class="nether-product-page__module nether-product-page__module--delivery nether-product-page__delivery"
+  data-nether-product-page-module="delivery"
+  data-nether-product-page-animate
+  {{ block.shopify_attributes }}
+>
+  {% render 'nether-commerce-estimated-delivery',
+    heading: block.settings.heading,
+    text: block.settings.text,
+    visible: true,
+    class: 'nether-product-page__delivery'
+  %}
+</div>

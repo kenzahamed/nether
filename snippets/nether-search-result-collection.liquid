@@ -1,0 +1,24 @@
+{% comment %}
+  Renders a Nether Premium predictive search collection card.
+
+  Accepts:
+  - collection: {Object} Collection resource
+  - index: {Number} Loop index for unique ids
+
+  Usage:
+  {% render 'nether-search-result-collection', collection: collection, index: forloop.index %}
+{% endcomment %}
+
+<li
+  id="predictive-search-option-collection-{{ index }}"
+  class="nether-search-result nether-search-result--collection predictive-search__list-item"
+  role="option"
+  aria-selected="false"
+>
+  <a href="{{ collection.url }}" class="nether-search-result__link predictive-search__item link link--text" tabindex="-1">
+    <div class="nether-search-result__content predictive-search__item-content predictive-search__item-content--centered">
+      <p class="nether-search-result__title predictive-search__item-heading h5">{{ collection.title | escape }}</p>
+      <span class="nether-search-result__meta caption-with-letter-spacing">{{ 'sections.header.search_drawer.collection' | t }}</span>
+    </div>
+  </a>
+</li>

@@ -1,0 +1,42 @@
+{% comment %}
+  Nether Premium Compare — item action controls (move to cart / remove).
+  Markup template consumed by the compare JS renderer.
+
+  Accepts:
+  - context: {String} drawer | page | table (default: drawer)
+
+  Usage:
+  {% render 'nether-compare-actions', context: 'drawer' %}
+{% endcomment %}
+
+{%- assign compare_context = context | default: 'drawer' -%}
+
+<div
+  class="nether-compare-card__actions nether-compare-card__actions--{{ compare_context }}"
+  data-nether-compare-item-actions
+>
+  <button
+    type="button"
+    class="button button--secondary button--small nether-compare-card__quick-view"
+    data-nether-quick-view-open
+    data-product-url=""
+    data-nether-compare-quick-view
+  >
+    {{ 'sections.nether_quick_view.actions.open' | t }}
+  </button>
+  <button
+    type="button"
+    class="button button--secondary button--small nether-compare-card__move"
+    data-nether-compare-move-to-cart
+  >
+    {{ 'sections.nether_compare.actions.move_to_cart' | t }}
+  </button>
+  <button
+    type="button"
+    class="button button--ghost button--small nether-compare-card__remove"
+    data-nether-compare-remove
+    aria-label="{{ 'sections.nether_compare.actions.remove' | t }}"
+  >
+    {{ 'sections.nether_compare.actions.remove' | t }}
+  </button>
+</div>

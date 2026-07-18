@@ -1,0 +1,175 @@
+{% comment %}
+  Renders a Nether Premium Button.
+
+  Accepts:
+  - label: {String} Button text (required unless icon-only)
+  - link: {String} URL — renders an <a> when set, otherwise a <button>
+  - style: {String} primary | secondary | outline | ghost | text | icon | arrow (default: primary)
+  - size: {String} small | medium | large (default: medium)
+  - icon_leading: {String} Icon asset name without extension, e.g. 'cart' → icon-cart.svg
+  - icon_trailing: {String} Icon asset name without extension
+  - show_arrow: {Boolean} Append animated arrow icon (default: false, true when style is arrow)
+  - loading: {Boolean} Show loading spinner state (default: false)
+  - disabled: {Boolean} Disabled state (default: false)
+  - full_width: {Boolean} Stretch to container width (default: false)
+  - type: {String} Button type attribute — button | submit | reset (default: button)
+  - id: {String} HTML id attribute
+  - class: {String} Additional CSS classes
+  - attributes: {String} Additional HTML attributes (e.g. 'name="add" data-custom="value"')
+  - aria_label: {String} Accessible label override (required for icon-only buttons)
+  - new_window: {Boolean} Open link in new tab (default: false)
+  - shopify_attributes: {String} Block shopify_attributes for Theme Editor
+
+  Usage:
+  {% render 'button', label: 'Shop now', link: '/collections/all', style: 'primary' %}
+
+  {% render 'button',
+    label: 'Add to cart',
+    style: 'secondary',
+    size: 'large',
+    type: 'submit',
+    loading: true
+  %}
+
+  {% render 'button',
+    label: 'Search',
+    style: 'icon',
+    icon_leading: 'search',
+    aria_label: 'Search'
+  %}
+
+  {% render 'button',
+    label: 'View collection',
+    link: collection.url,
+    style: 'arrow',
+    show_arrow: true
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign button_style = style | default: 'primary'
+  assign button_size = size | default: 'medium'
+  assign button_type = type | default: 'button'
+  assign is_disabled = disabled | default: false
+  assign is_loading = loading | default: false
+  assign is_full_width = full_width | default: false
+  assign is_new_window = new_window | default: false
+  assign show_arrow_icon = show_arrow | default: false
+
+  if button_style == 'arrow'
+    assign show_arrow_icon = true
+  endif
+
+  assign button_classes = 'button'
+
+  case button_style
+    when 'primary'
+      assign button_classes = button_classes | append: ' button--primary'
+    when 'secondary'
+      assign button_classes = button_classes | append: ' button--secondary'
+    when 'outline'
+      assign button_classes = button_classes | append: ' button--outline'
+    when 'ghost'
+      assign button_classes = button_classes | append: ' button--ghost'
+    when 'text'
+      assign button_classes = button_classes | append: ' button--text'
+    when 'icon'
+      assign button_classes = button_classes | append: ' button--icon'
+    when 'arrow'
+      assign button_classes = button_classes | append: ' button--primary button--arrow'
+  endcase
+
+  case button_size
+    when 'small'
+      assign button_classes = button_classes | append: ' button--small'
+    when 'large'
+      assign button_classes = button_classes | append: ' button--large'
+    when 'medium'
+      assign button_classes = button_classes | append: ' button--medium'
+  endcase
+
+  if is_full_width
+    assign button_classes = button_classes | append: ' button--full-width'
+  endif
+
+  if is_loading
+    assign button_classes = button_classes | append: ' loading'
+  endif
+
+  if class != blank
+    assign button_classes = button_classes | append: ' ' | append: class
+  endif
+
+  assign accessible_label = aria_label | default: label
+-%}
+
+{%- if link != blank -%}
+  <a
+    {% if id != blank %}id="{{ id }}"{% endif %}
+    href="{{ link }}"
+    class="{{ button_classes }}"
+    {% if is_disabled %}aria-disabled="true" tabindex="-1"{% endif %}
+    {% if accessible_label != blank %}aria-label="{{ accessible_label | escape }}"{% endif %}
+    {% if is_new_window %}target="_blank" rel="noopener noreferrer"{% endif %}
+    {{ shopify_attributes }}
+    {{ attributes }}
+  >
+{%- else -%}
+  <button
+    {% if id != blank %}id="{{ id }}"{% endif %}
+    type="{{ button_type }}"
+    class="{{ button_classes }}"
+    {% if is_disabled %}disabled aria-disabled="true"{% endif %}
+    {% if accessible_label != blank and button_style == 'icon' %}aria-label="{{ accessible_label | escape }}"{% endif %}
+    {{ shopify_attributes }}
+    {{ attributes }}
+  >
+{%- endif -%}
+
+  <span class="button__inner">
+    {%- if icon_leading != blank -%}
+      <span class="button__icon button__icon--leading" aria-hidden="true">
+        <span class="svg-wrapper">
+          {%- assign leading_icon = icon_leading | replace: '_', '-' | prepend: 'icon-' | append: '.svg' -%}
+          {{- leading_icon | inline_asset_content -}}
+        </span>
+      </span>
+    {%- endif -%}
+
+    {%- if label != blank -%}
+      {%- if button_style == 'icon' and icon_leading != blank -%}
+        <span class="visually-hidden">{{ label | escape }}</span>
+      {%- else -%}
+        <span class="button__label">{{ label | escape }}</span>
+      {%- endif -%}
+    {%- elsif button_style == 'icon' -%}
+      <span class="visually-hidden">{{ accessible_label | default: 'Button' | escape }}</span>
+    {%- endif -%}
+
+    {%- if icon_trailing != blank -%}
+      <span class="button__icon button__icon--trailing" aria-hidden="true">
+        <span class="svg-wrapper">
+          {%- assign trailing_icon = icon_trailing | replace: '_', '-' | prepend: 'icon-' | append: '.svg' -%}
+          {{- trailing_icon | inline_asset_content -}}
+        </span>
+      </span>
+    {%- endif -%}
+
+    {%- if show_arrow_icon -%}
+      <span class="button__icon button__icon--trailing" aria-hidden="true">
+        <span class="svg-wrapper">
+          {{- 'icon-arrow.svg' | inline_asset_content -}}
+        </span>
+      </span>
+    {%- endif -%}
+  </span>
+
+  {%- if is_loading -%}
+    {%- render 'loading-spinner' -%}
+  {%- endif -%}
+
+{%- if link != blank -%}
+  </a>
+{%- else -%}
+  </button>
+{%- endif -%}

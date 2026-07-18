@@ -1,0 +1,31 @@
+{% comment %}
+  Nether Mega Menu — Collection Card block.
+  Reuses card-collection snippet.
+
+  Accepts:
+  - block: {Object} Section block
+  - section: {Object} Header section
+{% endcomment %}
+
+{%- liquid
+  assign featured_collection = block.settings.collection
+-%}
+
+<div class="nether-mega-menu__collection-card" data-nether-mega-reveal data-nether-mega-image-reveal>
+  {%- if block.settings.heading != blank -%}
+    <p class="nether-mega-menu__column-heading h4">{{ block.settings.heading | escape }}</p>
+  {%- endif -%}
+
+  {%- if featured_collection != blank -%}
+    <div class="nether-mega-menu__card-shell">
+      {%- render 'card-collection',
+        card_collection: featured_collection,
+        media_aspect_ratio: block.settings.image_ratio,
+        columns: 1,
+        extend_height: false
+      -%}
+    </div>
+  {%- elsif request.design_mode -%}
+    <p class="nether-mega-menu__placeholder">{{ 'sections.header.nether_mega_menu.collection_placeholder' | t }}</p>
+  {%- endif -%}
+</div>

@@ -1,0 +1,281 @@
+{% comment %}
+  Renders a Nether Premium text-like form field.
+
+  Extends Dawn's .field / .field__input — existing forms remain unchanged.
+
+  Accepts:
+  - type: {String} text | email | password | number | tel | search | url | hidden
+  - name: {String} Input name attribute
+  - id: {String} Input id (auto-generated from name if blank)
+  - value: {String} Input value
+  - label: {String} Field label
+  - placeholder: {String} Placeholder text (required for Dawn floating label behaviour)
+  - size: {String} small | medium | large (default: medium)
+  - state: {String} success | error | warning (optional)
+  - floating_label: {Boolean} Dawn floating label (default: true)
+  - required: {Boolean} Required field (default: false)
+  - disabled: {Boolean} Disabled state (default: false)
+  - readonly: {Boolean} Readonly state (default: false)
+  - icon_prefix: {String} Leading icon name (Nether Icon System)
+  - icon_suffix: {String} Trailing decorative icon name
+  - clear_button: {Boolean} Show clear button (default: false)
+  - password_toggle: {Boolean} Show password visibility toggle (default: false for non-password)
+  - helper_text: {String} Helper text below field
+  - error_message: {String} Error validation message
+  - success_message: {String} Success validation message
+  - warning_message: {String} Warning validation message
+  - autocomplete: {String} Autocomplete attribute
+  - pattern: {String} Pattern attribute
+  - min: {String} Min attribute (number)
+  - max: {String} Max attribute (number)
+  - step: {String} Step attribute (number)
+  - maxlength: {Number} Maxlength attribute
+  - input_class: {String} Additional classes on input
+  - class: {String} Additional classes on field wrapper
+  - attributes: {String} Additional input HTML attributes
+  - shopify_attributes: {String} Theme Editor block attributes
+  - label_show: {String} Password show label for toggle (optional)
+  - label_hide: {String} Password hide label for toggle (optional)
+  - clear_label: {String} Clear button aria-label (optional)
+
+  Usage:
+  {% render 'form-field', type: 'email', name: 'contact[email]', label: 'Email', required: true %}
+
+  {% render 'form-field',
+    type: 'password',
+    name: 'customer[password]',
+    label: 'Password',
+    password_toggle: true
+  %}
+
+  {% render 'form-field',
+    type: 'search',
+    name: 'q',
+    label: 'Search',
+    icon_prefix: 'search',
+    clear_button: true
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign field_type = type | default: 'text'
+  assign field_size = size | default: 'medium'
+  assign is_floating = floating_label | default: true, allow_false: true
+  assign is_required = required | default: false, allow_false: true
+  assign is_disabled = disabled | default: false, allow_false: true
+  assign is_readonly = readonly | default: false, allow_false: true
+  assign show_clear = clear_button | default: false, allow_false: true
+  assign show_password_toggle = password_toggle | default: false, allow_false: true
+
+  if field_type == 'password'
+    assign show_password_toggle = password_toggle | default: true, allow_false: true
+  endif
+
+  assign field_id = id
+  if field_id == blank and name != blank
+    assign field_id = name | handleize | append: '-field'
+  endif
+
+  assign describedby_ids = ''
+  if helper_text != blank and field_id != blank
+    assign helper_id = field_id | append: '-helper'
+    assign describedby_ids = helper_id
+  endif
+  if error_message != blank and field_id != blank
+    if describedby_ids != blank
+      assign describedby_ids = describedby_ids | append: ' '
+    endif
+    assign describedby_ids = describedby_ids | append: field_id | append: '-error'
+  endif
+  if success_message != blank and field_id != blank
+    if describedby_ids != blank
+      assign describedby_ids = describedby_ids | append: ' '
+    endif
+    assign describedby_ids = describedby_ids | append: field_id | append: '-success'
+  endif
+  if warning_message != blank and field_id != blank
+    if describedby_ids != blank
+      assign describedby_ids = describedby_ids | append: ' '
+    endif
+    assign describedby_ids = describedby_ids | append: field_id | append: '-warning'
+  endif
+
+  assign input_classes = 'field__input'
+  if field_type == 'search'
+    assign input_classes = input_classes | append: ' search__input'
+  endif
+  if input_class != blank
+    assign input_classes = input_classes | append: ' ' | append: input_class
+  endif
+
+  assign field_classes = 'field'
+
+  case field_size
+    when 'small'
+      assign field_classes = field_classes | append: ' field--small'
+    when 'large'
+      assign field_classes = field_classes | append: ' field--large'
+    when 'medium'
+      assign field_classes = field_classes | append: ' field--medium'
+  endcase
+
+  unless is_floating
+    assign field_classes = field_classes | append: ' field--static-label'
+  endunless
+
+  if icon_prefix != blank
+    assign field_classes = field_classes | append: ' field--has-prefix'
+  endif
+
+  if icon_suffix != blank
+    assign field_classes = field_classes | append: ' field--has-suffix'
+  endif
+
+  if show_clear
+    assign field_classes = field_classes | append: ' field--has-clear'
+  endif
+
+  if show_password_toggle
+    assign field_classes = field_classes | append: ' field--has-password'
+  endif
+
+  if state == 'success'
+    assign field_classes = field_classes | append: ' field--success'
+  elsif state == 'error' or error_message != blank
+    assign field_classes = field_classes | append: ' field--with-error field--error'
+  elsif state == 'warning'
+    assign field_classes = field_classes | append: ' field--warning'
+  endif
+
+  if is_readonly
+    assign field_classes = field_classes | append: ' field--readonly'
+  endif
+
+  if is_disabled
+    assign field_classes = field_classes | append: ' field--disabled'
+  endif
+
+  if class != blank
+    assign field_classes = field_classes | append: ' ' | append: class
+  endif
+
+  assign toggle_show_label = label_show | default: 'Show password'
+  assign toggle_hide_label = label_hide | default: 'Hide password'
+  assign clear_aria_label = clear_label | default: 'Clear field'
+  assign use_enhanced_wrapper = false
+  if show_clear or show_password_toggle
+    assign use_enhanced_wrapper = true
+  endif
+
+  assign error_id = field_id | append: '-error'
+  assign success_id = field_id | append: '-success'
+  assign warning_id = field_id | append: '-warning'
+-%}
+
+{%- if field_type == 'hidden' -%}
+  <input
+    type="hidden"
+    {% if name != blank %}name="{{ name }}"{% endif %}
+    {% if value != blank %}value="{{ value }}"{% endif %}
+    {{ attributes }}
+  >
+{%- else -%}
+  {%- if use_enhanced_wrapper -%}
+    <form-field class="{{ field_classes }}" {{ shopify_attributes }}>
+  {%- else -%}
+    <div class="{{ field_classes }}" {{ shopify_attributes }}>
+  {%- endif -%}
+
+    {%- if icon_prefix != blank -%}
+      <span class="field__prefix" aria-hidden="true">
+        {% render 'icon', icon: icon_prefix, size: 'sm', wrapper: true, use_svg_wrapper: true %}
+      </span>
+    {%- endif -%}
+
+    <input
+      {% if field_id != blank %}id="{{ field_id }}"{% endif %}
+      {% if name != blank %}name="{{ name }}"{% endif %}
+      type="{{ field_type }}"
+      class="{{ input_classes }}"
+      {% if value != blank %}value="{{ value | escape }}"{% endif %}
+      {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% elsif label != blank %}placeholder="{{ label | escape }}"{% endif %}
+      {% if is_required %}required aria-required="true"{% endif %}
+      {% if is_disabled %}disabled{% endif %}
+      {% if is_readonly %}readonly{% endif %}
+      {% if autocomplete != blank %}autocomplete="{{ autocomplete }}"{% endif %}
+      {% if pattern != blank %}pattern="{{ pattern }}"{% endif %}
+      {% if min != blank %}min="{{ min }}"{% endif %}
+      {% if max != blank %}max="{{ max }}"{% endif %}
+      {% if step != blank %}step="{{ step }}"{% endif %}
+      {% if maxlength != blank %}maxlength="{{ maxlength }}"{% endif %}
+      {% if error_message != blank or state == 'error' %}aria-invalid="true"{% endif %}
+      {% if describedby_ids != blank %}aria-describedby="{{ describedby_ids }}"{% endif %}
+      {{ attributes }}
+    >
+
+    {%- if label != blank and field_id != blank -%}
+      <label class="field__label" for="{{ field_id }}">
+        {{ label | escape }}
+        {%- if is_required -%}
+          <span class="form-field__required" aria-hidden="true">*</span>
+        {%- endif -%}
+      </label>
+    {%- endif -%}
+
+    {%- if icon_suffix != blank -%}
+      <span class="field__suffix" aria-hidden="true">
+        {% render 'icon', icon: icon_suffix, size: 'sm', wrapper: true, use_svg_wrapper: true %}
+      </span>
+    {%- endif -%}
+
+    {%- if show_clear -%}
+      <button
+        type="button"
+        class="field__button field__button--clear hidden"
+        data-form-clear
+        aria-label="{{ clear_aria_label | escape }}"
+      >
+        <span class="svg-wrapper" aria-hidden="true">
+          {{- 'icon-reset.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    {%- endif -%}
+
+    {%- if show_password_toggle -%}
+      <button
+        type="button"
+        class="field__button field__button--password"
+        data-form-password-toggle
+        aria-pressed="false"
+        aria-label="{{ toggle_show_label | escape }}"
+        data-label-show="{{ toggle_show_label | escape }}"
+        data-label-hide="{{ toggle_hide_label | escape }}"
+      >
+        <span class="svg-wrapper" aria-hidden="true">
+          {{- 'icon-eye.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    {%- endif -%}
+
+  {%- if use_enhanced_wrapper -%}
+    </form-field>
+  {%- else -%}
+    </div>
+  {%- endif -%}
+
+  {%- if helper_text != blank and field_id != blank -%}
+    <p class="form-field__helper type-caption" id="{{ helper_id }}">{{ helper_text | escape }}</p>
+  {%- endif -%}
+
+  {%- if error_message != blank -%}
+    {% render 'form-message', message: error_message, type: 'error', id: error_id %}
+  {%- endif -%}
+
+  {%- if success_message != blank -%}
+    {% render 'form-message', message: success_message, type: 'success', id: success_id %}
+  {%- endif -%}
+
+  {%- if warning_message != blank -%}
+    {% render 'form-message', message: warning_message, type: 'warning', id: warning_id %}
+  {%- endif -%}
+{%- endif -%}

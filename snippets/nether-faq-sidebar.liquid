@@ -1,0 +1,44 @@
+{% comment %}
+  Renders FAQ support sidebar with related questions, helpful links, and CTAs.
+
+  Accepts:
+  - section: {Object} FAQ section (required)
+
+  Usage:
+  {% render 'nether-faq-sidebar', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign related_blocks = section.blocks | where: 'type', 'related_question'
+  assign link_blocks = section.blocks | where: 'type', 'helpful_link'
+-%}
+
+<aside class="nether-faq__sidebar" aria-label="{{ 'sections.nether_faq.sidebar.label' | t }}" data-nether-faq-sidebar>
+  {%- if related_blocks.size > 0 -%}
+    <div class="nether-faq__sidebar-group">
+      <p class="nether-faq__sidebar-heading">{{ 'sections.nether_faq.related.heading' | t }}</p>
+      <ul class="nether-faq__related-list" role="list">
+        {%- for block in related_blocks -%}
+          {%- render 'nether-faq-related', block: block, section: section -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+  {%- if link_blocks.size > 0 -%}
+    <div class="nether-faq__sidebar-group">
+      <p class="nether-faq__sidebar-heading">{{ 'sections.nether_faq.links.heading' | t }}</p>
+      <ul class="nether-faq__links-list" role="list">
+        {%- for block in link_blocks -%}
+          {%- render 'nether-faq-links', block: block -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'contact_cta' or block.type == 'support_cta' -%}
+      {%- render 'nether-faq-cta', block: block -%}
+    {%- endif -%}
+  {%- endfor -%}
+</aside>

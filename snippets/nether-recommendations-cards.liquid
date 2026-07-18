@@ -1,0 +1,61 @@
+{% comment %}
+  Nether Premium Recommendations — product card renderer.
+  Reuses Dawn card-product + optional Wishlist / Compare / Quick View slots.
+
+  Accepts:
+  - card_product: {Object} Product (required)
+  - section: {Object} Section object (required)
+  - skip_styles: {Boolean}
+  - lazy_load: {Boolean}
+  - horizontal: {Boolean} complementary-style horizontal card
+  - index: {Number} card index for featured editorial
+{% endcomment %}
+
+{%- liquid
+  assign media_ratio = section.settings.nether_image_ratio | default: 'adapt'
+  assign image_shape = section.settings.nether_image_shape | default: 'default'
+  assign show_secondary = section.settings.nether_show_secondary_image | default: false
+  assign show_vendor = section.settings.nether_show_vendor | default: false
+  assign show_rating = section.settings.nether_show_rating | default: false
+  assign quick_add = section.settings.nether_quick_add | default: 'none'
+  assign show_wishlist = section.settings.nether_enable_wishlist_cards | default: false
+  assign show_compare = section.settings.nether_enable_compare_cards | default: false
+  assign show_quick_view = section.settings.nether_enable_quick_view_cards | default: false
+  assign card_badge_label = section.settings.nether_card_badge_label
+
+  assign use_horizontal = false
+  if horizontal == true
+    assign use_horizontal = true
+  endif
+-%}
+
+<div
+  class="nether-recommendations__card{% if use_horizontal %} nether-recommendations__card--horizontal{% endif %}"
+  data-nether-recommendations-card
+  data-nether-recommendations-item
+>
+  {%- if card_badge_label != blank -%}
+    <div class="nether-recommendations__card-badge">
+      {% render 'badge', type: 'custom', label: card_badge_label, style: 'soft', size: 'small' %}
+    </div>
+  {%- endif -%}
+
+  {% render 'card-product',
+    card_product: card_product,
+    media_aspect_ratio: media_ratio,
+    image_shape: image_shape,
+    show_secondary_image: show_secondary,
+    show_vendor: show_vendor,
+    show_rating: show_rating,
+    lazy_load: lazy_load,
+    skip_styles: skip_styles,
+    quick_add: quick_add,
+    section_id: section.id,
+    horizontal_class: use_horizontal,
+    horizontal_quick_add: use_horizontal,
+    product_view_context: 'recommendation',
+    show_wishlist: show_wishlist,
+    show_compare: show_compare,
+    show_quick_view: show_quick_view
+  %}
+</div>

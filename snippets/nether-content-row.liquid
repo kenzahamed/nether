@@ -1,0 +1,157 @@
+{% comment %}
+  Renders a Nether Premium Content row for grid, timeline, and alternating layouts.
+
+  Accepts:
+  - block: {Object} Theme Editor content_row block (required)
+  - section: {Object} Content section (required)
+  - row_index: {Number} Row index for alternating layouts (optional)
+  - layout: {String} Parent layout key (optional)
+
+  Usage:
+  {% render 'nether-content-row', block: block, section: section, row_index: forloop.index %}
+{% endcomment %}
+
+{%- liquid
+  assign row_layout = layout | default: section.settings.nether_content_layout
+  assign row_number = row_index | default: 1
+  assign is_reversed = false
+  if row_layout == 'alternating_story' and row_number != 1
+    assign mod = row_number | modulo: 2
+    if mod == 0
+      assign is_reversed = true
+    endif
+  endif
+
+  assign desktop_image = block.settings.image
+  assign mobile_image = block.settings.image_mobile | default: desktop_image
+  assign media_type = block.settings.media_type | default: 'image'
+  assign widths = '375, 550, 750, 1100, 1500, 1780, 2000'
+  assign sizes = '(min-width: 990px) 40rem, (min-width: 750px) 45vw, 100vw'
+
+  assign card_classes = 'nether-content__row-card'
+  if section.settings.nether_content_enable_glass
+    assign card_classes = card_classes | append: ' nether-content__row-card--glass glass-hero-medium'
+  endif
+-%}
+
+<article
+  class="nether-content__row{% if is_reversed %} nether-content__row--reversed{% endif %}{% if row_layout == 'timeline' %} nether-content__row--timeline{% endif %}"
+  data-nether-content-row
+  data-nether-content-animate
+  data-nether-hero-animate
+  data-nether-hero-role="row"
+  {{ block.shopify_attributes }}
+>
+  {%- if row_layout == 'timeline' -%}
+    <div class="nether-content__timeline-marker" aria-hidden="true">
+      <span class="nether-content__timeline-dot"></span>
+      {%- if block.settings.timeline_label != blank -%}
+        <span class="nether-content__timeline-label type-overline">{{ block.settings.timeline_label | escape }}</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="{{ card_classes }}">
+    {%- if desktop_image != blank or block.settings.icon != blank and block.settings.icon != 'none' -%}
+      <div class="nether-content__row-media">
+        {%- if block.settings.icon != blank and block.settings.icon != 'none' and row_layout == 'feature_grid' -%}
+          <span class="nether-content__row-icon" aria-hidden="true">
+            {%- render 'icon', icon: block.settings.icon, size: 'lg', color: 'link' -%}
+          </span>
+        {%- elsif desktop_image != blank -%}
+          {%- case media_type -%}
+            {%- when 'video' -%}
+              {%- if block.settings.video != blank -%}
+                <deferred-media class="nether-content__deferred-video media" data-media-id="{{ block.settings.video.id }}">
+                  <button
+                    type="button"
+                    class="deferred-media__poster nether-content__video-poster"
+                    aria-label="{{ 'sections.video.load_video' | t: description: block.settings.video_description | default: block.settings.heading | escape }}"
+                  >
+                    {%- assign poster = block.settings.poster_image | default: desktop_image -%}
+                    {{
+                      poster
+                      | image_url: width: 1500
+                      | image_tag: widths: widths, sizes: sizes, alt: poster.alt | escape
+                    }}
+                    <span class="deferred-media__poster-button motion-reduce">
+                      <span class="svg-wrapper">{{- 'icon-play.svg' | inline_asset_content -}}</span>
+                    </span>
+                  </button>
+                  <template>
+                    {{
+                      block.settings.video
+                      | video_tag:
+                        image_size: '1500x',
+                        autoplay: true,
+                        loop: block.settings.video_loop,
+                        muted: false,
+                        controls: true,
+                        playsinline: true,
+                        class: 'nether-content__video'
+                    }}
+                  </template>
+                </deferred-media>
+              {%- else -%}
+                <picture>
+                  {%- if mobile_image != blank and mobile_image != desktop_image -%}
+                    <source
+                      media="(max-width: 749px)"
+                      srcset="{{ mobile_image | image_url: width: 750 }} 750w, {{ mobile_image | image_url }} {{ mobile_image.width }}w"
+                    >
+                  {%- endif -%}
+                  {{
+                    desktop_image
+                    | image_url: width: 1500
+                    | image_tag: widths: widths, sizes: sizes, loading: 'lazy', alt: desktop_image.alt | escape
+                  }}
+                </picture>
+              {%- endif -%}
+            {%- else -%}
+              <picture>
+                {%- if mobile_image != blank and mobile_image != desktop_image -%}
+                  <source
+                    media="(max-width: 749px)"
+                    srcset="{{ mobile_image | image_url: width: 750 }} 750w, {{ mobile_image | image_url }} {{ mobile_image.width }}w"
+                  >
+                {%- endif -%}
+                {{
+                  desktop_image
+                  | image_url: width: 1500
+                  | image_tag: widths: widths, sizes: sizes, loading: 'lazy', alt: desktop_image.alt | escape
+                }}
+              </picture>
+            {%- endcase -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="nether-content__row-copy">
+      {%- if block.settings.eyebrow != blank -%}
+        <p class="nether-content__eyebrow type-overline">{{ block.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      {%- if block.settings.heading != blank -%}
+        <h3 class="nether-content__heading inline-richtext {{ block.settings.heading_size | default: 'h3' }}">
+          {{ block.settings.heading }}
+        </h3>
+      {%- endif -%}
+
+      {%- if block.settings.text != blank -%}
+        <div class="nether-content__text rte type-body">{{ block.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if block.settings.button_label != blank -%}
+        <div class="nether-content__buttons">
+          {%- render 'button',
+            label: block.settings.button_label,
+            link: block.settings.button_link,
+            style: block.settings.button_style | default: 'primary',
+            size: 'medium',
+            disabled: block.settings.button_link == blank
+          -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

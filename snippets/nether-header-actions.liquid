@@ -1,0 +1,164 @@
+{% comment %}
+  Renders Nether Premium Header action icons.
+
+  Reuses Dawn header-search, localization, account, and cart patterns.
+  Wishlist upgrades the prior placeholder when the Wishlist Framework is enabled.
+  Compare upgrades the prior placeholder when the Compare Framework is enabled.
+
+  Accepts:
+  - search_input_id: {String} Search modal input id
+  - show_search_placeholder: {Boolean} Render search placeholder instead of modal
+
+  Usage:
+  {% render 'nether-header-actions', search_input_id: 'Search-In-Modal' %}
+{% endcomment %}
+
+  {%- liquid
+  if show_search_placeholder == nil
+    assign use_search_placeholder = section.settings.nether_search_placeholder
+  else
+    assign use_search_placeholder = show_search_placeholder
+  endif
+
+  assign use_search_drawer = section.settings.nether_enable_search_drawer
+
+  assign use_wishlist = section.settings.nether_enable_wishlist
+  assign show_wishlist = section.settings.nether_show_wishlist_placeholder
+  assign use_compare = section.settings.nether_enable_compare
+  assign show_compare = section.settings.nether_show_compare_placeholder
+  assign search_placeholder_label = 'sections.header.search_placeholder' | t
+  assign wishlist_placeholder_label = 'sections.header.wishlist_placeholder' | t
+  assign compare_placeholder_label = 'sections.header.compare_placeholder' | t
+-%}
+
+<div
+  class="header__icons nether-header__actions{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}"
+  role="navigation"
+  aria-label="{{ 'sections.header.utilities' | t }}"
+>
+  <div class="desktop-localization-wrapper">
+    {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+      <localization-form class="small-hide medium-hide" data-prevent-hide>
+        {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
+          <div>
+            <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>
+            {%- render 'country-localization', localPosition: 'HeaderCountry' -%}
+          </div>
+        {%- endform -%}
+      </localization-form>
+    {% endif %}
+
+    {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+      <localization-form class="small-hide medium-hide" data-prevent-hide>
+        {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
+          <div>
+            <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+            {%- render 'language-localization', localPosition: 'HeaderLanguage' -%}
+          </div>
+        {%- endform -%}
+      </localization-form>
+    {%- endif -%}
+  </div>
+
+  {%- if use_search_drawer -%}
+    {% render 'nether-search-trigger' %}
+  {%- elsif use_search_placeholder -%}
+    <span
+      class="header__icon header__icon--search nether-header__action nether-header__action--placeholder link focus-inset"
+      role="img"
+      aria-label="{{ search_placeholder_label }}"
+      aria-disabled="true"
+      data-nether-search-placeholder
+      tabindex="-1"
+    >
+      {% render 'icon', icon: 'search', size: 'md', decorative: false, label: search_placeholder_label %}
+    </span>
+  {%- else -%}
+    {% render 'header-search', input_id: search_input_id %}
+  {%- endif -%}
+
+  {%- if use_wishlist and show_wishlist -%}
+    {% render 'nether-wishlist-trigger' %}
+  {%- elsif show_wishlist -%}
+    <span
+      class="header__icon nether-header__action nether-header__action--placeholder link focus-inset"
+      role="img"
+      aria-label="{{ wishlist_placeholder_label }}"
+      aria-disabled="true"
+      data-nether-wishlist-placeholder
+      tabindex="-1"
+    >
+      {% render 'icon', icon: 'heart', size: 'md', decorative: false, label: wishlist_placeholder_label %}
+      <span class="nether-header__placeholder-badge visually-hidden">{{ 'sections.header.coming_soon' | t }}</span>
+    </span>
+  {%- endif -%}
+
+  {%- if use_compare and show_compare -%}
+    {% render 'nether-compare-trigger' %}
+  {%- elsif show_compare -%}
+    <span
+      class="header__icon nether-header__action nether-header__action--placeholder link focus-inset"
+      role="img"
+      aria-label="{{ compare_placeholder_label }}"
+      aria-disabled="true"
+      data-nether-compare-placeholder
+      tabindex="-1"
+    >
+      {% render 'icon', icon: 'clipboard', size: 'md', decorative: false, label: compare_placeholder_label %}
+      <span class="nether-header__placeholder-badge visually-hidden">{{ 'sections.header.coming_soon' | t }}</span>
+    </span>
+  {%- endif -%}
+
+  {%- if shop.customer_accounts_enabled -%}
+    <a
+      href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+      class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
+      rel="nofollow"
+    >
+      {%- if section.settings.enable_customer_avatar -%}
+        <account-icon>
+          {%- if customer and customer.has_avatar? -%}
+            {{ customer | avatar }}
+          {%- else -%}
+            <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+          {%- endif -%}
+        </account-icon>
+      {%- else -%}
+        <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+      {%- endif -%}
+      <span class="visually-hidden">
+        {%- liquid
+          if customer
+            echo 'customer.account_fallback' | t
+          else
+            echo 'customer.log_in' | t
+          endif
+        -%}
+      </span>
+    </a>
+  {%- endif -%}
+
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when '@app' -%}
+        {% render block %}
+    {%- endcase -%}
+  {%- endfor -%}
+
+  <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+    {% if cart == empty %}
+      <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
+    {% else %}
+      <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+    {% endif %}
+    <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+    {%- if cart != empty -%}
+      <div class="cart-count-bubble">
+        {%- if cart.item_count < 100 -%}
+          <span aria-hidden="true">{{ cart.item_count }}</span>
+        {%- endif -%}
+        <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+      </div>
+    {%- endif -%}
+  </a>
+</div>

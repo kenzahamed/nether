@@ -1,0 +1,25 @@
+{% comment %}
+  Loads Nether Quick View framework assets when needed outside the header shell.
+  Also preloads Product Page commerce scripts so lazy-injected product-info works.
+  Safe to render multiple times — browsers cache deferred scripts/styles.
+
+  Usage:
+  {% render 'nether-quick-view-assets' %}
+{% endcomment %}
+
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+{{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
+{{ 'component-swatch.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-page.css' | asset_url | stylesheet_tag }}
+{{ 'component-quick-view.css' | asset_url | stylesheet_tag }}
+{% render 'nether-commerce-assets' %}
+
+<script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-product-page.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-quick-view.js' | asset_url }}" defer="defer"></script>

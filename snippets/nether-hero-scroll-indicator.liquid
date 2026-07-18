@@ -1,0 +1,25 @@
+{% comment %}
+  Renders Nether Premium Hero scroll indicator.
+
+  Accepts:
+  - section: {Object} Hero section (required)
+
+  Usage:
+  {% render 'nether-hero-scroll-indicator', section: section %}
+{% endcomment %}
+
+{%- if section.settings.nether_show_scroll_indicator -%}
+  <a
+    href="#MainContent"
+    class="nether-hero__scroll"
+    data-nether-hero-scroll
+    aria-label="{{ 'sections.nether_hero.scroll.label' | t }}"
+  >
+    {%- if section.settings.nether_scroll_label != blank -%}
+      <p class="nether-hero__scroll-label type-caption">{{ section.settings.nether_scroll_label | escape }}</p>
+    {%- endif -%}
+    <span class="nether-hero__scroll-icon" data-nether-hero-scroll-icon aria-hidden="true">
+      {%- render 'icon', icon: 'arrow', size: 'sm', color: 'inherit' -%}
+    </span>
+  </a>
+{%- endif -%}

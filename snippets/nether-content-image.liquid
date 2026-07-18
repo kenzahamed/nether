@@ -1,0 +1,53 @@
+{% comment %}
+  Renders Nether Premium Content inline image block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - lazy_load: {Boolean} Lazy load image (default: true)
+
+  Usage:
+  {% render 'nether-content-image', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign desktop_image = block.settings.image
+  assign mobile_image = block.settings.image_mobile | default: desktop_image
+  assign lazy = lazy_load | default: true
+  assign widths = '375, 550, 750, 1100, 1500, 1780, 2000'
+  assign sizes = '(min-width: 990px) 60rem, (min-width: 750px) 50vw, 100vw'
+-%}
+
+{%- if desktop_image != blank -%}
+  <div
+    class="nether-content__image-block nether-content__image-block--{{ block.settings.image_ratio | default: 'adapt' }}"
+    data-nether-content-animate
+    data-nether-hero-animate
+    data-nether-hero-role="image"
+    {{ block.shopify_attributes }}
+  >
+    <picture>
+      {%- if mobile_image != blank and mobile_image != desktop_image -%}
+        <source
+          media="(max-width: 749px)"
+          srcset="
+            {%- if mobile_image.width >= 375 -%}{{ mobile_image | image_url: width: 375 }} 375w,{%- endif -%}
+            {%- if mobile_image.width >= 750 -%}{{ mobile_image | image_url: width: 750 }} 750w,{%- endif -%}
+            {{ mobile_image | image_url }} {{ mobile_image.width }}w
+          "
+        >
+      {%- endif -%}
+      {{
+        desktop_image
+        | image_url: width: 2000
+        | image_tag:
+          widths: widths,
+          sizes: sizes,
+          loading: lazy,
+          alt: desktop_image.alt | escape
+      }}
+    </picture>
+    {%- if block.settings.caption != blank -%}
+      <figcaption class="nether-content__image-caption type-caption">{{ block.settings.caption | escape }}</figcaption>
+    {%- endif -%}
+  </div>
+{%- endif -%}

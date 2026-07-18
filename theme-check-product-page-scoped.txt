@@ -1,0 +1,26 @@
+﻿node.exe : Γò¡ΓöÇ error ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö
+ÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓò«
+At C:\Users\Kenza\AppData\Roaming\npm\shopify.ps1:24 char:5
++     & "node$exe"  "$basedir/node_modules/@shopify/cli/bin/run.js" $ar ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Γò¡ΓöÇ error Γö...ΓöÇΓöÇΓöÇΓöÇΓò«:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Γöé                                                                              Γöé
+Γöé  Failed to prompt:                                                           Γöé
+Γöé                                                                              Γöé
+Γöé  Command theme check sections/nether-product-page.liquid                     Γöé
+Γöé  snippets/nether-product-page-*.liquid assets/component-product-page.css     Γöé
+Γöé  assets/component-product-page.js templates/product.json not found. Did you  Γöé
+Γöé   mean app generate extension?                                               Γöé
+Γöé                                                                              Γöé
+Γöé  This usually happens when running a command non-interactively, for example  Γöé
+Γöé   in a CI environment, or when piping to or from another process.            Γöé
+Γöé                                                                              Γöé
+Γöé  To resolve this, specify the option in the command, or run the command in   Γöé
+Γöé  an interactive environment such as your local terminal.                     Γöé
+Γöé                                                                              Γöé
+Γò░ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö
+ÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓ
+ò»
+

@@ -1,0 +1,53 @@
+{% comment %}
+  Renders Nether Premium Testimonials award or certification block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - block_type: {String} 'award' or 'certification' (optional)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-testimonials-award', block: block, block_type: 'award' %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attr = motion_attr | default: 'data-nether-testimonials-animate'
+  assign item_type = block_type | default: block.type
+  assign award_image = block.settings.image
+  assign award_title = block.settings.title
+  assign award_description = block.settings.description
+  assign award_year = block.settings.year
+  assign award_issuer = block.settings.issuer
+-%}
+
+{%- if award_image != blank or award_title != blank or award_description != blank -%}
+  <article class="nether-testimonials__award nether-testimonials__award--{{ item_type }}" {{ motion_attr }} {{ block.shopify_attributes }}>
+    {%- if award_image != blank -%}
+      <div class="nether-testimonials__award-image">
+        {{
+          award_image
+          | image_url: width: 240
+          | image_tag:
+            loading: 'lazy',
+            widths: '120, 180, 240',
+            alt: award_title | default: award_image.alt | escape
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="nether-testimonials__award-content">
+      {%- if award_title != blank -%}
+        <h3 class="nether-testimonials__award-title type-heading-sm">{{ award_title | escape }}</h3>
+      {%- endif -%}
+      {%- if item_type == 'certification' and award_issuer != blank -%}
+        <p class="nether-testimonials__award-issuer type-caption">{{ award_issuer | escape }}</p>
+      {%- endif -%}
+      {%- if item_type == 'award' and award_year != blank -%}
+        <p class="nether-testimonials__award-year type-caption">{{ award_year | escape }}</p>
+      {%- endif -%}
+      {%- if award_description != blank -%}
+        <p class="nether-testimonials__award-description type-body-sm">{{ award_description | escape }}</p>
+      {%- endif -%}
+    </div>
+  </article>
+{%- endif -%}

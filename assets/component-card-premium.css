@@ -1,0 +1,499 @@
+/* =============================================================================
+ * Nether Premium Card System
+ * Extends Dawn's .card / .card-wrapper — do not duplicate component-card.css.
+ * Styles: default, elevated, outline, glass, minimal, editorial
+ * Types: feature, testimonial, team, category, content (+ existing product/collection/blog)
+ * ============================================================================= */
+
+/* ── Design tokens for premium content cards ───────────────────────────────── */
+
+.content-card-wrapper .card,
+.feature-card-wrapper .card,
+.testimonial-card-wrapper .card,
+.team-card-wrapper .card,
+.category-card-wrapper .card {
+  --border-radius: var(--text-boxes-radius);
+  --border-width: var(--text-boxes-border-width);
+  --border-opacity: var(--text-boxes-border-opacity);
+  --shadow-horizontal-offset: var(--text-boxes-shadow-horizontal-offset);
+  --shadow-vertical-offset: var(--text-boxes-shadow-vertical-offset);
+  --shadow-blur-radius: var(--text-boxes-shadow-blur-radius);
+  --shadow-opacity: var(--text-boxes-shadow-opacity);
+  --shadow-visible: var(--text-boxes-shadow-visible);
+  --image-padding: 0rem;
+  --text-alignment: left;
+}
+
+/* ── Card style: Elevated ──────────────────────────────────────────────────── */
+
+.card--premium-elevated.card--card::after,
+.card--premium-elevated.card--standard .card__inner::after,
+.card--card.card--premium-elevated::after,
+.card--standard.card--premium-elevated .card__inner::after {
+  --shadow-vertical-offset: calc(var(--text-boxes-shadow-vertical-offset, 4px) + 4px);
+  --shadow-blur-radius: calc(var(--text-boxes-shadow-blur-radius, 5px) + 8px);
+  --shadow-opacity: min(calc(var(--shadow-opacity, 0.1) + 0.08), 1);
+}
+
+/* ── Card style: Outline ───────────────────────────────────────────────────── */
+
+.card--premium-outline.card--card,
+.card--premium-outline.card--standard .card__inner,
+.card--card.card--premium-outline,
+.card--standard.card--premium-outline .card__inner {
+  background-color: transparent;
+  --border-opacity: max(var(--border-opacity, 0.1), 0.15);
+}
+
+.card--premium-outline.card--card::after,
+.card--premium-outline.card--standard .card__inner::after,
+.card--card.card--premium-outline::after,
+.card--standard.card--premium-outline .card__inner::after {
+  box-shadow: none;
+}
+
+/* ── Card style: Glass ─────────────────────────────────────────────────────── */
+
+.card--premium-glass.card--card,
+.card--premium-glass.card--standard .card__inner,
+.card--card.card--premium-glass,
+.card--standard.card--premium-glass .card__inner {
+  background: rgba(var(--color-background), 0.55);
+  -webkit-backdrop-filter: blur(1.2rem);
+  backdrop-filter: blur(1.2rem);
+}
+
+.card--premium-glass.card--card,
+.card--premium-glass.card--standard .card__inner {
+  border-color: rgba(var(--color-foreground), 0.08);
+}
+
+/* ── Card style: Minimal ───────────────────────────────────────────────────── */
+
+.card--premium-minimal.card--card,
+.card--premium-minimal.card--standard .card__inner,
+.card--card.card--premium-minimal,
+.card--standard.card--premium-minimal .card__inner {
+  border: 0;
+  background-color: transparent;
+}
+
+.card--premium-minimal.card--card::after,
+.card--premium-minimal.card--standard .card__inner::after,
+.card--card.card--premium-minimal::after,
+.card--standard.card--premium-minimal .card__inner::after {
+  box-shadow: none;
+}
+
+/* ── Card style: Editorial ─────────────────────────────────────────────────── */
+
+.card--premium-editorial .card__content,
+.card--premium-editorial .card__information {
+  padding: 2rem 1.6rem;
+}
+
+.card--premium-editorial .card__heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  font-size: calc(var(--font-heading-scale) * 2.2rem);
+  letter-spacing: calc(var(--font-heading-scale) * 0.04rem);
+  line-height: calc(1 + 0.2 / max(var(--font-heading-scale), 1));
+}
+
+.card--premium-editorial .card__caption,
+.card--premium-editorial .card__description {
+  font-size: 1.5rem;
+  line-height: calc(1 + 0.6 / var(--font-body-scale));
+  color: rgba(var(--color-foreground), 0.72);
+}
+
+@media screen and (min-width: 750px) {
+  .card--premium-editorial .card__content,
+  .card--premium-editorial .card__information {
+    padding: 2.8rem 2.4rem;
+  }
+
+  .card--premium-editorial .card__heading {
+    font-size: calc(var(--font-heading-scale) * 2.8rem);
+  }
+}
+
+/* ── Border radius options ─────────────────────────────────────────────────── */
+
+.card--radius-none.card--card,
+.card--radius-none.card--standard .card__inner {
+  --border-radius: 0;
+}
+
+.card--radius-sm.card--card,
+.card--radius-sm.card--standard .card__inner {
+  --border-radius: 0.4rem;
+}
+
+.card--radius-lg.card--card,
+.card--radius-lg.card--standard .card__inner {
+  --border-radius: 1.6rem;
+}
+
+.card--radius-full.card--card,
+.card--radius-full.card--standard .card__inner {
+  --border-radius: 2rem;
+}
+
+/* ── Shadow levels ─────────────────────────────────────────────────────────── */
+
+.card--shadow-none.card--card::after,
+.card--shadow-none.card--standard .card__inner::after {
+  box-shadow: none;
+}
+
+.card--shadow-sm.card--card::after,
+.card--shadow-sm.card--standard .card__inner::after {
+  --shadow-vertical-offset: 2px;
+  --shadow-blur-radius: 4px;
+  --shadow-opacity: 0.06;
+}
+
+.card--shadow-lg.card--card::after,
+.card--shadow-lg.card--standard .card__inner::after {
+  --shadow-vertical-offset: 8px;
+  --shadow-blur-radius: 20px;
+  --shadow-opacity: min(calc(var(--shadow-opacity, 0.1) + 0.12), 1);
+}
+
+/* ── Gradient border ───────────────────────────────────────────────────────── */
+
+.card--gradient-border .card__inner {
+  position: relative;
+  isolation: isolate;
+}
+
+.card--gradient-border .card__inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: max(var(--border-width, 1px), 1px);
+  border-radius: var(--border-radius);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-foreground), 0.25),
+    rgba(var(--color-button), 0.6),
+    rgba(var(--color-foreground), 0.15)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.card--gradient-border.card--card {
+  border: 0;
+}
+
+.card--gradient-border.card--card::after {
+  display: none;
+}
+
+/* ── Equal height ──────────────────────────────────────────────────────────── */
+
+.card--equal-height {
+  height: 100%;
+}
+
+.premium-card-grid {
+  display: grid;
+  align-items: stretch;
+}
+
+.premium-card-grid > .card-wrapper,
+.premium-card-grid > li > .card-wrapper {
+  height: 100%;
+}
+
+/* ── Card type: Feature ─────────────────────────────────────────────────────── */
+
+.card--type-feature .card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  grid-template-rows: auto;
+  gap: 1rem;
+}
+
+.card--type-feature .card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.8rem;
+  height: 4.8rem;
+  border-radius: 50%;
+  background: rgba(var(--color-foreground), 0.06);
+  color: rgb(var(--color-foreground));
+  flex-shrink: 0;
+}
+
+.card--type-feature .card__icon .svg-wrapper {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.card--type-feature .card__information {
+  padding-top: 0;
+  width: 100%;
+}
+
+.card--type-feature .card__cta {
+  margin-top: 0.8rem;
+}
+
+/* ── Card type: Testimonial ────────────────────────────────────────────────── */
+
+.card--type-testimonial .card__content {
+  display: flex;
+  flex-direction: column;
+  grid-template-rows: auto;
+  height: 100%;
+}
+
+.card--type-testimonial .card__quote {
+  margin: 0;
+  font-size: 1.5rem;
+  font-style: italic;
+  line-height: calc(1 + 0.6 / var(--font-body-scale));
+  color: rgba(var(--color-foreground), 0.85);
+  flex-grow: 1;
+}
+
+.card--type-testimonial .card__quote::before {
+  content: '\201C';
+  display: block;
+  font-size: 3.2rem;
+  line-height: 1;
+  font-style: normal;
+  color: rgba(var(--color-foreground), 0.2);
+  margin-bottom: 0.4rem;
+}
+
+.card--type-testimonial .card__attribution {
+  display: block;
+  margin-top: 1.6rem;
+  font-size: 1.3rem;
+  font-style: normal;
+  color: rgba(var(--color-foreground), 0.65);
+}
+
+.card--type-testimonial .card__attribution strong {
+  display: block;
+  font-weight: var(--font-body-weight-bold);
+  color: rgb(var(--color-foreground));
+}
+
+/* ── Card type: Team ───────────────────────────────────────────────────────── */
+
+.card--type-team .card__media {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.card--type-team .card__media img {
+  border-radius: inherit;
+}
+
+.card--type-team .card__information {
+  text-align: center;
+}
+
+.card--type-team .card__caption {
+  color: rgba(var(--color-foreground), 0.65);
+  font-size: 1.3rem;
+  margin-top: 0.4rem;
+}
+
+/* ── Card type: Category ───────────────────────────────────────────────────── */
+
+.card--type-category .card__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.card--type-category .card__media + .card__content,
+.card--type-category .card__inner .card__content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, rgba(var(--color-shadow), 0.55) 0%, transparent 60%);
+  color: rgb(var(--color-background));
+}
+
+.card--type-category .card__heading a,
+.card--type-category .card__caption {
+  color: inherit;
+}
+
+/* ── Card type: Content (generic) ────────────────────────────────────────────── */
+
+.card--type-content .card__description {
+  margin-top: 0.8rem;
+  color: rgba(var(--color-foreground), 0.75);
+  font-size: 1.4rem;
+  line-height: calc(1 + 0.5 / var(--font-body-scale));
+}
+
+.card__footer {
+  margin-top: auto;
+  padding-top: 1.2rem;
+  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+.card__cta {
+  margin-top: 1.2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Premium inner structure ───────────────────────────────────────────────── */
+
+.premium-card-wrapper {
+  display: block;
+  height: 100%;
+}
+
+.premium-card-wrapper:focus-within .card__heading a:focus-visible::after {
+  box-shadow: var(--focused-base-box-shadow);
+  outline: var(--focused-base-outline);
+}
+
+/* ── Hover: Lift ───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .card-hover-lift .card--card,
+  .card-hover-lift .card--standard .card__inner {
+    transition: transform var(--duration-medium) ease, box-shadow var(--duration-medium) ease;
+  }
+
+  .card-hover-lift:hover .card--card,
+  .card-hover-lift:hover .card--standard .card__inner {
+    transform: translateY(-0.4rem);
+  }
+}
+
+/* ── Hover: Shadow increase ──────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .card-hover-shadow .card--card::after,
+  .card-hover-shadow .card--standard .card__inner::after {
+    transition: box-shadow var(--duration-medium) ease;
+  }
+
+  .card-hover-shadow:hover .card--card::after,
+  .card-hover-shadow:hover .card--standard .card__inner::after {
+    --shadow-vertical-offset: calc(var(--text-boxes-shadow-vertical-offset, 4px) + 6px);
+    --shadow-blur-radius: calc(var(--text-boxes-shadow-blur-radius, 5px) + 12px);
+    --shadow-opacity: min(calc(var(--shadow-opacity, 0.1) + 0.1), 1);
+  }
+}
+
+/* ── Hover: Image zoom ─────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .card-hover-zoom .card__media img,
+  .card-hover-zoom .media img {
+    transition: transform var(--duration-long) ease;
+  }
+
+  .card-hover-zoom:hover .card__media img,
+  .card-hover-zoom:hover .media img {
+    transform: scale(1.06);
+  }
+}
+
+/* ── Hover: Image scale (container) ────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .card-hover-scale .card__media {
+    overflow: hidden;
+  }
+
+  .card-hover-scale:hover .card__media {
+    transform: scale(1.02);
+    transition: transform var(--duration-medium) ease;
+  }
+}
+
+/* ── Hover: Border highlight ───────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .card-hover-border .card--card,
+  .card-hover-border .card--standard .card__inner {
+    transition: border-color var(--duration-short) ease;
+  }
+
+  .card-hover-border:hover .card--card,
+  .card-hover-border:hover .card--standard .card__inner {
+    --border-opacity: 0.35;
+  }
+}
+
+/* ── Hover: Arrow movement ─────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .card-hover-arrow .icon-wrap,
+  .card-hover-arrow .card__cta .button__icon--trailing {
+    transition: transform var(--duration-short) ease;
+  }
+
+  .card-hover-arrow:hover .icon-wrap,
+  .card-hover-arrow:hover .card__cta .button__icon--trailing {
+    transform: translateX(0.3rem);
+  }
+}
+
+/* ── Hover: Glow ───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .card-hover-glow .card--card::after,
+  .card-hover-glow .card--standard .card__inner::after {
+    transition: box-shadow var(--duration-medium) ease;
+  }
+
+  .card-hover-glow:hover .card--card::after,
+  .card-hover-glow:hover .card--standard .card__inner::after {
+    box-shadow:
+      var(--shadow-horizontal-offset) var(--shadow-vertical-offset) var(--shadow-blur-radius)
+        rgba(var(--color-shadow), var(--shadow-opacity)),
+      0 0 2rem rgba(var(--color-button), 0.18);
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hover-lift:hover .card--card,
+  .card-hover-lift:hover .card--standard .card__inner,
+  .card-hover-zoom:hover .card__media img,
+  .card-hover-scale:hover .card__media,
+  .card-hover-arrow:hover .icon-wrap {
+    transform: none;
+  }
+}
+
+/* ── High contrast ─────────────────────────────────────────────────────────── */
+
+@media (forced-colors: active) {
+  .card--premium-glass.card--card,
+  .card--premium-glass.card--standard .card__inner {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: 1px solid CanvasText;
+  }
+
+  .card--gradient-border .card__inner::before {
+    display: none;
+  }
+}

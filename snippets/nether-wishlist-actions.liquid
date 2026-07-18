@@ -1,0 +1,42 @@
+{% comment %}
+  Nether Premium Wishlist — item action controls (move to cart / remove).
+  Markup template consumed by the wishlist JS renderer.
+
+  Accepts:
+  - context: {String} drawer | page (default: drawer)
+
+  Usage:
+  {% render 'nether-wishlist-actions', context: 'drawer' %}
+{% endcomment %}
+
+{%- assign wishlist_context = context | default: 'drawer' -%}
+
+<div
+  class="nether-wishlist-card__actions nether-wishlist-card__actions--{{ wishlist_context }}"
+  data-nether-wishlist-item-actions
+>
+  <button
+    type="button"
+    class="button button--secondary button--small nether-wishlist-card__quick-view"
+    data-nether-quick-view-open
+    data-product-url=""
+    data-nether-wishlist-quick-view
+  >
+    {{ 'sections.nether_quick_view.actions.open' | t }}
+  </button>
+  <button
+    type="button"
+    class="button button--secondary button--small nether-wishlist-card__move"
+    data-nether-wishlist-move-to-cart
+  >
+    {{ 'sections.nether_wishlist.actions.move_to_cart' | t }}
+  </button>
+  <button
+    type="button"
+    class="button button--ghost button--small nether-wishlist-card__remove"
+    data-nether-wishlist-remove
+    aria-label="{{ 'sections.nether_wishlist.actions.remove' | t }}"
+  >
+    {{ 'sections.nether_wishlist.actions.remove' | t }}
+  </button>
+</div>

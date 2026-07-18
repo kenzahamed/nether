@@ -1,0 +1,54 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — shared info card primitive.
+  Used by delivery, shipping, returns, warranty, money-back, and notices.
+
+  Accepts:
+  - heading: {String}
+  - text: {String} Plain or HTML (when rte: true)
+  - rte: {Boolean} Treat text as richtext (default: false)
+  - icon: {String} Nether icon name (default: info)
+  - style: {String} card | minimal | glass | inline (default: card)
+  - class: {String}
+  - attributes: {String}
+  - animate: {Boolean} Add data-nether-commerce-animate (default: true)
+{% endcomment %}
+
+{%- liquid
+  assign card_style = style | default: 'card'
+  assign card_icon = icon | default: 'info'
+  assign enable_animate = animate
+  if enable_animate == nil
+    assign enable_animate = true
+  endif
+  assign has_content = false
+  if heading != blank or text != blank
+    assign has_content = true
+  endif
+-%}
+
+{%- if has_content -%}
+  <div
+    class="nether-commerce__info nether-commerce__info--{{ card_style }}{% if class != blank %} {{ class }}{% endif %}"
+    data-nether-commerce-module="info-card"
+    {% if enable_animate %}data-nether-commerce-animate{% endif %}
+    {% if attributes != blank %}{{ attributes }}{% endif %}
+  >
+    <div class="nether-commerce__info-inner{% if card_style == 'card' or card_style == 'glass' %} card card--card card--standard shadow-sm radius-md{% endif %}{% if card_style == 'glass' %} glass{% endif %}">
+      {%- if card_icon != blank and card_icon != 'none' -%}
+        {% render 'nether-commerce-icon', icon: card_icon, size: 'sm', decorative: true %}
+      {%- endif -%}
+      <div class="nether-commerce__info-copy">
+        {%- if heading != blank -%}
+          <p class="nether-commerce__info-heading type-body-sm">{{ heading }}</p>
+        {%- endif -%}
+        {%- if text != blank -%}
+          {%- if rte -%}
+            <div class="nether-commerce__info-text rte type-body-sm">{{ text }}</div>
+          {%- else -%}
+            <p class="nether-commerce__info-text type-body-sm">{{ text }}</p>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

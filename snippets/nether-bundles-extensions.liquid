@@ -1,0 +1,86 @@
+{% comment %}
+  Nether Premium Bundles — future extension points (architecture only).
+
+  Accepts:
+  - block: {Object} Block object (optional)
+  - section: {Object} Section object (optional)
+  - type: {String} Extension type override when block is absent
+
+  Usage:
+  {% render 'nether-bundles-extensions', type: 'build_your_own' %}
+{% endcomment %}
+
+{%- liquid
+  assign extension_type = type
+  if block != blank
+    assign extension_type = block.type | default: extension_type
+  endif
+  assign extension_type = extension_type | default: 'generic'
+  assign extension_type = extension_type | replace: '_placeholder', '' | replace: 'bundles_', ''
+
+  case extension_type
+    when 'build_your_own', 'byob'
+      assign extension_data = 'data-nether-bundles-byob-placeholder'
+      assign extension_icon = 'clipboard'
+      assign default_label = 'sections.nether_bundles.extensions.build_your_own' | t
+    when 'subscription', 'subscriptions'
+      assign extension_data = 'data-nether-bundles-subscription-placeholder'
+      assign extension_icon = 'return'
+      assign default_label = 'sections.nether_bundles.extensions.subscription' | t
+    when 'ai', 'ai_bundles'
+      assign extension_data = 'data-nether-bundles-ai-placeholder'
+      assign extension_icon = 'star'
+      assign default_label = 'sections.nether_bundles.extensions.ai' | t
+    when 'dynamic_merchandising', 'merchandising'
+      assign extension_data = 'data-nether-bundles-merchandising-placeholder'
+      assign extension_icon = 'box'
+      assign default_label = 'sections.nether_bundles.extensions.dynamic_merchandising' | t
+    when 'inventory'
+      assign extension_data = 'data-nether-bundles-inventory-placeholder'
+      assign extension_icon = 'box'
+      assign default_label = 'sections.nether_bundles.extensions.inventory' | t
+    when 'discount', 'discount_engine'
+      assign extension_data = 'data-nether-bundles-discount-placeholder'
+      assign extension_icon = 'discount'
+      assign default_label = 'sections.nether_bundles.extensions.discount' | t
+    when 'personalization'
+      assign extension_data = 'data-nether-bundles-personalization-placeholder'
+      assign extension_icon = 'silhouette'
+      assign default_label = 'sections.nether_bundles.extensions.personalization' | t
+    when 'analytics'
+      assign extension_data = 'data-nether-bundles-analytics-placeholder'
+      assign extension_icon = 'info'
+      assign default_label = 'sections.nether_bundles.extensions.analytics' | t
+    when 'loyalty'
+      assign extension_data = 'data-nether-bundles-loyalty-placeholder'
+      assign extension_icon = 'heart'
+      assign default_label = 'sections.nether_bundles.extensions.loyalty' | t
+    else
+      assign extension_data = 'data-nether-bundles-extension-placeholder'
+      assign extension_icon = 'info'
+      assign default_label = 'sections.nether_bundles.extensions.generic' | t
+  endcase
+
+  assign extension_label = default_label
+  if block != blank and block.settings.label != blank
+    assign extension_label = block.settings.label
+  elsif block != blank and block.settings.heading != blank
+    assign extension_label = block.settings.heading
+  endif
+-%}
+
+<div
+  class="nether-bundles__module nether-bundles__extension nether-bundles__extension--{{ extension_type }}"
+  data-nether-bundles-module="extension"
+  data-nether-bundles-animate
+  {{ extension_data }}
+  {% if block != blank %}{{ block.shopify_attributes }}{% endif %}
+>
+  <div class="nether-bundles__extension-inner" role="group" aria-label="{{ extension_label | escape }}">
+    {% render 'icon', icon: extension_icon, size: 'sm', decorative: false, label: extension_label %}
+    <span class="nether-bundles__extension-label type-body-sm">{{ extension_label }}</span>
+    {%- if block != blank and block.settings.text != blank -%}
+      <p class="nether-bundles__extension-text type-body-sm">{{ block.settings.text }}</p>
+    {%- endif -%}
+  </div>
+</div>

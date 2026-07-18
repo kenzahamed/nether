@@ -1,0 +1,51 @@
+{% comment %}
+  Sticky category navigation for categorized FAQ layouts.
+
+  Accepts:
+  - section: {Object} FAQ section (required)
+
+  Usage:
+  {% render 'nether-faq-nav', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign has_categories = false
+
+  for block in section.blocks
+    if block.type == 'category'
+      assign has_categories = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if has_categories and section.settings.nether_enable_category_nav -%}
+  <nav
+    class="nether-faq__nav"
+    aria-label="{{ 'sections.nether_faq.nav.label' | t }}"
+    data-nether-faq-nav
+  >
+    <ul class="nether-faq__nav-list" role="list">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'category' -%}
+          {%- liquid
+            assign category_title = block.settings.heading | default: block.settings.title
+            assign category_slug = block.settings.slug | default: category_title | handleize
+          -%}
+          {%- if category_title != blank -%}
+            <li class="nether-faq__nav-item">
+              <a
+                class="nether-faq__nav-link link"
+                href="#NetherFaqCategory-{{ section.id }}-{{ category_slug }}"
+                data-nether-faq-nav-link
+                data-category-slug="{{ category_slug }}"
+              >
+                {{- category_title | escape -}}
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </nav>
+{%- endif -%}

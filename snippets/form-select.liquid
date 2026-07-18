@@ -1,0 +1,120 @@
+{% comment %}
+  Renders a Nether Premium select dropdown.
+
+  Extends Dawn's .select / .select__select — existing selects remain unchanged.
+
+  Accepts:
+  - name: {String} Select name attribute
+  - id: {String} Select id (auto-generated from name if blank)
+  - label: {String} Field label
+  - options: {String} Comma-separated value:Label pairs, e.g. 'us:United States,ca:Canada'
+  - selected: {String} Pre-selected option value
+  - placeholder_option: {String} Disabled placeholder option label (optional)
+  - size: {String} small | medium | large (default: medium)
+  - state: {String} success | error | warning (optional)
+  - static_label: {Boolean} Show label above select (default: true)
+  - required: {Boolean} Required field (default: false)
+  - disabled: {Boolean} Disabled state (default: false)
+  - helper_text: {String} Helper text below field
+  - error_message: {String} Error validation message
+  - class: {String} Additional classes on select wrapper
+  - attributes: {String} Additional select HTML attributes
+  - shopify_attributes: {String} Theme Editor block attributes
+
+  Usage:
+  {% render 'form-select',
+    name: 'country',
+    label: 'Country',
+    options: 'us:United States,ca:Canada,uk:United Kingdom',
+    selected: 'us'
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign field_size = size | default: 'medium'
+  assign show_static_label = static_label | default: true, allow_false: true
+  assign is_required = required | default: false, allow_false: true
+  assign is_disabled = disabled | default: false, allow_false: true
+
+  assign field_id = id
+  if field_id == blank and name != blank
+    assign field_id = name | handleize | append: '-select'
+  endif
+
+  assign select_classes = 'select'
+  case field_size
+    when 'small'
+      assign select_classes = select_classes | append: ' select--small'
+    when 'large'
+      assign select_classes = select_classes | append: ' select--large'
+  endcase
+
+  if state == 'success'
+    assign select_classes = select_classes | append: ' select--success'
+  elsif state == 'error' or error_message != blank
+    assign select_classes = select_classes | append: ' select--error'
+  elsif state == 'warning'
+    assign select_classes = select_classes | append: ' select--warning'
+  endif
+
+  if is_disabled
+    assign select_classes = select_classes | append: ' select--disabled'
+  endif
+
+  if class != blank
+    assign select_classes = select_classes | append: ' ' | append: class
+  endif
+
+  assign options_array = options | split: ','
+  assign helper_id = field_id | append: '-helper'
+  assign error_id = field_id | append: '-error'
+-%}
+
+{%- if show_static_label and label != blank and field_id != blank -%}
+  <label class="form__label" for="{{ field_id }}">
+    {{ label | escape }}
+    {%- if is_required -%}
+      <span class="form-field__required" aria-hidden="true">*</span>
+    {%- endif -%}
+  </label>
+{%- endif -%}
+
+<div class="{{ select_classes }}" {{ shopify_attributes }}>
+  <select
+    {% if field_id != blank %}id="{{ field_id }}"{% endif %}
+    {% if name != blank %}name="{{ name }}"{% endif %}
+    class="select__select"
+    {% if is_required %}required aria-required="true"{% endif %}
+    {% if is_disabled %}disabled{% endif %}
+    {% if error_message != blank or state == 'error' %}aria-invalid="true"{% endif %}
+    {% if helper_text != blank and field_id != blank %}aria-describedby="{{ helper_id }}"{% endif %}
+    {{ attributes }}
+  >
+    {%- if placeholder_option != blank -%}
+      <option value="" disabled {% unless selected != blank %}selected{% endunless %}>{{ placeholder_option | escape }}</option>
+    {%- endif -%}
+
+    {%- for option_pair in options_array -%}
+      {%- assign option_parts = option_pair | split: ':' -%}
+      {%- assign option_value = option_parts[0] | strip -%}
+      {%- assign option_label = option_parts[1] | default: option_parts[0] | strip -%}
+      <option
+        value="{{ option_value | escape }}"
+        {% if selected == option_value %}selected{% endif %}
+      >
+        {{ option_label | escape }}
+      </option>
+    {%- endfor -%}
+  </select>
+  <span class="svg-wrapper" aria-hidden="true">
+    {{- 'icon-caret.svg' | inline_asset_content -}}
+  </span>
+</div>
+
+{%- if helper_text != blank -%}
+  <p class="form-field__helper type-caption" id="{{ helper_id }}">{{ helper_text | escape }}</p>
+{%- endif -%}
+
+{%- if error_message != blank -%}
+  {% render 'form-message', message: error_message, type: 'error', id: error_id %}
+{%- endif -%}

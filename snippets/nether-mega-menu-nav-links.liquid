@@ -1,0 +1,113 @@
+{% comment %}
+  Nether Mega Menu — Navigation Links block.
+  Reuses Dawn mega-menu link classes and Nether Icon System.
+
+  Accepts:
+  - block: {Object} Section block
+  - link: {Object} Parent menu link
+  - section: {Object} Header section
+{% endcomment %}
+
+{%- liquid
+  assign show_icons = false
+  if section.settings.nether_mega_enable_images and block.settings.show_link_icons
+    assign show_icons = true
+  endif
+
+  assign nav_links = link.links
+  if block.settings.menu_handle != blank
+    assign nav_links = blank
+    for childlink in link.links
+      if childlink.handle == block.settings.menu_handle
+        assign nav_links = childlink.links
+        break
+      endif
+    endfor
+    if nav_links == blank
+      for childlink in link.links
+        if childlink.handle == block.settings.menu_handle
+          assign nav_links = childlink
+          break
+        endif
+      endfor
+    endif
+  endif
+
+  if block.settings.menu_handle == blank
+    assign nav_links = link.links
+  endif
+-%}
+
+<div class="nether-mega-menu__nav-column" data-nether-mega-reveal>
+  {%- if block.settings.heading != blank -%}
+    <p class="nether-mega-menu__column-heading h4">
+      {%- if block.settings.column_icon != blank -%}
+        <span class="nether-mega-menu__column-icon">
+          {{ block.settings.column_icon | image_url: width: 48 | image_tag: loading: 'lazy', widths: '24, 48', alt: block.settings.heading }}
+        </span>
+      {%- elsif show_icons and block.settings.icon_name != blank -%}
+        <span class="nether-mega-menu__column-icon nether-mega-menu__column-icon--svg">
+          {%- render 'icon', icon: block.settings.icon_name, size: 'sm' -%}
+        </span>
+      {%- endif -%}
+      {{ block.settings.heading | escape }}
+    </p>
+  {%- endif -%}
+
+  <ul class="nether-mega-menu__link-list list-unstyled" role="list">
+    {%- for childlink in nav_links -%}
+      <li class="nether-mega-menu__link-item">
+        <a
+          href="{{ childlink.url }}"
+          class="mega-menu__link mega-menu__link--level-2 link nether-mega-menu__link{% if childlink.current %} mega-menu__link--active{% endif %}"
+          {% if childlink.current %}aria-current="page"{% endif %}
+        >
+          {%- if show_icons -%}
+            <span class="nether-mega-menu__link-icon" aria-hidden="true">
+              {%- liquid
+                assign link_icon = block.settings.icon_name
+                case childlink.type
+                  when 'collection_link'
+                    if link_icon == blank
+                      assign link_icon = 'collection'
+                    endif
+                  when 'product_link'
+                    if link_icon == blank
+                      assign link_icon = 'box'
+                    endif
+                  when 'page_link'
+                    if link_icon == blank
+                      assign link_icon = 'page'
+                    endif
+                  when 'blog_link'
+                    if link_icon == blank
+                      assign link_icon = 'chat_bubble'
+                    endif
+                endcase
+              -%}
+              {%- if link_icon != blank -%}
+                {%- render 'icon', icon: link_icon, size: 'sm', wrapper: false -%}
+              {%- endif -%}
+            </span>
+          {%- endif -%}
+          <span>{{ childlink.title | escape }}</span>
+        </a>
+        {%- if childlink.links != blank -%}
+          <ul class="nether-mega-menu__sublinks list-unstyled" role="list">
+            {%- for grandchildlink in childlink.links -%}
+              <li>
+                <a
+                  href="{{ grandchildlink.url }}"
+                  class="mega-menu__link link nether-mega-menu__sublink{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                  {% if grandchildlink.current %}aria-current="page"{% endif %}
+                >
+                  {{ grandchildlink.title | escape }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>

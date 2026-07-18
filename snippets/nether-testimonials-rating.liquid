@@ -1,0 +1,44 @@
+{% comment %}
+  Renders Nether Premium Testimonials rating block.
+
+  Accepts:
+  - block: {Object} Theme Editor block (required)
+  - motion_attr: {String} Motion data attribute (optional)
+
+  Usage:
+  {% render 'nether-testimonials-rating', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign motion_attr = motion_attr | default: 'data-nether-testimonials-animate'
+  assign rating_value = block.settings.rating | default: 5
+  assign rating_max = 5
+  assign rating_decimal = 0
+  assign decimal = rating_value | modulo: 1
+  if decimal >= 0.3 and decimal <= 0.7
+    assign rating_decimal = 0.5
+  elsif decimal > 0.7
+    assign rating_decimal = 1
+  endif
+-%}
+
+{%- if rating_value > 0 -%}
+  <div
+    class="nether-testimonials__rating rating"
+    {{ motion_attr }}
+    data-nether-testimonials-rating
+    data-nether-testimonials-role="rating"
+    role="img"
+    aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, rating_max: rating_max }}"
+    {{ block.shopify_attributes }}
+  >
+    <span
+      class="rating-star"
+      style="--rating: {{ rating_value | floor }}; --rating-max: {{ rating_max }}; --rating-decimal: {{ rating_decimal }};"
+      aria-hidden="true"
+    ></span>
+    <p class="rating-text caption">
+      <span aria-hidden="true">{{ rating_value }} / {{ rating_max }}</span>
+    </p>
+  </div>
+{%- endif -%}

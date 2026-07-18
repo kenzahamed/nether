@@ -1,0 +1,25 @@
+{% comment %}
+  Nether Premium Product Page — Bundles module.
+  Fulfills bundles_placeholder with the Bundles Commerce Framework.
+  Does not replace product-form, variants, or buy buttons.
+
+  Accepts:
+  - block: {Object} Block object (required)
+  - section: {Object} Section object (required)
+  - product: {Object} Product object (required)
+{% endcomment %}
+
+<div
+  class="nether-product-page__module nether-product-page__module--bundles nether-product-page__bundles"
+  data-nether-product-page-module="bundles"
+  data-nether-product-page-animate
+  data-nether-bundles-placeholder
+>
+  {% render 'nether-bundles-embedded',
+    section: section,
+    block: block,
+    product: product,
+    context: 'product',
+    compact: true
+  %}
+</div>

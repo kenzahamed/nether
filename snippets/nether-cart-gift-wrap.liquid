@@ -1,0 +1,47 @@
+{% comment %}
+  Nether Premium Cart — gift wrap placeholder.
+  Structural placeholder for future gift wrap apps.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - block: {Object} Block object (optional)
+{% endcomment %}
+
+{%- liquid
+  assign show_gift_wrap = section.settings.nether_enable_gift_wrap
+  assign gift_label = section.settings.nether_gift_wrap_label
+  assign gift_text = section.settings.nether_gift_wrap_text
+
+  if block
+    assign show_gift_wrap = true
+    assign gift_label = block.settings.label | default: gift_label
+    assign gift_text = block.settings.text | default: gift_text
+  endif
+
+  if gift_label == blank
+    assign gift_label = 'sections.nether_cart.gift_wrap.label' | t
+  endif
+-%}
+
+{%- if show_gift_wrap -%}
+  <div
+    class="nether-cart__module nether-cart__module--gift-wrap nether-cart__gift-wrap"
+    data-nether-cart-module="gift-wrap"
+    data-nether-cart-animate
+    data-nether-gift-wrap-placeholder
+    role="group"
+    aria-label="{{ gift_label | escape }}"
+    {% if block %}{{ block.shopify_attributes }}{% endif %}
+  >
+    <div class="nether-cart__gift-wrap-inner">
+      {% render 'icon', icon: 'box', size: 'sm', decorative: true %}
+      <div class="nether-cart__gift-wrap-copy">
+        <p class="nether-cart__gift-wrap-label type-body-sm">{{ gift_label }}</p>
+        {%- if gift_text != blank -%}
+          <p class="nether-cart__gift-wrap-text type-body-sm">{{ gift_text }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+

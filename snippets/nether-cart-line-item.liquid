@@ -1,0 +1,225 @@
+{% comment %}
+  Nether Premium Cart — shared line item card.
+  Preserves Dawn cart-item markup, IDs, and data attributes for native AJAX cart.
+
+  Accepts:
+  - item: {Object} Cart line item (required)
+  - context: {String} drawer | page (required)
+{% endcomment %}
+
+{%- liquid
+  assign cart_context = context | default: 'page'
+  assign line_index = item.index | plus: 1
+
+  if cart_context == 'drawer'
+    assign item_row_id = 'CartDrawer-Item-' | append: line_index
+    assign quantity_input_id = 'Drawer-quantity-' | append: line_index
+    assign remove_button_id = 'CartDrawer-Remove-' | append: line_index
+    assign error_id = 'CartDrawer-LineItemError-' | append: line_index
+    assign image_header = 'CartDrawer-ColumnProductImage'
+    assign product_header = 'CartDrawer-ColumnProduct'
+    assign total_header = 'CartDrawer-ColumnTotal'
+    assign quantity_header = 'CartDrawer-ColumnQuantity'
+    assign disclosure_prefix = 'CartDisclosureModal-drawer-'
+  else
+    assign item_row_id = 'CartItem-' | append: line_index
+    assign quantity_input_id = 'Quantity-' | append: line_index
+    assign remove_button_id = 'Remove-' | append: line_index
+    assign error_id = 'Line-item-error-' | append: line_index
+    assign disclosure_prefix = 'CartDisclosureModal-cart-'
+  endif
+
+  assign cart_disclosure_modal_id = disclosure_prefix | append: item.key | replace: ':', '-'
+
+  assign has_qty_rules = false
+  if item.variant.quantity_rule.increment > 1 or item.variant.quantity_rule.min > 1 or item.variant.quantity_rule.max != null
+    assign has_qty_rules = true
+  endif
+
+  assign has_vol_pricing = false
+  if item.variant.quantity_price_breaks.size > 0
+    assign has_vol_pricing = true
+  endif
+
+  assign can_update_quantity = item.instructions.can_update_quantity | default: true
+  assign can_remove = item.instructions.can_remove | default: true
+-%}
+
+<tr
+  id="{{ item_row_id }}"
+  class="cart-item nether-cart__line-item nether-cart__line-item--{{ cart_context }}{% if item.parent_relationship.parent != null %} cart-item__nested-line{% endif %}"
+  {% if cart_context == 'drawer' %}role="row"{% endif %}
+  data-nether-cart-line-item
+  data-nether-cart-animate
+  {% if item.parent_relationship.parent != null %}
+    aria-label="{{- 'products.product.nested_label' | t: title: item.product.title, parent_title: item.parent_relationship.parent.title | escape -}}"
+  {% endif %}
+>
+  <td
+    class="cart-item__media"
+    {% if cart_context == 'drawer' %}role="cell" headers="{{ image_header }}"{% endif %}
+  >
+    {% if item.image %}
+      <a href="{{ item.url }}" class="cart-item__link" tabindex="-1" aria-hidden="true"> </a>
+      {%- if cart_context == 'page' -%}
+        <div class="cart-item__image-container gradient {% if item.parent_relationship.parent == null %}global-media-settings{% endif %}">
+      {%- endif -%}
+      <img
+        class="cart-item__image {% if cart_context == 'page' and item.parent_relationship.parent != null %}global-media-settings{% endif %}"
+        src="{{ item.image | image_url: width: 300 }}"
+        alt="{{ item.image.alt | escape }}"
+        loading="lazy"
+        width="150"
+        height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+      >
+      {%- if cart_context == 'page' -%}
+        </div>
+      {%- endif -%}
+    {% endif %}
+  </td>
+
+  <td
+    class="cart-item__details"
+    {% if cart_context == 'drawer' %}role="cell" headers="{{ product_header }}"{% endif %}
+  >
+    {%- if settings.show_vendor -%}
+      <p class="caption-with-letter-spacing{% if cart_context == 'drawer' %} light{% endif %}">{{ item.product.vendor }}</p>
+    {%- endif -%}
+
+    <div class="cart-item__title">
+      <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
+      {%- render 'cart-disclosure-indicator', product: item.product, modal_id: cart_disclosure_modal_id -%}
+    </div>
+
+    {%- if item.original_price != item.final_price -%}
+      <div class="cart-item__discounted-prices">
+        <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+        <s class="cart-item__old-price product-option">{{ item.original_price | money }}</s>
+        <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+        <strong class="cart-item__final-price product-option">{{ item.final_price | money }}</strong>
+      </div>
+    {%- else -%}
+      <div class="product-option">{{ item.original_price | money }}</div>
+    {%- endif -%}
+
+    {%- if item.product.has_only_default_variant == false or item.properties.size != 0 or item.selling_plan_allocation != null -%}
+      <dl>
+        {%- if item.product.has_only_default_variant == false -%}
+          {%- for option in item.options_with_values -%}
+            <div class="product-option">
+              <dt>{{ option.name }}:</dt>
+              <dd>
+                {{ option.value -}}
+                {%- unless forloop.last %}, {% endunless %}
+              </dd>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+
+        {%- for property in item.properties -%}
+          {%- assign property_first_char = property.first | slice: 0 -%}
+          {%- if property.last != blank and property_first_char != '_' -%}
+            <div class="product-option">
+              <dt>{{ property.first }}:</dt>
+              <dd>
+                {%- if property.last contains '/uploads/' -%}
+                  <a href="{{ property.last }}" class="link" target="_blank" aria-describedby="a11y-new-window-message">
+                    {{ property.last | split: '/' | last }}
+                  </a>
+                {%- else -%}
+                  {{ property.last }}
+                {%- endif -%}
+              </dd>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </dl>
+
+      {%- if item.selling_plan_allocation != null -%}
+        <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+      {%- endif -%}
+    {%- endif -%}
+
+    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+      {%- for discount in item.line_level_discount_allocations -%}
+        <li class="discounts__discount">
+          {{- 'icon-discount.svg' | inline_asset_content -}}
+          {{ discount.discount_application.title | escape }}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </td>
+
+  <td
+    class="cart-item__totals right{% if cart_context == 'page' %} medium-hide large-up-hide{% endif %}"
+    {% if cart_context == 'drawer' %}role="cell" headers="{{ total_header }}"{% endif %}
+  >
+    {%- render 'loading-spinner' -%}
+    <div class="cart-item__price-wrapper">
+      {%- if item.original_line_price != item.final_line_price -%}
+        {%- if cart_context == 'page' -%}
+          <dl class="cart-item__discounted-prices">
+            <dt class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</dt>
+            <dd><s class="cart-item__old-price price price--end">{{ item.original_line_price | money }}</s></dd>
+            <dt class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</dt>
+            <dd class="price price--end">{{ item.final_line_price | money }}</dd>
+          </dl>
+        {%- else -%}
+          <div class="cart-item__discounted-prices">
+            <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+            <s class="cart-item__old-price price price--end">{{ item.original_line_price | money }}</s>
+            <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+            <span class="price price--end">{{ item.final_line_price | money }}</span>
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <span class="price price--end">{{ item.original_line_price | money }}</span>
+      {%- endif -%}
+
+      {%- if item.variant.available and item.unit_price_measurement -%}
+        {% render 'unit-price', price: item.unit_price, measurement: item.unit_price_measurement %}
+      {%- endif -%}
+    </div>
+  </td>
+
+  <td
+    class="cart-item__quantity{% if has_qty_rules or has_vol_pricing %} cart-item__quantity--info{% endif %}"
+    {% if cart_context == 'drawer' %}role="cell" headers="{{ quantity_header }}"{% endif %}
+  >
+    {% render 'nether-cart-quantity',
+      item: item,
+      context: cart_context,
+      line_index: line_index,
+      quantity_input_id: quantity_input_id,
+      remove_button_id: remove_button_id,
+      error_id: error_id,
+      has_qty_rules: has_qty_rules,
+      has_vol_pricing: has_vol_pricing,
+      can_update_quantity: can_update_quantity,
+      can_remove: can_remove
+    %}
+  </td>
+
+  {%- if cart_context == 'page' -%}
+    <td class="cart-item__totals right small-hide">
+      {%- render 'loading-spinner' -%}
+      <div class="cart-item__price-wrapper">
+        {%- if item.original_line_price != item.final_line_price -%}
+          <dl class="cart-item__discounted-prices">
+            <dt class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</dt>
+            <dd><s class="cart-item__old-price price price--end">{{ item.original_line_price | money }}</s></dd>
+            <dt class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</dt>
+            <dd class="price price--end">{{ item.final_line_price | money }}</dd>
+          </dl>
+        {%- else -%}
+          <span class="price price--end">{{ item.original_line_price | money }}</span>
+        {%- endif -%}
+
+        {%- if item.variant.available and item.unit_price_measurement -%}
+          {% render 'unit-price', price: item.unit_price, measurement: item.unit_price_measurement %}
+        {%- endif -%}
+      </div>
+    </td>
+  {%- endif -%}
+</tr>
+

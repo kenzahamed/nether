@@ -1,0 +1,87 @@
+{% comment %}
+  Nether Premium Commerce Enhancements — Shipping Progress (free shipping threshold).
+  Uses Shopify cart.total_price — does not replace shipping rate calculation.
+
+  Accepts:
+  - threshold: {Number} Money amount in shop currency units (not cents), e.g. 100
+  - threshold_cents: {Number} Optional absolute cents (overrides threshold)
+  - context: {String} page | drawer | product | generic (default: generic)
+  - enable: {Boolean} Must be true to render
+  - class: {String}
+  - attributes: {String}
+{% endcomment %}
+
+{%- liquid
+  assign cart_context = context | default: 'generic'
+  assign enable_progress = enable
+  if enable_progress == nil
+    assign enable_progress = false
+  endif
+
+  assign threshold_value = 0
+  if threshold_cents != blank
+    assign threshold_value = threshold_cents | plus: 0
+  elsif threshold != blank
+    assign threshold_value = threshold | times: 100
+  endif
+
+  if threshold_value <= 0
+    assign enable_progress = false
+  endif
+
+  assign cart_total = cart.total_price
+  assign remaining = threshold_value | minus: cart_total
+  assign progress_percent = 0
+  if threshold_value > 0
+    assign progress_percent = cart_total | times: 100 | divided_by: threshold_value
+  endif
+  if progress_percent > 100
+    assign progress_percent = 100
+  endif
+  if remaining < 0
+    assign remaining = 0
+  endif
+
+  assign message_id = 'NetherCommerceShippingMessage-' | append: cart_context
+-%}
+
+{%- if enable_progress and cart != empty -%}
+  <div
+    class="nether-commerce__shipping-progress nether-commerce__shipping-progress--{{ cart_context }}{% if class != blank %} {{ class }}{% endif %}"
+    data-nether-commerce-module="shipping-progress"
+    data-nether-commerce-animate
+    role="region"
+    aria-label="{{ 'sections.nether_commerce.shipping.label' | t }}"
+    {% if attributes != blank %}{{ attributes }}{% endif %}
+  >
+    <p class="nether-commerce__shipping-message type-body-sm" id="{{ message_id }}">
+      {%- if remaining > 0 -%}
+        {%- assign remaining_money = remaining | money -%}
+        {{ 'sections.nether_commerce.shipping.remaining_html' | t: amount: remaining_money }}
+      {%- else -%}
+        {{ 'sections.nether_commerce.shipping.qualified' | t }}
+      {%- endif -%}
+    </p>
+    {%- assign shipping_sr_id = message_id | append: '-sr' -%}
+    {%- assign shipping_sr_label = 'sections.nether_commerce.shipping.label' | t -%}
+    {% render 'nether-commerce-utilities', utility: 'sr_label', id: shipping_sr_id, label: shipping_sr_label %}
+    <nether-commerce-meter
+      class="nether-commerce__meter nether-commerce__meter--shipping"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="{{ threshold_value }}"
+      aria-valuenow="{{ cart_total }}"
+      aria-labelledby="{{ message_id }}"
+      data-nether-commerce-meter
+      data-progress="{{ progress_percent }}"
+      data-nether-commerce-shipping-fill
+    >
+    <span
+      class="nether-commerce__meter-fill nether-cart__shipping-fill"
+      data-nether-commerce-meter-fill
+      data-nether-cart-shipping-fill
+      style="--nether-commerce-meter-progress: {{ progress_percent }}%; --nether-cart-shipping-progress: {{ progress_percent }}%;"
+    ></span>
+    </nether-commerce-meter>
+  </div>
+{%- endif -%}

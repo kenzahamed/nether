@@ -1,0 +1,52 @@
+{% comment %}
+  Nether Premium Product Page — Trust & delivery badges module.
+  Extends shared Commerce Enhancements trust component.
+  Reuses Nether Icon and Badge systems via nether-commerce-trust.
+
+  Accepts:
+  - block: {Object} Block object (required)
+{% endcomment %}
+
+{%- liquid
+  assign trust_items = 0
+  if block.settings.heading_1 != blank
+    assign trust_items = trust_items | plus: 1
+  endif
+  if block.settings.heading_2 != blank
+    assign trust_items = trust_items | plus: 1
+  endif
+  if block.settings.heading_3 != blank
+    assign trust_items = trust_items | plus: 1
+  endif
+  if block.settings.heading_4 != blank
+    assign trust_items = trust_items | plus: 1
+  endif
+-%}
+
+{%- if trust_items > 0 -%}
+  <div
+    class="nether-product-page__module nether-product-page__module--trust"
+    data-nether-product-page-module="trust"
+    data-nether-product-page-animate
+    {{ block.shopify_attributes }}
+  >
+    {% render 'nether-commerce-trust',
+      heading: block.settings.heading,
+      layout: 'stack',
+      icon_1: block.settings.icon_1,
+      heading_1: block.settings.heading_1,
+      text_1: block.settings.text_1,
+      icon_2: block.settings.icon_2,
+      heading_2: block.settings.heading_2,
+      text_2: block.settings.text_2,
+      icon_3: block.settings.icon_3,
+      heading_3: block.settings.heading_3,
+      text_3: block.settings.text_3,
+      icon_4: block.settings.icon_4,
+      heading_4: block.settings.heading_4,
+      text_4: block.settings.text_4,
+      class: 'nether-product-page__trust-list',
+      animate: false
+    %}
+  </div>
+{%- endif -%}
