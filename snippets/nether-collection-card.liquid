@@ -33,6 +33,7 @@
   assign show_product_count = section.settings.nether_show_product_count
 
   assign premium_style = 'default'
+  assign card_gradient_border = false
   case card_style
     when 'editorial'
       assign premium_style = 'editorial'
@@ -42,6 +43,7 @@
       assign premium_style = 'minimal'
     when 'gradient'
       assign premium_style = 'default'
+      assign card_gradient_border = true
   endcase
 
   assign card_size_class = ''
@@ -165,7 +167,7 @@
       aria-label="{{ aria_label | escape }}"
     {% endif %}
   >
-    <div class="nether-collection-card__inner card card--card card--media{% if premium_style != 'default' %} card--premium-{{ premium_style }}{% endif %}">
+    <div class="nether-collection-card__inner card card--card card--media{% if premium_style != 'default' %} card--premium-{{ premium_style }}{% endif %}{% if card_gradient_border %} card--gradient-border{% endif %}">
       {%- render 'nether-collection-media',
         block: block,
         section: section,

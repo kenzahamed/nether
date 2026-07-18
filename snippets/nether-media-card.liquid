@@ -32,6 +32,7 @@
   assign enable_lightbox = block.settings.enable_lightbox
 
   assign premium_style = 'default'
+  assign card_gradient_border = false
   case card_style
     when 'editorial'
       assign premium_style = 'editorial'
@@ -41,6 +42,7 @@
       assign premium_style = 'minimal'
     when 'gradient'
       assign premium_style = 'default'
+      assign card_gradient_border = true
   endcase
 
   assign card_size_class = ''
@@ -148,7 +150,7 @@
   {%- else -%}
     <div class="nether-media-card__link" role="group" aria-label="{{ aria_label | escape }}">
   {%- endif -%}
-    <div class="nether-media-card__inner card card--card card--media{% if premium_style != 'default' %} card--premium-{{ premium_style }}{% endif %}">
+    <div class="nether-media-card__inner card card--card card--media{% if premium_style != 'default' %} card--premium-{{ premium_style }}{% endif %}{% if card_gradient_border %} card--gradient-border{% endif %}">
       {%- render 'nether-media-render',
         block: block,
         section: section,

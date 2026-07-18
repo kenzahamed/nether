@@ -30,7 +30,17 @@
 
   assign card_classes = 'nether-content__row-card'
   if section.settings.nether_content_enable_glass
-    assign card_classes = card_classes | append: ' nether-content__row-card--glass glass-hero-medium'
+    assign card_classes = card_classes | append: ' nether-content__row-card--glass'
+    case section.settings.nether_content_glass_style
+      when 'light'
+        assign card_classes = card_classes | append: ' glass-hero-light'
+      when 'heavy'
+        assign card_classes = card_classes | append: ' glass-hero-heavy'
+      when 'frosted'
+        assign card_classes = card_classes | append: ' glass-hero-frosted'
+      else
+        assign card_classes = card_classes | append: ' glass-hero-medium'
+    endcase
   endif
 -%}
 

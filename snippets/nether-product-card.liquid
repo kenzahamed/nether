@@ -38,6 +38,7 @@
   assign show_stock_status = section.settings.nether_show_stock_status
 
   assign premium_style = 'default'
+  assign card_gradient_border = false
   case card_style
     when 'editorial'
       assign premium_style = 'editorial'
@@ -47,6 +48,7 @@
       assign premium_style = 'minimal'
     when 'gradient'
       assign premium_style = 'default'
+      assign card_gradient_border = true
   endcase
 
   assign card_size_class = ''
@@ -190,7 +192,7 @@
   data-nether-product-card
   {{ editor_attributes }}
 >
-  <div class="nether-product-card__inner card card--card card--media{% if premium_style != 'default' %} card--premium-{{ premium_style }}{% endif %}">
+  <div class="nether-product-card__inner card card--card card--media{% if premium_style != 'default' %} card--premium-{{ premium_style }}{% endif %}{% if card_gradient_border %} card--gradient-border{% endif %}">
     <a
       class="nether-product-card__link full-unstyled-link"
       {% if card_url != blank %}

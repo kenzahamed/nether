@@ -32,11 +32,11 @@
     assign card_classes = card_classes | append: ' nether-testimonials-card--featured'
   endif
 
-  if enable_glass
+  if enable_glass or card_style == 'glass'
     assign card_classes = card_classes | append: ' nether-testimonials-card--glass'
   endif
 
-  if enable_gradient
+  if enable_gradient or card_style == 'gradient'
     assign card_classes = card_classes | append: ' nether-testimonials-card--gradient'
   endif
 
