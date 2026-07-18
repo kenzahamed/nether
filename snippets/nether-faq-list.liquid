@@ -6,14 +6,16 @@
   - section: {Object} FAQ section (required)
   - layout: {String} Active FAQ layout (optional)
   - context: {String} 'body' or 'shell' (optional)
+  - heading_tag: {String} Question heading element (default: h3)
 
   Usage:
-  {% render 'nether-faq-list', section: section, layout: nether_layout %}
+  {% render 'nether-faq-list', section: section, layout: nether_layout, heading_tag: heading_tag %}
 {% endcomment %}
 
 {%- liquid
   assign active_layout = layout | default: section.settings.nether_layout
   assign list_context = context | default: 'body'
+  assign question_heading = heading_tag | default: 'h3'
   assign item_index = 0
   assign featured_assigned = false
   assign pending_question = nil
@@ -81,7 +83,8 @@
               block: block,
               section: section,
               item_index: item_index,
-              is_featured: is_featured
+              is_featured: is_featured,
+              heading_tag: question_heading
             -%}
 
           {%- when 'question' -%}
@@ -102,7 +105,8 @@
                 answer_block: block,
                 section: section,
                 item_index: item_index,
-                is_featured: is_featured
+                is_featured: is_featured,
+                heading_tag: question_heading
               -%}
               {%- assign pending_question = nil -%}
             {%- endif -%}

@@ -23,7 +23,7 @@
   assign poster_image = block.settings.poster_image
   assign video_description = block.settings.video_description | default: card_collection.title
   assign video_loop = block.settings.video_loop
-  assign image_ratio = section.settings.nether_image_ratio | default: 'portrait'
+  assign image_ratio = section.settings.nether_image_ratio | default: section.settings.image_ratio | default: 'portrait'
   assign columns_count = columns | default: 3
   assign is_lazy = lazy_load | default: true
   assign fetch_priority_value = fetch_priority | default: 'auto'
@@ -43,9 +43,13 @@
     assign poster_image = desktop_image
   endif
 
+  # Showcase ratio contract (identical across product/collection/media-render):
+  # portrait 0.8 · landscape 1.4 · square 1 · adapt image AR (fallback 1)
   assign ratio = 1
   if desktop_image != blank and image_ratio == 'portrait'
     assign ratio = 0.8
+  elsif desktop_image != blank and image_ratio == 'landscape'
+    assign ratio = 1.4
   elsif desktop_image != blank and image_ratio == 'adapt'
     assign ratio = desktop_image.aspect_ratio
   elsif image_ratio == 'square'

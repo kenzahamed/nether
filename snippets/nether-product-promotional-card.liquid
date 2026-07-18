@@ -17,6 +17,9 @@
   assign is_lazy = lazy_load | default: true
   assign card_index_num = card_index | default: 1
   assign content_position = section.settings.nether_content_position | default: 'bottom-left'
+  if content_position == 'center'
+    assign content_position = 'middle-center'
+  endif
   assign enable_glass = section.settings.nether_enable_glass
   assign enable_gradient = section.settings.nether_enable_gradient
   assign show_overlay = section.settings.nether_enable_overlay

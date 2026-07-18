@@ -9,14 +9,16 @@
   - item_index: {Number} Item index for IDs and expand-first logic
   - is_open: {Boolean} Force open state
   - is_featured: {Boolean} Magazine featured item
+  - heading_tag: {String} Question heading element (default: h3)
   - motion_attr: {String} Motion data attribute (optional)
 
   Usage:
-  {% render 'nether-faq-item', block: block, section: section, item_index: item_index %}
+  {% render 'nether-faq-item', block: block, section: section, item_index: item_index, heading_tag: heading_tag %}
 {% endcomment %}
 
 {%- liquid
   assign motion_attribute = motion_attr | default: 'data-nether-faq-animate'
+  assign question_heading = heading_tag | default: 'h3'
   assign index = item_index | default: 1
   assign question_text = block.settings.question | default: block.settings.heading
   assign answer_content = block.settings.answer | default: block.settings.row_content
@@ -83,9 +85,9 @@
               {%- render 'icon-accordion', icon: icon_name -%}
             </span>
           {%- endif -%}
-          <h3 class="nether-faq__question accordion__title inline-richtext h4" data-nether-faq-question data-nether-faq-role="question">
+          <{{ question_heading }} class="nether-faq__question accordion__title inline-richtext h4" data-nether-faq-question data-nether-faq-role="question">
             {{- question_text -}}
-          </h3>
+          </{{ question_heading }}>
         </span>
         <span class="nether-faq__caret svg-wrapper" aria-hidden="true" data-nether-faq-caret data-nether-faq-role="caret">
           {{- 'icon-caret.svg' | inline_asset_content -}}

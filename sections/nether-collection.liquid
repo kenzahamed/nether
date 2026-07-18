@@ -78,6 +78,17 @@
     assign heading_tag = 'h3'
   endif
 
+  # Placeholder ratio respects section setting (no image → adapt falls back to 1)
+  assign placeholder_image_ratio = section.settings.nether_image_ratio | default: 'portrait'
+  assign placeholder_ratio = 1
+  if placeholder_image_ratio == 'portrait'
+    assign placeholder_ratio = 0.8
+  elsif placeholder_image_ratio == 'landscape'
+    assign placeholder_ratio = 1.4
+  elsif placeholder_image_ratio == 'square'
+    assign placeholder_ratio = 1
+  endif
+
   assign grid_classes = 'nether-collection__grid'
   if show_slider
     assign grid_classes = grid_classes | append: ' slider slider--desktop grid--peek'
@@ -237,7 +248,7 @@
           <li class="nether-collection__item">
             <article class="nether-collection-card nether-collection-card--placeholder">
               <div class="nether-collection-card__inner card card--card card--media">
-                <div class="nether-collection-card__media ratio" style="--ratio-percent: 125%;">
+                <div class="nether-collection-card__media ratio" style="--ratio-percent: {{ 1 | divided_by: placeholder_ratio | times: 100 }}%;">
                   {{ 'collection-apparel-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
                 </div>
                 <div class="nether-collection-card__content">

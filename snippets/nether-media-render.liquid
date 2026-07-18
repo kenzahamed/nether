@@ -25,7 +25,7 @@
   assign video_loop = block.settings.video_loop
   assign block_image_ratio = block.settings.image_ratio | default: 'default'
   if block_image_ratio == 'default'
-    assign image_ratio = section.settings.nether_image_ratio | default: 'portrait'
+    assign image_ratio = section.settings.nether_image_ratio | default: section.settings.image_ratio | default: 'portrait'
   else
     assign image_ratio = block_image_ratio
   endif
@@ -34,6 +34,8 @@
   assign fetch_priority_value = fetch_priority | default: 'auto'
   assign use_parallax = enable_parallax | default: section.settings.nether_enable_parallax
 
+  # Showcase ratio contract (identical across product/collection/media-render):
+  # portrait 0.8 · landscape 1.4 · square 1 · adapt image AR (fallback 1)
   assign ratio = 1
   if desktop_image != blank and image_ratio == 'portrait'
     assign ratio = 0.8
