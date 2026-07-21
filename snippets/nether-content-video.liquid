@@ -3,9 +3,11 @@
 
   Accepts:
   - block: {Object} Theme Editor block (required)
+  - motion_attr: {String} Motion data attribute from host framework (optional; defaults to Content + Hero animate attributes)
 
   Usage:
   {% render 'nether-content-video', block: block %}
+  {% render 'nether-content-video', block: block, motion_attr: motion_attr %}
 {% endcomment %}
 
 {%- liquid
@@ -22,8 +24,12 @@
 {%- if shopify_video != blank or video_url != blank -%}
   <div
     class="nether-content__video-block"
+    {%- if motion_attr != blank %}
+    {{ motion_attr }}
+    {%- else %}
     data-nether-content-animate
     data-nether-hero-animate
+    {%- endif %}
     data-nether-hero-role="video"
     {{ block.shopify_attributes }}
   >    {%- case media_type -%}

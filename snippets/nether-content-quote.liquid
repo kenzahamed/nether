@@ -3,16 +3,22 @@
 
   Accepts:
   - block: {Object} Theme Editor block (required)
+  - motion_attr: {String} Motion data attribute from host framework (optional; defaults to Content + Hero animate attributes)
 
   Usage:
   {% render 'nether-content-quote', block: block %}
+  {% render 'nether-content-quote', block: block, motion_attr: motion_attr %}
 {% endcomment %}
 
 {%- if block.settings.quote != blank -%}
   <figure
     class="nether-content__quote"
+    {%- if motion_attr != blank %}
+    {{ motion_attr }}
+    {%- else %}
     data-nether-content-animate
     data-nether-hero-animate
+    {%- endif %}
     data-nether-hero-role="quote"
     {{ block.shopify_attributes }}
   >

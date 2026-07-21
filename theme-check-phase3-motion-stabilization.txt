@@ -1,0 +1,10 @@
+﻿Nether Theme Check - Framework Stabilization Phase 3 (Motion)
+Date: 2026-07-21
+Files inspected: 469 (41 files with offenses)
+Total offenses: 60 (31 errors, 29 warnings)
+
+Offenses in Phase 3 modified files: 0
+Modified files (13): nether-content-image/video/quote/custom-html.liquid; component-hero/banner/content/cta/newsletter-showcase/media/product-showcase/collection-showcase/testimonials.js
+
+All errors are pre-existing (commerce/chrome snippets - UnsupportedFilterArguments etc.), unchanged from Phase 2 baseline.
+No new offenses introduced by Phase 3.

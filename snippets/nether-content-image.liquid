@@ -4,9 +4,11 @@
   Accepts:
   - block: {Object} Theme Editor block (required)
   - lazy_load: {Boolean} Lazy load image (default: true)
+  - motion_attr: {String} Motion data attribute from host framework (optional; defaults to Content + Hero animate attributes)
 
   Usage:
   {% render 'nether-content-image', block: block %}
+  {% render 'nether-content-image', block: block, motion_attr: motion_attr %}
 {% endcomment %}
 
 {%- liquid
@@ -20,8 +22,12 @@
 {%- if desktop_image != blank -%}
   <div
     class="nether-content__image-block nether-content__image-block--{{ block.settings.image_ratio | default: 'adapt' }}"
+    {%- if motion_attr != blank %}
+    {{ motion_attr }}
+    {%- else %}
     data-nether-content-animate
     data-nether-hero-animate
+    {%- endif %}
     data-nether-hero-role="image"
     {{ block.shopify_attributes }}
   >

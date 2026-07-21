@@ -1146,9 +1146,10 @@
     }
 
     handleSectionLoad(event) {
-      if (event.detail?.sectionId !== this.dataset.sectionId) {
-        // Fallback: Theme Editor may bubble without detail.sectionId
-        if (!(event.target?.contains?.(this) || event.target === this)) return;
+      if (event.detail?.sectionId) {
+        if (event.detail.sectionId !== this.dataset.sectionId) return;
+      } else if (!(event.target?.contains?.(this) || event.target === this)) {
+        return;
       }
 
       this.parseConfig();

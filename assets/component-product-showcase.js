@@ -1240,8 +1240,10 @@
     }
 
     handleSectionLoad(event) {
-      if (event.detail?.sectionId !== this.dataset.sectionId) {
-        if (!(event.target?.contains?.(this) || event.target === this)) return;
+      if (event.detail?.sectionId) {
+        if (event.detail.sectionId !== this.dataset.sectionId) return;
+      } else if (!(event.target?.contains?.(this) || event.target === this)) {
+        return;
       }
 
       this.parseConfig();
