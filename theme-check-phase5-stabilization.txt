@@ -1,0 +1,13 @@
+# Theme Check Summary (Phase 5 — Framework Verification)
+
+**Date:** 2026-07-21  
+**Command:** `shopify theme check`  
+**Result:** 472 files inspected · 60 offenses across 41 files · 31 errors · 29 warnings
+
+**Phase 5 code changes:** None (verification-only)
+
+**Stabilization cores / Phase 1–4 touch set:** No new offenses attributable to Framework Stabilization.
+
+Filtered scan of Phase 4 cores (`nether-divider`, `nether-stat`, `nether-shared-header-block`), Phase 3 leaves (`nether-content-image|video|quote|custom-html`), Phase 1 media/FAQ, and Phase 2 cards: **no matches** except the pre-existing `UnsupportedFilterArguments` in `snippets/nether-content-row.liquid` (documented in Phase 2 — render-arg filter on button style; out of Stabilization scope).
+
+All other reported offenses are pre-existing (commerce / chrome / orphaned snippets) and are out of Phase 5 scope.

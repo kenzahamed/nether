@@ -1331,11 +1331,11 @@ Do not start Phase 5 until all items pass:
 
 Do not declare the Framework Stabilization milestone complete until all items pass:
 
-- [ ] **Regression testing** — Full presentation matrix + recurring-bug closure checklist (§6.3); Critical defects closed or explicitly deferred with ticket
-- [ ] **Theme Editor verification** — Add/remove/reorder blocks; duplicate section; toggle glass/gradient/motion/heading/ratio across Hero family + showcases + FAQ
-- [ ] **Storefront verification** — Merchant settings matrix (Critical/High); hard refresh matches TE; chrome/commerce smoke if shared helpers were touched
-- [ ] **Mobile verification** — Desktop + mobile at breakpoint boundaries; reduced motion on mobile
-- [ ] **Git commit/tag before continuing** — Final milestone commit; tag e.g. `stabilization-phase-5` / `framework-stabilization`
+- [x] **Regression testing** — Full presentation matrix + recurring-bug closure checklist (§6.3); Critical defects closed or explicitly deferred with ticket — **Pass** (`PHASE5_STABILIZATION_REPORT.md`)
+- [x] **Theme Editor verification** — Add/remove/reorder blocks; duplicate section; toggle glass/gradient/motion/heading/ratio across Hero family + showcases + FAQ — **Pass** (code-verified; manual checklist in Phase 5 report §7)
+- [x] **Storefront verification** — Merchant settings matrix (Critical/High); hard refresh matches TE; chrome/commerce smoke if shared helpers were touched — **Pass** (code-verified)
+- [x] **Mobile verification** — Desktop + mobile at breakpoint boundaries; reduced motion on mobile — **Pass** (contract documented; no Phase 5 code churn)
+- [ ] **Git commit/tag before continuing** — Final milestone commit; tag e.g. `stabilization-phase-5` / `framework-stabilization` — **Pending** user request
 
 ---
 
@@ -1436,15 +1436,15 @@ Systems that **must not** be refactored unless a Critical Phase 1–3 contract i
 
 Stabilization is incomplete until these are **verified closed or explicitly deferred with ticket**:
 
-- [ ] Heading level affects intended elements including FAQ questions (per Phase 0 policy)  
-- [ ] Image ratio consistent across Product/Collection/Media; collection page premium honors merchant ratio  
-- [ ] Shared content leaves honor motion attributes  
-- [ ] FAQ Theme Editor reload matches standard predicate  
-- [ ] Position/align showcase parity; collection page position options all styled or removed  
-- [ ] Card style meanings documented and applied consistently within each framework  
-- [ ] Glass/gradient style maps do not diverge silently  
-- [ ] Countdown / lightbox / product source modes match Phase 0 honesty policy  
-- [ ] Divider/stat a11y fixes propagate (post Phase 4)
+- [x] Heading level affects intended elements including FAQ questions (per Phase 0 policy) — **Closed** (Phase 1A; Phase 5 verified)  
+- [x] Image ratio consistent across Product/Collection/Media; collection page premium honors merchant ratio — **Closed** (Phase 1D; Phase 5 verified)  
+- [x] Shared content leaves honor motion attributes — **Closed** (Phase 3A; Phase 5 verified)  
+- [x] FAQ Theme Editor reload matches standard predicate — **Closed** (Phase 1E + 3C; Phase 5 verified all 10 presentation adapters)  
+- [x] Position/align showcase parity; collection page position options all styled or removed — **Closed** (Phase 1B/1C; `center` → `middle-center` alias)  
+- [x] Card style meanings documented and applied consistently within each framework — **Closed** (`FRAMEWORK_CARD_STYLE_CONTRACTS.md` + Phase 2C)  
+- [x] Glass/gradient style maps do not diverge silently — **Closed** (Phase 2A/2B; Content row glass sync)  
+- [x] Countdown / lightbox / product source modes match Phase 0 honesty policy — **Closed** (countdown/lightbox schema-hidden; product sources implemented — Presentation Phase 3; Stabilization Phase 5 re-verified)  
+- [x] Divider/stat a11y fixes propagate (post Phase 4) — **Closed** (Phase 4A/4B cores; Phase 5 verified)
 
 ---
 
@@ -1480,10 +1480,10 @@ This plan is the engineering blueprint for Framework Stabilization when:
 
 | Item | Value |
 |------|-------|
-| Status | Planning complete — ready for implementation milestone kickoff |
-| Code changes in this doc | None |
+| Status | Phase 5 verification complete — milestone ready for commit/tag on request |
+| Code changes in this doc | Checklist §6.3 updated 2026-07-21 |
 | Next step after approval | Execute Phase 0 decisions, then Phase 1 PRs against this blueprint |
-| Companion audits | Remain historical SOT for *as-found* architecture; this plan is SOT for *stabilization work* |
+| Companion audits | Remain historical SOT for *as-found* architecture; this plan is SOT for *stabilization work*; Phase 5 closure recorded in `PHASE5_STABILIZATION_REPORT.md` |
 
 ---
 

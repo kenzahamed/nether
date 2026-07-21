@@ -260,7 +260,21 @@ Motion data attributes are framework-namespaced (`data-nether-hero-animate`, `da
 
 ## 16. Recurring bug analysis (code-supported only)
 
-These architectural facts can explain **the same QA failure appearing across multiple sections**. No fixes applied.
+These architectural facts can explain **the same QA failure appearing across multiple sections**. Findings below are the **as-found audit record** (2026-07-18).
+
+**Framework Stabilization closure (Phase 5 — 2026-07-21):** Critical/High contracts from this section are **closed or accepted-deferred**. See `PHASE5_STABILIZATION_REPORT.md` and `FRAMEWORK_STABILIZATION_PLAN.md` §6.3. Do not treat as-found wording below as current runtime truth without checking the phase reports.
+
+| § | Status |
+|---|--------|
+| 16.1 Heading | **Stabilized** — FAQ questions honor section `heading_tag` (Phase 1A) |
+| 16.2 Image ratio | **Stabilized** — identical mappers + collection page dual-read (Phase 1D); Product/Collection TE omit `landscape` option (accepted debt — mappers still support it; Media exposes it) |
+| 16.3 Motion wiring | **Stabilized** — leaf `motion_attr` + Phase 0 TE predicate on all 10 presentation adapters (Phase 3) |
+| 16.4 Align / position | **Stabilized** — parity verified; collection page `center` aliased (Phase 1B/1C); shared CSS extract deferred (4E) |
+| 16.5 Card style | **Stabilized** — contracts documented; showcase/testimonials no-ops fixed (Phase 2C) |
+| 16.6 Responsive columns | **Accepted debt** — per-framework vars remain; breakpoint CSS↔Motion numeric unify deferred |
+| 16.7 Glass / gradient | **Stabilized** — behavior parity; shared mapper snippets deferred by approval (Phase 2) |
+| 16.8 Placeholders | **Stabilized honesty** — countdown/lightbox removed from merchant schema; product sources implemented; intensity schema remains non-goal |
+| 16.9 Dividers / stats | **Stabilized** — shared cores + wrappers (Phase 4A/4B); cart/commerce dividers + testimonials stat independent by approval |
 
 ### 16.1 Heading level — shared pattern, incomplete consumers
 
