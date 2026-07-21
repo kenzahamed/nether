@@ -1,0 +1,16 @@
+﻿# Theme Check Summary (Phase 4 — Duplicated Components)
+
+**Date:** 2026-07-21  
+**Command:** `shopify theme check`  
+**Result:** 472 files inspected · 60 offenses across 41 files · 31 errors · 29 warnings
+
+**Phase 4 touched / new snippets:** **0 offenses**
+
+New cores inspected with no findings:
+- `snippets/nether-divider.liquid`
+- `snippets/nether-stat.liquid`
+- `snippets/nether-shared-header-block.liquid`
+
+Presentation wrappers and block dispatchers modified in this phase: **no Theme Check matches**.
+
+All reported offenses are pre-existing (commerce / chrome / form filter arguments, orphaned snippets elsewhere, etc.) and are out of Phase 4 scope.

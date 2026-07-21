@@ -14,10 +14,9 @@
   assign divider_style = section.settings.nether_divider_style | default: 'line'
 -%}
 
-<div
-  class="nether-media__divider nether-media__divider--{{ divider_position }} nether-media__divider--{{ divider_style }}"
-  aria-hidden="true"
-  role="presentation"
-  data-nether-media-divider
-  data-nether-media-role="divider"
-></div>
+{%- render 'nether-divider',
+  class_prefix: 'nether-media',
+  position: divider_position,
+  style: divider_style,
+  attributes: 'data-nether-media-divider data-nether-media-role="divider"'
+-%}

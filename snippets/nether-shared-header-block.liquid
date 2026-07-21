@@ -1,0 +1,127 @@
+{% comment %}
+  Nether shared header block cases: @app, eyebrow, heading, subheading, text, buttons.
+
+  Accepts (normalized only — parent dispatchers own heading defaults / motion / roles):
+  - block: {Object} Theme Editor block (required)
+  - class_prefix: {String} BEM block prefix (required), e.g. nether-faq
+  - heading_element: {String} semantic heading tag (required)
+  - subheading_element: {String} semantic subheading tag (required)
+  - motion_attr: {String} motion data attribute(s), space-separated if multiple
+  - role_attr: {String} primary role attribute name, e.g. data-nether-faq-role (optional)
+  - secondary_role_attr: {String} secondary role attribute name (optional; not applied to @app)
+  - text_role: {String} role value for text blocks (default: text)
+  - button_extra_attr: {String} extra attributes on the buttons container (optional)
+  - button_1_class: {String} optional class passed to first button snippet
+  - button_2_class: {String} optional class passed to second button snippet
+
+  Usage:
+  {% render 'nether-shared-header-block',
+    block: block,
+    class_prefix: 'nether-faq',
+    heading_element: heading_element,
+    subheading_element: subheading_element,
+    motion_attr: motion_attr,
+    role_attr: 'data-nether-faq-role'
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign text_role = text_role | default: 'text'
+-%}
+
+{%- case block.type -%}
+  {%- when '@app' -%}
+    <div
+      class="{{ class_prefix }}__app-block"
+      {{ motion_attr }}
+      {% if role_attr != blank %}{{ role_attr }}="app"{% endif %}
+      {{ block.shopify_attributes }}
+    >
+      {% render block %}
+    </div>
+
+  {%- when 'eyebrow' -%}
+    {%- if block.settings.text != blank -%}
+      <p
+        class="{{ class_prefix }}__eyebrow type-overline"
+        {{ motion_attr }}
+        {% if role_attr != blank %}{{ role_attr }}="eyebrow"{% endif %}
+        {% if secondary_role_attr != blank %}{{ secondary_role_attr }}="eyebrow"{% endif %}
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.text | escape -}}
+      </p>
+    {%- endif -%}
+
+  {%- when 'heading' -%}
+    {%- if block.settings.heading != blank -%}
+      <{{ heading_element }}
+        class="{{ class_prefix }}__heading inline-richtext {{ block.settings.heading_size }}"
+        {{ motion_attr }}
+        {% if role_attr != blank %}{{ role_attr }}="heading"{% endif %}
+        {% if secondary_role_attr != blank %}{{ secondary_role_attr }}="heading"{% endif %}
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.heading -}}
+      </{{ heading_element }}>
+    {%- endif -%}
+
+  {%- when 'subheading' -%}
+    {%- if block.settings.subheading != blank -%}
+      <{{ subheading_element }}
+        class="{{ class_prefix }}__subheading inline-richtext {{ block.settings.subheading_size }}"
+        {{ motion_attr }}
+        {% if role_attr != blank %}{{ role_attr }}="subheading"{% endif %}
+        {% if secondary_role_attr != blank %}{{ secondary_role_attr }}="subheading"{% endif %}
+        {{ block.shopify_attributes }}
+      >
+        {{- block.settings.subheading -}}
+      </{{ subheading_element }}>
+    {%- endif -%}
+
+  {%- when 'text' -%}
+    {%- if block.settings.text != blank -%}
+      <div
+        class="{{ class_prefix }}__text rte {{ block.settings.text_style }}"
+        {{ motion_attr }}
+        {% if role_attr != blank %}{{ role_attr }}="{{ text_role }}"{% endif %}
+        {% if secondary_role_attr != blank %}{{ secondary_role_attr }}="{{ text_role }}"{% endif %}
+        {{ block.shopify_attributes }}
+      >
+        {{ block.settings.text }}
+      </div>
+    {%- endif -%}
+
+  {%- when 'buttons' -%}
+    {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
+      <div
+        class="{{ class_prefix }}__buttons"
+        {{ motion_attr }}
+        {% if button_extra_attr != blank %}{{ button_extra_attr }}{% endif %}
+        {% if role_attr != blank %}{{ role_attr }}="buttons"{% endif %}
+        {% if secondary_role_attr != blank %}{{ secondary_role_attr }}="buttons"{% endif %}
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.button_label_1 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_1,
+            link: block.settings.button_link_1,
+            style: block.settings.button_style_1,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_1 == blank,
+            class: button_1_class
+          -%}
+        {%- endif -%}
+        {%- if block.settings.button_label_2 != blank -%}
+          {%- render 'button',
+            label: block.settings.button_label_2,
+            link: block.settings.button_link_2,
+            style: block.settings.button_style_2,
+            size: block.settings.button_size,
+            disabled: block.settings.button_link_2 == blank,
+            class: button_2_class
+          -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+{%- endcase -%}

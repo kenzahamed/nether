@@ -11,58 +11,17 @@
 
 {%- liquid
   assign class_prefix = class_prefix | default: 'nether-product-card'
-  assign has_stats = false
-
-  for i in (1..3)
-    case i
-      when 1
-        if block.settings.stat_1_value != blank or block.settings.stat_1_label != blank
-          assign has_stats = true
-        endif
-      when 2
-        if block.settings.stat_2_value != blank or block.settings.stat_2_label != blank
-          assign has_stats = true
-        endif
-      when 3
-        if block.settings.stat_3_value != blank or block.settings.stat_3_label != blank
-          assign has_stats = true
-        endif
-    endcase
-  endfor
+  assign aria_label = 'sections.nether_product.stats.label' | t
 -%}
 
-{%- if has_stats -%}
-  <div
-    class="{{ class_prefix }}__stats"
-    role="group"
-    aria-label="{{ 'sections.nether_product.stats.label' | t }}"
-    data-nether-product-stat
-  >
-    {%- for i in (1..3) -%}
-      {%- liquid
-        case i
-          when 1
-            assign stat_value = block.settings.stat_1_value
-            assign stat_label = block.settings.stat_1_label
-          when 2
-            assign stat_value = block.settings.stat_2_value
-            assign stat_label = block.settings.stat_2_label
-          when 3
-            assign stat_value = block.settings.stat_3_value
-            assign stat_label = block.settings.stat_3_label
-        endcase
-      -%}
+{%- capture stat_attributes -%}
+  data-nether-product-stat
+{%- endcapture -%}
 
-      {%- if stat_value != blank or stat_label != blank -%}
-        <div class="{{ class_prefix }}__stat">
-          {%- if stat_value != blank -%}
-            <p class="{{ class_prefix }}__stat-value type-display-sm">{{ stat_value | escape }}</p>
-          {%- endif -%}
-          {%- if stat_label != blank -%}
-            <p class="{{ class_prefix }}__stat-label type-caption">{{ stat_label | escape }}</p>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-    {%- endfor -%}
-  </div>
-{%- endif -%}
+{%- render 'nether-stat',
+  block: block,
+  class_prefix: class_prefix,
+  value_type_class: 'type-display-sm',
+  aria_label: aria_label,
+  attributes: stat_attributes
+-%}

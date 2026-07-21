@@ -14,10 +14,9 @@
   assign divider_style = section.settings.nether_divider_style | default: 'line'
 -%}
 
-<div
-  class="nether-faq__divider nether-faq__divider--{{ divider_position }} nether-faq__divider--{{ divider_style }}"
-  aria-hidden="true"
-  role="presentation"
-  data-nether-faq-divider
-  data-nether-faq-role="divider"
-></div>
+{%- render 'nether-divider',
+  class_prefix: 'nether-faq',
+  position: divider_position,
+  style: divider_style,
+  attributes: 'data-nether-faq-divider data-nether-faq-role="divider"'
+-%}

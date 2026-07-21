@@ -9,56 +9,16 @@
 {% endcomment %}
 
 {%- liquid
-  assign has_stats = false
-  for i in (1..3)
-    case i
-      when 1
-        if block.settings.stat_1_value != blank or block.settings.stat_1_label != blank
-          assign has_stats = true
-        endif
-      when 2
-        if block.settings.stat_2_value != blank or block.settings.stat_2_label != blank
-          assign has_stats = true
-        endif
-      when 3
-        if block.settings.stat_3_value != blank or block.settings.stat_3_label != blank
-          assign has_stats = true
-        endif
-    endcase
-  endfor
--%}
-
-{%- liquid
   assign motion_attr = motion_attr | default: 'data-nether-hero-animate'
 -%}
 
-{%- if has_stats -%}
-  <div class="nether-hero__stats" {{ motion_attr }} data-nether-hero-role="stats" role="group" {{ block.shopify_attributes }}>
-    {%- for i in (1..3) -%}
-      {%- liquid
-        case i
-          when 1
-            assign stat_value = block.settings.stat_1_value
-            assign stat_label = block.settings.stat_1_label
-          when 2
-            assign stat_value = block.settings.stat_2_value
-            assign stat_label = block.settings.stat_2_label
-          when 3
-            assign stat_value = block.settings.stat_3_value
-            assign stat_label = block.settings.stat_3_label
-        endcase
-      -%}
+{%- capture stat_attributes -%}
+  {{ motion_attr }} data-nether-hero-role="stats" {{ block.shopify_attributes }}
+{%- endcapture -%}
 
-      {%- if stat_value != blank or stat_label != blank -%}
-        <div class="nether-hero__stat">
-          {%- if stat_value != blank -%}
-            <p class="nether-hero__stat-value type-display-lg">{{ stat_value | escape }}</p>
-          {%- endif -%}
-          {%- if stat_label != blank -%}
-            <p class="nether-hero__stat-label type-caption">{{ stat_label | escape }}</p>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-    {%- endfor -%}
-  </div>
-{%- endif -%}
+{%- render 'nether-stat',
+  block: block,
+  class_prefix: 'nether-hero',
+  value_type_class: 'type-display-lg',
+  attributes: stat_attributes
+-%}

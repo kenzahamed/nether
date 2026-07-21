@@ -1,0 +1,29 @@
+{% comment %}
+  Nether shared presentation divider core.
+
+  Accepts (normalized only — wrappers own setting IDs):
+  - class_prefix: {String} BEM block prefix (required), e.g. nether-faq
+  - position: {String} top | bottom (default: bottom)
+  - style: {String} divider style modifier (default: line)
+  - attributes: {String} optional extra HTML attributes (already normalized)
+
+  Usage:
+  {% render 'nether-divider',
+    class_prefix: 'nether-faq',
+    position: divider_position,
+    style: divider_style,
+    attributes: 'data-nether-faq-divider data-nether-faq-role="divider"'
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign divider_position = position | default: 'bottom'
+  assign divider_style = style | default: 'line'
+-%}
+
+<div
+  class="{{ class_prefix }}__divider {{ class_prefix }}__divider--{{ divider_position }} {{ class_prefix }}__divider--{{ divider_style }}"
+  aria-hidden="true"
+  role="presentation"
+  {% if attributes != blank %}{{ attributes }}{% endif %}
+></div>

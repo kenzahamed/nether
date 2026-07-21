@@ -14,10 +14,9 @@
   assign divider_style = section.settings.nether_divider_style | default: 'line'
 -%}
 
-<div
-  class="nether-testimonials__divider nether-testimonials__divider--{{ divider_position }} nether-testimonials__divider--{{ divider_style }}"
-  aria-hidden="true"
-  role="presentation"
-  data-nether-testimonials-divider
-  data-nether-testimonials-role="divider"
-></div>
+{%- render 'nether-divider',
+  class_prefix: 'nether-testimonials',
+  position: divider_position,
+  style: divider_style,
+  attributes: 'data-nether-testimonials-divider data-nether-testimonials-role="divider"'
+-%}

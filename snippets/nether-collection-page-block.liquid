@@ -26,70 +26,14 @@
 {%- comment -%} Zone: {{ zone | default: 'footer' }} {%- endcomment -%}
 
 {%- case block.type -%}
-  {%- when '@app' -%}
-    <div class="nether-collection-page__app-block" data-nether-collection-page-animate {{ block.shopify_attributes }}>
-      {% render block %}
-    </div>
-
-  {%- when 'eyebrow' -%}
-    {%- if block.settings.text != blank -%}
-      <p class="nether-collection-page__eyebrow type-overline" data-nether-collection-page-animate {{ block.shopify_attributes }}>
-        {{- block.settings.text | escape -}}
-      </p>
-    {%- endif -%}
-
-  {%- when 'heading' -%}
-    {%- if block.settings.heading != blank -%}
-      <{{ heading_element }}
-        class="nether-collection-page__heading inline-richtext {{ block.settings.heading_size }}"
-        data-nether-collection-page-animate
-        {{ block.shopify_attributes }}
-      >
-        {{- block.settings.heading -}}
-      </{{ heading_element }}>
-    {%- endif -%}
-
-  {%- when 'subheading' -%}
-    {%- if block.settings.subheading != blank -%}
-      <{{ subheading_element }}
-        class="nether-collection-page__subheading inline-richtext {{ block.settings.subheading_size }}"
-        data-nether-collection-page-animate
-        {{ block.shopify_attributes }}
-      >
-        {{- block.settings.subheading -}}
-      </{{ subheading_element }}>
-    {%- endif -%}
-
-  {%- when 'text' -%}
-    {%- if block.settings.text != blank -%}
-      <div class="nether-collection-page__text rte {{ block.settings.text_style }}" data-nether-collection-page-animate {{ block.shopify_attributes }}>
-        {{ block.settings.text }}
-      </div>
-    {%- endif -%}
-
-  {%- when 'buttons' -%}
-    {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
-      <div class="nether-collection-page__buttons" data-nether-collection-page-animate {{ block.shopify_attributes }}>
-        {%- if block.settings.button_label_1 != blank -%}
-          {%- render 'button',
-            label: block.settings.button_label_1,
-            link: block.settings.button_link_1,
-            style: block.settings.button_style_1,
-            size: block.settings.button_size,
-            disabled: block.settings.button_link_1 == blank
-          -%}
-        {%- endif -%}
-        {%- if block.settings.button_label_2 != blank -%}
-          {%- render 'button',
-            label: block.settings.button_label_2,
-            link: block.settings.button_link_2,
-            style: block.settings.button_style_2,
-            size: block.settings.button_size,
-            disabled: block.settings.button_link_2 == blank
-          -%}
-        {%- endif -%}
-      </div>
-    {%- endif -%}
+  {%- when '@app', 'eyebrow', 'heading', 'subheading', 'text', 'buttons' -%}
+    {%- render 'nether-shared-header-block',
+      block: block,
+      class_prefix: 'nether-collection-page',
+      heading_element: heading_element,
+      subheading_element: subheading_element,
+      motion_attr: 'data-nether-collection-page-animate'
+    -%}
 
   {%- when 'stat' -%}
     {% render 'nether-hero-stat', block: block, motion_attr: 'data-nether-collection-page-animate' %}
