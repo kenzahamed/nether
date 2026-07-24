@@ -21,7 +21,7 @@
         id="NetherFaqSearch-{{ section.id }}"
         class="nether-faq__search-input field__input"
         name="nether-faq-search"
-        placeholder="{{ section.settings.nether_search_placeholder | default: 'sections.nether_faq.search.placeholder' | t | escape }}"
+        placeholder="{%- if section.settings.nether_search_placeholder != blank -%}{{ section.settings.nether_search_placeholder | escape }}{%- else -%}{{ 'sections.nether_faq.search.placeholder' | t | escape }}{%- endif -%}"
         autocomplete="off"
         data-nether-faq-search
         data-nether-faq-search-endpoint="{{ section.settings.nether_search_endpoint | escape }}"

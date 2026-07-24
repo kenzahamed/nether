@@ -17,7 +17,7 @@
   if adapter_mode == 'newsletter'
     assign media_type = section.settings.nether_newsletter_media_type | default: 'image'
     if section.settings.nether_layout == 'background_video'
-      assign media_type = 'video'
+      assign media_type = 'background_video'
     endif
     assign desktop_image = section.settings.nether_newsletter_image_desktop
     assign mobile_image = section.settings.nether_newsletter_image_mobile | default: desktop_image
@@ -47,7 +47,7 @@
     assign shopify_video = section.settings.nether_testimonials_video
     assign video_url = section.settings.nether_testimonials_video_url
     assign enable_blur = section.settings.nether_testimonials_enable_blur
-    assign enable_parallax = section.settings.nether_testimonials_enable_parallax
+    assign enable_parallax = section.settings.nether_enable_parallax
     assign video_description = section.settings.nether_testimonials_video_description
     assign video_loop = section.settings.nether_testimonials_video_loop
   elsif adapter_mode == 'content'

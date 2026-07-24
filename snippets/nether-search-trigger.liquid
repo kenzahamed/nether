@@ -11,7 +11,11 @@
 {% endcomment %}
 
 {%- liquid
-  assign trigger_label = label | default: 'general.search.search' | t
+  if label != blank
+    assign trigger_label = label
+  else
+    assign trigger_label = 'general.search.search' | t
+  endif
   assign show_desktop = desktop
   assign show_mobile = mobile
   if show_desktop == nil

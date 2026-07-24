@@ -8,7 +8,7 @@
 <header class="nether-cart__module nether-cart__module--header nether-cart__header" data-nether-cart-module="header" data-nether-cart-animate>
   <div class="nether-cart__header-main">
     <h1 class="nether-cart__title title title--primary type-heading-md">
-      {{ section.settings.nether_heading | default: 'sections.cart.title' | t }}
+      {% render 'nether-locale-text', value: section.settings.nether_heading, key: 'sections.cart.title' %}
     </h1>
     {%- if section.settings.nether_show_continue_shopping -%}
       <a href="{{ routes.all_products_collection_url }}" class="nether-cart__continue underlined-link type-body-sm">

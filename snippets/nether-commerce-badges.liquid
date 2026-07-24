@@ -20,7 +20,11 @@
 {%- liquid
   assign badge_style = style | default: 'solid'
   assign badge_size = size | default: 'small'
-  assign region_label = label | default: 'sections.nether_commerce.badges.label' | t
+  if label != blank
+    assign region_label = label
+  else
+    assign region_label = 'sections.nether_commerce.badges.label' | t
+  endif
   assign has_badges = false
 
   if show_sale and product and product.compare_at_price > product.price

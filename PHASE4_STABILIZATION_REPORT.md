@@ -79,7 +79,7 @@ Shopify Product Recommendations / Search & Discovery compatibility preserved.
 | Collection list view | **Implemented** — list toggle enabled; default view applied to host; toolbar pressed state synced |
 | Gift wrap settings/block (cart page + drawer) | **Hidden** from Theme Editor until cart-attribute write path exists; Liquid render path preserved for existing blocks |
 | Cart chrome placeholders (upsells, cross-sells, loyalty, gift cards, subscriptions, coupon, analytics) | **Hidden** from Theme Editor; Liquid extension dispatch preserved |
-| PDP `subscriptions_placeholder` / `personalization_placeholder` | **Hidden** from Theme Editor; Liquid extension path preserved |
+| PDP `subscriptions_placeholder` / `personalize_placeholder` | **Hidden** from Theme Editor; Liquid extension path preserved |
 | Live `*_placeholder` labels (wishlist / compare / bundles) | **Relabeled** in schema locales to real names (no longer “placeholder”) |
 
 ---
@@ -142,7 +142,7 @@ Shopify Product Recommendations / Search & Discovery compatibility preserved.
 | `gift_wrap` block | Cart Page / Drawer | Removed from TE |
 | Cart `*_placeholder` chrome blocks | Cart Page / Drawer | Removed from TE (except live Bundles) |
 | PDP `subscriptions_placeholder` | Product Page | Removed from TE |
-| PDP `personalization_placeholder` | Product Page | Removed from TE |
+| PDP `personalize_placeholder` | Product Page | Removed from TE |
 | Wishlist / Compare / Bundles block names | Schema locales | Relabeled to real feature names |
 
 ---

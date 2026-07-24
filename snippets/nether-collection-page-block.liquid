@@ -122,7 +122,7 @@
       {% render 'nether-recommendations-extensions', type: 'recently_viewed' %}
     </div>
 
-  {%- when 'recommendations_placeholder' -%}
+  {%- when 'recommend_placeholder' -%}
     <div
       class="nether-collection-page__module nether-collection-page__module--recommendations nether-collection-page__recommendations"
       data-nether-collection-page-module="recommendations"
@@ -142,6 +142,6 @@
       {% render 'nether-recommendations-extensions', type: 'merchandising' %}
     </div>
 
-  {%- when 'infinite_scroll_placeholder', 'merchandising_rules_placeholder' -%}
+  {%- when 'inf_scroll_placeholder', 'merch_rules_placeholder' -%}
     {% render 'nether-collection-page-extensions', block: block, section: section %}
 {%- endcase -%}

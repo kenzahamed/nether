@@ -30,7 +30,7 @@
     data-animation-style="{{ section.settings.nether_animation_style | default: 'stagger' }}"
     data-animation-duration="{{ section.settings.nether_animation_duration | default: 0.5 }}"
     role="region"
-    aria-label="{{ block.settings.heading | default: 'sections.nether_recommendations.strategies.related' | t | escape }}"
+    aria-label="{% render 'nether-locale-text', value: block.settings.heading, key: 'sections.nether_recommendations.strategies.related' %}"
   >
     {%- if recommendations.performed and recommendations.products_count > 0 -%}
       <div class="nether-product-page__related-inner nether-recommendations__inner">

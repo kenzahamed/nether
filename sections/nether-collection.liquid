@@ -152,7 +152,7 @@
   data-hover-reveal="{{ section.settings.nether_hover_effect }}"
   data-carousel-ready="{{ show_slider }}"
   role="region"
-  aria-label="{{ section.settings.nether_aria_label | default: 'Collection showcase' | escape }}"
+  aria-label="{% render 'nether-locale-text', value: section.settings.nether_aria_label, key: 'sections.nether_collection.aria_label' %}"
 >
   <div class="nether-collection__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
     {%- render 'nether-collection-content', section: section, heading_tag: heading_tag -%}
@@ -310,7 +310,10 @@
   "class": "section section-nether-collection",
   "max_blocks": 16,
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   },
   "settings": [
     {
@@ -323,15 +326,42 @@
       "label": "t:sections.nether_collection.settings.nether_layout.label",
       "default": "luxury_grid",
       "options": [
-        { "value": "editorial_grid", "label": "t:sections.nether_collection.settings.nether_layout.options__1.label" },
-        { "value": "luxury_grid", "label": "t:sections.nether_collection.settings.nether_layout.options__2.label" },
-        { "value": "masonry_grid", "label": "t:sections.nether_collection.settings.nether_layout.options__3.label" },
-        { "value": "magazine", "label": "t:sections.nether_collection.settings.nether_layout.options__4.label" },
-        { "value": "split_collection", "label": "t:sections.nether_collection.settings.nether_layout.options__5.label" },
-        { "value": "card_layout", "label": "t:sections.nether_collection.settings.nether_layout.options__6.label" },
-        { "value": "minimal_grid", "label": "t:sections.nether_collection.settings.nether_layout.options__7.label" },
-        { "value": "horizontal_scroll", "label": "t:sections.nether_collection.settings.nether_layout.options__8.label" },
-        { "value": "carousel", "label": "t:sections.nether_collection.settings.nether_layout.options__9.label" }
+        {
+          "value": "editorial_grid",
+          "label": "t:sections.nether_collection.settings.nether_layout.options__1.label"
+        },
+        {
+          "value": "luxury_grid",
+          "label": "t:sections.nether_collection.settings.nether_layout.options__2.label"
+        },
+        {
+          "value": "masonry_grid",
+          "label": "t:sections.nether_collection.settings.nether_layout.options__3.label"
+        },
+        {
+          "value": "magazine",
+          "label": "t:sections.nether_collection.settings.nether_layout.options__4.label"
+        },
+        {
+          "value": "split_collection",
+          "label": "t:sections.nether_collection.settings.nether_layout.options__5.label"
+        },
+        {
+          "value": "card_layout",
+          "label": "t:sections.nether_collection.settings.nether_layout.options__6.label"
+        },
+        {
+          "value": "minimal_grid",
+          "label": "t:sections.nether_collection.settings.nether_layout.options__7.label"
+        },
+        {
+          "value": "horizontal_scroll",
+          "label": "t:sections.nether_collection.settings.nether_layout.options__8.label"
+        },
+        {
+          "value": "carousel",
+          "label": "t:sections.nether_collection.settings.nether_layout.options__9.label"
+        }
       ]
     },
     {
@@ -358,8 +388,14 @@
       "label": "t:sections.nether_collection.settings.nether_columns_mobile.label",
       "default": "1",
       "options": [
-        { "value": "1", "label": "t:sections.nether_collection.settings.nether_columns_mobile.options__1.label" },
-        { "value": "2", "label": "t:sections.nether_collection.settings.nether_columns_mobile.options__2.label" }
+        {
+          "value": "1",
+          "label": "t:sections.nether_collection.settings.nether_columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.nether_collection.settings.nether_columns_mobile.options__2.label"
+        }
       ]
     },
     {
@@ -368,7 +404,7 @@
       "min": 0,
       "max": 60,
       "step": 4,
-      "unit": "px",
+      "unit": "t:nether.common.px",
       "default": 24,
       "label": "t:sections.nether_collection.settings.nether_gap.label"
     },
@@ -378,13 +414,34 @@
       "label": "t:sections.nether_collection.settings.nether_card_style.label",
       "default": "medium",
       "options": [
-        { "value": "small", "label": "t:sections.nether_collection.settings.nether_card_style.options__1.label" },
-        { "value": "medium", "label": "t:sections.nether_collection.settings.nether_card_style.options__2.label" },
-        { "value": "large", "label": "t:sections.nether_collection.settings.nether_card_style.options__3.label" },
-        { "value": "editorial", "label": "t:sections.nether_collection.settings.nether_card_style.options__4.label" },
-        { "value": "glass", "label": "t:sections.nether_collection.settings.nether_card_style.options__5.label" },
-        { "value": "gradient", "label": "t:sections.nether_collection.settings.nether_card_style.options__6.label" },
-        { "value": "minimal", "label": "t:sections.nether_collection.settings.nether_card_style.options__7.label" }
+        {
+          "value": "small",
+          "label": "t:sections.nether_collection.settings.nether_card_style.options__1.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.nether_collection.settings.nether_card_style.options__2.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.nether_collection.settings.nether_card_style.options__3.label"
+        },
+        {
+          "value": "editorial",
+          "label": "t:sections.nether_collection.settings.nether_card_style.options__4.label"
+        },
+        {
+          "value": "glass",
+          "label": "t:sections.nether_collection.settings.nether_card_style.options__5.label"
+        },
+        {
+          "value": "gradient",
+          "label": "t:sections.nether_collection.settings.nether_card_style.options__6.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.nether_collection.settings.nether_card_style.options__7.label"
+        }
       ]
     },
     {
@@ -393,15 +450,42 @@
       "label": "t:sections.nether_collection.settings.nether_content_position.label",
       "default": "bottom-left",
       "options": [
-        { "value": "top-left", "label": "t:sections.nether_collection.settings.nether_content_position.options__1.label" },
-        { "value": "top-center", "label": "t:sections.nether_collection.settings.nether_content_position.options__2.label" },
-        { "value": "top-right", "label": "t:sections.nether_collection.settings.nether_content_position.options__3.label" },
-        { "value": "middle-left", "label": "t:sections.nether_collection.settings.nether_content_position.options__4.label" },
-        { "value": "middle-center", "label": "t:sections.nether_collection.settings.nether_content_position.options__5.label" },
-        { "value": "middle-right", "label": "t:sections.nether_collection.settings.nether_content_position.options__6.label" },
-        { "value": "bottom-left", "label": "t:sections.nether_collection.settings.nether_content_position.options__7.label" },
-        { "value": "bottom-center", "label": "t:sections.nether_collection.settings.nether_content_position.options__8.label" },
-        { "value": "bottom-right", "label": "t:sections.nether_collection.settings.nether_content_position.options__9.label" }
+        {
+          "value": "top-left",
+          "label": "t:sections.nether_collection.settings.nether_content_position.options__1.label"
+        },
+        {
+          "value": "top-center",
+          "label": "t:sections.nether_collection.settings.nether_content_position.options__2.label"
+        },
+        {
+          "value": "top-right",
+          "label": "t:sections.nether_collection.settings.nether_content_position.options__3.label"
+        },
+        {
+          "value": "middle-left",
+          "label": "t:sections.nether_collection.settings.nether_content_position.options__4.label"
+        },
+        {
+          "value": "middle-center",
+          "label": "t:sections.nether_collection.settings.nether_content_position.options__5.label"
+        },
+        {
+          "value": "middle-right",
+          "label": "t:sections.nether_collection.settings.nether_content_position.options__6.label"
+        },
+        {
+          "value": "bottom-left",
+          "label": "t:sections.nether_collection.settings.nether_content_position.options__7.label"
+        },
+        {
+          "value": "bottom-center",
+          "label": "t:sections.nether_collection.settings.nether_content_position.options__8.label"
+        },
+        {
+          "value": "bottom-right",
+          "label": "t:sections.nether_collection.settings.nether_content_position.options__9.label"
+        }
       ]
     },
     {
@@ -410,9 +494,18 @@
       "label": "t:sections.nether_collection.settings.nether_content_alignment.label",
       "default": "left",
       "options": [
-        { "value": "left", "label": "t:sections.nether_collection.settings.nether_content_alignment.options__1.label" },
-        { "value": "center", "label": "t:sections.nether_collection.settings.nether_content_alignment.options__2.label" },
-        { "value": "right", "label": "t:sections.nether_collection.settings.nether_content_alignment.options__3.label" }
+        {
+          "value": "left",
+          "label": "t:sections.nether_collection.settings.nether_content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.nether_collection.settings.nether_content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.nether_collection.settings.nether_content_alignment.options__3.label"
+        }
       ]
     },
     {
@@ -421,9 +514,18 @@
       "label": "t:sections.nether_collection.settings.nether_image_ratio.label",
       "default": "portrait",
       "options": [
-        { "value": "adapt", "label": "t:sections.nether_collection.settings.nether_image_ratio.options__1.label" },
-        { "value": "portrait", "label": "t:sections.nether_collection.settings.nether_image_ratio.options__2.label" },
-        { "value": "square", "label": "t:sections.nether_collection.settings.nether_image_ratio.options__3.label" }
+        {
+          "value": "adapt",
+          "label": "t:sections.nether_collection.settings.nether_image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.nether_collection.settings.nether_image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.nether_collection.settings.nether_image_ratio.options__3.label"
+        }
       ]
     },
     {
@@ -432,8 +534,14 @@
       "label": "t:sections.nether_collection.settings.nether_heading_level.label",
       "default": "h2",
       "options": [
-        { "value": "h2", "label": "t:sections.nether_collection.settings.nether_heading_level.options__1.label" },
-        { "value": "h3", "label": "t:sections.nether_collection.settings.nether_heading_level.options__2.label" }
+        {
+          "value": "h2",
+          "label": "t:sections.nether_collection.settings.nether_heading_level.options__1.label"
+        },
+        {
+          "value": "h3",
+          "label": "t:sections.nether_collection.settings.nether_heading_level.options__2.label"
+        }
       ]
     },
     {
@@ -512,10 +620,22 @@
       "label": "t:sections.nether_collection.settings.nether_gradient_style.label",
       "default": "brand",
       "options": [
-        { "value": "brand", "label": "t:sections.nether_collection.settings.nether_gradient_style.options__1.label" },
-        { "value": "dramatic", "label": "t:sections.nether_collection.settings.nether_gradient_style.options__2.label" },
-        { "value": "vignette", "label": "t:sections.nether_collection.settings.nether_gradient_style.options__3.label" },
-        { "value": "fade-down", "label": "t:sections.nether_collection.settings.nether_gradient_style.options__4.label" }
+        {
+          "value": "brand",
+          "label": "t:sections.nether_collection.settings.nether_gradient_style.options__1.label"
+        },
+        {
+          "value": "dramatic",
+          "label": "t:sections.nether_collection.settings.nether_gradient_style.options__2.label"
+        },
+        {
+          "value": "vignette",
+          "label": "t:sections.nether_collection.settings.nether_gradient_style.options__3.label"
+        },
+        {
+          "value": "fade-down",
+          "label": "t:sections.nether_collection.settings.nether_gradient_style.options__4.label"
+        }
       ]
     },
     {
@@ -530,12 +650,30 @@
       "label": "t:sections.nether_collection.settings.nether_hover_effect.label",
       "default": "zoom",
       "options": [
-        { "value": "zoom", "label": "t:sections.nether_collection.settings.nether_hover_effect.options__1.label" },
-        { "value": "lift", "label": "t:sections.nether_collection.settings.nether_hover_effect.options__2.label" },
-        { "value": "scale", "label": "t:sections.nether_collection.settings.nether_hover_effect.options__3.label" },
-        { "value": "shadow", "label": "t:sections.nether_collection.settings.nether_hover_effect.options__4.label" },
-        { "value": "glow", "label": "t:sections.nether_collection.settings.nether_hover_effect.options__5.label" },
-        { "value": "reveal", "label": "t:sections.nether_collection.settings.nether_hover_effect.options__6.label" }
+        {
+          "value": "zoom",
+          "label": "t:sections.nether_collection.settings.nether_hover_effect.options__1.label"
+        },
+        {
+          "value": "lift",
+          "label": "t:sections.nether_collection.settings.nether_hover_effect.options__2.label"
+        },
+        {
+          "value": "scale",
+          "label": "t:sections.nether_collection.settings.nether_hover_effect.options__3.label"
+        },
+        {
+          "value": "shadow",
+          "label": "t:sections.nether_collection.settings.nether_hover_effect.options__4.label"
+        },
+        {
+          "value": "glow",
+          "label": "t:sections.nether_collection.settings.nether_hover_effect.options__5.label"
+        },
+        {
+          "value": "reveal",
+          "label": "t:sections.nether_collection.settings.nether_hover_effect.options__6.label"
+        }
       ]
     },
     {
@@ -556,9 +694,18 @@
       "label": "t:sections.nether_collection.settings.nether_divider_style.label",
       "default": "line",
       "options": [
-        { "value": "line", "label": "t:sections.nether_collection.settings.nether_divider_style.options__1.label" },
-        { "value": "gradient", "label": "t:sections.nether_collection.settings.nether_divider_style.options__2.label" },
-        { "value": "wave", "label": "t:sections.nether_collection.settings.nether_divider_style.options__3.label" }
+        {
+          "value": "line",
+          "label": "t:sections.nether_collection.settings.nether_divider_style.options__1.label"
+        },
+        {
+          "value": "gradient",
+          "label": "t:sections.nether_collection.settings.nether_divider_style.options__2.label"
+        },
+        {
+          "value": "wave",
+          "label": "t:sections.nether_collection.settings.nether_divider_style.options__3.label"
+        }
       ]
     },
     {
@@ -577,9 +724,18 @@
       "label": "t:sections.nether_collection.settings.nether_default_cta_style.label",
       "default": "arrow",
       "options": [
-        { "value": "text", "label": "t:sections.nether_collection.settings.nether_default_cta_style.options__1.label" },
-        { "value": "arrow", "label": "t:sections.nether_collection.settings.nether_default_cta_style.options__2.label" },
-        { "value": "primary", "label": "t:sections.nether_collection.settings.nether_default_cta_style.options__3.label" }
+        {
+          "value": "text",
+          "label": "t:sections.nether_collection.settings.nether_default_cta_style.options__1.label"
+        },
+        {
+          "value": "arrow",
+          "label": "t:sections.nether_collection.settings.nether_default_cta_style.options__2.label"
+        },
+        {
+          "value": "primary",
+          "label": "t:sections.nether_collection.settings.nether_default_cta_style.options__3.label"
+        }
       ]
     },
     {
@@ -604,10 +760,22 @@
       "label": "t:sections.nether_collection.settings.nether_view_all_style.label",
       "default": "secondary",
       "options": [
-        { "value": "primary", "label": "t:sections.nether_collection.settings.nether_view_all_style.options__1.label" },
-        { "value": "secondary", "label": "t:sections.nether_collection.settings.nether_view_all_style.options__2.label" },
-        { "value": "outline", "label": "t:sections.nether_collection.settings.nether_view_all_style.options__3.label" },
-        { "value": "text", "label": "t:sections.nether_collection.settings.nether_view_all_style.options__4.label" }
+        {
+          "value": "primary",
+          "label": "t:sections.nether_collection.settings.nether_view_all_style.options__1.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:sections.nether_collection.settings.nether_view_all_style.options__2.label"
+        },
+        {
+          "value": "outline",
+          "label": "t:sections.nether_collection.settings.nether_view_all_style.options__3.label"
+        },
+        {
+          "value": "text",
+          "label": "t:sections.nether_collection.settings.nether_view_all_style.options__4.label"
+        }
       ]
     },
     {
@@ -620,10 +788,22 @@
       "label": "t:sections.nether_collection.settings.nether_animation_style.label",
       "default": "stagger",
       "options": [
-        { "value": "fade", "label": "t:sections.nether_collection.settings.nether_animation_style.options__1.label" },
-        { "value": "slide", "label": "t:sections.nether_collection.settings.nether_animation_style.options__2.label" },
-        { "value": "stagger", "label": "t:sections.nether_collection.settings.nether_animation_style.options__3.label" },
-        { "value": "scale", "label": "t:sections.nether_collection.settings.nether_animation_style.options__4.label" }
+        {
+          "value": "fade",
+          "label": "t:sections.nether_collection.settings.nether_animation_style.options__1.label"
+        },
+        {
+          "value": "slide",
+          "label": "t:sections.nether_collection.settings.nether_animation_style.options__2.label"
+        },
+        {
+          "value": "stagger",
+          "label": "t:sections.nether_collection.settings.nether_animation_style.options__3.label"
+        },
+        {
+          "value": "scale",
+          "label": "t:sections.nether_collection.settings.nether_animation_style.options__4.label"
+        }
       ]
     },
     {
@@ -632,9 +812,18 @@
       "label": "t:sections.nether_collection.settings.nether_animation_speed.label",
       "default": "medium",
       "options": [
-        { "value": "slow", "label": "t:sections.nether_collection.settings.nether_animation_speed.options__1.label" },
-        { "value": "medium", "label": "t:sections.nether_collection.settings.nether_animation_speed.options__2.label" },
-        { "value": "fast", "label": "t:sections.nether_collection.settings.nether_animation_speed.options__3.label" }
+        {
+          "value": "slow",
+          "label": "t:sections.nether_collection.settings.nether_animation_speed.options__1.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.nether_collection.settings.nether_animation_speed.options__2.label"
+        },
+        {
+          "value": "fast",
+          "label": "t:sections.nether_collection.settings.nether_animation_speed.options__3.label"
+        }
       ]
     },
     {
@@ -654,9 +843,18 @@
       "label": "t:sections.nether_collection.settings.nether_layout_desktop.label",
       "default": "default",
       "options": [
-        { "value": "default", "label": "t:sections.nether_collection.settings.nether_layout_desktop.options__1.label" },
-        { "value": "editorial", "label": "t:sections.nether_collection.settings.nether_layout_desktop.options__2.label" },
-        { "value": "compact", "label": "t:sections.nether_collection.settings.nether_layout_desktop.options__3.label" }
+        {
+          "value": "default",
+          "label": "t:sections.nether_collection.settings.nether_layout_desktop.options__1.label"
+        },
+        {
+          "value": "editorial",
+          "label": "t:sections.nether_collection.settings.nether_layout_desktop.options__2.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.nether_collection.settings.nether_layout_desktop.options__3.label"
+        }
       ]
     },
     {
@@ -665,9 +863,18 @@
       "label": "t:sections.nether_collection.settings.nether_layout_tablet.label",
       "default": "default",
       "options": [
-        { "value": "default", "label": "t:sections.nether_collection.settings.nether_layout_tablet.options__1.label" },
-        { "value": "stacked", "label": "t:sections.nether_collection.settings.nether_layout_tablet.options__2.label" },
-        { "value": "centered", "label": "t:sections.nether_collection.settings.nether_layout_tablet.options__3.label" }
+        {
+          "value": "default",
+          "label": "t:sections.nether_collection.settings.nether_layout_tablet.options__1.label"
+        },
+        {
+          "value": "stacked",
+          "label": "t:sections.nether_collection.settings.nether_layout_tablet.options__2.label"
+        },
+        {
+          "value": "centered",
+          "label": "t:sections.nether_collection.settings.nether_layout_tablet.options__3.label"
+        }
       ]
     },
     {
@@ -676,10 +883,22 @@
       "label": "t:sections.nether_collection.settings.nether_layout_mobile.label",
       "default": "default",
       "options": [
-        { "value": "default", "label": "t:sections.nether_collection.settings.nether_layout_mobile.options__1.label" },
-        { "value": "stacked", "label": "t:sections.nether_collection.settings.nether_layout_mobile.options__2.label" },
-        { "value": "centered", "label": "t:sections.nether_collection.settings.nether_layout_mobile.options__3.label" },
-        { "value": "minimal", "label": "t:sections.nether_collection.settings.nether_layout_mobile.options__4.label" }
+        {
+          "value": "default",
+          "label": "t:sections.nether_collection.settings.nether_layout_mobile.options__1.label"
+        },
+        {
+          "value": "stacked",
+          "label": "t:sections.nether_collection.settings.nether_layout_mobile.options__2.label"
+        },
+        {
+          "value": "centered",
+          "label": "t:sections.nether_collection.settings.nether_layout_mobile.options__3.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.nether_collection.settings.nether_layout_mobile.options__4.label"
+        }
       ]
     },
     {
@@ -698,7 +917,7 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "unit": "px",
+      "unit": "t:nether.common.px",
       "label": "t:sections.all.padding.padding_top",
       "default": 36
     },
@@ -708,7 +927,7 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "unit": "px",
+      "unit": "t:nether.common.px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
     }
@@ -733,8 +952,14 @@
           "label": "t:sections.nether_collection.blocks.collection.settings.media_type.label",
           "default": "image",
           "options": [
-            { "value": "image", "label": "t:sections.nether_collection.blocks.collection.settings.media_type.options__1.label" },
-            { "value": "video", "label": "t:sections.nether_collection.blocks.collection.settings.media_type.options__2.label" }
+            {
+              "value": "image",
+              "label": "t:sections.nether_collection.blocks.collection.settings.media_type.options__1.label"
+            },
+            {
+              "value": "video",
+              "label": "t:sections.nether_collection.blocks.collection.settings.media_type.options__2.label"
+            }
           ]
         },
         {
@@ -756,7 +981,10 @@
         {
           "type": "video_url",
           "id": "video_url",
-          "accept": ["youtube", "vimeo"],
+          "accept": [
+            "youtube",
+            "vimeo"
+          ],
           "label": "t:sections.nether_collection.blocks.collection.settings.video_url.label"
         },
         {
@@ -810,10 +1038,22 @@
           "label": "t:sections.nether_collection.blocks.collection.settings.badge_type.label",
           "default": "featured",
           "options": [
-            { "value": "featured", "label": "t:sections.nether_collection.blocks.collection.settings.badge_type.options__1.label" },
-            { "value": "new", "label": "t:sections.nether_collection.blocks.collection.settings.badge_type.options__2.label" },
-            { "value": "exclusive", "label": "t:sections.nether_collection.blocks.collection.settings.badge_type.options__3.label" },
-            { "value": "custom", "label": "t:sections.nether_collection.blocks.collection.settings.badge_type.options__4.label" }
+            {
+              "value": "featured",
+              "label": "t:sections.nether_collection.blocks.collection.settings.badge_type.options__1.label"
+            },
+            {
+              "value": "new",
+              "label": "t:sections.nether_collection.blocks.collection.settings.badge_type.options__2.label"
+            },
+            {
+              "value": "exclusive",
+              "label": "t:sections.nether_collection.blocks.collection.settings.badge_type.options__3.label"
+            },
+            {
+              "value": "custom",
+              "label": "t:sections.nether_collection.blocks.collection.settings.badge_type.options__4.label"
+            }
           ]
         },
         {
@@ -822,9 +1062,18 @@
           "label": "t:sections.nether_collection.blocks.collection.settings.badge_style.label",
           "default": "soft",
           "options": [
-            { "value": "solid", "label": "t:sections.nether_collection.blocks.collection.settings.badge_style.options__1.label" },
-            { "value": "soft", "label": "t:sections.nether_collection.blocks.collection.settings.badge_style.options__2.label" },
-            { "value": "outline", "label": "t:sections.nether_collection.blocks.collection.settings.badge_style.options__3.label" }
+            {
+              "value": "solid",
+              "label": "t:sections.nether_collection.blocks.collection.settings.badge_style.options__1.label"
+            },
+            {
+              "value": "soft",
+              "label": "t:sections.nether_collection.blocks.collection.settings.badge_style.options__2.label"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.nether_collection.blocks.collection.settings.badge_style.options__3.label"
+            }
           ]
         },
         {
@@ -838,9 +1087,18 @@
           "label": "t:sections.nether_collection.blocks.collection.settings.cta_style.label",
           "default": "arrow",
           "options": [
-            { "value": "text", "label": "t:sections.nether_collection.blocks.collection.settings.cta_style.options__1.label" },
-            { "value": "arrow", "label": "t:sections.nether_collection.blocks.collection.settings.cta_style.options__2.label" },
-            { "value": "primary", "label": "t:sections.nether_collection.blocks.collection.settings.cta_style.options__3.label" }
+            {
+              "value": "text",
+              "label": "t:sections.nether_collection.blocks.collection.settings.cta_style.options__1.label"
+            },
+            {
+              "value": "arrow",
+              "label": "t:sections.nether_collection.blocks.collection.settings.cta_style.options__2.label"
+            },
+            {
+              "value": "primary",
+              "label": "t:sections.nether_collection.blocks.collection.settings.cta_style.options__3.label"
+            }
           ]
         },
         {
@@ -909,10 +1167,22 @@
           "label": "t:sections.all.heading_size.label",
           "default": "h1",
           "options": [
-            { "value": "h2", "label": "t:sections.all.heading_size.options__1.label" },
-            { "value": "h1", "label": "t:sections.all.heading_size.options__2.label" },
-            { "value": "h0", "label": "t:sections.all.heading_size.options__3.label" },
-            { "value": "hxl", "label": "t:sections.all.heading_size.options__4.label" }
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h0",
+              "label": "t:sections.all.heading_size.options__3.label"
+            },
+            {
+              "value": "hxl",
+              "label": "t:sections.all.heading_size.options__4.label"
+            }
           ]
         }
       ]
@@ -933,8 +1203,14 @@
           "label": "t:sections.all.heading_size.label",
           "default": "h2",
           "options": [
-            { "value": "h3", "label": "t:sections.all.heading_size.options__1.label" },
-            { "value": "h2", "label": "t:sections.all.heading_size.options__2.label" }
+            {
+              "value": "h3",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__2.label"
+            }
           ]
         }
       ]
@@ -956,8 +1232,14 @@
           "label": "t:sections.nether_collection.blocks.text.settings.text_style.label",
           "default": "body",
           "options": [
-            { "value": "body", "label": "t:sections.nether_collection.blocks.text.settings.text_style.options__1.label" },
-            { "value": "subtitle", "label": "t:sections.nether_collection.blocks.text.settings.text_style.options__2.label" }
+            {
+              "value": "body",
+              "label": "t:sections.nether_collection.blocks.text.settings.text_style.options__1.label"
+            },
+            {
+              "value": "subtitle",
+              "label": "t:sections.nether_collection.blocks.text.settings.text_style.options__2.label"
+            }
           ]
         }
       ]
@@ -983,9 +1265,18 @@
           "label": "t:sections.nether_collection.blocks.buttons.settings.button_style_1.label",
           "default": "primary",
           "options": [
-            { "value": "primary", "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__1.label" },
-            { "value": "secondary", "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__2.label" },
-            { "value": "outline", "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__3.label" }
+            {
+              "value": "primary",
+              "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__1.label"
+            },
+            {
+              "value": "secondary",
+              "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__2.label"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__3.label"
+            }
           ]
         },
         {
@@ -1004,9 +1295,18 @@
           "label": "t:sections.nether_collection.blocks.buttons.settings.button_style_2.label",
           "default": "secondary",
           "options": [
-            { "value": "primary", "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__1.label" },
-            { "value": "secondary", "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__2.label" },
-            { "value": "outline", "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__3.label" }
+            {
+              "value": "primary",
+              "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__1.label"
+            },
+            {
+              "value": "secondary",
+              "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__2.label"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.nether_collection.blocks.buttons.settings.button_style.options__3.label"
+            }
           ]
         },
         {
@@ -1015,9 +1315,18 @@
           "label": "t:sections.nether_collection.blocks.buttons.settings.button_size.label",
           "default": "medium",
           "options": [
-            { "value": "small", "label": "t:sections.nether_collection.blocks.buttons.settings.button_size.options__1.label" },
-            { "value": "medium", "label": "t:sections.nether_collection.blocks.buttons.settings.button_size.options__2.label" },
-            { "value": "large", "label": "t:sections.nether_collection.blocks.buttons.settings.button_size.options__3.label" }
+            {
+              "value": "small",
+              "label": "t:sections.nether_collection.blocks.buttons.settings.button_size.options__1.label"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.nether_collection.blocks.buttons.settings.button_size.options__2.label"
+            },
+            {
+              "value": "large",
+              "label": "t:sections.nether_collection.blocks.buttons.settings.button_size.options__3.label"
+            }
           ]
         }
       ]
@@ -1073,12 +1382,24 @@
     {
       "name": "t:sections.nether_collection.presets.name",
       "blocks": [
-        { "type": "eyebrow" },
-        { "type": "heading" },
-        { "type": "text" },
-        { "type": "collection" },
-        { "type": "collection" },
-        { "type": "collection" }
+        {
+          "type": "eyebrow"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
       ]
     },
     {
@@ -1088,11 +1409,21 @@
         "nether_card_style": "editorial"
       },
       "blocks": [
-        { "type": "heading" },
-        { "type": "collection" },
-        { "type": "collection" },
-        { "type": "collection" },
-        { "type": "collection" }
+        {
+          "type": "heading"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
       ]
     },
     {
@@ -1102,10 +1433,18 @@
         "nether_columns_desktop": 2
       },
       "blocks": [
-        { "type": "heading" },
-        { "type": "collection" },
-        { "type": "collection" },
-        { "type": "collection" }
+        {
+          "type": "heading"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
       ]
     }
   ]

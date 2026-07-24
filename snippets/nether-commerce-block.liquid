@@ -179,7 +179,7 @@
   {%- when 'divider' -%}
     {% render 'nether-commerce-divider', style: block.settings.style, attributes: block.shopify_attributes %}
 
-  {%- when 'extension_delivery_provider', 'extension_shipping_api', 'extension_ai_messaging', 'extension_localization', 'extension_preorder', 'extension_coming_soon', 'extension_shipping_countdown' -%}
+  {%- when 'ext_delivery_provider', 'extension_shipping_api', 'extension_ai_messaging', 'extension_localization', 'extension_preorder', 'extension_coming_soon', 'ext_ship_countdown' -%}
     {%- liquid
       assign ext = block.type | remove: 'extension_'
     -%}

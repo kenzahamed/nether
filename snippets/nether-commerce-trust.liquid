@@ -29,7 +29,11 @@
   if heading_4 != blank
     assign trust_items = trust_items | plus: 1
   endif
-  assign region_label = heading | default: 'sections.nether_commerce.trust.label' | t
+  if heading != blank
+    assign region_label = heading
+  else
+    assign region_label = 'sections.nether_commerce.trust.label' | t
+  endif
 -%}
 
 {%- if trust_items > 0 -%}

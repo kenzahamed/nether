@@ -12,7 +12,15 @@
   assign show_social = section.settings.nether_drawer_enable_social
   assign show_contact = section.settings.nether_drawer_enable_contact
   assign show_secondary = section.settings.nether_drawer_enable_secondary_menu
-  assign secondary_menu = section.settings.nether_drawer_secondary_menu
+  assign secondary_menu_setting = section.settings.nether_drawer_secondary_menu
+  assign secondary_menu = blank
+  if secondary_menu_setting != blank
+    if secondary_menu_setting.links != blank
+      assign secondary_menu = secondary_menu_setting
+    else
+      assign secondary_menu = linklists[secondary_menu_setting]
+    endif
+  endif
   assign use_search_drawer = section.settings.nether_enable_search_drawer
 
   assign has_social = false
@@ -92,10 +100,10 @@
     </a>
   </div>
 
-  {%- if show_secondary and secondary_menu != blank and linklists[secondary_menu].links.size > 0 -%}
+  {%- if show_secondary and secondary_menu != blank and secondary_menu.links.size > 0 -%}
     <nav class="nether-mobile-drawer__secondary" aria-label="{{ 'sections.header.mobile_drawer.secondary_menu' | t }}">
       <ul class="nether-mobile-drawer__secondary-menu list-menu list-unstyled" role="list">
-        {%- for link in linklists[secondary_menu].links -%}
+        {%- for link in secondary_menu.links -%}
           <li>
             <a
               href="{{ link.url }}"

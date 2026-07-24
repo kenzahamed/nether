@@ -20,7 +20,11 @@
   assign qv_size = size | default: 'md'
   assign qv_button_style = button_style | default: 'secondary'
   assign qv_context = context | default: 'card'
-  assign qv_label = label | default: 'sections.nether_quick_view.actions.open' | t
+  if label != blank
+    assign qv_label = label
+  else
+    assign qv_label = 'sections.nether_quick_view.actions.open' | t
+  endif
 
   assign icon_size = 'md'
   if qv_size == 'sm'

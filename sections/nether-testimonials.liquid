@@ -170,7 +170,7 @@
   data-hover-reveal="{{ section.settings.nether_hover_effect }}"
   data-carousel-ready="{{ show_slider }}"
   role="region"
-  aria-label="{{ section.settings.nether_aria_label | default: 'Testimonials and social proof' | escape }}"
+  aria-label="{% render 'nether-locale-text', value: section.settings.nether_aria_label, key: 'sections.nether_testimonials.aria_label' %}"
 >
   <div class="nether-testimonials__inner nether-hero__inner" data-nether-testimonials-shell-outer>
     {%- if uses_section_media -%}
@@ -203,12 +203,15 @@
 
 {% schema %}
 {
-  "name": "Nether testimonials",
+  "name": "t:nether.common.nether_testimonials",
   "tag": "section",
   "class": "section section-nether-testimonials",
   "max_blocks": 24,
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   },
   "settings": [
     {
@@ -218,19 +221,49 @@
     {
       "type": "select",
       "id": "nether_layout",
-      "label": "Layout",
+      "label": "t:nether.common.layout",
       "default": "grid_testimonials",
       "options": [
-        { "value": "editorial_testimonials", "label": "Editorial testimonials" },
-        { "value": "grid_testimonials", "label": "Grid testimonials" },
-        { "value": "carousel_testimonials", "label": "Carousel testimonials" },
-        { "value": "video_testimonials", "label": "Video testimonials" },
-        { "value": "magazine", "label": "Magazine layout" },
-        { "value": "minimal", "label": "Minimal layout" },
-        { "value": "brand_logos", "label": "Brand logos" },
-        { "value": "statistics", "label": "Statistics layout" },
-        { "value": "awards", "label": "Awards & recognition" },
-        { "value": "press_mentions", "label": "Press mentions" }
+        {
+          "value": "editorial_testimonials",
+          "label": "t:nether.common.editorial_testimonials"
+        },
+        {
+          "value": "grid_testimonials",
+          "label": "t:nether.common.grid_testimonials"
+        },
+        {
+          "value": "carousel_testimonials",
+          "label": "t:nether.common.carousel_testimonials"
+        },
+        {
+          "value": "video_testimonials",
+          "label": "t:nether.common.video_testimonials"
+        },
+        {
+          "value": "magazine",
+          "label": "t:nether.common.magazine_layout"
+        },
+        {
+          "value": "minimal",
+          "label": "t:nether.common.minimal_layout"
+        },
+        {
+          "value": "brand_logos",
+          "label": "t:nether.common.brand_logos"
+        },
+        {
+          "value": "statistics",
+          "label": "t:nether.common.statistics_layout"
+        },
+        {
+          "value": "awards",
+          "label": "t:nether.common.awards_and_recognition"
+        },
+        {
+          "value": "press_mentions",
+          "label": "t:nether.common.press_mentions"
+        }
       ]
     },
     {
@@ -240,7 +273,7 @@
       "max": 6,
       "step": 1,
       "default": 3,
-      "label": "Desktop columns"
+      "label": "t:nether.common.desktop_columns"
     },
     {
       "type": "range",
@@ -249,16 +282,22 @@
       "max": 4,
       "step": 1,
       "default": 2,
-      "label": "Tablet columns"
+      "label": "t:nether.common.tablet_columns"
     },
     {
       "type": "select",
       "id": "nether_columns_mobile",
-      "label": "Mobile columns",
+      "label": "t:nether.common.mobile_columns",
       "default": "1",
       "options": [
-        { "value": "1", "label": "1 column" },
-        { "value": "2", "label": "2 columns" }
+        {
+          "value": "1",
+          "label": "t:nether.common.1_column"
+        },
+        {
+          "value": "2",
+          "label": "t:nether.common.2_columns"
+        }
       ]
     },
     {
@@ -267,57 +306,93 @@
       "min": 0,
       "max": 60,
       "step": 4,
-      "unit": "px",
+      "unit": "t:nether.common.px",
       "default": 24,
-      "label": "Grid gap"
+      "label": "t:nether.common.grid_gap"
     },
     {
       "type": "select",
       "id": "nether_card_style",
-      "label": "Card style",
+      "label": "t:nether.common.card_style",
       "default": "medium",
       "options": [
-        { "value": "small", "label": "Small" },
-        { "value": "medium", "label": "Medium" },
-        { "value": "large", "label": "Large" },
-        { "value": "editorial", "label": "Editorial" },
-        { "value": "glass", "label": "Glass" },
-        { "value": "gradient", "label": "Gradient" },
-        { "value": "minimal", "label": "Minimal" }
+        {
+          "value": "small",
+          "label": "t:nether.common.small"
+        },
+        {
+          "value": "medium",
+          "label": "t:nether.common.medium"
+        },
+        {
+          "value": "large",
+          "label": "t:nether.common.large"
+        },
+        {
+          "value": "editorial",
+          "label": "t:nether.common.editorial"
+        },
+        {
+          "value": "glass",
+          "label": "t:nether.common.glass"
+        },
+        {
+          "value": "gradient",
+          "label": "t:nether.common.gradient"
+        },
+        {
+          "value": "minimal",
+          "label": "t:nether.common.minimal"
+        }
       ]
     },
     {
       "type": "select",
       "id": "nether_content_alignment",
-      "label": "Content alignment",
+      "label": "t:nether.common.content_alignment",
       "default": "left",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
+        {
+          "value": "left",
+          "label": "t:nether.common.left"
+        },
+        {
+          "value": "center",
+          "label": "t:nether.common.center"
+        },
+        {
+          "value": "right",
+          "label": "t:nether.common.right"
+        }
       ]
     },
     {
       "type": "select",
       "id": "nether_heading_level",
-      "label": "Primary heading level",
+      "label": "t:nether.common.primary_heading_level",
       "default": "h2",
       "options": [
-        { "value": "h2", "label": "H2" },
-        { "value": "h3", "label": "H3" }
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        }
       ]
     },
     {
       "type": "text",
       "id": "nether_aria_label",
-      "label": "Accessibility label",
+      "label": "t:nether.common.accessibility_label",
       "default": "Testimonials and social proof"
     },
     {
       "type": "checkbox",
       "id": "nether_full_width",
       "default": false,
-      "label": "Full width"
+      "label": "t:nether.common.full_width"
     },
     {
       "type": "header",
@@ -326,55 +401,64 @@
     {
       "type": "select",
       "id": "nether_testimonials_media_type",
-      "label": "Media type",
+      "label": "t:nether.common.media_type",
       "default": "image",
       "options": [
-        { "value": "image", "label": "Image" },
-        { "value": "video", "label": "Video" }
+        {
+          "value": "image",
+          "label": "t:nether.common.image"
+        },
+        {
+          "value": "video",
+          "label": "t:nether.common.video"
+        }
       ]
     },
     {
       "type": "image_picker",
       "id": "nether_testimonials_image_desktop",
-      "label": "Desktop image"
+      "label": "t:nether.common.desktop_image"
     },
     {
       "type": "image_picker",
       "id": "nether_testimonials_image_mobile",
-      "label": "Mobile image"
+      "label": "t:nether.common.mobile_image"
     },
     {
       "type": "video",
       "id": "nether_testimonials_video",
-      "label": "Shopify-hosted video"
+      "label": "t:nether.common.shopify_hosted_video"
     },
     {
       "type": "video_url",
       "id": "nether_testimonials_video_url",
-      "accept": ["youtube", "vimeo"],
-      "label": "External video URL"
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "label": "t:nether.common.external_video_url"
     },
     {
       "type": "image_picker",
       "id": "nether_testimonials_poster_image",
-      "label": "Poster image"
+      "label": "t:nether.common.poster_image"
     },
     {
       "type": "text",
       "id": "nether_testimonials_video_description",
-      "label": "Video description"
+      "label": "t:nether.common.video_description"
     },
     {
       "type": "checkbox",
       "id": "nether_testimonials_video_loop",
       "default": true,
-      "label": "Loop video"
+      "label": "t:nether.common.loop_video"
     },
     {
       "type": "checkbox",
       "id": "nether_testimonials_enable_blur",
       "default": false,
-      "label": "Background blur"
+      "label": "t:nether.common.background_blur"
     },
     {
       "type": "header",
@@ -388,90 +472,138 @@
       "step": 5,
       "unit": "%",
       "default": 35,
-      "label": "Overlay opacity"
+      "label": "t:nether.common.overlay_opacity"
     },
     {
       "type": "checkbox",
       "id": "nether_enable_image_overlay",
       "default": false,
-      "label": "Enable image overlay"
+      "label": "t:nether.common.enable_image_overlay"
     },
     {
       "type": "checkbox",
       "id": "nether_enable_glass",
       "default": false,
-      "label": "Enable glass card"
+      "label": "t:nether.common.enable_glass_card"
     },
     {
       "type": "select",
       "id": "nether_glass_style",
-      "label": "Glass style",
+      "label": "t:nether.common.glass_style",
       "default": "medium",
       "options": [
-        { "value": "light", "label": "Light" },
-        { "value": "medium", "label": "Medium" },
-        { "value": "heavy", "label": "Heavy" },
-        { "value": "frosted", "label": "Frosted" }
+        {
+          "value": "light",
+          "label": "t:nether.common.light"
+        },
+        {
+          "value": "medium",
+          "label": "t:nether.common.medium"
+        },
+        {
+          "value": "heavy",
+          "label": "t:nether.common.heavy"
+        },
+        {
+          "value": "frosted",
+          "label": "t:nether.common.frosted"
+        }
       ]
     },
     {
       "type": "checkbox",
       "id": "nether_enable_gradient",
       "default": false,
-      "label": "Enable gradient overlay"
+      "label": "t:nether.common.enable_gradient_overlay"
     },
     {
       "type": "select",
       "id": "nether_gradient_style",
-      "label": "Gradient style",
+      "label": "t:nether.common.gradient_style",
       "default": "brand",
       "options": [
-        { "value": "brand", "label": "Brand" },
-        { "value": "dramatic", "label": "Dramatic" },
-        { "value": "vignette", "label": "Vignette" },
-        { "value": "fade-down", "label": "Fade down" }
+        {
+          "value": "brand",
+          "label": "t:nether.common.brand"
+        },
+        {
+          "value": "dramatic",
+          "label": "t:nether.common.dramatic"
+        },
+        {
+          "value": "vignette",
+          "label": "t:nether.common.vignette"
+        },
+        {
+          "value": "fade-down",
+          "label": "t:nether.common.fade_down"
+        }
       ]
     },
     {
       "type": "checkbox",
       "id": "nether_enable_floating_cards",
       "default": false,
-      "label": "Floating cards"
+      "label": "t:nether.common.floating_cards"
     },
     {
       "type": "select",
       "id": "nether_hover_effect",
-      "label": "Hover effect",
+      "label": "t:nether.common.hover_effect",
       "default": "lift",
       "options": [
-        { "value": "lift", "label": "Lift" },
-        { "value": "scale", "label": "Scale" },
-        { "value": "shadow", "label": "Shadow" },
-        { "value": "glow", "label": "Glow" },
-        { "value": "reveal", "label": "Hover reveal" }
+        {
+          "value": "lift",
+          "label": "t:nether.common.lift"
+        },
+        {
+          "value": "scale",
+          "label": "t:nether.common.scale"
+        },
+        {
+          "value": "shadow",
+          "label": "t:nether.common.shadow"
+        },
+        {
+          "value": "glow",
+          "label": "t:nether.common.glow"
+        },
+        {
+          "value": "reveal",
+          "label": "t:nether.common.hover_reveal"
+        }
       ]
     },
     {
       "type": "checkbox",
       "id": "nether_show_divider_top",
       "default": false,
-      "label": "Top divider"
+      "label": "t:nether.common.top_divider"
     },
     {
       "type": "checkbox",
       "id": "nether_show_divider_bottom",
       "default": false,
-      "label": "Bottom divider"
+      "label": "t:nether.common.bottom_divider"
     },
     {
       "type": "select",
       "id": "nether_divider_style",
-      "label": "Divider style",
+      "label": "t:nether.common.divider_style",
       "default": "line",
       "options": [
-        { "value": "line", "label": "Line" },
-        { "value": "gradient", "label": "Gradient" },
-        { "value": "wave", "label": "Wave" }
+        {
+          "value": "line",
+          "label": "t:nether.common.line"
+        },
+        {
+          "value": "gradient",
+          "label": "t:nether.common.gradient"
+        },
+        {
+          "value": "wave",
+          "label": "t:nether.common.wave"
+        }
       ]
     },
     {
@@ -481,35 +613,65 @@
     {
       "type": "select",
       "id": "nether_animation_style",
-      "label": "Animation style",
+      "label": "t:nether.common.animation_style",
       "default": "stagger",
       "options": [
-        { "value": "fade", "label": "Fade" },
-        { "value": "slide", "label": "Slide" },
-        { "value": "scale", "label": "Scale" },
-        { "value": "stagger", "label": "Stagger" },
-        { "value": "card_reveal", "label": "Card reveal" },
-        { "value": "logo_reveal", "label": "Logo reveal" },
-        { "value": "counter_reveal", "label": "Counter reveal" }
+        {
+          "value": "fade",
+          "label": "t:nether.common.fade"
+        },
+        {
+          "value": "slide",
+          "label": "t:nether.common.slide"
+        },
+        {
+          "value": "scale",
+          "label": "t:nether.common.scale"
+        },
+        {
+          "value": "stagger",
+          "label": "t:nether.common.stagger"
+        },
+        {
+          "value": "card_reveal",
+          "label": "t:nether.common.card_reveal"
+        },
+        {
+          "value": "logo_reveal",
+          "label": "t:nether.common.logo_reveal"
+        },
+        {
+          "value": "counter_reveal",
+          "label": "t:nether.common.counter_reveal"
+        }
       ]
     },
     {
       "type": "select",
       "id": "nether_animation_speed",
-      "label": "Animation speed",
+      "label": "t:nether.common.animation_speed",
       "default": "medium",
       "options": [
-        { "value": "slow", "label": "Slow" },
-        { "value": "medium", "label": "Medium" },
-        { "value": "fast", "label": "Fast" }
+        {
+          "value": "slow",
+          "label": "t:nether.common.slow"
+        },
+        {
+          "value": "medium",
+          "label": "t:nether.common.medium"
+        },
+        {
+          "value": "fast",
+          "label": "t:nether.common.fast"
+        }
       ]
     },
     {
       "type": "checkbox",
       "id": "nether_enable_parallax",
       "default": false,
-      "label": "Enable parallax",
-      "info": "Subtle media parallax on scroll. Respects reduced motion preferences."
+      "label": "t:nether.common.enable_parallax",
+      "info": "t:nether.common.subtle_media_parallax_on_scroll_respects_reduced_motion_pref"
     },
     {
       "type": "header",
@@ -518,41 +680,71 @@
     {
       "type": "select",
       "id": "nether_layout_desktop",
-      "label": "Desktop layout",
+      "label": "t:nether.common.desktop_layout",
       "default": "default",
       "options": [
-        { "value": "default", "label": "Default" },
-        { "value": "editorial", "label": "Editorial emphasis" },
-        { "value": "compact", "label": "Compact" }
+        {
+          "value": "default",
+          "label": "t:nether.common.default"
+        },
+        {
+          "value": "editorial",
+          "label": "t:nether.common.editorial_emphasis"
+        },
+        {
+          "value": "compact",
+          "label": "t:nether.common.compact"
+        }
       ]
     },
     {
       "type": "select",
       "id": "nether_layout_tablet",
-      "label": "Tablet layout",
+      "label": "t:nether.common.tablet_layout",
       "default": "default",
       "options": [
-        { "value": "default", "label": "Default" },
-        { "value": "stacked", "label": "Stacked" },
-        { "value": "centered", "label": "Centered" }
+        {
+          "value": "default",
+          "label": "t:nether.common.default"
+        },
+        {
+          "value": "stacked",
+          "label": "t:nether.common.stacked"
+        },
+        {
+          "value": "centered",
+          "label": "t:nether.common.centered"
+        }
       ]
     },
     {
       "type": "select",
       "id": "nether_layout_mobile",
-      "label": "Mobile layout",
+      "label": "t:nether.common.mobile_layout",
       "default": "default",
       "options": [
-        { "value": "default", "label": "Default" },
-        { "value": "stacked", "label": "Stacked" },
-        { "value": "centered", "label": "Centered" },
-        { "value": "minimal", "label": "Minimal" }
+        {
+          "value": "default",
+          "label": "t:nether.common.default"
+        },
+        {
+          "value": "stacked",
+          "label": "t:nether.common.stacked"
+        },
+        {
+          "value": "centered",
+          "label": "t:nether.common.centered"
+        },
+        {
+          "value": "minimal",
+          "label": "t:nether.common.minimal"
+        }
       ]
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "Color scheme",
+      "label": "t:nether.common.color_scheme",
       "default": "scheme-1"
     },
     {
@@ -565,8 +757,8 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "unit": "px",
-      "label": "Top",
+      "unit": "t:nether.common.px",
+      "label": "t:nether.common.top",
       "default": 36
     },
     {
@@ -575,8 +767,8 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "unit": "px",
-      "label": "Bottom",
+      "unit": "t:nether.common.px",
+      "label": "t:nether.common.bottom",
       "default": 36
     }
   ],
@@ -586,125 +778,149 @@
     },
     {
       "type": "eyebrow",
-      "name": "Eyebrow",
+      "name": "t:nether.common.eyebrow",
       "limit": 1,
       "settings": [
         {
           "type": "text",
           "id": "text",
-          "label": "Text",
+          "label": "t:nether.common.text",
           "default": "Social proof"
         }
       ]
     },
     {
       "type": "heading",
-      "name": "Heading",
+      "name": "t:nether.common.heading",
       "limit": 1,
       "settings": [
         {
           "type": "inline_richtext",
           "id": "heading",
-          "label": "Heading",
+          "label": "t:nether.common.heading",
           "default": "Trusted by customers worldwide"
         },
         {
           "type": "select",
           "id": "heading_size",
-          "label": "Heading size",
+          "label": "t:nether.common.heading_size",
           "default": "h1",
           "options": [
-            { "value": "h2", "label": "Small" },
-            { "value": "h1", "label": "Medium" },
-            { "value": "h0", "label": "Large" }
+            {
+              "value": "h2",
+              "label": "t:nether.common.small"
+            },
+            {
+              "value": "h1",
+              "label": "t:nether.common.medium"
+            },
+            {
+              "value": "h0",
+              "label": "t:nether.common.large"
+            }
           ]
         }
       ]
     },
     {
       "type": "subheading",
-      "name": "Subheading",
+      "name": "t:nether.common.subheading",
       "limit": 1,
       "settings": [
         {
           "type": "inline_richtext",
           "id": "subheading",
-          "label": "Subheading"
+          "label": "t:nether.common.subheading"
         },
         {
           "type": "select",
           "id": "subheading_size",
-          "label": "Subheading size",
+          "label": "t:nether.common.subheading_size",
           "default": "h3",
           "options": [
-            { "value": "h4", "label": "Small" },
-            { "value": "h3", "label": "Medium" },
-            { "value": "h2", "label": "Large" }
+            {
+              "value": "h4",
+              "label": "t:nether.common.small"
+            },
+            {
+              "value": "h3",
+              "label": "t:nether.common.medium"
+            },
+            {
+              "value": "h2",
+              "label": "t:nether.common.large"
+            }
           ]
         }
       ]
     },
     {
       "type": "text",
-      "name": "Text",
+      "name": "t:nether.common.text",
       "limit": 1,
       "settings": [
         {
           "type": "richtext",
           "id": "text",
-          "label": "Text",
+          "label": "t:nether.common.text",
           "default": "<p>Build trust with editorial testimonials, press mentions, and social proof for any industry.</p>"
         },
         {
           "type": "select",
           "id": "text_style",
-          "label": "Text style",
+          "label": "t:nether.common.text_style",
           "default": "body",
           "options": [
-            { "value": "body", "label": "Body" },
-            { "value": "subtitle", "label": "Subtitle" }
+            {
+              "value": "body",
+              "label": "t:nether.common.body"
+            },
+            {
+              "value": "subtitle",
+              "label": "t:nether.common.subtitle"
+            }
           ]
         }
       ]
     },
     {
       "type": "customer_testimonial",
-      "name": "Customer testimonial",
+      "name": "t:nether.common.customer_testimonial",
       "settings": [
         {
           "type": "richtext",
           "id": "quote",
-          "label": "Quote",
+          "label": "t:nether.common.quote",
           "default": "<p>This brand exceeded every expectation. The quality, service, and attention to detail are unmatched.</p>"
         },
         {
           "type": "text",
           "id": "author",
-          "label": "Author",
+          "label": "t:nether.common.author",
           "default": "Alex Morgan"
         },
         {
           "type": "image_picker",
           "id": "author_image",
-          "label": "Author image"
+          "label": "t:nether.common.author_image"
         },
         {
           "type": "text",
           "id": "role",
-          "label": "Role / position",
+          "label": "t:nether.common.role_position",
           "default": "Creative Director"
         },
         {
           "type": "text",
           "id": "company",
-          "label": "Company",
+          "label": "t:nether.common.company",
           "default": "Studio North"
         },
         {
           "type": "checkbox",
           "id": "show_rating",
           "default": true,
-          "label": "Show rating"
+          "label": "t:nether.common.show_rating"
         },
         {
           "type": "range",
@@ -713,71 +929,74 @@
           "max": 5,
           "step": 0.5,
           "default": 5,
-          "label": "Rating"
+          "label": "t:nether.common.rating"
         }
       ]
     },
     {
       "type": "video_testimonial",
-      "name": "Video testimonial",
+      "name": "t:nether.common.video_testimonial",
       "settings": [
         {
           "type": "video",
           "id": "video",
-          "label": "Shopify-hosted video"
+          "label": "t:nether.common.shopify_hosted_video"
         },
         {
           "type": "video_url",
           "id": "video_url",
-          "accept": ["youtube", "vimeo"],
-          "label": "External video URL"
+          "accept": [
+            "youtube",
+            "vimeo"
+          ],
+          "label": "t:nether.common.external_video_url"
         },
         {
           "type": "image_picker",
           "id": "poster_image",
-          "label": "Poster image"
+          "label": "t:nether.common.poster_image"
         },
         {
           "type": "text",
           "id": "video_description",
-          "label": "Video description"
+          "label": "t:nether.common.video_description"
         },
         {
           "type": "checkbox",
           "id": "video_loop",
           "default": false,
-          "label": "Loop video"
+          "label": "t:nether.common.loop_video"
         },
         {
           "type": "richtext",
           "id": "quote",
-          "label": "Quote"
+          "label": "t:nether.common.quote"
         },
         {
           "type": "text",
           "id": "author",
-          "label": "Author"
+          "label": "t:nether.common.author"
         },
         {
           "type": "image_picker",
           "id": "author_image",
-          "label": "Author image"
+          "label": "t:nether.common.author_image"
         },
         {
           "type": "text",
           "id": "role",
-          "label": "Role / position"
+          "label": "t:nether.common.role_position"
         },
         {
           "type": "text",
           "id": "company",
-          "label": "Company"
+          "label": "t:nether.common.company"
         },
         {
           "type": "checkbox",
           "id": "show_rating",
           "default": false,
-          "label": "Show rating"
+          "label": "t:nether.common.show_rating"
         },
         {
           "type": "range",
@@ -786,66 +1005,98 @@
           "max": 5,
           "step": 0.5,
           "default": 5,
-          "label": "Rating"
+          "label": "t:nether.common.rating"
         }
       ]
     },
     {
       "type": "quote",
-      "name": "Quote",
+      "name": "t:nether.common.quote",
       "settings": [
         {
           "type": "richtext",
           "id": "quote",
-          "label": "Quote"
+          "label": "t:nether.common.quote"
         },
         {
           "type": "text",
           "id": "author",
-          "label": "Author"
+          "label": "t:nether.common.author"
         },
         {
           "type": "text",
           "id": "author_title",
-          "label": "Author title"
+          "label": "t:nether.common.author_title"
         }
       ]
     },
     {
       "type": "author",
-      "name": "Author",
+      "name": "t:nether.common.author",
       "settings": [
-        { "type": "text", "id": "author", "label": "Author" },
-        { "type": "image_picker", "id": "author_image", "label": "Author image" },
-        { "type": "text", "id": "role", "label": "Role / position" },
-        { "type": "text", "id": "company", "label": "Company" }
+        {
+          "type": "text",
+          "id": "author",
+          "label": "t:nether.common.author"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "t:nether.common.author_image"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "t:nether.common.role_position"
+        },
+        {
+          "type": "text",
+          "id": "company",
+          "label": "t:nether.common.company"
+        }
       ]
     },
     {
       "type": "author_image",
-      "name": "Author image",
+      "name": "t:nether.common.author_image",
       "settings": [
-        { "type": "image_picker", "id": "author_image", "label": "Author image" },
-        { "type": "text", "id": "author", "label": "Author name" }
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "t:nether.common.author_image"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "t:nether.common.author_name"
+        }
       ]
     },
     {
       "type": "company",
-      "name": "Company",
+      "name": "t:nether.common.company",
       "settings": [
-        { "type": "text", "id": "company", "label": "Company" }
+        {
+          "type": "text",
+          "id": "company",
+          "label": "t:nether.common.company"
+        }
       ]
     },
     {
       "type": "role",
-      "name": "Role / position",
+      "name": "t:nether.common.role_position",
       "settings": [
-        { "type": "text", "id": "role", "label": "Role / position" }
+        {
+          "type": "text",
+          "id": "role",
+          "label": "t:nether.common.role_position"
+        }
       ]
     },
     {
       "type": "rating",
-      "name": "Rating",
+      "name": "t:nether.common.rating",
       "settings": [
         {
           "type": "range",
@@ -854,162 +1105,335 @@
           "max": 5,
           "step": 0.5,
           "default": 5,
-          "label": "Rating"
+          "label": "t:nether.common.rating"
         }
       ]
     },
     {
       "type": "brand_logo",
-      "name": "Brand logo",
+      "name": "t:nether.common.brand_logo",
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Logo image" },
-        { "type": "text", "id": "label", "label": "Logo label" },
-        { "type": "url", "id": "link", "label": "Logo link" }
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:nether.common.logo_image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.logo_label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:nether.common.logo_link"
+        }
       ]
     },
     {
       "type": "statistic",
-      "name": "Statistic",
+      "name": "t:nether.common.statistic",
       "settings": [
-        { "type": "text", "id": "value", "label": "Value", "default": "98" },
-        { "type": "text", "id": "prefix", "label": "Prefix" },
-        { "type": "text", "id": "suffix", "label": "Suffix", "default": "%" },
-        { "type": "text", "id": "label", "label": "Label", "default": "Customer satisfaction" }
+        {
+          "type": "text",
+          "id": "value",
+          "label": "t:nether.common.value",
+          "default": "98"
+        },
+        {
+          "type": "text",
+          "id": "prefix",
+          "label": "t:nether.common.prefix"
+        },
+        {
+          "type": "text",
+          "id": "suffix",
+          "label": "t:nether.common.suffix",
+          "default": "%"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.label",
+          "default": "Customer satisfaction"
+        }
       ]
     },
     {
       "type": "award",
-      "name": "Award",
+      "name": "t:nether.common.award",
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Award image" },
-        { "type": "text", "id": "title", "label": "Title", "default": "Best in class" },
-        { "type": "text", "id": "year", "label": "Year", "default": "2026" },
-        { "type": "text", "id": "description", "label": "Description" }
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:nether.common.award_image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:nether.common.title",
+          "default": "Best in class"
+        },
+        {
+          "type": "text",
+          "id": "year",
+          "label": "t:nether.common.year",
+          "default": "2026"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "t:nether.common.description"
+        }
       ]
     },
     {
       "type": "certification",
-      "name": "Certification",
+      "name": "t:nether.common.certification",
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Certification image" },
-        { "type": "text", "id": "title", "label": "Title", "default": "Certified quality" },
-        { "type": "text", "id": "issuer", "label": "Issuer" },
-        { "type": "text", "id": "description", "label": "Description" }
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:nether.common.certification_image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:nether.common.title",
+          "default": "Certified quality"
+        },
+        {
+          "type": "text",
+          "id": "issuer",
+          "label": "t:nether.common.issuer"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "t:nether.common.description"
+        }
       ]
     },
     {
       "type": "press_mention",
-      "name": "Press mention",
+      "name": "t:nether.common.press_mention",
       "settings": [
-        { "type": "image_picker", "id": "logo", "label": "Publication logo" },
-        { "type": "text", "id": "publication", "label": "Publication" },
-        { "type": "richtext", "id": "quote", "label": "Quote" },
-        { "type": "text", "id": "date", "label": "Date" },
-        { "type": "url", "id": "link", "label": "Article link" }
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "t:nether.common.publication_logo"
+        },
+        {
+          "type": "text",
+          "id": "publication",
+          "label": "t:nether.common.publication"
+        },
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "t:nether.common.quote"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "t:nether.common.date"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:nether.common.article_link"
+        }
       ]
     },
     {
       "type": "trust_badge",
-      "name": "Trust badge",
+      "name": "t:nether.common.trust_badge",
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Badge image" },
-        { "type": "text", "id": "label", "label": "Badge label" },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:nether.common.badge_image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.badge_label"
+        },
         {
           "type": "select",
           "id": "badge_type",
-          "label": "Badge type",
+          "label": "t:nether.common.badge_type",
           "default": "custom",
           "options": [
-            { "value": "featured", "label": "Featured" },
-            { "value": "new", "label": "New" },
-            { "value": "exclusive", "label": "Exclusive" },
-            { "value": "custom", "label": "Custom" }
+            {
+              "value": "featured",
+              "label": "t:nether.common.featured"
+            },
+            {
+              "value": "new",
+              "label": "t:nether.common.new"
+            },
+            {
+              "value": "exclusive",
+              "label": "t:nether.common.exclusive"
+            },
+            {
+              "value": "custom",
+              "label": "t:nether.common.custom"
+            }
           ]
         },
         {
           "type": "select",
           "id": "badge_style",
-          "label": "Badge style",
+          "label": "t:nether.common.badge_style",
           "default": "soft",
           "options": [
-            { "value": "solid", "label": "Solid" },
-            { "value": "soft", "label": "Soft" },
-            { "value": "outline", "label": "Outline" }
+            {
+              "value": "solid",
+              "label": "t:nether.common.solid"
+            },
+            {
+              "value": "soft",
+              "label": "t:nether.common.soft"
+            },
+            {
+              "value": "outline",
+              "label": "t:nether.common.outline"
+            }
           ]
         }
       ]
     },
     {
       "type": "buttons",
-      "name": "Buttons",
+      "name": "t:nether.common.buttons",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "button_label_1", "label": "First button label" },
-        { "type": "url", "id": "button_link_1", "label": "First button link" },
+        {
+          "type": "text",
+          "id": "button_label_1",
+          "label": "t:nether.common.first_button_label"
+        },
+        {
+          "type": "url",
+          "id": "button_link_1",
+          "label": "t:nether.common.first_button_link"
+        },
         {
           "type": "select",
           "id": "button_style_1",
-          "label": "First button style",
+          "label": "t:nether.common.first_button_style",
           "default": "primary",
           "options": [
-            { "value": "primary", "label": "Primary" },
-            { "value": "secondary", "label": "Secondary" },
-            { "value": "outline", "label": "Outline" },
-            { "value": "text", "label": "Text" }
+            {
+              "value": "primary",
+              "label": "t:nether.common.primary"
+            },
+            {
+              "value": "secondary",
+              "label": "t:nether.common.secondary"
+            },
+            {
+              "value": "outline",
+              "label": "t:nether.common.outline"
+            },
+            {
+              "value": "text",
+              "label": "t:nether.common.text"
+            }
           ]
         },
-        { "type": "text", "id": "button_label_2", "label": "Second button label" },
-        { "type": "url", "id": "button_link_2", "label": "Second button link" },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "label": "t:nether.common.second_button_label"
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "t:nether.common.second_button_link"
+        },
         {
           "type": "select",
           "id": "button_style_2",
-          "label": "Second button style",
+          "label": "t:nether.common.second_button_style",
           "default": "outline",
           "options": [
-            { "value": "primary", "label": "Primary" },
-            { "value": "secondary", "label": "Secondary" },
-            { "value": "outline", "label": "Outline" },
-            { "value": "text", "label": "Text" }
+            {
+              "value": "primary",
+              "label": "t:nether.common.primary"
+            },
+            {
+              "value": "secondary",
+              "label": "t:nether.common.secondary"
+            },
+            {
+              "value": "outline",
+              "label": "t:nether.common.outline"
+            },
+            {
+              "value": "text",
+              "label": "t:nether.common.text"
+            }
           ]
         },
         {
           "type": "select",
           "id": "button_size",
-          "label": "Button size",
+          "label": "t:nether.common.button_size",
           "default": "medium",
           "options": [
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
+            {
+              "value": "small",
+              "label": "t:nether.common.small"
+            },
+            {
+              "value": "medium",
+              "label": "t:nether.common.medium"
+            },
+            {
+              "value": "large",
+              "label": "t:nether.common.large"
+            }
           ]
         }
       ]
     },
     {
       "type": "divider",
-      "name": "Divider",
+      "name": "t:nether.common.divider",
       "settings": [
         {
           "type": "select",
           "id": "divider_style",
-          "label": "Divider style",
+          "label": "t:nether.common.divider_style",
           "default": "line",
           "options": [
-            { "value": "line", "label": "Line" },
-            { "value": "gradient", "label": "Gradient" },
-            { "value": "space", "label": "Space" }
+            {
+              "value": "line",
+              "label": "t:nether.common.line"
+            },
+            {
+              "value": "gradient",
+              "label": "t:nether.common.gradient"
+            },
+            {
+              "value": "space",
+              "label": "t:nether.common.space"
+            }
           ]
         }
       ]
     },
     {
       "type": "custom_html",
-      "name": "Custom HTML",
+      "name": "t:nether.common.custom_html",
       "settings": [
         {
           "type": "html",
           "id": "html",
-          "label": "HTML",
+          "label": "t:nether.common.html",
           "default": "<p>Add custom HTML or install an app block for reviews widgets.</p>"
         }
       ]
@@ -1017,40 +1441,70 @@
   ],
   "presets": [
     {
-      "name": "Nether testimonials",
+      "name": "t:nether.common.nether_testimonials",
       "blocks": [
-        { "type": "eyebrow" },
-        { "type": "heading" },
-        { "type": "text" },
-        { "type": "customer_testimonial" },
-        { "type": "customer_testimonial" },
-        { "type": "customer_testimonial" }
+        {
+          "type": "eyebrow"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "customer_testimonial"
+        },
+        {
+          "type": "customer_testimonial"
+        },
+        {
+          "type": "customer_testimonial"
+        }
       ]
     },
     {
-      "name": "Nether brand logos",
+      "name": "t:nether.common.nether_brand_logos",
       "settings": {
         "nether_layout": "brand_logos"
       },
       "blocks": [
-        { "type": "heading" },
-        { "type": "brand_logo" },
-        { "type": "brand_logo" },
-        { "type": "brand_logo" },
-        { "type": "brand_logo" }
+        {
+          "type": "heading"
+        },
+        {
+          "type": "brand_logo"
+        },
+        {
+          "type": "brand_logo"
+        },
+        {
+          "type": "brand_logo"
+        },
+        {
+          "type": "brand_logo"
+        }
       ]
     },
     {
-      "name": "Nether statistics",
+      "name": "t:nether.common.nether_statistics",
       "settings": {
         "nether_layout": "statistics",
         "nether_animation_style": "counter_reveal"
       },
       "blocks": [
-        { "type": "heading" },
-        { "type": "statistic" },
-        { "type": "statistic" },
-        { "type": "statistic" }
+        {
+          "type": "heading"
+        },
+        {
+          "type": "statistic"
+        },
+        {
+          "type": "statistic"
+        },
+        {
+          "type": "statistic"
+        }
       ]
     }
   ]

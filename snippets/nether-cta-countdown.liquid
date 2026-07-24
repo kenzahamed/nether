@@ -24,7 +24,7 @@
   {{ block.shopify_attributes }}
 >
   <p class="nether-cta__countdown-label type-label">
-    {{- block.settings.label | default: 'sections.nether_cta.countdown.label' | t | escape -}}
+    {%- render 'nether-locale-text', value: block.settings.label, key: 'sections.nether_cta.countdown.label' -%}
   </p>
   <div class="nether-cta__countdown-slot" data-nether-cta-countdown-slot>
     {%- comment -%} Future: wire countdown timer module here {%- endcomment -%}

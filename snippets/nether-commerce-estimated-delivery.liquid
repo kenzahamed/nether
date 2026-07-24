@@ -13,7 +13,11 @@
 {% endcomment %}
 
 {%- liquid
-  assign estimate_heading = heading | default: 'sections.nether_commerce.delivery.label' | t
+  if heading != blank
+    assign estimate_heading = heading
+  else
+    assign estimate_heading = 'sections.nether_commerce.delivery.label' | t
+  endif
   assign estimate_text = text
   if estimate_text == blank
     assign estimate_text = 'sections.nether_commerce.delivery.placeholder' | t

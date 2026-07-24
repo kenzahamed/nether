@@ -508,16 +508,19 @@
       "payment": "Payment methods"
     },
     "nether_hero": {
+      "aria_label": "Hero",
       "scroll": {
         "label": "Scroll to main content"
       }
     },
     "nether_banner": {
+      "aria_label": "Promotional banner",
       "collection": {
         "view": "Shop {{ title }}"
       }
     },
     "nether_collection": {
+      "aria_label": "Collection showcase",
       "grid": {
         "label": "Collection list"
       },
@@ -536,6 +539,7 @@
       }
     },
     "nether_product": {
+      "aria_label": "Product showcase",
       "grid": {
         "label": "Product list"
       },
@@ -560,11 +564,13 @@
       }
     },
     "nether_content": {
+      "aria_label": "Content",
       "rows": {
         "label": "Content rows"
       }
     },
     "nether_media": {
+      "aria_label": "Media gallery",
       "grid": {
         "label": "Media gallery"
       },
@@ -586,6 +592,7 @@
       }
     },
     "nether_testimonials": {
+      "aria_label": "Testimonials and social proof",
       "grid": {
         "label": "Customer testimonials"
       },
@@ -851,6 +858,7 @@
       }
     },
     "nether_faq": {
+      "aria_label": "Frequently asked questions",
       "list": {
         "label": "Frequently asked questions"
       },
@@ -879,6 +887,7 @@
       }
     },
     "nether_newsletter": {
+      "aria_label": "Newsletter signup",
       "form": {
         "group_label": "Newsletter signup form",
         "name_label": "Name",
@@ -903,6 +912,7 @@
     },
     "nether_footer": {
       "aria_label": "Footer",
+      "navigation": "Navigation",
       "contact": {
         "phone": "Phone",
         "email": "Email",

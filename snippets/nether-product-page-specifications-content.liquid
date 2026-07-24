@@ -9,7 +9,7 @@
 
 {%- if spec_style == 'table' -%}
   <table class="nether-product-page__spec-table">
-    <caption class="visually-hidden">{{ block.settings.heading | default: 'sections.nether_product_page.specifications.label' | t }}</caption>
+    <caption class="visually-hidden">{% render 'nether-locale-text', value: block.settings.heading, key: 'sections.nether_product_page.specifications.label' %}</caption>
     <tbody>
       {%- if block.settings.show_vendor and product.vendor != blank -%}
         <tr>

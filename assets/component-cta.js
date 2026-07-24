@@ -17,8 +17,12 @@
 
   if (customElements.get('nether-cta')) return;
 
-  const NetherHeroClass = customElements.get('nether-hero')?.constructor;
-  if (!NetherHeroClass) return;
+  /**
+   * CTA extends NetherHero. Boot only after nether-hero is defined so
+   * Theme Editor / deferred load order never silently skips registration.
+   */
+  function bootNetherCta(NetherHeroClass) {
+    if (!NetherHeroClass || customElements.get('nether-cta')) return;
 
   const HOST_ID = 'nether-cta';
   let hostRegistered = false;
@@ -741,4 +745,14 @@
   }
 
   customElements.define('nether-cta', NetherCta);
+  }
+
+  const existingHero = customElements.get('nether-hero');
+  if (existingHero) {
+    bootNetherCta(existingHero.constructor);
+  } else {
+    customElements.whenDefined('nether-hero').then(function () {
+      bootNetherCta(customElements.get('nether-hero')?.constructor);
+    });
+  }
 })();

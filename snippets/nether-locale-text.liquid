@@ -1,0 +1,27 @@
+{% comment %}
+  Nether Locale Text — shared localization helper.
+
+  Resolves merchant-provided copy or a translation-key fallback.
+  Never pipes merchant content through `| t` (avoids TRANSLATION MISSING
+  for custom Theme Editor strings such as "BEFORE" / custom aria labels).
+
+  Accepts:
+  - value: {String} Merchant setting or content (optional)
+  - key: {String} Locale key path when value is blank (required)
+  - escape: {Boolean} HTML-escape output (default: true)
+
+  Usage:
+  {% render 'nether-locale-text', value: section.settings.nether_aria_label, key: 'sections.nether_cta.aria_label' %}
+{% endcomment %}
+{%- liquid
+  if value != blank
+    assign nether_locale_output = value
+  else
+    assign nether_locale_output = key | t
+  endif
+-%}
+{%- if escape == false -%}
+  {{- nether_locale_output -}}
+{%- else -%}
+  {{- nether_locale_output | escape -}}
+{%- endif -%}

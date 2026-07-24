@@ -18,7 +18,7 @@
           "settings": {}
         },
         "recommendations": {
-          "type": "recommendations_placeholder",
+          "type": "recommend_placeholder",
           "settings": {}
         },
         "sharing": {

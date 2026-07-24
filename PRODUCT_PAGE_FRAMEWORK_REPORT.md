@@ -143,7 +143,7 @@ The framework wraps native Shopify commerce inside a modular Nether presentation
 
 **Dawn commerce blocks (preserved):** `@app`, `text`, `title`, `price`, `sku`, `inventory`, `quantity_selector`, `variant_picker`, `buy_buttons`, `description`, `share`, `collapsible_tab`, `rating`, `complementary`, `custom_liquid`
 
-**Nether commerce blocks (new):** `product_badges`, `trust_badges`, `shipping_info`, `returns_info`, `product_highlights`, `specifications`, `delivery_estimate`, `merchant_content`, `related_products`, `wishlist_placeholder`, `compare_placeholder`, `bundles_placeholder`, `subscriptions_placeholder`, `personalization_placeholder`
+**Nether commerce blocks (new):** `product_badges`, `trust_badges`, `shipping_info`, `returns_info`, `product_highlights`, `specifications`, `delivery_estimate`, `merchant_content`, `related_products`, `wishlist_placeholder`, `compare_placeholder`, `bundles_placeholder`, `subscriptions_placeholder`, `personalize_placeholder`
 
 ### Layout modes
 
@@ -251,7 +251,7 @@ Structural placeholders only (no runtime handlers):
 | Compare | `data-nether-compare-placeholder` | `compare_placeholder` |
 | Bundles | `data-nether-bundles-placeholder` | `bundles_placeholder` |
 | Subscriptions | `data-nether-subscriptions-placeholder` | `subscriptions_placeholder` |
-| Personalization | `data-nether-personalization-placeholder` | `personalization_placeholder` |
+| Personalization | `data-nether-personalization-placeholder` | `personalize_placeholder` |
 | Delivery estimation | `data-nether-delivery-estimate-placeholder` | `delivery_estimate` (hidden until implemented) |
 
 These align with the Header Framework and Product Showcase placeholder conventions.

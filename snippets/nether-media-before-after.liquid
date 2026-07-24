@@ -12,8 +12,17 @@
 {%- liquid
   assign before_image = block.settings.before_image
   assign after_image = block.settings.after_image
-  assign before_label = block.settings.before_label | default: 'sections.nether_media.before_after.before' | t
-  assign after_label = block.settings.after_label | default: 'sections.nether_media.before_after.after' | t
+  # Do not pipe merchant/schema default strings through | t (causes TRANSLATION MISSING: en.BEFORE).
+  if block.settings.before_label != blank
+    assign before_label = block.settings.before_label
+  else
+    assign before_label = 'sections.nether_media.before_after.before' | t
+  endif
+  if block.settings.after_label != blank
+    assign after_label = block.settings.after_label
+  else
+    assign after_label = 'sections.nether_media.before_after.after' | t
+  endif
   assign widths = '375, 550, 750, 1100, 1500, 2000'
   assign sizes = '(min-width: 990px) 80rem, 100vw'
 -%}

@@ -252,8 +252,11 @@
         aria-live="polite"
         tabindex="-1"
       >
+        {%- capture nether_newsletter_success -%}
+          {%- render 'nether-locale-text', value: block.settings.success_message, key: 'newsletter.success', escape: false -%}
+        {%- endcapture -%}
         {%- render 'form-message',
-          message: block.settings.success_message | default: 'newsletter.success' | t,
+          message: nether_newsletter_success,
           type: 'success',
           id: form_id | append: '-success-message'
         -%}

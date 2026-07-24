@@ -120,7 +120,7 @@
   data-enable-parallax="{{ section.settings.nether_enable_parallax }}"
   data-enable-scroll-indicator="{{ section.settings.nether_show_scroll_indicator }}"
   role="region"
-  aria-label="{{ section.settings.nether_aria_label | default: 'Hero' | escape }}"
+  aria-label="{% render 'nether-locale-text', value: section.settings.nether_aria_label, key: 'sections.nether_hero.aria_label' %}"
 >
   <div class="nether-hero__inner">
     {%- render 'nether-hero-media', section: section, fetch_priority: fetch_priority -%}
@@ -149,7 +149,10 @@
   "tag": "section",
   "class": "section section-nether-hero",
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   },
   "settings": [
     {
@@ -162,14 +165,38 @@
       "label": "t:sections.nether_hero.settings.nether_hero_layout.label",
       "default": "classic",
       "options": [
-        { "value": "classic", "label": "t:sections.nether_hero.settings.nether_hero_layout.options__1.label" },
-        { "value": "centered", "label": "t:sections.nether_hero.settings.nether_hero_layout.options__2.label" },
-        { "value": "split", "label": "t:sections.nether_hero.settings.nether_hero_layout.options__3.label" },
-        { "value": "fullscreen", "label": "t:sections.nether_hero.settings.nether_hero_layout.options__4.label" },
-        { "value": "editorial", "label": "t:sections.nether_hero.settings.nether_hero_layout.options__5.label" },
-        { "value": "card", "label": "t:sections.nether_hero.settings.nether_hero_layout.options__6.label" },
-        { "value": "overlay", "label": "t:sections.nether_hero.settings.nether_hero_layout.options__7.label" },
-        { "value": "minimal", "label": "t:sections.nether_hero.settings.nether_hero_layout.options__8.label" }
+        {
+          "value": "classic",
+          "label": "t:sections.nether_hero.settings.nether_hero_layout.options__1.label"
+        },
+        {
+          "value": "centered",
+          "label": "t:sections.nether_hero.settings.nether_hero_layout.options__2.label"
+        },
+        {
+          "value": "split",
+          "label": "t:sections.nether_hero.settings.nether_hero_layout.options__3.label"
+        },
+        {
+          "value": "fullscreen",
+          "label": "t:sections.nether_hero.settings.nether_hero_layout.options__4.label"
+        },
+        {
+          "value": "editorial",
+          "label": "t:sections.nether_hero.settings.nether_hero_layout.options__5.label"
+        },
+        {
+          "value": "card",
+          "label": "t:sections.nether_hero.settings.nether_hero_layout.options__6.label"
+        },
+        {
+          "value": "overlay",
+          "label": "t:sections.nether_hero.settings.nether_hero_layout.options__7.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.nether_hero.settings.nether_hero_layout.options__8.label"
+        }
       ]
     },
     {
@@ -178,11 +205,26 @@
       "label": "t:sections.nether_hero.settings.nether_hero_height.label",
       "default": "medium",
       "options": [
-        { "value": "adapt", "label": "t:sections.nether_hero.settings.nether_hero_height.options__1.label" },
-        { "value": "small", "label": "t:sections.nether_hero.settings.nether_hero_height.options__2.label" },
-        { "value": "medium", "label": "t:sections.nether_hero.settings.nether_hero_height.options__3.label" },
-        { "value": "large", "label": "t:sections.nether_hero.settings.nether_hero_height.options__4.label" },
-        { "value": "fullscreen", "label": "t:sections.nether_hero.settings.nether_hero_height.options__5.label" }
+        {
+          "value": "adapt",
+          "label": "t:sections.nether_hero.settings.nether_hero_height.options__1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.nether_hero.settings.nether_hero_height.options__2.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.nether_hero.settings.nether_hero_height.options__3.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.nether_hero.settings.nether_hero_height.options__4.label"
+        },
+        {
+          "value": "fullscreen",
+          "label": "t:sections.nether_hero.settings.nether_hero_height.options__5.label"
+        }
       ]
     },
     {
@@ -191,10 +233,22 @@
       "label": "t:sections.nether_hero.settings.nether_content_width.label",
       "default": "medium",
       "options": [
-        { "value": "narrow", "label": "t:sections.nether_hero.settings.nether_content_width.options__1.label" },
-        { "value": "medium", "label": "t:sections.nether_hero.settings.nether_content_width.options__2.label" },
-        { "value": "wide", "label": "t:sections.nether_hero.settings.nether_content_width.options__3.label" },
-        { "value": "full", "label": "t:sections.nether_hero.settings.nether_content_width.options__4.label" }
+        {
+          "value": "narrow",
+          "label": "t:sections.nether_hero.settings.nether_content_width.options__1.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.nether_hero.settings.nether_content_width.options__2.label"
+        },
+        {
+          "value": "wide",
+          "label": "t:sections.nether_hero.settings.nether_content_width.options__3.label"
+        },
+        {
+          "value": "full",
+          "label": "t:sections.nether_hero.settings.nether_content_width.options__4.label"
+        }
       ]
     },
     {
@@ -203,15 +257,42 @@
       "label": "t:sections.nether_hero.settings.nether_content_position.label",
       "default": "middle-center",
       "options": [
-        { "value": "top-left", "label": "t:sections.nether_hero.settings.nether_content_position.options__1.label" },
-        { "value": "top-center", "label": "t:sections.nether_hero.settings.nether_content_position.options__2.label" },
-        { "value": "top-right", "label": "t:sections.nether_hero.settings.nether_content_position.options__3.label" },
-        { "value": "middle-left", "label": "t:sections.nether_hero.settings.nether_content_position.options__4.label" },
-        { "value": "middle-center", "label": "t:sections.nether_hero.settings.nether_content_position.options__5.label" },
-        { "value": "middle-right", "label": "t:sections.nether_hero.settings.nether_content_position.options__6.label" },
-        { "value": "bottom-left", "label": "t:sections.nether_hero.settings.nether_content_position.options__7.label" },
-        { "value": "bottom-center", "label": "t:sections.nether_hero.settings.nether_content_position.options__8.label" },
-        { "value": "bottom-right", "label": "t:sections.nether_hero.settings.nether_content_position.options__9.label" }
+        {
+          "value": "top-left",
+          "label": "t:sections.nether_hero.settings.nether_content_position.options__1.label"
+        },
+        {
+          "value": "top-center",
+          "label": "t:sections.nether_hero.settings.nether_content_position.options__2.label"
+        },
+        {
+          "value": "top-right",
+          "label": "t:sections.nether_hero.settings.nether_content_position.options__3.label"
+        },
+        {
+          "value": "middle-left",
+          "label": "t:sections.nether_hero.settings.nether_content_position.options__4.label"
+        },
+        {
+          "value": "middle-center",
+          "label": "t:sections.nether_hero.settings.nether_content_position.options__5.label"
+        },
+        {
+          "value": "middle-right",
+          "label": "t:sections.nether_hero.settings.nether_content_position.options__6.label"
+        },
+        {
+          "value": "bottom-left",
+          "label": "t:sections.nether_hero.settings.nether_content_position.options__7.label"
+        },
+        {
+          "value": "bottom-center",
+          "label": "t:sections.nether_hero.settings.nether_content_position.options__8.label"
+        },
+        {
+          "value": "bottom-right",
+          "label": "t:sections.nether_hero.settings.nether_content_position.options__9.label"
+        }
       ]
     },
     {
@@ -220,9 +301,18 @@
       "label": "t:sections.nether_hero.settings.nether_content_alignment.label",
       "default": "center",
       "options": [
-        { "value": "left", "label": "t:sections.nether_hero.settings.nether_content_alignment.options__1.label" },
-        { "value": "center", "label": "t:sections.nether_hero.settings.nether_content_alignment.options__2.label" },
-        { "value": "right", "label": "t:sections.nether_hero.settings.nether_content_alignment.options__3.label" }
+        {
+          "value": "left",
+          "label": "t:sections.nether_hero.settings.nether_content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.nether_hero.settings.nether_content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.nether_hero.settings.nether_content_alignment.options__3.label"
+        }
       ]
     },
     {
@@ -231,8 +321,14 @@
       "label": "t:sections.nether_hero.settings.nether_split_media_position.label",
       "default": "left",
       "options": [
-        { "value": "left", "label": "t:sections.nether_hero.settings.nether_split_media_position.options__1.label" },
-        { "value": "right", "label": "t:sections.nether_hero.settings.nether_split_media_position.options__2.label" }
+        {
+          "value": "left",
+          "label": "t:sections.nether_hero.settings.nether_split_media_position.options__1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.nether_hero.settings.nether_split_media_position.options__2.label"
+        }
       ]
     },
     {
@@ -241,8 +337,14 @@
       "label": "t:sections.nether_hero.settings.nether_heading_level.label",
       "default": "h1",
       "options": [
-        { "value": "h1", "label": "t:sections.nether_hero.settings.nether_heading_level.options__1.label" },
-        { "value": "h2", "label": "t:sections.nether_hero.settings.nether_heading_level.options__2.label" }
+        {
+          "value": "h1",
+          "label": "t:sections.nether_hero.settings.nether_heading_level.options__1.label"
+        },
+        {
+          "value": "h2",
+          "label": "t:sections.nether_hero.settings.nether_heading_level.options__2.label"
+        }
       ]
     },
     {
@@ -261,9 +363,18 @@
       "label": "t:sections.nether_hero.settings.nether_media_type.label",
       "default": "image",
       "options": [
-        { "value": "image", "label": "t:sections.nether_hero.settings.nether_media_type.options__1.label" },
-        { "value": "video", "label": "t:sections.nether_hero.settings.nether_media_type.options__2.label" },
-        { "value": "background_video", "label": "t:sections.nether_hero.settings.nether_media_type.options__3.label" }
+        {
+          "value": "image",
+          "label": "t:sections.nether_hero.settings.nether_media_type.options__1.label"
+        },
+        {
+          "value": "video",
+          "label": "t:sections.nether_hero.settings.nether_media_type.options__2.label"
+        },
+        {
+          "value": "background_video",
+          "label": "t:sections.nether_hero.settings.nether_media_type.options__3.label"
+        }
       ]
     },
     {
@@ -285,7 +396,10 @@
     {
       "type": "video_url",
       "id": "nether_video_url",
-      "accept": ["youtube", "vimeo"],
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
       "label": "t:sections.nether_hero.settings.nether_video_url.label"
     },
     {
@@ -337,10 +451,22 @@
       "label": "t:sections.nether_hero.settings.nether_glass_style.label",
       "default": "medium",
       "options": [
-        { "value": "light", "label": "t:sections.nether_hero.settings.nether_glass_style.options__1.label" },
-        { "value": "medium", "label": "t:sections.nether_hero.settings.nether_glass_style.options__2.label" },
-        { "value": "heavy", "label": "t:sections.nether_hero.settings.nether_glass_style.options__3.label" },
-        { "value": "frosted", "label": "t:sections.nether_hero.settings.nether_glass_style.options__4.label" }
+        {
+          "value": "light",
+          "label": "t:sections.nether_hero.settings.nether_glass_style.options__1.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.nether_hero.settings.nether_glass_style.options__2.label"
+        },
+        {
+          "value": "heavy",
+          "label": "t:sections.nether_hero.settings.nether_glass_style.options__3.label"
+        },
+        {
+          "value": "frosted",
+          "label": "t:sections.nether_hero.settings.nether_glass_style.options__4.label"
+        }
       ]
     },
     {
@@ -355,10 +481,22 @@
       "label": "t:sections.nether_hero.settings.nether_gradient_style.label",
       "default": "brand",
       "options": [
-        { "value": "brand", "label": "t:sections.nether_hero.settings.nether_gradient_style.options__1.label" },
-        { "value": "dramatic", "label": "t:sections.nether_hero.settings.nether_gradient_style.options__2.label" },
-        { "value": "vignette", "label": "t:sections.nether_hero.settings.nether_gradient_style.options__3.label" },
-        { "value": "fade-down", "label": "t:sections.nether_hero.settings.nether_gradient_style.options__4.label" }
+        {
+          "value": "brand",
+          "label": "t:sections.nether_hero.settings.nether_gradient_style.options__1.label"
+        },
+        {
+          "value": "dramatic",
+          "label": "t:sections.nether_hero.settings.nether_gradient_style.options__2.label"
+        },
+        {
+          "value": "vignette",
+          "label": "t:sections.nether_hero.settings.nether_gradient_style.options__3.label"
+        },
+        {
+          "value": "fade-down",
+          "label": "t:sections.nether_hero.settings.nether_gradient_style.options__4.label"
+        }
       ]
     },
     {
@@ -395,10 +533,22 @@
       "label": "t:sections.nether_hero.settings.nether_animation_style.label",
       "default": "fade",
       "options": [
-        { "value": "fade", "label": "t:sections.nether_hero.settings.nether_animation_style.options__1.label" },
-        { "value": "slide", "label": "t:sections.nether_hero.settings.nether_animation_style.options__2.label" },
-        { "value": "stagger", "label": "t:sections.nether_hero.settings.nether_animation_style.options__3.label" },
-        { "value": "scale", "label": "t:sections.nether_hero.settings.nether_animation_style.options__4.label" }
+        {
+          "value": "fade",
+          "label": "t:sections.nether_hero.settings.nether_animation_style.options__1.label"
+        },
+        {
+          "value": "slide",
+          "label": "t:sections.nether_hero.settings.nether_animation_style.options__2.label"
+        },
+        {
+          "value": "stagger",
+          "label": "t:sections.nether_hero.settings.nether_animation_style.options__3.label"
+        },
+        {
+          "value": "scale",
+          "label": "t:sections.nether_hero.settings.nether_animation_style.options__4.label"
+        }
       ]
     },
     {
@@ -407,9 +557,18 @@
       "label": "t:sections.nether_hero.settings.nether_animation_speed.label",
       "default": "medium",
       "options": [
-        { "value": "slow", "label": "t:sections.nether_hero.settings.nether_animation_speed.options__1.label" },
-        { "value": "medium", "label": "t:sections.nether_hero.settings.nether_animation_speed.options__2.label" },
-        { "value": "fast", "label": "t:sections.nether_hero.settings.nether_animation_speed.options__3.label" }
+        {
+          "value": "slow",
+          "label": "t:sections.nether_hero.settings.nether_animation_speed.options__1.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.nether_hero.settings.nether_animation_speed.options__2.label"
+        },
+        {
+          "value": "fast",
+          "label": "t:sections.nether_hero.settings.nether_animation_speed.options__3.label"
+        }
       ]
     },
     {
@@ -429,8 +588,14 @@
       "label": "t:sections.nether_hero.settings.nether_layout_desktop.label",
       "default": "default",
       "options": [
-        { "value": "default", "label": "t:sections.nether_hero.settings.nether_layout_desktop.options__1.label" },
-        { "value": "editorial", "label": "t:sections.nether_hero.settings.nether_layout_desktop.options__2.label" }
+        {
+          "value": "default",
+          "label": "t:sections.nether_hero.settings.nether_layout_desktop.options__1.label"
+        },
+        {
+          "value": "editorial",
+          "label": "t:sections.nether_hero.settings.nether_layout_desktop.options__2.label"
+        }
       ]
     },
     {
@@ -439,9 +604,18 @@
       "label": "t:sections.nether_hero.settings.nether_layout_tablet.label",
       "default": "default",
       "options": [
-        { "value": "default", "label": "t:sections.nether_hero.settings.nether_layout_tablet.options__1.label" },
-        { "value": "stacked", "label": "t:sections.nether_hero.settings.nether_layout_tablet.options__2.label" },
-        { "value": "centered", "label": "t:sections.nether_hero.settings.nether_layout_tablet.options__3.label" }
+        {
+          "value": "default",
+          "label": "t:sections.nether_hero.settings.nether_layout_tablet.options__1.label"
+        },
+        {
+          "value": "stacked",
+          "label": "t:sections.nether_hero.settings.nether_layout_tablet.options__2.label"
+        },
+        {
+          "value": "centered",
+          "label": "t:sections.nether_hero.settings.nether_layout_tablet.options__3.label"
+        }
       ]
     },
     {
@@ -450,10 +624,22 @@
       "label": "t:sections.nether_hero.settings.nether_layout_mobile.label",
       "default": "default",
       "options": [
-        { "value": "default", "label": "t:sections.nether_hero.settings.nether_layout_mobile.options__1.label" },
-        { "value": "stacked", "label": "t:sections.nether_hero.settings.nether_layout_mobile.options__2.label" },
-        { "value": "centered", "label": "t:sections.nether_hero.settings.nether_layout_mobile.options__3.label" },
-        { "value": "minimal", "label": "t:sections.nether_hero.settings.nether_layout_mobile.options__4.label" }
+        {
+          "value": "default",
+          "label": "t:sections.nether_hero.settings.nether_layout_mobile.options__1.label"
+        },
+        {
+          "value": "stacked",
+          "label": "t:sections.nether_hero.settings.nether_layout_mobile.options__2.label"
+        },
+        {
+          "value": "centered",
+          "label": "t:sections.nether_hero.settings.nether_layout_mobile.options__3.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.nether_hero.settings.nether_layout_mobile.options__4.label"
+        }
       ]
     },
     {
@@ -476,7 +662,7 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "unit": "px",
+      "unit": "t:nether.common.px",
       "label": "t:sections.all.padding.padding_top",
       "default": 0
     },
@@ -486,7 +672,7 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "unit": "px",
+      "unit": "t:nether.common.px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 0
     }
@@ -522,11 +708,26 @@
           "label": "t:sections.all.heading_size.label",
           "default": "h0",
           "options": [
-            { "value": "h2", "label": "t:sections.all.heading_size.options__1.label" },
-            { "value": "h1", "label": "t:sections.all.heading_size.options__2.label" },
-            { "value": "h0", "label": "t:sections.all.heading_size.options__3.label" },
-            { "value": "hxl", "label": "t:sections.all.heading_size.options__4.label" },
-            { "value": "hxxl", "label": "t:sections.all.heading_size.options__5.label" }
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h0",
+              "label": "t:sections.all.heading_size.options__3.label"
+            },
+            {
+              "value": "hxl",
+              "label": "t:sections.all.heading_size.options__4.label"
+            },
+            {
+              "value": "hxxl",
+              "label": "t:sections.all.heading_size.options__5.label"
+            }
           ]
         }
       ]
@@ -548,9 +749,18 @@
           "label": "t:sections.all.heading_size.label",
           "default": "h2",
           "options": [
-            { "value": "h3", "label": "t:sections.all.heading_size.options__1.label" },
-            { "value": "h2", "label": "t:sections.all.heading_size.options__2.label" },
-            { "value": "h1", "label": "t:sections.all.heading_size.options__3.label" }
+            {
+              "value": "h3",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__3.label"
+            }
           ]
         }
       ]
@@ -572,9 +782,18 @@
           "label": "t:sections.nether_hero.blocks.text.settings.text_style.label",
           "default": "type-body-lg",
           "options": [
-            { "value": "type-body", "label": "t:sections.nether_hero.blocks.text.settings.text_style.options__1.label" },
-            { "value": "type-body-lg", "label": "t:sections.nether_hero.blocks.text.settings.text_style.options__2.label" },
-            { "value": "subtitle", "label": "t:sections.nether_hero.blocks.text.settings.text_style.options__3.label" }
+            {
+              "value": "type-body",
+              "label": "t:sections.nether_hero.blocks.text.settings.text_style.options__1.label"
+            },
+            {
+              "value": "type-body-lg",
+              "label": "t:sections.nether_hero.blocks.text.settings.text_style.options__2.label"
+            },
+            {
+              "value": "subtitle",
+              "label": "t:sections.nether_hero.blocks.text.settings.text_style.options__3.label"
+            }
           ]
         }
       ]
@@ -601,11 +820,26 @@
           "label": "t:sections.nether_hero.blocks.buttons.settings.button_style_1.label",
           "default": "primary",
           "options": [
-            { "value": "primary", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__1.label" },
-            { "value": "secondary", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__2.label" },
-            { "value": "outline", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__3.label" },
-            { "value": "ghost", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__4.label" },
-            { "value": "arrow", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__5.label" }
+            {
+              "value": "primary",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__1.label"
+            },
+            {
+              "value": "secondary",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__2.label"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__3.label"
+            },
+            {
+              "value": "ghost",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__4.label"
+            },
+            {
+              "value": "arrow",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__5.label"
+            }
           ]
         },
         {
@@ -625,11 +859,26 @@
           "label": "t:sections.nether_hero.blocks.buttons.settings.button_style_2.label",
           "default": "secondary",
           "options": [
-            { "value": "primary", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__1.label" },
-            { "value": "secondary", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__2.label" },
-            { "value": "outline", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__3.label" },
-            { "value": "ghost", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__4.label" },
-            { "value": "text", "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__6.label" }
+            {
+              "value": "primary",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__1.label"
+            },
+            {
+              "value": "secondary",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__2.label"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__3.label"
+            },
+            {
+              "value": "ghost",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__4.label"
+            },
+            {
+              "value": "text",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_style.options__6.label"
+            }
           ]
         },
         {
@@ -638,9 +887,18 @@
           "label": "t:sections.nether_hero.blocks.buttons.settings.button_size.label",
           "default": "large",
           "options": [
-            { "value": "small", "label": "t:sections.nether_hero.blocks.buttons.settings.button_size.options__1.label" },
-            { "value": "medium", "label": "t:sections.nether_hero.blocks.buttons.settings.button_size.options__2.label" },
-            { "value": "large", "label": "t:sections.nether_hero.blocks.buttons.settings.button_size.options__3.label" }
+            {
+              "value": "small",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_size.options__1.label"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_size.options__2.label"
+            },
+            {
+              "value": "large",
+              "label": "t:sections.nether_hero.blocks.buttons.settings.button_size.options__3.label"
+            }
           ]
         }
       ]
@@ -661,9 +919,18 @@
           "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_style.label",
           "default": "soft",
           "options": [
-            { "value": "solid", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_style.options__1.label" },
-            { "value": "soft", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_style.options__2.label" },
-            { "value": "outline", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_style.options__3.label" }
+            {
+              "value": "solid",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_style.options__1.label"
+            },
+            {
+              "value": "soft",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_style.options__2.label"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_style.options__3.label"
+            }
           ]
         },
         {
@@ -682,10 +949,22 @@
           "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_1_type.label",
           "default": "premium",
           "options": [
-            { "value": "premium", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__1.label" },
-            { "value": "free_shipping", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__2.label" },
-            { "value": "organic", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__3.label" },
-            { "value": "custom", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__4.label" }
+            {
+              "value": "premium",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__1.label"
+            },
+            {
+              "value": "free_shipping",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__2.label"
+            },
+            {
+              "value": "organic",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__3.label"
+            },
+            {
+              "value": "custom",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__4.label"
+            }
           ]
         },
         {
@@ -704,10 +983,22 @@
           "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_2_type.label",
           "default": "free_shipping",
           "options": [
-            { "value": "premium", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__1.label" },
-            { "value": "free_shipping", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__2.label" },
-            { "value": "organic", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__3.label" },
-            { "value": "custom", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__4.label" }
+            {
+              "value": "premium",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__1.label"
+            },
+            {
+              "value": "free_shipping",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__2.label"
+            },
+            {
+              "value": "organic",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__3.label"
+            },
+            {
+              "value": "custom",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__4.label"
+            }
           ]
         },
         {
@@ -726,10 +1017,22 @@
           "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_3_type.label",
           "default": "custom",
           "options": [
-            { "value": "premium", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__1.label" },
-            { "value": "free_shipping", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__2.label" },
-            { "value": "organic", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__3.label" },
-            { "value": "custom", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__4.label" }
+            {
+              "value": "premium",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__1.label"
+            },
+            {
+              "value": "free_shipping",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__2.label"
+            },
+            {
+              "value": "organic",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__3.label"
+            },
+            {
+              "value": "custom",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__4.label"
+            }
           ]
         },
         {
@@ -748,10 +1051,22 @@
           "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_4_type.label",
           "default": "custom",
           "options": [
-            { "value": "premium", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__1.label" },
-            { "value": "free_shipping", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__2.label" },
-            { "value": "organic", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__3.label" },
-            { "value": "custom", "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__4.label" }
+            {
+              "value": "premium",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__1.label"
+            },
+            {
+              "value": "free_shipping",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__2.label"
+            },
+            {
+              "value": "organic",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__3.label"
+            },
+            {
+              "value": "custom",
+              "label": "t:sections.nether_hero.blocks.trust_badges.settings.badge_type.options__4.label"
+            }
           ]
         }
       ]
@@ -814,11 +1129,26 @@
           "label": "t:sections.nether_hero.blocks.feature_list.settings.feature_1_icon.label",
           "default": "checkmark",
           "options": [
-            { "value": "none", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__1.label" },
-            { "value": "checkmark", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__2.label" },
-            { "value": "truck", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__3.label" },
-            { "value": "leaf", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__4.label" },
-            { "value": "star", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__5.label" }
+            {
+              "value": "none",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__1.label"
+            },
+            {
+              "value": "checkmark",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__2.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__3.label"
+            },
+            {
+              "value": "leaf",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__4.label"
+            },
+            {
+              "value": "star",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__5.label"
+            }
           ]
         },
         {
@@ -833,11 +1163,26 @@
           "label": "t:sections.nether_hero.blocks.feature_list.settings.feature_2_icon.label",
           "default": "truck",
           "options": [
-            { "value": "none", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__1.label" },
-            { "value": "checkmark", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__2.label" },
-            { "value": "truck", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__3.label" },
-            { "value": "leaf", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__4.label" },
-            { "value": "star", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__5.label" }
+            {
+              "value": "none",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__1.label"
+            },
+            {
+              "value": "checkmark",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__2.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__3.label"
+            },
+            {
+              "value": "leaf",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__4.label"
+            },
+            {
+              "value": "star",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__5.label"
+            }
           ]
         },
         {
@@ -851,11 +1196,26 @@
           "label": "t:sections.nether_hero.blocks.feature_list.settings.feature_3_icon.label",
           "default": "leaf",
           "options": [
-            { "value": "none", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__1.label" },
-            { "value": "checkmark", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__2.label" },
-            { "value": "truck", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__3.label" },
-            { "value": "leaf", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__4.label" },
-            { "value": "star", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__5.label" }
+            {
+              "value": "none",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__1.label"
+            },
+            {
+              "value": "checkmark",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__2.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__3.label"
+            },
+            {
+              "value": "leaf",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__4.label"
+            },
+            {
+              "value": "star",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__5.label"
+            }
           ]
         },
         {
@@ -869,11 +1229,26 @@
           "label": "t:sections.nether_hero.blocks.feature_list.settings.feature_4_icon.label",
           "default": "star",
           "options": [
-            { "value": "none", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__1.label" },
-            { "value": "checkmark", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__2.label" },
-            { "value": "truck", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__3.label" },
-            { "value": "leaf", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__4.label" },
-            { "value": "star", "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__5.label" }
+            {
+              "value": "none",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__1.label"
+            },
+            {
+              "value": "checkmark",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__2.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__3.label"
+            },
+            {
+              "value": "leaf",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__4.label"
+            },
+            {
+              "value": "star",
+              "label": "t:sections.nether_hero.blocks.feature_list.settings.icon.options__5.label"
+            }
           ]
         }
       ]
@@ -920,9 +1295,18 @@
           "label": "t:sections.nether_hero.blocks.hero_card.settings.cta_style.label",
           "default": "text",
           "options": [
-            { "value": "text", "label": "t:sections.nether_hero.blocks.hero_card.settings.cta_style.options__1.label" },
-            { "value": "primary", "label": "t:sections.nether_hero.blocks.hero_card.settings.cta_style.options__2.label" },
-            { "value": "secondary", "label": "t:sections.nether_hero.blocks.hero_card.settings.cta_style.options__3.label" }
+            {
+              "value": "text",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.cta_style.options__1.label"
+            },
+            {
+              "value": "primary",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.cta_style.options__2.label"
+            },
+            {
+              "value": "secondary",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.cta_style.options__3.label"
+            }
           ]
         },
         {
@@ -936,10 +1320,22 @@
           "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.label",
           "default": "elevated",
           "options": [
-            { "value": "default", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.options__1.label" },
-            { "value": "elevated", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.options__2.label" },
-            { "value": "glass", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.options__3.label" },
-            { "value": "outline", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.options__4.label" }
+            {
+              "value": "default",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.options__1.label"
+            },
+            {
+              "value": "elevated",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.options__2.label"
+            },
+            {
+              "value": "glass",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.options__3.label"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.options__4.label"
+            }
           ]
         },
         {
@@ -955,9 +1351,18 @@
           "label": "t:sections.nether_hero.blocks.hero_card.settings.card_radius.label",
           "default": "lg",
           "options": [
-            { "value": "sm", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_radius.options__1.label" },
-            { "value": "md", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_radius.options__2.label" },
-            { "value": "lg", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_radius.options__3.label" }
+            {
+              "value": "sm",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_radius.options__1.label"
+            },
+            {
+              "value": "md",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_radius.options__2.label"
+            },
+            {
+              "value": "lg",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_radius.options__3.label"
+            }
           ]
         },
         {
@@ -966,9 +1371,18 @@
           "label": "t:sections.nether_hero.blocks.hero_card.settings.card_shadow.label",
           "default": "md",
           "options": [
-            { "value": "sm", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_shadow.options__1.label" },
-            { "value": "md", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_shadow.options__2.label" },
-            { "value": "lg", "label": "t:sections.nether_hero.blocks.hero_card.settings.card_shadow.options__3.label" }
+            {
+              "value": "sm",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_shadow.options__1.label"
+            },
+            {
+              "value": "md",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_shadow.options__2.label"
+            },
+            {
+              "value": "lg",
+              "label": "t:sections.nether_hero.blocks.hero_card.settings.card_shadow.options__3.label"
+            }
           ]
         }
       ]
@@ -981,10 +1395,18 @@
     {
       "name": "t:sections.nether_hero.presets.name",
       "blocks": [
-        { "type": "eyebrow" },
-        { "type": "heading" },
-        { "type": "text" },
-        { "type": "buttons" }
+        {
+          "type": "eyebrow"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "buttons"
+        }
       ]
     }
   ]

@@ -16,7 +16,7 @@
   {%- when 'attributes' -%}
     {% render 'nether-compare-attributes', block: block, section: section %}
 
-  {%- when 'recently_compared_placeholder' -%}
+  {%- when 'recent_cmp_placeholder' -%}
     {% render 'nether-compare-extensions', block: block, section: section, type: 'recently' %}
 
   {%- when 'sharing_placeholder' -%}
@@ -40,7 +40,7 @@
   {%- when 'notifications_placeholder' -%}
     {% render 'nether-compare-extensions', block: block, section: section, type: 'notifications' %}
 
-  {%- when 'recommendations_placeholder' -%}
+  {%- when 'recommend_placeholder' -%}
     {% render 'nether-compare-extensions', block: block, section: section, type: 'recommendations' %}
     {% render 'nether-recommendations-extensions', block: block, section: section, type: 'for_you' %}
 

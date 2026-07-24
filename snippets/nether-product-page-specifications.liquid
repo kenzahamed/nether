@@ -53,7 +53,7 @@
             <div class="summary__title">
               {% render 'icon-accordion', icon: block.settings.icon %}
               <h2 class="h4 accordion__title inline-richtext">
-                {{ block.settings.heading | default: 'sections.nether_product_page.specifications.label' | t }}
+                {% render 'nether-locale-text', value: block.settings.heading, key: 'sections.nether_product_page.specifications.label' %}
               </h2>
             </div>
             {{- 'icon-caret.svg' | inline_asset_content -}}

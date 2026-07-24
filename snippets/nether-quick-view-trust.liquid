@@ -17,6 +17,13 @@
 -%}
 
 {%- if show_trust -%}
+  {%- liquid
+    if trust_text != blank
+      assign trust_item_heading = trust_text
+    else
+      assign trust_item_heading = 'sections.nether_quick_view.trust.default' | t
+    endif
+  -%}
   <aside
     class="nether-quick-view__trust shadow-xs radius-md"
     data-nether-quick-view-module="trust"
@@ -27,7 +34,7 @@
       heading: trust_heading,
       layout: 'stack',
       icon_1: 'lock',
-      heading_1: trust_text | default: 'sections.nether_quick_view.trust.default' | t,
+      heading_1: trust_item_heading,
       text_1: '',
       class: 'nether-quick-view__trust-shared',
       animate: false

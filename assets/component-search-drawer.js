@@ -18,6 +18,7 @@ class NetherSearchDrawer extends HTMLElement {
     this.handleTriggerClick = this.handleTriggerClick.bind(this);
     this.handleHeaderState = this.handleHeaderState.bind(this);
     this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.handleSectionLoad = this.handleSectionLoad.bind(this);
   }
 
   connectedCallback() {
@@ -40,7 +41,7 @@ class NetherSearchDrawer extends HTMLElement {
     document.addEventListener('nether:header:state', this.handleHeaderState);
 
     if (window.Shopify?.designMode) {
-      document.addEventListener('shopify:section:load', this.handleSectionLoad.bind(this));
+      document.addEventListener('shopify:section:load', this.handleSectionLoad);
     }
   }
 
@@ -50,6 +51,9 @@ class NetherSearchDrawer extends HTMLElement {
     this.removeEventListener('click', this.handleCloseClick);
     document.removeEventListener('keydown', this.handleKeydown);
     document.removeEventListener('nether:header:state', this.handleHeaderState);
+    if (window.Shopify?.designMode) {
+      document.removeEventListener('shopify:section:load', this.handleSectionLoad);
+    }
     this.killMotionTweens();
   }
 

@@ -26,6 +26,7 @@ class NetherMegaMenu extends HTMLElement {
     this.handleSearchOpen = this.handleSearchOpen.bind(this);
     this.handleSummaryKeydown = this.handleSummaryKeydown.bind(this);
     this.handleFocusOut = this.handleFocusOut.bind(this);
+    this.handleSectionLoad = this.handleSectionLoad.bind(this);
   }
 
   connectedCallback() {
@@ -43,13 +44,16 @@ class NetherMegaMenu extends HTMLElement {
     this.registerMotion();
 
     if (window.Shopify?.designMode) {
-      document.addEventListener('shopify:section:load', this.handleSectionLoad.bind(this));
+      document.addEventListener('shopify:section:load', this.handleSectionLoad);
     }
   }
 
   disconnectedCallback() {
     this.unbindEvents();
     this.killMotionTweens();
+    if (window.Shopify?.designMode) {
+      document.removeEventListener('shopify:section:load', this.handleSectionLoad);
+    }
   }
 
   parseConfig() {

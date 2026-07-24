@@ -13,7 +13,7 @@
   {%- when 'empty' -%}
     {% render 'nether-wishlist-empty', section: section, context: 'page' %}
 
-  {%- when 'recently_wishlisted_placeholder' -%}
+  {%- when 'recent_wish_placeholder' -%}
     {% render 'nether-wishlist-extensions', block: block, section: section, type: 'recently' %}
 
   {%- when 'sharing_placeholder' -%}
@@ -37,7 +37,7 @@
   {%- when 'notifications_placeholder' -%}
     {% render 'nether-wishlist-extensions', block: block, section: section, type: 'notifications' %}
 
-  {%- when 'recommendations_placeholder' -%}
+  {%- when 'recommend_placeholder' -%}
     {% render 'nether-recommendations-extensions', block: block, section: section, type: 'for_you' %}
 
   {%- when 'merchant_content' -%}

@@ -361,7 +361,7 @@ Primary risks before Phase 5 are **wishlist↔compare clone debt (~75–80%)**, 
 | List view setting + disabled control | Half-wired UX |
 | Enable-order coupling (header flags before surface toggles) | Easy misconfiguration |
 | Hardcoded English label on cart notice icon setting | i18n debt |
-| Collection recommendations_placeholder is a note, not a live grid | Expectation mismatch |
+| Collection recommend_placeholder is a note, not a live grid | Expectation mismatch |
 
 ### Theme Editor grade: **B-**
 

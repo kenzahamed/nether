@@ -282,6 +282,13 @@ nether-testimonials {
   background: rgba(var(--color-background), 0.9);
 }
 
+.nether-testimonials__logo-item--placeholder .nether-testimonials__logo-placeholder {
+  width: 100%;
+  max-width: 12rem;
+  height: auto;
+  opacity: 0.45;
+}
+
 .nether-testimonials__logo-link {
   display: flex;
   align-items: center;

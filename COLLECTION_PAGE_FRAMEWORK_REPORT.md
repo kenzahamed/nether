@@ -149,7 +149,7 @@ The framework wraps native Shopify collection functionality inside a modular Net
 | **Responsive** | Desktop/tablet/mobile layout modifiers |
 | **Standard** | Color scheme, padding |
 
-**Grid blocks:** `@app`, `merchant_content`, `editorial_content`, `category_highlight`, `stat`, `collection_info`, `collection_description`, `subcollections`, `wishlist_placeholder`, `compare_placeholder`, `quick_view_placeholder`, `infinite_scroll_placeholder`, `merchandising_rules_placeholder`
+**Grid blocks:** `@app`, `merchant_content`, `editorial_content`, `category_highlight`, `stat`, `collection_info`, `collection_description`, `subcollections`, `wishlist_placeholder`, `compare_placeholder`, `quick_view_placeholder`, `inf_scroll_placeholder`, `merch_rules_placeholder`
 
 ### Hero layouts
 

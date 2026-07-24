@@ -14,7 +14,11 @@
 {% endcomment %}
 
 {%- liquid
-  assign trigger_label = label | default: 'sections.nether_wishlist.title' | t
+  if label != blank
+    assign trigger_label = label
+  else
+    assign trigger_label = 'sections.nether_wishlist.title' | t
+  endif
   assign show_count_bubble = show_count
   if show_count_bubble == nil
     assign show_count_bubble = section.settings.nether_wishlist_show_count

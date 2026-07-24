@@ -34,7 +34,7 @@
   id="NetherCommerce-{{ section.id }}"
   class="nether-commerce-section section-{{ section.id }}-padding gradient {{ section_classes }}"
   style="--section-nether-commerce-padding-top: {{ section.settings.padding_top }}px; --section-nether-commerce-padding-bottom: {{ section.settings.padding_bottom }}px;"
-  aria-label="{{ section.settings.aria_label | default: 'sections.nether_commerce.label' | t | escape }}"
+  aria-label="{% render 'nether-locale-text', value: section.settings.aria_label, key: 'sections.nether_commerce.label' %}"
 >
   <div class="page-width{% if section.settings.full_width %} page-width--full{% endif %}">
     <nether-commerce
@@ -88,7 +88,10 @@
   "tag": "section",
   "class": "section nether-commerce-section",
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   },
   "settings": [
     {
@@ -113,9 +116,18 @@
       "label": "t:sections.nether_commerce.settings.heading_size.label",
       "default": "h2",
       "options": [
-        { "value": "h2", "label": "H2" },
-        { "value": "h1", "label": "H1" },
-        { "value": "h3", "label": "H3" }
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        }
       ]
     },
     {
@@ -128,9 +140,18 @@
       "label": "t:sections.nether_commerce.settings.trust_layout.label",
       "default": "stack",
       "options": [
-        { "value": "stack", "label": "t:sections.nether_commerce.settings.trust_layout.options.stack" },
-        { "value": "row", "label": "t:sections.nether_commerce.settings.trust_layout.options.row" },
-        { "value": "grid", "label": "t:sections.nether_commerce.settings.trust_layout.options.grid" }
+        {
+          "value": "stack",
+          "label": "t:sections.nether_commerce.settings.trust_layout.options.stack"
+        },
+        {
+          "value": "row",
+          "label": "t:sections.nether_commerce.settings.trust_layout.options.row"
+        },
+        {
+          "value": "grid",
+          "label": "t:sections.nether_commerce.settings.trust_layout.options.grid"
+        }
       ]
     },
     {
@@ -139,11 +160,26 @@
       "label": "t:sections.nether_commerce.settings.badge_style.label",
       "default": "solid",
       "options": [
-        { "value": "solid", "label": "Solid" },
-        { "value": "outline", "label": "Outline" },
-        { "value": "soft", "label": "Soft" },
-        { "value": "pill", "label": "Pill" },
-        { "value": "minimal", "label": "Minimal" }
+        {
+          "value": "solid",
+          "label": "t:nether.common.solid"
+        },
+        {
+          "value": "outline",
+          "label": "t:nether.common.outline"
+        },
+        {
+          "value": "soft",
+          "label": "t:nether.common.soft"
+        },
+        {
+          "value": "pill",
+          "label": "t:nether.common.pill"
+        },
+        {
+          "value": "minimal",
+          "label": "t:nether.common.minimal"
+        }
       ]
     },
     {
@@ -152,10 +188,22 @@
       "label": "t:sections.nether_commerce.settings.notice_style.label",
       "default": "soft",
       "options": [
-        { "value": "soft", "label": "Soft" },
-        { "value": "outline", "label": "Outline" },
-        { "value": "solid", "label": "Solid" },
-        { "value": "minimal", "label": "Minimal" }
+        {
+          "value": "soft",
+          "label": "t:nether.common.soft"
+        },
+        {
+          "value": "outline",
+          "label": "t:nether.common.outline"
+        },
+        {
+          "value": "solid",
+          "label": "t:nether.common.solid"
+        },
+        {
+          "value": "minimal",
+          "label": "t:nether.common.minimal"
+        }
       ]
     },
     {
@@ -164,9 +212,18 @@
       "label": "t:sections.nether_commerce.settings.inventory_display.label",
       "default": "status",
       "options": [
-        { "value": "status", "label": "t:sections.nether_commerce.settings.inventory_display.options.status" },
-        { "value": "status_progress", "label": "t:sections.nether_commerce.settings.inventory_display.options.status_progress" },
-        { "value": "hidden", "label": "t:sections.nether_commerce.settings.inventory_display.options.hidden" }
+        {
+          "value": "status",
+          "label": "t:sections.nether_commerce.settings.inventory_display.options.status"
+        },
+        {
+          "value": "status_progress",
+          "label": "t:sections.nether_commerce.settings.inventory_display.options.status_progress"
+        },
+        {
+          "value": "hidden",
+          "label": "t:sections.nether_commerce.settings.inventory_display.options.hidden"
+        }
       ]
     },
     {
@@ -196,9 +253,18 @@
       "label": "t:sections.nether_commerce.settings.desktop_layout.label",
       "default": "stack",
       "options": [
-        { "value": "stack", "label": "Stack" },
-        { "value": "row", "label": "Row" },
-        { "value": "compact", "label": "Compact" }
+        {
+          "value": "stack",
+          "label": "t:nether.common.stack"
+        },
+        {
+          "value": "row",
+          "label": "t:nether.common.row"
+        },
+        {
+          "value": "compact",
+          "label": "t:nether.common.compact"
+        }
       ]
     },
     {
@@ -207,8 +273,14 @@
       "label": "t:sections.nether_commerce.settings.tablet_layout.label",
       "default": "stacked",
       "options": [
-        { "value": "stacked", "label": "Stacked" },
-        { "value": "compact", "label": "Compact" }
+        {
+          "value": "stacked",
+          "label": "t:nether.common.stacked"
+        },
+        {
+          "value": "compact",
+          "label": "t:nether.common.compact"
+        }
       ]
     },
     {
@@ -217,8 +289,14 @@
       "label": "t:sections.nether_commerce.settings.mobile_layout.label",
       "default": "stacked",
       "options": [
-        { "value": "stacked", "label": "Stacked" },
-        { "value": "compact", "label": "Compact" }
+        {
+          "value": "stacked",
+          "label": "t:nether.common.stacked"
+        },
+        {
+          "value": "compact",
+          "label": "t:nether.common.compact"
+        }
       ]
     },
     {
@@ -243,10 +321,22 @@
       "label": "t:sections.nether_commerce.settings.animation_style.label",
       "default": "fade",
       "options": [
-        { "value": "none", "label": "None" },
-        { "value": "fade", "label": "Fade" },
-        { "value": "slide", "label": "Slide" },
-        { "value": "stagger", "label": "Stagger" }
+        {
+          "value": "none",
+          "label": "t:nether.common.none"
+        },
+        {
+          "value": "fade",
+          "label": "t:nether.common.fade"
+        },
+        {
+          "value": "slide",
+          "label": "t:nether.common.slide"
+        },
+        {
+          "value": "stagger",
+          "label": "t:nether.common.stagger"
+        }
       ]
     },
     {
@@ -271,7 +361,7 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "unit": "px",
+      "unit": "t:nether.common.px",
       "label": "t:sections.all.padding.padding_top",
       "default": 36
     },
@@ -281,7 +371,7 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "unit": "px",
+      "unit": "t:nether.common.px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
     }
@@ -292,44 +382,170 @@
       "name": "t:sections.nether_commerce.blocks.trust.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "heading", "label": "t:sections.nether_commerce.blocks.trust.settings.heading.label" },
-        { "type": "select", "id": "layout", "label": "t:sections.nether_commerce.blocks.trust.settings.layout.label", "default": "stack", "options": [
-          { "value": "stack", "label": "Stack" },
-          { "value": "row", "label": "Row" },
-          { "value": "grid", "label": "Grid" }
-        ]},
-        { "type": "select", "id": "icon_1", "default": "truck", "label": "Icon 1", "options": [
-          { "value": "truck", "label": "Truck" },
-          { "value": "lock", "label": "Lock" },
-          { "value": "return", "label": "Return" },
-          { "value": "check_mark", "label": "Check" },
-          { "value": "none", "label": "None" }
-        ]},
-        { "type": "inline_richtext", "id": "heading_1", "default": "Complimentary shipping", "label": "Trust item 1" },
-        { "type": "text", "id": "text_1", "label": "Trust text 1" },
-        { "type": "select", "id": "icon_2", "default": "return", "label": "Icon 2", "options": [
-          { "value": "return", "label": "Return" },
-          { "value": "lock", "label": "Lock" },
-          { "value": "check_mark", "label": "Check" },
-          { "value": "none", "label": "None" }
-        ]},
-        { "type": "inline_richtext", "id": "heading_2", "default": "Easy returns", "label": "Trust item 2" },
-        { "type": "text", "id": "text_2", "label": "Trust text 2" },
-        { "type": "select", "id": "icon_3", "default": "lock", "label": "Icon 3", "options": [
-          { "value": "lock", "label": "Lock" },
-          { "value": "padlock", "label": "Padlock" },
-          { "value": "check_mark", "label": "Check" },
-          { "value": "none", "label": "None" }
-        ]},
-        { "type": "inline_richtext", "id": "heading_3", "default": "Secure checkout", "label": "Trust item 3" },
-        { "type": "text", "id": "text_3", "label": "Trust text 3" },
-        { "type": "select", "id": "icon_4", "default": "none", "label": "Icon 4", "options": [
-          { "value": "none", "label": "None" },
-          { "value": "star", "label": "Star" },
-          { "value": "check_mark", "label": "Check" }
-        ]},
-        { "type": "inline_richtext", "id": "heading_4", "label": "Trust item 4" },
-        { "type": "text", "id": "text_4", "label": "Trust text 4" }
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.nether_commerce.blocks.trust.settings.heading.label"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "t:sections.nether_commerce.blocks.trust.settings.layout.label",
+          "default": "stack",
+          "options": [
+            {
+              "value": "stack",
+              "label": "t:nether.common.stack"
+            },
+            {
+              "value": "row",
+              "label": "t:nether.common.row"
+            },
+            {
+              "value": "grid",
+              "label": "t:nether.common.grid"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "icon_1",
+          "default": "truck",
+          "label": "t:nether.common.icon_1",
+          "options": [
+            {
+              "value": "truck",
+              "label": "t:nether.common.truck"
+            },
+            {
+              "value": "lock",
+              "label": "t:nether.common.lock"
+            },
+            {
+              "value": "return",
+              "label": "t:nether.common.return"
+            },
+            {
+              "value": "check_mark",
+              "label": "t:nether.common.check"
+            },
+            {
+              "value": "none",
+              "label": "t:nether.common.none"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading_1",
+          "default": "Complimentary shipping",
+          "label": "t:nether.common.trust_item_1"
+        },
+        {
+          "type": "text",
+          "id": "text_1",
+          "label": "t:nether.common.trust_text_1"
+        },
+        {
+          "type": "select",
+          "id": "icon_2",
+          "default": "return",
+          "label": "t:nether.common.icon_2",
+          "options": [
+            {
+              "value": "return",
+              "label": "t:nether.common.return"
+            },
+            {
+              "value": "lock",
+              "label": "t:nether.common.lock"
+            },
+            {
+              "value": "check_mark",
+              "label": "t:nether.common.check"
+            },
+            {
+              "value": "none",
+              "label": "t:nether.common.none"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading_2",
+          "default": "Easy returns",
+          "label": "t:nether.common.trust_item_2"
+        },
+        {
+          "type": "text",
+          "id": "text_2",
+          "label": "t:nether.common.trust_text_2"
+        },
+        {
+          "type": "select",
+          "id": "icon_3",
+          "default": "lock",
+          "label": "t:nether.common.icon_3",
+          "options": [
+            {
+              "value": "lock",
+              "label": "t:nether.common.lock"
+            },
+            {
+              "value": "padlock",
+              "label": "t:nether.common.padlock"
+            },
+            {
+              "value": "check_mark",
+              "label": "t:nether.common.check"
+            },
+            {
+              "value": "none",
+              "label": "t:nether.common.none"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading_3",
+          "default": "Secure checkout",
+          "label": "t:nether.common.trust_item_3"
+        },
+        {
+          "type": "text",
+          "id": "text_3",
+          "label": "t:nether.common.trust_text_3"
+        },
+        {
+          "type": "select",
+          "id": "icon_4",
+          "default": "none",
+          "label": "t:nether.common.icon_4",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:nether.common.none"
+            },
+            {
+              "value": "star",
+              "label": "t:nether.common.star"
+            },
+            {
+              "value": "check_mark",
+              "label": "t:nether.common.check"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading_4",
+          "label": "t:nether.common.trust_item_4"
+        },
+        {
+          "type": "text",
+          "id": "text_4",
+          "label": "t:nether.common.trust_text_4"
+        }
       ]
     },
     {
@@ -337,11 +553,28 @@
       "name": "t:sections.nether_commerce.blocks.secure_checkout.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "text", "default": "Secure checkout", "label": "t:sections.nether_commerce.blocks.secure_checkout.settings.text.label" },
-        { "type": "select", "id": "icon", "default": "lock", "label": "Icon", "options": [
-          { "value": "lock", "label": "Lock" },
-          { "value": "padlock", "label": "Padlock" }
-        ]}
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Secure checkout",
+          "label": "t:sections.nether_commerce.blocks.secure_checkout.settings.text.label"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "default": "lock",
+          "label": "t:nether.common.icon",
+          "options": [
+            {
+              "value": "lock",
+              "label": "t:nether.common.lock"
+            },
+            {
+              "value": "padlock",
+              "label": "t:nether.common.padlock"
+            }
+          ]
+        }
       ]
     },
     {
@@ -349,19 +582,61 @@
       "name": "t:sections.nether_commerce.blocks.delivery_info.name",
       "limit": 1,
       "settings": [
-        { "type": "select", "id": "icon", "default": "truck", "label": "Icon", "options": [
-          { "value": "truck", "label": "Truck" },
-          { "value": "plane", "label": "Plane" },
-          { "value": "box", "label": "Box" }
-        ]},
-        { "type": "inline_richtext", "id": "heading", "default": "Delivery information", "label": "Heading" },
-        { "type": "richtext", "id": "text", "label": "Text" },
-        { "type": "select", "id": "style", "default": "card", "label": "Style", "options": [
-          { "value": "card", "label": "Card" },
-          { "value": "minimal", "label": "Minimal" },
-          { "value": "inline", "label": "Inline" },
-          { "value": "glass", "label": "Glass" }
-        ]}
+        {
+          "type": "select",
+          "id": "icon",
+          "default": "truck",
+          "label": "t:nether.common.icon",
+          "options": [
+            {
+              "value": "truck",
+              "label": "t:nether.common.truck"
+            },
+            {
+              "value": "plane",
+              "label": "t:nether.common.plane"
+            },
+            {
+              "value": "box",
+              "label": "t:nether.common.box"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Delivery information",
+          "label": "t:nether.common.heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:nether.common.text"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "default": "card",
+          "label": "t:nether.common.style",
+          "options": [
+            {
+              "value": "card",
+              "label": "t:nether.common.card"
+            },
+            {
+              "value": "minimal",
+              "label": "t:nether.common.minimal"
+            },
+            {
+              "value": "inline",
+              "label": "t:nether.common.inline"
+            },
+            {
+              "value": "glass",
+              "label": "t:nether.common.glass"
+            }
+          ]
+        }
       ]
     },
     {
@@ -369,13 +644,40 @@
       "name": "t:sections.nether_commerce.blocks.estimated_delivery.name",
       "limit": 1,
       "settings": [
-        { "type": "checkbox", "id": "visible", "default": false, "label": "t:sections.nether_commerce.blocks.estimated_delivery.settings.visible.label", "info": "t:sections.nether_commerce.blocks.estimated_delivery.settings.visible.info" },
-        { "type": "inline_richtext", "id": "heading", "default": "Estimated delivery", "label": "Heading" },
-        { "type": "text", "id": "text", "label": "Placeholder text" },
-        { "type": "select", "id": "icon", "default": "stopwatch", "label": "Icon", "options": [
-          { "value": "stopwatch", "label": "Stopwatch" },
-          { "value": "truck", "label": "Truck" }
-        ]}
+        {
+          "type": "checkbox",
+          "id": "visible",
+          "default": false,
+          "label": "t:sections.nether_commerce.blocks.estimated_delivery.settings.visible.label",
+          "info": "t:sections.nether_commerce.blocks.estimated_delivery.settings.visible.info"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Estimated delivery",
+          "label": "t:nether.common.heading"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:nether.common.placeholder_text"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "default": "stopwatch",
+          "label": "t:nether.common.icon",
+          "options": [
+            {
+              "value": "stopwatch",
+              "label": "t:nether.common.stopwatch"
+            },
+            {
+              "value": "truck",
+              "label": "t:nether.common.truck"
+            }
+          ]
+        }
       ]
     },
     {
@@ -383,16 +685,49 @@
       "name": "t:sections.nether_commerce.blocks.return_policy.name",
       "limit": 1,
       "settings": [
-        { "type": "select", "id": "icon", "default": "return", "label": "Icon", "options": [
-          { "value": "return", "label": "Return" }
-        ]},
-        { "type": "inline_richtext", "id": "heading", "default": "Returns", "label": "Heading" },
-        { "type": "richtext", "id": "text", "label": "Text" },
-        { "type": "select", "id": "style", "default": "card", "label": "Style", "options": [
-          { "value": "card", "label": "Card" },
-          { "value": "minimal", "label": "Minimal" },
-          { "value": "inline", "label": "Inline" }
-        ]}
+        {
+          "type": "select",
+          "id": "icon",
+          "default": "return",
+          "label": "t:nether.common.icon",
+          "options": [
+            {
+              "value": "return",
+              "label": "t:nether.common.return"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Returns",
+          "label": "t:nether.common.heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:nether.common.text"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "default": "card",
+          "label": "t:nether.common.style",
+          "options": [
+            {
+              "value": "card",
+              "label": "t:nether.common.card"
+            },
+            {
+              "value": "minimal",
+              "label": "t:nether.common.minimal"
+            },
+            {
+              "value": "inline",
+              "label": "t:nether.common.inline"
+            }
+          ]
+        }
       ]
     },
     {
@@ -400,17 +735,53 @@
       "name": "t:sections.nether_commerce.blocks.warranty.name",
       "limit": 1,
       "settings": [
-        { "type": "select", "id": "icon", "default": "padlock", "label": "Icon", "options": [
-          { "value": "padlock", "label": "Padlock" },
-          { "value": "lock", "label": "Lock" },
-          { "value": "check_mark", "label": "Check" }
-        ]},
-        { "type": "inline_richtext", "id": "heading", "default": "Warranty", "label": "Heading" },
-        { "type": "richtext", "id": "text", "label": "Text" },
-        { "type": "select", "id": "style", "default": "card", "label": "Style", "options": [
-          { "value": "card", "label": "Card" },
-          { "value": "minimal", "label": "Minimal" }
-        ]}
+        {
+          "type": "select",
+          "id": "icon",
+          "default": "padlock",
+          "label": "t:nether.common.icon",
+          "options": [
+            {
+              "value": "padlock",
+              "label": "t:nether.common.padlock"
+            },
+            {
+              "value": "lock",
+              "label": "t:nether.common.lock"
+            },
+            {
+              "value": "check_mark",
+              "label": "t:nether.common.check"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Warranty",
+          "label": "t:nether.common.heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:nether.common.text"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "default": "card",
+          "label": "t:nether.common.style",
+          "options": [
+            {
+              "value": "card",
+              "label": "t:nether.common.card"
+            },
+            {
+              "value": "minimal",
+              "label": "t:nether.common.minimal"
+            }
+          ]
+        }
       ]
     },
     {
@@ -418,16 +789,49 @@
       "name": "t:sections.nether_commerce.blocks.money_back.name",
       "limit": 1,
       "settings": [
-        { "type": "select", "id": "icon", "default": "check_mark", "label": "Icon", "options": [
-          { "value": "check_mark", "label": "Check" },
-          { "value": "return", "label": "Return" }
-        ]},
-        { "type": "inline_richtext", "id": "heading", "default": "Money-back guarantee", "label": "Heading" },
-        { "type": "richtext", "id": "text", "label": "Text" },
-        { "type": "select", "id": "style", "default": "card", "label": "Style", "options": [
-          { "value": "card", "label": "Card" },
-          { "value": "minimal", "label": "Minimal" }
-        ]}
+        {
+          "type": "select",
+          "id": "icon",
+          "default": "check_mark",
+          "label": "t:nether.common.icon",
+          "options": [
+            {
+              "value": "check_mark",
+              "label": "t:nether.common.check"
+            },
+            {
+              "value": "return",
+              "label": "t:nether.common.return"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Money-back guarantee",
+          "label": "t:nether.common.heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:nether.common.text"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "default": "card",
+          "label": "t:nether.common.style",
+          "options": [
+            {
+              "value": "card",
+              "label": "t:nether.common.card"
+            },
+            {
+              "value": "minimal",
+              "label": "t:nether.common.minimal"
+            }
+          ]
+        }
       ]
     },
     {
@@ -435,15 +839,53 @@
       "name": "t:sections.nether_commerce.blocks.inventory_status.name",
       "limit": 1,
       "settings": [
-        { "type": "range", "id": "inventory_threshold", "min": 0, "max": 100, "step": 1, "default": 10, "label": "t:sections.nether_commerce.blocks.inventory_status.settings.inventory_threshold.label" },
-        { "type": "checkbox", "id": "show_inventory_quantity", "default": true, "label": "t:sections.nether_commerce.blocks.inventory_status.settings.show_inventory_quantity.label" },
-        { "type": "checkbox", "id": "show_progress", "default": false, "label": "t:sections.nether_commerce.blocks.inventory_status.settings.show_progress.label" },
-        { "type": "checkbox", "id": "show_badge", "default": false, "label": "t:sections.nether_commerce.blocks.inventory_status.settings.show_badge.label" },
-        { "type": "select", "id": "text_style", "default": "body", "label": "Text style", "options": [
-          { "value": "body", "label": "Body" },
-          { "value": "subtitle", "label": "Subtitle" },
-          { "value": "uppercase", "label": "Uppercase" }
-        ]}
+        {
+          "type": "range",
+          "id": "inventory_threshold",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 10,
+          "label": "t:sections.nether_commerce.blocks.inventory_status.settings.inventory_threshold.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_inventory_quantity",
+          "default": true,
+          "label": "t:sections.nether_commerce.blocks.inventory_status.settings.show_inventory_quantity.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_progress",
+          "default": false,
+          "label": "t:sections.nether_commerce.blocks.inventory_status.settings.show_progress.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_badge",
+          "default": false,
+          "label": "t:sections.nether_commerce.blocks.inventory_status.settings.show_badge.label"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "default": "body",
+          "label": "t:nether.common.text_style",
+          "options": [
+            {
+              "value": "body",
+              "label": "t:nether.common.body"
+            },
+            {
+              "value": "subtitle",
+              "label": "t:nether.common.subtitle"
+            },
+            {
+              "value": "uppercase",
+              "label": "t:nether.common.uppercase"
+            }
+          ]
+        }
       ]
     },
     {
@@ -451,7 +893,12 @@
       "name": "t:sections.nether_commerce.blocks.shipping_progress.name",
       "limit": 1,
       "settings": [
-        { "type": "number", "id": "threshold", "label": "t:sections.nether_commerce.blocks.shipping_progress.settings.threshold.label", "default": 100 }
+        {
+          "type": "number",
+          "id": "threshold",
+          "label": "t:sections.nether_commerce.blocks.shipping_progress.settings.threshold.label",
+          "default": 100
+        }
       ]
     },
     {
@@ -459,7 +906,12 @@
       "name": "t:sections.nether_commerce.blocks.payment_methods.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "heading", "label": "t:sections.nether_commerce.blocks.payment_methods.settings.heading.label", "default": "Payment methods" }
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.nether_commerce.blocks.payment_methods.settings.heading.label",
+          "default": "Payment methods"
+        }
       ]
     },
     {
@@ -467,7 +919,10 @@
       "name": "t:sections.nether_commerce.blocks.pickup.name",
       "limit": 1,
       "settings": [
-        { "type": "paragraph", "content": "t:sections.nether_commerce.blocks.pickup.settings.paragraph.content" }
+        {
+          "type": "paragraph",
+          "content": "t:sections.nether_commerce.blocks.pickup.settings.paragraph.content"
+        }
       ]
     },
     {
@@ -475,43 +930,157 @@
       "name": "t:sections.nether_commerce.blocks.commerce_badges.name",
       "limit": 1,
       "settings": [
-        { "type": "select", "id": "badge_style", "default": "solid", "label": "Badge style", "options": [
-          { "value": "solid", "label": "Solid" },
-          { "value": "soft", "label": "Soft" },
-          { "value": "outline", "label": "Outline" },
-          { "value": "pill", "label": "Pill" },
-          { "value": "minimal", "label": "Minimal" }
-        ]},
-        { "type": "checkbox", "id": "show_sale", "default": true, "label": "Show sale badge" },
-        { "type": "checkbox", "id": "show_new", "default": false, "label": "Show new badge" },
-        { "type": "checkbox", "id": "show_low_stock", "default": false, "label": "Show low stock badge" },
-        { "type": "checkbox", "id": "show_preorder", "default": false, "label": "Show pre-order badge" },
-        { "type": "checkbox", "id": "show_coming_soon", "default": false, "label": "Show coming soon badge" },
-        { "type": "text", "id": "badge_1_label", "label": "Custom badge 1" },
-        { "type": "text", "id": "badge_1_type", "default": "custom", "label": "Badge 1 type" },
-        { "type": "text", "id": "badge_2_label", "label": "Custom badge 2" },
-        { "type": "text", "id": "badge_2_type", "default": "custom", "label": "Badge 2 type" },
-        { "type": "text", "id": "badge_3_label", "label": "Custom badge 3" },
-        { "type": "text", "id": "badge_3_type", "default": "custom", "label": "Badge 3 type" }
+        {
+          "type": "select",
+          "id": "badge_style",
+          "default": "solid",
+          "label": "t:nether.common.badge_style",
+          "options": [
+            {
+              "value": "solid",
+              "label": "t:nether.common.solid"
+            },
+            {
+              "value": "soft",
+              "label": "t:nether.common.soft"
+            },
+            {
+              "value": "outline",
+              "label": "t:nether.common.outline"
+            },
+            {
+              "value": "pill",
+              "label": "t:nether.common.pill"
+            },
+            {
+              "value": "minimal",
+              "label": "t:nether.common.minimal"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sale",
+          "default": true,
+          "label": "t:nether.common.show_sale_badge"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_new",
+          "default": false,
+          "label": "t:nether.common.show_new_badge"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_low_stock",
+          "default": false,
+          "label": "t:nether.common.show_low_stock_badge"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_preorder",
+          "default": false,
+          "label": "t:nether.common.show_pre_order_badge"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_coming_soon",
+          "default": false,
+          "label": "t:nether.common.show_coming_soon_badge"
+        },
+        {
+          "type": "text",
+          "id": "badge_1_label",
+          "label": "t:nether.common.custom_badge_1"
+        },
+        {
+          "type": "text",
+          "id": "badge_1_type",
+          "default": "custom",
+          "label": "t:nether.common.badge_1_type"
+        },
+        {
+          "type": "text",
+          "id": "badge_2_label",
+          "label": "t:nether.common.custom_badge_2"
+        },
+        {
+          "type": "text",
+          "id": "badge_2_type",
+          "default": "custom",
+          "label": "t:nether.common.badge_2_type"
+        },
+        {
+          "type": "text",
+          "id": "badge_3_label",
+          "label": "t:nether.common.custom_badge_3"
+        },
+        {
+          "type": "text",
+          "id": "badge_3_type",
+          "default": "custom",
+          "label": "t:nether.common.badge_3_type"
+        }
       ]
     },
     {
       "type": "promotional_notice",
       "name": "t:sections.nether_commerce.blocks.promotional_notice.name",
       "settings": [
-        { "type": "inline_richtext", "id": "heading", "label": "Heading" },
-        { "type": "richtext", "id": "text", "label": "Text" },
-        { "type": "select", "id": "notice_style", "default": "soft", "label": "Style", "options": [
-          { "value": "soft", "label": "Soft" },
-          { "value": "outline", "label": "Outline" },
-          { "value": "solid", "label": "Solid" },
-          { "value": "minimal", "label": "Minimal" }
-        ]},
-        { "type": "select", "id": "icon", "default": "discount", "label": "Icon", "options": [
-          { "value": "discount", "label": "Discount" },
-          { "value": "star", "label": "Star" },
-          { "value": "info", "label": "Info" }
-        ]}
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:nether.common.heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:nether.common.text"
+        },
+        {
+          "type": "select",
+          "id": "notice_style",
+          "default": "soft",
+          "label": "t:nether.common.style",
+          "options": [
+            {
+              "value": "soft",
+              "label": "t:nether.common.soft"
+            },
+            {
+              "value": "outline",
+              "label": "t:nether.common.outline"
+            },
+            {
+              "value": "solid",
+              "label": "t:nether.common.solid"
+            },
+            {
+              "value": "minimal",
+              "label": "t:nether.common.minimal"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "default": "discount",
+          "label": "t:nether.common.icon",
+          "options": [
+            {
+              "value": "discount",
+              "label": "t:nether.common.discount"
+            },
+            {
+              "value": "star",
+              "label": "t:nether.common.star"
+            },
+            {
+              "value": "info",
+              "label": "t:nether.common.info"
+            }
+          ]
+        }
       ]
     },
     {
@@ -519,28 +1088,82 @@
       "name": "t:sections.nether_commerce.blocks.sales_messaging.name",
       "limit": 1,
       "settings": [
-        { "type": "inline_richtext", "id": "heading", "label": "Heading" },
-        { "type": "text", "id": "text", "label": "Text" },
-        { "type": "checkbox", "id": "show_savings", "default": true, "label": "Show savings from compare-at price" }
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:nether.common.heading"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:nether.common.text"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_savings",
+          "default": true,
+          "label": "t:nether.common.show_savings_from_compare_at_price"
+        }
       ]
     },
     {
       "type": "announcement",
       "name": "t:sections.nether_commerce.blocks.announcement.name",
       "settings": [
-        { "type": "inline_richtext", "id": "heading", "label": "Heading" },
-        { "type": "richtext", "id": "text", "label": "Text" },
-        { "type": "select", "id": "notice_style", "default": "outline", "label": "Style", "options": [
-          { "value": "soft", "label": "Soft" },
-          { "value": "outline", "label": "Outline" },
-          { "value": "solid", "label": "Solid" },
-          { "value": "minimal", "label": "Minimal" }
-        ]},
-        { "type": "select", "id": "icon", "default": "info", "label": "Icon", "options": [
-          { "value": "info", "label": "Info" },
-          { "value": "lightning_bolt", "label": "Lightning" },
-          { "value": "star", "label": "Star" }
-        ]}
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:nether.common.heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:nether.common.text"
+        },
+        {
+          "type": "select",
+          "id": "notice_style",
+          "default": "outline",
+          "label": "t:nether.common.style",
+          "options": [
+            {
+              "value": "soft",
+              "label": "t:nether.common.soft"
+            },
+            {
+              "value": "outline",
+              "label": "t:nether.common.outline"
+            },
+            {
+              "value": "solid",
+              "label": "t:nether.common.solid"
+            },
+            {
+              "value": "minimal",
+              "label": "t:nether.common.minimal"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "default": "info",
+          "label": "t:nether.common.icon",
+          "options": [
+            {
+              "value": "info",
+              "label": "t:nether.common.info"
+            },
+            {
+              "value": "lightning_bolt",
+              "label": "t:nether.common.lightning"
+            },
+            {
+              "value": "star",
+              "label": "t:nether.common.star"
+            }
+          ]
+        }
       ]
     },
     {
@@ -548,36 +1171,98 @@
       "name": "t:sections.nether_commerce.blocks.summary.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Checkout confidence" },
-        { "type": "select", "id": "layout", "default": "stack", "label": "Layout", "options": [
-          { "value": "stack", "label": "Stack" },
-          { "value": "compact", "label": "Compact" },
-          { "value": "split", "label": "Split" }
-        ]},
-        { "type": "checkbox", "id": "show_secure", "default": true, "label": "Show secure checkout" },
-        { "type": "text", "id": "secure_text", "default": "Secure checkout", "label": "Secure checkout text" },
-        { "type": "checkbox", "id": "show_payment", "default": true, "label": "Show payment methods" },
-        { "type": "text", "id": "payment_heading", "label": "Payment heading" }
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:nether.common.heading",
+          "default": "Checkout confidence"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "default": "stack",
+          "label": "t:nether.common.layout",
+          "options": [
+            {
+              "value": "stack",
+              "label": "t:nether.common.stack"
+            },
+            {
+              "value": "compact",
+              "label": "t:nether.common.compact"
+            },
+            {
+              "value": "split",
+              "label": "t:nether.common.split"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "show_secure",
+          "default": true,
+          "label": "t:nether.common.show_secure_checkout"
+        },
+        {
+          "type": "text",
+          "id": "secure_text",
+          "default": "Secure checkout",
+          "label": "t:nether.common.secure_checkout_text"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_payment",
+          "default": true,
+          "label": "t:nether.common.show_payment_methods"
+        },
+        {
+          "type": "text",
+          "id": "payment_heading",
+          "label": "t:nether.common.payment_heading"
+        }
       ]
     },
     {
       "type": "divider",
       "name": "t:sections.nether_commerce.blocks.divider.name",
       "settings": [
-        { "type": "select", "id": "style", "default": "line", "label": "Style", "options": [
-          { "value": "line", "label": "Line" },
-          { "value": "space", "label": "Space" },
-          { "value": "fade", "label": "Fade" }
-        ]}
+        {
+          "type": "select",
+          "id": "style",
+          "default": "line",
+          "label": "t:nether.common.style",
+          "options": [
+            {
+              "value": "line",
+              "label": "t:nether.common.line"
+            },
+            {
+              "value": "space",
+              "label": "t:nether.common.space"
+            },
+            {
+              "value": "fade",
+              "label": "t:nether.common.fade"
+            }
+          ]
+        }
       ]
     },
     {
-      "type": "extension_delivery_provider",
-      "name": "t:sections.nether_commerce.blocks.extension_delivery_provider.name",
+      "type": "ext_delivery_provider",
+      "name": "t:sections.nether_commerce.blocks.ext_delivery_provider.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label" },
-        { "type": "text", "id": "text", "label": "Text" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.label"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:nether.common.text"
+        }
       ]
     },
     {
@@ -585,8 +1270,16 @@
       "name": "t:sections.nether_commerce.blocks.extension_shipping_api.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label" },
-        { "type": "text", "id": "text", "label": "Text" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.label"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:nether.common.text"
+        }
       ]
     },
     {
@@ -594,8 +1287,16 @@
       "name": "t:sections.nether_commerce.blocks.extension_ai_messaging.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label" },
-        { "type": "text", "id": "text", "label": "Text" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.label"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:nether.common.text"
+        }
       ]
     },
     {
@@ -603,8 +1304,16 @@
       "name": "t:sections.nether_commerce.blocks.extension_localization.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label" },
-        { "type": "text", "id": "text", "label": "Text" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.label"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:nether.common.text"
+        }
       ]
     },
     {
@@ -612,8 +1321,16 @@
       "name": "t:sections.nether_commerce.blocks.extension_preorder.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label" },
-        { "type": "text", "id": "text", "label": "Text" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.label"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:nether.common.text"
+        }
       ]
     },
     {
@@ -621,17 +1338,33 @@
       "name": "t:sections.nether_commerce.blocks.extension_coming_soon.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label" },
-        { "type": "text", "id": "text", "label": "Text" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.label"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:nether.common.text"
+        }
       ]
     },
     {
-      "type": "extension_shipping_countdown",
-      "name": "t:sections.nether_commerce.blocks.extension_shipping_countdown.name",
+      "type": "ext_ship_countdown",
+      "name": "t:sections.nether_commerce.blocks.ext_ship_countdown.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label" },
-        { "type": "text", "id": "text", "label": "Text" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:nether.common.label"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:nether.common.text"
+        }
       ]
     }
   ],
@@ -639,11 +1372,21 @@
     {
       "name": "t:sections.nether_commerce.presets.name",
       "blocks": [
-        { "type": "trust" },
-        { "type": "secure_checkout" },
-        { "type": "payment_methods" },
-        { "type": "return_policy" },
-        { "type": "money_back" }
+        {
+          "type": "trust"
+        },
+        {
+          "type": "secure_checkout"
+        },
+        {
+          "type": "payment_methods"
+        },
+        {
+          "type": "return_policy"
+        },
+        {
+          "type": "money_back"
+        }
       ]
     }
   ]

@@ -8,7 +8,15 @@
 {%- liquid
   assign show_footer = section.settings.nether_mega_enable_footer
   assign show_secondary = section.settings.nether_mega_enable_secondary_nav
-  assign secondary_menu = section.settings.nether_mega_secondary_menu
+  assign secondary_menu_setting = section.settings.nether_mega_secondary_menu
+  assign secondary_menu = blank
+  if secondary_menu_setting != blank
+    if secondary_menu_setting.links != blank
+      assign secondary_menu = secondary_menu_setting
+    else
+      assign secondary_menu = linklists[secondary_menu_setting]
+    endif
+  endif
 -%}
 
 {%- if show_footer or show_secondary -%}

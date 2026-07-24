@@ -31,6 +31,8 @@ nether-banner {
 
 .nether-banner--height-adapt {
   --nether-banner-min-height: auto;
+  min-height: auto;
+  height: auto;
 }
 
 /* ── Banner layout modifiers ────────────────────────────────────────────────── */

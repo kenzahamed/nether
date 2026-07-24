@@ -50,7 +50,7 @@
               </div>
             {%- endif -%}
 
-          {%- when 'trust_badges', 'gift_wrap' -%}
+          {%- when 'trust_badges', 'gift_wrap', 'payment_methods', 'promotional_notice' -%}
             {% render 'nether-cart-block', block: block, section: section, zone: 'summary' %}
         {%- endcase -%}
       {%- endfor -%}

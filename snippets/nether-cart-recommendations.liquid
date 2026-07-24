@@ -43,12 +43,12 @@
     data-animation-style="{{ section.settings.nether_animation_style | default: 'stagger' }}"
     data-animation-duration="{{ section.settings.nether_animation_duration | default: 0.5 }}"
     role="region"
-    aria-label="{{ block.settings.heading | default: 'sections.nether_cart.recommendations.heading' | t | escape }}"
+    aria-label="{% render 'nether-locale-text', value: block.settings.heading, key: 'sections.nether_cart.recommendations.heading' %}"
   >
     {%- if recommendations.performed and recommendations.products_count > 0 -%}
       <div class="nether-cart__recommendations-inner nether-recommendations__inner">
         <h2 class="nether-cart__module-heading nether-recommendations__heading type-heading-sm">
-          {{ block.settings.heading | default: 'sections.nether_cart.recommendations.heading' | t }}
+          {% render 'nether-locale-text', value: block.settings.heading, key: 'sections.nether_cart.recommendations.heading' %}
         </h2>
         <ul
           class="nether-cart__recommendations-list nether-recommendations__grid list-unstyled"

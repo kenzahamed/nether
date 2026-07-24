@@ -30,7 +30,7 @@
       aria-labelledby="FooterNavHeading-{{ block.id }}"
     {% endunless %}
     {% if suppress_heading %}
-      aria-label="{{ block.settings.heading | default: 'Navigation' | escape }}"
+      aria-label="{% render 'nether-locale-text', value: block.settings.heading, key: 'sections.nether_footer.navigation' %}"
     {% endif %}
   >
     <ul class="footer-block__details-content list-unstyled nether-footer__nav-list" role="list">

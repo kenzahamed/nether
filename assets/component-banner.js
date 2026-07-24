@@ -12,8 +12,12 @@
 
   if (customElements.get('nether-banner')) return;
 
-  const NetherHeroClass = customElements.get('nether-hero')?.constructor;
-  if (!NetherHeroClass) return;
+  /**
+   * Banner extends NetherHero. Boot only after nether-hero is defined so
+   * Theme Editor / deferred load order never silently skips registration.
+   */
+  function bootNetherBanner(NetherHeroClass) {
+    if (!NetherHeroClass || customElements.get('nether-banner')) return;
 
   const HOST_ID = 'nether-banner';
   let hostRegistered = false;
@@ -296,4 +300,14 @@
   }
 
   customElements.define('nether-banner', NetherBanner);
+  }
+
+  const existingHero = customElements.get('nether-hero');
+  if (existingHero) {
+    bootNetherBanner(existingHero.constructor);
+  } else {
+    customElements.whenDefined('nether-hero').then(function () {
+      bootNetherBanner(customElements.get('nether-hero')?.constructor);
+    });
+  }
 })();

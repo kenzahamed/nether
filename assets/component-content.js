@@ -13,8 +13,12 @@
 
   if (customElements.get('nether-content')) return;
 
-  const NetherHeroClass = customElements.get('nether-hero')?.constructor;
-  if (!NetherHeroClass) return;
+  /**
+   * Content extends NetherHero. Boot only after nether-hero is defined so
+   * Theme Editor / deferred load order never silently skips registration.
+   */
+  function bootNetherContent(NetherHeroClass) {
+    if (!NetherHeroClass || customElements.get('nether-content')) return;
 
   const HOST_ID = 'nether-content';
   let hostRegistered = false;
@@ -625,4 +629,14 @@
   }
 
   customElements.define('nether-content', NetherContent);
+  }
+
+  const existingHero = customElements.get('nether-hero');
+  if (existingHero) {
+    bootNetherContent(existingHero.constructor);
+  } else {
+    customElements.whenDefined('nether-hero').then(function () {
+      bootNetherContent(customElements.get('nether-hero')?.constructor);
+    });
+  }
 })();

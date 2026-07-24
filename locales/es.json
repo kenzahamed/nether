@@ -180,7 +180,8 @@
       "product_variants": "Variantes de producto",
       "taxes_included": "Impuestos incluidos.",
       "duties_included": "Aranceles incluidos.",
-      "duties_and_taxes_included": "Aranceles e impuestos incluidos."
+      "duties_and_taxes_included": "Aranceles e impuestos incluidos.",
+      "new": "New"
     },
     "modal": {
       "label": "Galería multimedia"
@@ -221,6 +222,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Página no encontrada",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "No se encontraron resultados para “{{ terms }}” Revisa la ortografía o usa una palabra o frase diferente.",
       "results_with_count": {
@@ -269,10 +274,6 @@
         "error_heading": "Por favor, ajusta lo siguiente:",
         "title": "Formulario de contacto"
       }
-    },
-    "404": {
-      "title": "Página no encontrada",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -283,6 +284,34 @@
         "one": "{{ count }} artículo",
         "other": "{{ count }} artículos",
         "many": "{{ count }} artículos"
+      },
+      "utilities": "Header utilities",
+      "search_placeholder": "Search (coming soon)",
+      "wishlist_placeholder": "Wishlist",
+      "compare_placeholder": "Compare",
+      "coming_soon": "Coming soon",
+      "search_drawer": {
+        "title": "Search",
+        "empty": "Start typing to search products, collections, and more.",
+        "view_all": "View all results",
+        "collection": "Collection",
+        "page": "Page",
+        "article": "Article"
+      },
+      "mobile_drawer": {
+        "title": "Menu",
+        "search": "Search",
+        "secondary_menu": "Secondary menu"
+      },
+      "nether_mega_menu": {
+        "label": "Mega menu",
+        "secondary_nav": "Secondary navigation",
+        "collection_placeholder": "Select a collection to display.",
+        "products_placeholder": "Select products to display.",
+        "products_disabled": "Featured products are disabled in mega menu settings.",
+        "promotion_disabled": "Promotion cards are disabled in mega menu settings.",
+        "images_disabled": "Images are disabled in mega menu settings.",
+        "html_placeholder": "Add custom HTML content."
       }
     },
     "cart": {
@@ -359,7 +388,9 @@
       "next_announcement": "Anuncio siguiente",
       "carousel": "Carrusel",
       "announcement": "Anuncio",
-      "announcement_bar": "Barra de anuncios"
+      "announcement_bar": "Barra de anuncios",
+      "close_announcement_bar": "Close announcement bar",
+      "countdown_placeholder": "Countdown placeholder"
     },
     "quick_order_list": {
       "product_total": "Subtotal de productos",
@@ -387,6 +418,581 @@
       "min_error": "Este artículo tiene un mínimo de {{ min }}.",
       "max_error": "Este artículo tiene un máximo de {{ max }}.",
       "step_error": "Solo puedes agregar este artículo en incrementos de {{ step }}"
+    },
+    "nether_wishlist": {
+      "title": "Wishlist",
+      "list_label": "Wishlist items",
+      "collection_note": "Wishlist is available on product cards in this collection.",
+      "count": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} items"
+      },
+      "actions": {
+        "add": "Add to wishlist",
+        "remove": "Remove from wishlist",
+        "clear": "Clear wishlist",
+        "move_to_cart": "Move to cart",
+        "moving": "Moving…",
+        "moved": "Moved to cart",
+        "view_page": "View wishlist"
+      },
+      "availability": {
+        "available": "Available",
+        "unavailable": "Unavailable"
+      },
+      "empty": {
+        "heading": "Your wishlist is empty",
+        "text": "Save pieces you love and return to them anytime.",
+        "login_title": "Have an account?",
+        "login_html": "<a href=\"{{ link }}\">Sign in</a> to sync your wishlist across devices in a future update."
+      },
+      "toolbar": {
+        "label": "Wishlist tools"
+      },
+      "live": {
+        "added": "Added to wishlist",
+        "removed": "Removed from wishlist"
+      },
+      "errors": {
+        "generic": "Something went wrong. Please try again."
+      },
+      "extensions": {
+        "sharing": "Wishlist sharing (coming soon)",
+        "sync": "Wishlist sync (coming soon)",
+        "account": "Account wishlist storage (coming soon)",
+        "guest": "Guest storage adapters (coming soon)",
+        "apps": "App integrations (coming soon)",
+        "analytics": "Wishlist analytics (coming soon)",
+        "notifications": "Wishlist notifications (coming soon)",
+        "recently": "Recently wishlisted (coming soon)",
+        "generic": "Wishlist extension"
+      }
+    },
+    "nether_compare": {
+      "title": "Compare",
+      "list_label": "Compare items",
+      "collection_note": "Compare is available on product cards in this collection.",
+      "count": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} items"
+      },
+      "actions": {
+        "add": "Add to compare",
+        "remove": "Remove from compare",
+        "clear": "Clear compare",
+        "move_to_cart": "Move to cart",
+        "moving": "Moving…",
+        "moved": "Moved to cart",
+        "view_page": "View compare"
+      },
+      "availability": {
+        "available": "Available",
+        "unavailable": "Unavailable"
+      },
+      "attributes": {
+        "vendor": "Vendor",
+        "type": "Type",
+        "price": "Price",
+        "availability": "Availability",
+        "sku": "SKU",
+        "weight": "Weight",
+        "module_label": "Specification attributes",
+        "module_text": "Category-agnostic attributes are captured from each product (vendor, type, price, options, and more) for side-by-side comparison."
+      },
+      "table": {
+        "label": "Product comparison table",
+        "caption": "Compare selected products by attribute",
+        "attribute": "Attribute",
+        "product": "Product"
+      },
+      "empty": {
+        "heading": "Nothing to compare yet",
+        "text": "Add products to compare attributes and specifications side by side.",
+        "login_title": "Have an account?",
+        "login_html": "<a href=\"{{ link }}\">Sign in</a> to sync your compare list across devices in a future update."
+      },
+      "toolbar": {
+        "label": "Compare tools"
+      },
+      "live": {
+        "added": "Added to compare",
+        "removed": "Removed from compare",
+        "full": "Compare list is full"
+      },
+      "errors": {
+        "generic": "Something went wrong. Please try again.",
+        "full": "Compare list is full. Remove a product to add another."
+      },
+      "extensions": {
+        "sharing": "Compare sharing (coming soon)",
+        "sync": "Compare sync (coming soon)",
+        "account": "Account compare storage (coming soon)",
+        "guest": "Guest storage adapters (coming soon)",
+        "apps": "App integrations (coming soon)",
+        "analytics": "Compare analytics (coming soon)",
+        "notifications": "Compare notifications (coming soon)",
+        "recommendations": "Compare recommendations (coming soon)",
+        "recently": "Recently compared (coming soon)",
+        "generic": "Compare extension"
+      }
+    },
+    "nether_quick_view": {
+      "title": "Quick view",
+      "loading": "Loading product…",
+      "collection_note": "Quick view is available on product cards in this collection when the framework is enabled in the header.",
+      "trust": {
+        "default": "Secure checkout · Easy returns · Authentic products"
+      },
+      "highlights": {
+        "heading": "Highlights"
+      },
+      "actions": {
+        "group": "Quick view actions",
+        "open": "Quick view",
+        "view_full": "View full details",
+        "share": "Share",
+        "share_copied": "Link copied"
+      },
+      "modules": {
+        "media": "Product media (Product Page gallery)",
+        "information": "Product information (Product Page buy box)",
+        "pricing": "Pricing (native price)",
+        "variants": "Variant selection (variant-selects)",
+        "quantity": "Quantity (quantity-input)",
+        "buy": "Buy buttons (product-form)"
+      },
+      "errors": {
+        "generic": "Unable to load this product. Please try again."
+      },
+      "extensions": {
+        "recently_viewed": "Recently viewed (coming soon)",
+        "personalization": "Personalization (coming soon)",
+        "bundles": "Bundles",
+        "upsells": "Upsells (coming soon)",
+        "recommendations": "Recommendations",
+        "analytics": "Quick view analytics (coming soon)",
+        "image_zoom": "Image zoom (coming soon)",
+        "generic": "Quick view extension"
+      }
+    },
+    "nether_hero": {
+      "aria_label": "Hero",
+      "scroll": {
+        "label": "Scroll to main content"
+      }
+    },
+    "nether_banner": {
+      "aria_label": "Promotional banner",
+      "collection": {
+        "view": "Shop {{ title }}"
+      }
+    },
+    "nether_collection": {
+      "aria_label": "Collection showcase",
+      "grid": {
+        "label": "Collection list"
+      },
+      "stats": {
+        "label": "Collection statistics"
+      },
+      "view_all": "View all collections",
+      "view_all_label": "View all products in the {{ collection_name }} collection",
+      "card": {
+        "view_label": "Browse {{ title }} collection",
+        "placeholder_label": "Browse collection",
+        "product_count": {
+          "one": "{{ count }} product",
+          "other": "{{ count }} products"
+        }
+      }
+    },
+    "nether_product": {
+      "aria_label": "Product showcase",
+      "grid": {
+        "label": "Product list"
+      },
+      "stats": {
+        "label": "Product statistics"
+      },
+      "actions": {
+        "label": "Product actions"
+      },
+      "view_all": "View all products",
+      "view_all_label": "View all products in the {{ collection_name }} collection",
+      "card": {
+        "view_label": "View {{ title }}",
+        "placeholder_label": "View product",
+        "savings": "Save {{ amount }}",
+        "rating_placeholder": "★★★★★",
+        "in_stock": "In stock",
+        "out_of_stock": "Out of stock"
+      },
+      "promotional": {
+        "placeholder_label": "View promotion"
+      }
+    },
+    "nether_content": {
+      "aria_label": "Content",
+      "rows": {
+        "label": "Content rows"
+      }
+    },
+    "nether_media": {
+      "aria_label": "Media gallery",
+      "grid": {
+        "label": "Media gallery"
+      },
+      "placeholder": {
+        "title": "Media item"
+      },
+      "lightbox": {
+        "open": "View larger image: {{ title }}"
+      },
+      "before_after": {
+        "label": "Before and after comparison",
+        "slider": "Drag to compare before and after",
+        "before": "Before",
+        "after": "After"
+      },
+      "card": {
+        "view_label": "View {{ title }}",
+        "placeholder_label": "View media item"
+      }
+    },
+    "nether_testimonials": {
+      "aria_label": "Testimonials and social proof",
+      "grid": {
+        "label": "Customer testimonials"
+      },
+      "logos": {
+        "label": "Brand logos"
+      },
+      "stats": {
+        "label": "Social proof statistics"
+      },
+      "awards": {
+        "label": "Awards and certifications"
+      },
+      "press": {
+        "label": "Press mentions",
+        "read": "Read article in {{ publication }}"
+      }
+    },
+    "nether_product_page": {
+      "badges": {
+        "label": "Product badges"
+      },
+      "trust": {
+        "label": "Trust and delivery"
+      },
+      "specifications": {
+        "label": "Specifications",
+        "vendor": "Vendor",
+        "type": "Product type",
+        "tags": "Tags"
+      },
+      "delivery": {
+        "label": "Estimated delivery",
+        "placeholder": "Delivery estimation will be available in a future Nether release."
+      },
+      "sticky": {
+        "label": "Sticky purchase summary"
+      },
+      "extensions": {
+        "wishlist": "Wishlist",
+        "compare": "Compare (coming soon)",
+        "bundles": "Bundles",
+        "subscriptions": "Subscriptions (coming soon)",
+        "personalization": "Personalization (coming soon)",
+        "generic": "Extension placeholder"
+      }
+    },
+    "nether_cart": {
+      "summary": {
+        "label": "Order summary"
+      },
+      "shipping": {
+        "label": "Shipping progress",
+        "remaining_html": "Spend {{ amount }} more for free shipping",
+        "qualified": "You qualify for free shipping"
+      },
+      "trust": {
+        "label": "Trust and security"
+      },
+      "gift_wrap": {
+        "label": "Gift wrap (coming soon)"
+      },
+      "recommendations": {
+        "heading": "You may also like",
+        "placeholder": "Recommendations appear when cart items are present."
+      },
+      "extensions": {
+        "bundles": "Bundles",
+        "upsells": "Upsells (coming soon)",
+        "cross_sells": "Cross-sells (coming soon)",
+        "loyalty": "Loyalty (coming soon)",
+        "gift_cards": "Gift cards (coming soon)",
+        "subscriptions": "Subscriptions (coming soon)",
+        "coupon": "Coupon engine (coming soon)",
+        "analytics": "Analytics hooks (coming soon)",
+        "generic": "Extension placeholder"
+      }
+    },
+    "nether_recommendations": {
+      "heading": "You may also like",
+      "collection_note": "Add a Nether Recommendations section below this collection for related merchandising.",
+      "showcase_note": "Pair this showcase with a Nether Recommendations section for related, complementary, or collection-based products.",
+      "collection_showcase_note": "Add Nether Recommendations beside this showcase for luxury product discovery.",
+      "grid": {
+        "label": "Recommended products"
+      },
+      "carousel": {
+        "label": "Recommended products carousel"
+      },
+      "toolbar": {
+        "label": "Recommendations toolbar",
+        "ready": "Personalized for this product",
+        "count": "{{ count }} recommendations",
+        "view_all": "View all"
+      },
+      "empty": {
+        "heading": "No recommendations yet",
+        "text": "Recommendations will appear when product data and Search & Discovery settings are available.",
+        "design_text": "Recommendations preview when a product seed and Shopify recommendations are available."
+      },
+      "strategies": {
+        "related": "Related",
+        "complementary": "Complementary",
+        "trending": "Trending",
+        "new_arrivals": "New arrivals",
+        "best_sellers": "Best sellers",
+        "collection": "Collection",
+        "frequently_bought": "Frequently bought together",
+        "recently_viewed": "Recently viewed",
+        "recently_purchased": "Recently purchased",
+        "for_you": "Recommended for you",
+        "generic": "Recommendations"
+      },
+      "extensions": {
+        "frequently_bought": "Frequently bought together (coming soon)",
+        "recently_viewed": "Recently viewed (coming soon)",
+        "recently_purchased": "Recently purchased (coming soon)",
+        "for_you": "Recommended for you (coming soon)",
+        "ai": "AI recommendations (coming soon)",
+        "personalization": "Personalization (coming soon)",
+        "analytics": "Analytics hooks (coming soon)",
+        "merchandising": "Merchandising rules (coming soon)",
+        "ab_testing": "A/B testing (coming soon)",
+        "filters": "Recommendation filters (coming soon)",
+        "collection_cards": "Collection cards (coming soon)",
+        "generic": "Extension placeholder"
+      }
+    },
+    "nether_bundles": {
+      "heading": "Complete the set",
+      "showcase_note": "Pair this showcase with a Nether Bundles section for packs, gift sets, and complete-the-look commerce.",
+      "collection_showcase_note": "Add Nether Bundles beside this showcase for curated packs and mix-and-match merchandising.",
+      "grid": {
+        "label": "Bundle products"
+      },
+      "item": {
+        "include": "Include {{ title }} in bundle",
+        "required": "{{ title }} is required in this bundle",
+        "required_badge": "Required",
+        "optional_badge": "Optional"
+      },
+      "summary": {
+        "label": "Bundle summary",
+        "heading": "Bundle summary",
+        "count": "{{ count }} selected"
+      },
+      "pricing": {
+        "total": "Bundle total",
+        "separate": "Bought separately",
+        "you_save": "You save",
+        "savings_badge": "Save {{ amount }}"
+      },
+      "notes": {
+        "label": "Bundle note",
+        "placeholder": "Add a note for this bundle (optional)"
+      },
+      "actions": {
+        "add": "Add bundle to cart",
+        "open_summary": "View bundle summary",
+        "success": "Bundle added to cart"
+      },
+      "drawer": {
+        "title": "Bundle summary"
+      },
+      "empty": {
+        "heading": "No bundle products yet",
+        "text": "Add products with Bundle product blocks, a product list, a collection, or complementary recommendations.",
+        "design_text": "Bundle preview appears when products or complementary recommendations are available."
+      },
+      "errors": {
+        "empty": "Select at least one available product",
+        "generic": "Unable to add this bundle. Please try again."
+      },
+      "strategies": {
+        "frequently_bought": "Frequently bought together",
+        "complete_the_look": "Complete the look",
+        "product_pack": "Product pack",
+        "volume_discount": "Volume discount",
+        "mix_match": "Mix & match",
+        "curated": "Curated bundle",
+        "gift_set": "Gift set",
+        "build_your_own": "Build your own",
+        "subscription": "Subscription bundle",
+        "ai": "AI bundle",
+        "dynamic_merchandising": "Dynamic merchandising",
+        "generic": "Bundle"
+      },
+      "extensions": {
+        "build_your_own": "Build your own bundle (coming soon)",
+        "subscription": "Subscription bundles (coming soon)",
+        "ai": "AI bundle recommendations (coming soon)",
+        "dynamic_merchandising": "Dynamic merchandising (coming soon)",
+        "inventory": "Inventory validation (coming soon)",
+        "discount": "Bundle discount engine (coming soon)",
+        "personalization": "Personalization (coming soon)",
+        "analytics": "Analytics hooks (coming soon)",
+        "loyalty": "Loyalty (coming soon)",
+        "generic": "Extension placeholder"
+      }
+    },
+    "nether_commerce": {
+      "label": "Commerce information",
+      "trust": {
+        "label": "Trust and security"
+      },
+      "delivery": {
+        "label": "Estimated delivery",
+        "placeholder": "Delivery estimation will be available when a delivery provider is connected."
+      },
+      "shipping": {
+        "label": "Shipping progress",
+        "remaining_html": "Spend {{ amount }} more for free shipping",
+        "qualified": "You qualify for free shipping"
+      },
+      "payment": {
+        "label": "Payment methods"
+      },
+      "stock": {
+        "progress_label": "{{ quantity }} remaining"
+      },
+      "badges": {
+        "label": "Commerce badges"
+      },
+      "sales": {
+        "savings_html": "You save {{ amount }}"
+      },
+      "summary": {
+        "label": "Commerce summary"
+      },
+      "extensions": {
+        "delivery_provider": "Delivery provider (coming soon)",
+        "shipping_api": "Shipping API (coming soon)",
+        "ai_messaging": "AI commerce messaging (coming soon)",
+        "localization": "Localization (coming soon)",
+        "preorder": "Pre-order (coming soon)",
+        "coming_soon": "Coming soon (coming soon)",
+        "shipping_countdown": "Shipping countdown (coming soon)",
+        "generic": "Commerce extension placeholder"
+      }
+    },
+    "nether_collection_page": {
+      "empty": {
+        "title": "No products found"
+      },
+      "info": {
+        "product_count": "Products",
+        "rules": "Collection type",
+        "automated_collection": "Automated smart collection"
+      },
+      "view_toggle": {
+        "label": "Product view",
+        "grid": "Grid",
+        "list": "List",
+        "list_future": "List view will be available in a future Nether release"
+      },
+      "extensions": {
+        "wishlist": "Wishlist",
+        "compare": "Compare",
+        "quick_view": "Quick view",
+        "infinite_scroll": "Infinite scroll (coming soon)",
+        "merchandising_rules": "Merchandising rules (coming soon)",
+        "recommendations": "Recommendations",
+        "generic": "Extension placeholder"
+      }
+    },
+    "nether_faq": {
+      "aria_label": "Frequently asked questions",
+      "list": {
+        "label": "Frequently asked questions"
+      },
+      "nav": {
+        "label": "FAQ categories"
+      },
+      "sidebar": {
+        "label": "FAQ support sidebar"
+      },
+      "related": {
+        "heading": "Related questions"
+      },
+      "links": {
+        "heading": "Helpful links"
+      },
+      "search": {
+        "label": "Search FAQ",
+        "placeholder": "Search questions...",
+        "clear": "Clear search",
+        "result_singular": "1 result found",
+        "result_plural": "{{ count }} results found"
+      },
+      "controls": {
+        "expand_all": "Expand all",
+        "collapse_all": "Collapse all"
+      }
+    },
+    "nether_newsletter": {
+      "aria_label": "Newsletter signup",
+      "form": {
+        "group_label": "Newsletter signup form",
+        "name_label": "Name",
+        "consent_label": "I agree to receive marketing emails",
+        "join_waitlist": "Join the waitlist",
+        "join_vip": "Join VIP",
+        "get_discount": "Get my discount",
+        "submit_lead": "Submit"
+      }
+    },
+    "nether_cta": {
+      "aria_label": "Call to action",
+      "countdown": {
+        "label": "Limited time offer"
+      },
+      "aside": {
+        "product": "Featured product: {{ title }}",
+        "collection": "Featured collection: {{ title }}",
+        "shop_product": "Shop now",
+        "shop_collection": "Explore collection"
+      }
+    },
+    "nether_footer": {
+      "aria_label": "Footer",
+      "navigation": "Navigation",
+      "contact": {
+        "phone": "Phone",
+        "email": "Email",
+        "hours": "Store hours"
+      },
+      "social": {
+        "aria_label": "Social media"
+      },
+      "trust": {
+        "app_placeholder": "Trust badge app block slot — install an app or add badge images above."
+      },
+      "html_placeholder": "Add custom HTML or install an app block."
     }
   },
   "localization": {

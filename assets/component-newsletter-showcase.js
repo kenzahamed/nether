@@ -17,8 +17,12 @@
 
   if (customElements.get('nether-newsletter')) return;
 
-  const NetherHeroClass = customElements.get('nether-hero')?.constructor;
-  if (!NetherHeroClass) return;
+  /**
+   * Newsletter extends NetherHero. Boot only after nether-hero is defined so
+   * Theme Editor / deferred load order never silently skips registration.
+   */
+  function bootNetherNewsletter(NetherHeroClass) {
+    if (!NetherHeroClass || customElements.get('nether-newsletter')) return;
 
   const HOST_ID = 'nether-newsletter';
   let hostRegistered = false;
@@ -888,4 +892,14 @@
   }
 
   customElements.define('nether-newsletter', NetherNewsletter);
+  }
+
+  const existingHero = customElements.get('nether-hero');
+  if (existingHero) {
+    bootNetherNewsletter(existingHero.constructor);
+  } else {
+    customElements.whenDefined('nether-hero').then(function () {
+      bootNetherNewsletter(customElements.get('nether-hero')?.constructor);
+    });
+  }
 })();

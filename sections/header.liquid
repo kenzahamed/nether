@@ -1,6 +1,8 @@
 {{ 'component-header.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'component-header.js' | asset_url }}" defer="defer"></script>
 
+{%- comment -%} Header schema validated for Theme Dev upload (Sprint 2). {%- endcomment -%}
+
 {%- if section.settings.nether_enable_mobile_drawer -%}
   {{ 'component-mobile-drawer.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
@@ -951,8 +953,7 @@
     {
       "type": "text",
       "id": "nether_search_placeholder_text",
-      "label": "t:sections.header.settings.nether_search_placeholder_text.label",
-      "default": ""
+      "label": "t:sections.header.settings.nether_search_placeholder_text.label"
     },
     {
       "type": "range",
@@ -1139,9 +1140,10 @@
       "default": false
     },
     {
-      "type": "link_list",
+      "type": "text",
       "id": "nether_drawer_secondary_menu",
-      "label": "t:sections.header.settings.nether_drawer_secondary_menu.label"
+      "label": "t:sections.header.settings.nether_drawer_secondary_menu.label",
+      "info": "t:sections.header.settings.nether_drawer_secondary_menu.info"
     },
     {
       "type": "checkbox",
@@ -1184,9 +1186,18 @@
       "label": "t:sections.header.settings.nether_wishlist_button_style.label",
       "default": "icon",
       "options": [
-        { "value": "icon", "label": "t:sections.header.settings.nether_wishlist_button_style.options__1.label" },
-        { "value": "minimal", "label": "t:sections.header.settings.nether_wishlist_button_style.options__2.label" },
-        { "value": "outlined", "label": "t:sections.header.settings.nether_wishlist_button_style.options__3.label" }
+        {
+          "value": "icon",
+          "label": "t:sections.header.settings.nether_wishlist_button_style.options__1.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.header.settings.nether_wishlist_button_style.options__2.label"
+        },
+        {
+          "value": "outlined",
+          "label": "t:sections.header.settings.nether_wishlist_button_style.options__3.label"
+        }
       ]
     },
     {
@@ -1195,9 +1206,18 @@
       "label": "t:sections.header.settings.nether_wishlist_drawer_style.label",
       "default": "standard",
       "options": [
-        { "value": "standard", "label": "t:sections.header.settings.nether_wishlist_drawer_style.options__1.label" },
-        { "value": "minimal", "label": "t:sections.header.settings.nether_wishlist_drawer_style.options__2.label" },
-        { "value": "editorial", "label": "t:sections.header.settings.nether_wishlist_drawer_style.options__3.label" }
+        {
+          "value": "standard",
+          "label": "t:sections.header.settings.nether_wishlist_drawer_style.options__1.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.header.settings.nether_wishlist_drawer_style.options__2.label"
+        },
+        {
+          "value": "editorial",
+          "label": "t:sections.header.settings.nether_wishlist_drawer_style.options__3.label"
+        }
       ]
     },
     {
@@ -1260,9 +1280,18 @@
       "label": "t:sections.header.settings.nether_wishlist_animation_style.label",
       "default": "slide",
       "options": [
-        { "value": "none", "label": "t:sections.header.settings.nether_wishlist_animation_style.options__1.label" },
-        { "value": "slide", "label": "t:sections.header.settings.nether_wishlist_animation_style.options__2.label" },
-        { "value": "fade", "label": "t:sections.header.settings.nether_wishlist_animation_style.options__3.label" }
+        {
+          "value": "none",
+          "label": "t:sections.header.settings.nether_wishlist_animation_style.options__1.label"
+        },
+        {
+          "value": "slide",
+          "label": "t:sections.header.settings.nether_wishlist_animation_style.options__2.label"
+        },
+        {
+          "value": "fade",
+          "label": "t:sections.header.settings.nether_wishlist_animation_style.options__3.label"
+        }
       ]
     },
     {
@@ -1271,9 +1300,18 @@
       "label": "t:sections.header.settings.nether_wishlist_animation_speed.label",
       "default": "default",
       "options": [
-        { "value": "fast", "label": "t:sections.header.settings.nether_animation_speed.options__1.label" },
-        { "value": "default", "label": "t:sections.header.settings.nether_animation_speed.options__2.label" },
-        { "value": "slow", "label": "t:sections.header.settings.nether_animation_speed.options__3.label" }
+        {
+          "value": "fast",
+          "label": "t:sections.header.settings.nether_animation_speed.options__1.label"
+        },
+        {
+          "value": "default",
+          "label": "t:sections.header.settings.nether_animation_speed.options__2.label"
+        },
+        {
+          "value": "slow",
+          "label": "t:sections.header.settings.nether_animation_speed.options__3.label"
+        }
       ]
     },
     {
@@ -1317,9 +1355,18 @@
       "label": "t:sections.header.settings.nether_compare_button_style.label",
       "default": "icon",
       "options": [
-        { "value": "icon", "label": "t:sections.header.settings.nether_compare_button_style.options__1.label" },
-        { "value": "minimal", "label": "t:sections.header.settings.nether_compare_button_style.options__2.label" },
-        { "value": "outlined", "label": "t:sections.header.settings.nether_compare_button_style.options__3.label" }
+        {
+          "value": "icon",
+          "label": "t:sections.header.settings.nether_compare_button_style.options__1.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.header.settings.nether_compare_button_style.options__2.label"
+        },
+        {
+          "value": "outlined",
+          "label": "t:sections.header.settings.nether_compare_button_style.options__3.label"
+        }
       ]
     },
     {
@@ -1328,9 +1375,18 @@
       "label": "t:sections.header.settings.nether_compare_drawer_style.label",
       "default": "standard",
       "options": [
-        { "value": "standard", "label": "t:sections.header.settings.nether_compare_drawer_style.options__1.label" },
-        { "value": "minimal", "label": "t:sections.header.settings.nether_compare_drawer_style.options__2.label" },
-        { "value": "editorial", "label": "t:sections.header.settings.nether_compare_drawer_style.options__3.label" }
+        {
+          "value": "standard",
+          "label": "t:sections.header.settings.nether_compare_drawer_style.options__1.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.header.settings.nether_compare_drawer_style.options__2.label"
+        },
+        {
+          "value": "editorial",
+          "label": "t:sections.header.settings.nether_compare_drawer_style.options__3.label"
+        }
       ]
     },
     {
@@ -1339,9 +1395,18 @@
       "label": "t:sections.header.settings.nether_compare_table_style.label",
       "default": "standard",
       "options": [
-        { "value": "standard", "label": "t:sections.header.settings.nether_compare_table_style.options__1.label" },
-        { "value": "minimal", "label": "t:sections.header.settings.nether_compare_table_style.options__2.label" },
-        { "value": "editorial", "label": "t:sections.header.settings.nether_compare_table_style.options__3.label" }
+        {
+          "value": "standard",
+          "label": "t:sections.header.settings.nether_compare_table_style.options__1.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.header.settings.nether_compare_table_style.options__2.label"
+        },
+        {
+          "value": "editorial",
+          "label": "t:sections.header.settings.nether_compare_table_style.options__3.label"
+        }
       ]
     },
     {
@@ -1419,9 +1484,18 @@
       "label": "t:sections.header.settings.nether_compare_animation_style.label",
       "default": "slide",
       "options": [
-        { "value": "none", "label": "t:sections.header.settings.nether_compare_animation_style.options__1.label" },
-        { "value": "slide", "label": "t:sections.header.settings.nether_compare_animation_style.options__2.label" },
-        { "value": "fade", "label": "t:sections.header.settings.nether_compare_animation_style.options__3.label" }
+        {
+          "value": "none",
+          "label": "t:sections.header.settings.nether_compare_animation_style.options__1.label"
+        },
+        {
+          "value": "slide",
+          "label": "t:sections.header.settings.nether_compare_animation_style.options__2.label"
+        },
+        {
+          "value": "fade",
+          "label": "t:sections.header.settings.nether_compare_animation_style.options__3.label"
+        }
       ]
     },
     {
@@ -1430,9 +1504,18 @@
       "label": "t:sections.header.settings.nether_compare_animation_speed.label",
       "default": "default",
       "options": [
-        { "value": "fast", "label": "t:sections.header.settings.nether_animation_speed.options__1.label" },
-        { "value": "default", "label": "t:sections.header.settings.nether_animation_speed.options__2.label" },
-        { "value": "slow", "label": "t:sections.header.settings.nether_animation_speed.options__3.label" }
+        {
+          "value": "fast",
+          "label": "t:sections.header.settings.nether_animation_speed.options__1.label"
+        },
+        {
+          "value": "default",
+          "label": "t:sections.header.settings.nether_animation_speed.options__2.label"
+        },
+        {
+          "value": "slow",
+          "label": "t:sections.header.settings.nether_animation_speed.options__3.label"
+        }
       ]
     },
     {
@@ -1470,9 +1553,18 @@
       "label": "t:sections.header.settings.nether_quick_view_modal_style.label",
       "default": "standard",
       "options": [
-        { "value": "standard", "label": "t:sections.header.settings.nether_quick_view_modal_style.options__1.label" },
-        { "value": "minimal", "label": "t:sections.header.settings.nether_quick_view_modal_style.options__2.label" },
-        { "value": "editorial", "label": "t:sections.header.settings.nether_quick_view_modal_style.options__3.label" }
+        {
+          "value": "standard",
+          "label": "t:sections.header.settings.nether_quick_view_modal_style.options__1.label"
+        },
+        {
+          "value": "minimal",
+          "label": "t:sections.header.settings.nether_quick_view_modal_style.options__2.label"
+        },
+        {
+          "value": "editorial",
+          "label": "t:sections.header.settings.nether_quick_view_modal_style.options__3.label"
+        }
       ]
     },
     {
@@ -1491,8 +1583,14 @@
       "label": "t:sections.header.settings.nether_quick_view_gallery_layout.label",
       "default": "stacked",
       "options": [
-        { "value": "stacked", "label": "t:sections.header.settings.nether_quick_view_gallery_layout.options__1.label" },
-        { "value": "media-focus", "label": "t:sections.header.settings.nether_quick_view_gallery_layout.options__2.label" }
+        {
+          "value": "stacked",
+          "label": "t:sections.header.settings.nether_quick_view_gallery_layout.options__1.label"
+        },
+        {
+          "value": "media-focus",
+          "label": "t:sections.header.settings.nether_quick_view_gallery_layout.options__2.label"
+        }
       ]
     },
     {
@@ -1501,9 +1599,18 @@
       "label": "t:sections.header.settings.nether_quick_view_info_layout.label",
       "default": "standard",
       "options": [
-        { "value": "standard", "label": "t:sections.header.settings.nether_quick_view_info_layout.options__1.label" },
-        { "value": "compact", "label": "t:sections.header.settings.nether_quick_view_info_layout.options__2.label" },
-        { "value": "editorial", "label": "t:sections.header.settings.nether_quick_view_info_layout.options__3.label" }
+        {
+          "value": "standard",
+          "label": "t:sections.header.settings.nether_quick_view_info_layout.options__1.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.header.settings.nether_quick_view_info_layout.options__2.label"
+        },
+        {
+          "value": "editorial",
+          "label": "t:sections.header.settings.nether_quick_view_info_layout.options__3.label"
+        }
       ]
     },
     {
@@ -1580,9 +1687,18 @@
       "label": "t:sections.header.settings.nether_quick_view_animation_style.label",
       "default": "fade",
       "options": [
-        { "value": "none", "label": "t:sections.header.settings.nether_quick_view_animation_style.options__1.label" },
-        { "value": "fade", "label": "t:sections.header.settings.nether_quick_view_animation_style.options__2.label" },
-        { "value": "slide", "label": "t:sections.header.settings.nether_quick_view_animation_style.options__3.label" }
+        {
+          "value": "none",
+          "label": "t:sections.header.settings.nether_quick_view_animation_style.options__1.label"
+        },
+        {
+          "value": "fade",
+          "label": "t:sections.header.settings.nether_quick_view_animation_style.options__2.label"
+        },
+        {
+          "value": "slide",
+          "label": "t:sections.header.settings.nether_quick_view_animation_style.options__3.label"
+        }
       ]
     },
     {
@@ -1591,9 +1707,18 @@
       "label": "t:sections.header.settings.nether_quick_view_animation_speed.label",
       "default": "default",
       "options": [
-        { "value": "fast", "label": "t:sections.header.settings.nether_animation_speed.options__1.label" },
-        { "value": "default", "label": "t:sections.header.settings.nether_animation_speed.options__2.label" },
-        { "value": "slow", "label": "t:sections.header.settings.nether_animation_speed.options__3.label" }
+        {
+          "value": "fast",
+          "label": "t:sections.header.settings.nether_animation_speed.options__1.label"
+        },
+        {
+          "value": "default",
+          "label": "t:sections.header.settings.nether_animation_speed.options__2.label"
+        },
+        {
+          "value": "slow",
+          "label": "t:sections.header.settings.nether_animation_speed.options__3.label"
+        }
       ]
     },
     {
@@ -1728,9 +1853,10 @@
       "default": false
     },
     {
-      "type": "link_list",
+      "type": "text",
       "id": "nether_mega_secondary_menu",
-      "label": "t:sections.header.settings.nether_mega_secondary_menu.label"
+      "label": "t:sections.header.settings.nether_mega_secondary_menu.label",
+      "info": "t:sections.header.settings.nether_mega_secondary_menu.info"
     },
     {
       "type": "select",
@@ -1870,7 +1996,7 @@
           "type": "range",
           "id": "column_span",
           "min": 1,
-          "max": 2,
+          "max": 3,
           "step": 1,
           "label": "t:sections.header.blocks.mega_menu_common.column_span.label",
           "default": 1
@@ -1894,8 +2020,8 @@
       ]
     },
     {
-      "type": "mega_menu_featured_collection",
-      "name": "t:sections.header.blocks.mega_menu_featured_collection.name",
+      "type": "mm_featured_collection",
+      "name": "t:sections.header.blocks.mm_featured_collection.name",
       "settings": [
         {
           "type": "text",
@@ -1911,12 +2037,12 @@
         {
           "type": "collection",
           "id": "collection",
-          "label": "t:sections.header.blocks.mega_menu_featured_collection.settings.collection.label"
+          "label": "t:sections.header.blocks.mm_featured_collection.settings.collection.label"
         },
         {
           "type": "text",
           "id": "caption",
-          "label": "t:sections.header.blocks.mega_menu_featured_collection.settings.caption.label"
+          "label": "t:sections.header.blocks.mm_featured_collection.settings.caption.label"
         },
         {
           "type": "select",
@@ -1924,16 +2050,25 @@
           "label": "t:sections.header.blocks.mega_menu_common.image_ratio.label",
           "default": "portrait",
           "options": [
-            { "value": "adapt", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label" },
-            { "value": "portrait", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label" },
-            { "value": "square", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label" }
+            {
+              "value": "adapt",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label"
+            },
+            {
+              "value": "portrait",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label"
+            },
+            {
+              "value": "square",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label"
+            }
           ]
         },
         {
           "type": "range",
           "id": "column_span",
           "min": 1,
-          "max": 2,
+          "max": 3,
           "step": 1,
           "label": "t:sections.header.blocks.mega_menu_common.column_span.label",
           "default": 1
@@ -1941,8 +2076,8 @@
       ]
     },
     {
-      "type": "mega_menu_featured_products",
-      "name": "t:sections.header.blocks.mega_menu_featured_products.name",
+      "type": "mm_featured_products",
+      "name": "t:sections.header.blocks.mm_featured_products.name",
       "settings": [
         {
           "type": "text",
@@ -1958,7 +2093,7 @@
         {
           "type": "product_list",
           "id": "product_list",
-          "label": "t:sections.header.blocks.mega_menu_featured_products.settings.product_list.label",
+          "label": "t:sections.header.blocks.mm_featured_products.settings.product_list.label",
           "limit": 4
         },
         {
@@ -1967,13 +2102,13 @@
           "min": 1,
           "max": 4,
           "step": 1,
-          "label": "t:sections.header.blocks.mega_menu_featured_products.settings.products_to_show.label",
+          "label": "t:sections.header.blocks.mm_featured_products.settings.products_to_show.label",
           "default": 2
         },
         {
           "type": "checkbox",
           "id": "show_vendor",
-          "label": "t:sections.header.blocks.mega_menu_featured_products.settings.show_vendor.label",
+          "label": "t:sections.header.blocks.mm_featured_products.settings.show_vendor.label",
           "default": false
         },
         {
@@ -1982,16 +2117,25 @@
           "label": "t:sections.header.blocks.mega_menu_common.image_ratio.label",
           "default": "portrait",
           "options": [
-            { "value": "adapt", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label" },
-            { "value": "portrait", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label" },
-            { "value": "square", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label" }
+            {
+              "value": "adapt",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label"
+            },
+            {
+              "value": "portrait",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label"
+            },
+            {
+              "value": "square",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label"
+            }
           ]
         },
         {
           "type": "range",
           "id": "column_span",
           "min": 1,
-          "max": 2,
+          "max": 3,
           "step": 1,
           "label": "t:sections.header.blocks.mega_menu_common.column_span.label",
           "default": 1
@@ -2050,9 +2194,18 @@
           "label": "t:sections.header.blocks.mega_menu_common.button_style.label",
           "default": "primary",
           "options": [
-            { "value": "primary", "label": "t:sections.header.blocks.mega_menu_common.button_style.options__1.label" },
-            { "value": "secondary", "label": "t:sections.header.blocks.mega_menu_common.button_style.options__2.label" },
-            { "value": "text", "label": "t:sections.header.blocks.mega_menu_common.button_style.options__3.label" }
+            {
+              "value": "primary",
+              "label": "t:sections.header.blocks.mega_menu_common.button_style.options__1.label"
+            },
+            {
+              "value": "secondary",
+              "label": "t:sections.header.blocks.mega_menu_common.button_style.options__2.label"
+            },
+            {
+              "value": "text",
+              "label": "t:sections.header.blocks.mega_menu_common.button_style.options__3.label"
+            }
           ]
         },
         {
@@ -2061,9 +2214,18 @@
           "label": "t:sections.header.blocks.mega_menu_common.card_style.label",
           "default": "elevated",
           "options": [
-            { "value": "default", "label": "t:sections.header.blocks.mega_menu_common.card_style.options__1.label" },
-            { "value": "elevated", "label": "t:sections.header.blocks.mega_menu_common.card_style.options__2.label" },
-            { "value": "glass", "label": "t:sections.header.blocks.mega_menu_common.card_style.options__3.label" }
+            {
+              "value": "default",
+              "label": "t:sections.header.blocks.mega_menu_common.card_style.options__1.label"
+            },
+            {
+              "value": "elevated",
+              "label": "t:sections.header.blocks.mega_menu_common.card_style.options__2.label"
+            },
+            {
+              "value": "glass",
+              "label": "t:sections.header.blocks.mega_menu_common.card_style.options__3.label"
+            }
           ]
         },
         {
@@ -2072,16 +2234,25 @@
           "label": "t:sections.header.blocks.mega_menu_common.image_ratio.label",
           "default": "portrait",
           "options": [
-            { "value": "adapt", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label" },
-            { "value": "portrait", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label" },
-            { "value": "square", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label" }
+            {
+              "value": "adapt",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label"
+            },
+            {
+              "value": "portrait",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label"
+            },
+            {
+              "value": "square",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label"
+            }
           ]
         },
         {
           "type": "range",
           "id": "column_span",
           "min": 1,
-          "max": 2,
+          "max": 3,
           "step": 1,
           "label": "t:sections.header.blocks.mega_menu_common.column_span.label",
           "default": 1
@@ -2132,7 +2303,7 @@
           "type": "range",
           "id": "column_span",
           "min": 1,
-          "max": 2,
+          "max": 3,
           "step": 1,
           "label": "t:sections.header.blocks.mega_menu_common.column_span.label",
           "default": 1
@@ -2175,9 +2346,18 @@
           "label": "t:sections.header.blocks.mega_menu_common.card_style.label",
           "default": "default",
           "options": [
-            { "value": "default", "label": "t:sections.header.blocks.mega_menu_common.card_style.options__1.label" },
-            { "value": "elevated", "label": "t:sections.header.blocks.mega_menu_common.card_style.options__2.label" },
-            { "value": "glass", "label": "t:sections.header.blocks.mega_menu_common.card_style.options__3.label" }
+            {
+              "value": "default",
+              "label": "t:sections.header.blocks.mega_menu_common.card_style.options__1.label"
+            },
+            {
+              "value": "elevated",
+              "label": "t:sections.header.blocks.mega_menu_common.card_style.options__2.label"
+            },
+            {
+              "value": "glass",
+              "label": "t:sections.header.blocks.mega_menu_common.card_style.options__3.label"
+            }
           ]
         },
         {
@@ -2186,16 +2366,25 @@
           "label": "t:sections.header.blocks.mega_menu_common.image_ratio.label",
           "default": "portrait",
           "options": [
-            { "value": "adapt", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label" },
-            { "value": "portrait", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label" },
-            { "value": "square", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label" }
+            {
+              "value": "adapt",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label"
+            },
+            {
+              "value": "portrait",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label"
+            },
+            {
+              "value": "square",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label"
+            }
           ]
         },
         {
           "type": "range",
           "id": "column_span",
           "min": 1,
-          "max": 2,
+          "max": 3,
           "step": 1,
           "label": "t:sections.header.blocks.mega_menu_common.column_span.label",
           "default": 1
@@ -2220,7 +2409,7 @@
         {
           "type": "collection",
           "id": "collection",
-          "label": "t:sections.header.blocks.mega_menu_featured_collection.settings.collection.label"
+          "label": "t:sections.header.blocks.mm_featured_collection.settings.collection.label"
         },
         {
           "type": "select",
@@ -2228,16 +2417,25 @@
           "label": "t:sections.header.blocks.mega_menu_common.image_ratio.label",
           "default": "portrait",
           "options": [
-            { "value": "adapt", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label" },
-            { "value": "portrait", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label" },
-            { "value": "square", "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label" }
+            {
+              "value": "adapt",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__1.label"
+            },
+            {
+              "value": "portrait",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__2.label"
+            },
+            {
+              "value": "square",
+              "label": "t:sections.header.blocks.mega_menu_common.image_ratio.options__3.label"
+            }
           ]
         },
         {
           "type": "range",
           "id": "column_span",
           "min": 1,
-          "max": 2,
+          "max": 3,
           "step": 1,
           "label": "t:sections.header.blocks.mega_menu_common.column_span.label",
           "default": 1
@@ -2268,7 +2466,7 @@
           "type": "range",
           "id": "column_span",
           "min": 1,
-          "max": 2,
+          "max": 3,
           "step": 1,
           "label": "t:sections.header.blocks.mega_menu_common.column_span.label",
           "default": 1

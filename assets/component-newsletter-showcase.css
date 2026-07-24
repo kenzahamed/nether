@@ -57,14 +57,30 @@ nether-newsletter {
 
 /* ── Layout: centered signup ───────────────────────────────────────────────── */
 
+.nether-newsletter .nether-newsletter__body[data-nether-hero-content] {
+  display: flex;
+  align-items: var(--nether-hero-justify, center);
+  justify-content: var(--nether-hero-content-align, center);
+  width: 100%;
+  min-height: inherit;
+  box-sizing: border-box;
+}
+
 .nether-newsletter--layout-centered_signup .nether-newsletter__body {
-  max-width: min(var(--nether-hero-content-width, 72rem), 72rem);
+  max-width: none;
   margin-inline: auto;
 }
 
 .nether-newsletter--layout-centered_signup .nether-newsletter__blocks {
+  width: 100%;
+  max-width: var(--nether-hero-content-width, 72rem);
   text-align: center;
   align-items: center;
+}
+
+.nether-newsletter .nether-newsletter__body[data-nether-hero-content] .nether-newsletter__blocks {
+  width: 100%;
+  max-width: var(--nether-hero-content-width, 72rem);
 }
 
 /* ── Layout: magazine ──────────────────────────────────────────────────────── */

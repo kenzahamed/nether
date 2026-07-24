@@ -25,6 +25,7 @@ class NetherMobileDrawer extends HTMLElement {
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
     this.handleSubmenuToggle = this.handleSubmenuToggle.bind(this);
     this.handleDrawerSearch = this.handleDrawerSearch.bind(this);
+    this.handleSectionLoad = this.handleSectionLoad.bind(this);
   }
 
   connectedCallback() {
@@ -57,7 +58,7 @@ class NetherMobileDrawer extends HTMLElement {
     }
 
     if (window.Shopify?.designMode) {
-      document.addEventListener('shopify:section:load', this.handleSectionLoad.bind(this));
+      document.addEventListener('shopify:section:load', this.handleSectionLoad);
     }
   }
 
@@ -71,6 +72,9 @@ class NetherMobileDrawer extends HTMLElement {
     this.panel?.removeEventListener('touchstart', this.handleTouchStart);
     this.panel?.removeEventListener('touchmove', this.handleTouchMove);
     this.panel?.removeEventListener('touchend', this.handleTouchEnd);
+    if (window.Shopify?.designMode) {
+      document.removeEventListener('shopify:section:load', this.handleSectionLoad);
+    }
     this.killMotionTweens();
   }
 

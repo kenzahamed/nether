@@ -33,8 +33,8 @@ Theme Editor section: nether-recommendations
 Existing commerce surfaces (extended, not replaced)
   ├── PDP complementary / related        → framework classes + assets
   ├── Cart recommendations               → data-product-id fix + framework hooks
-  ├── Collection page                    → recommendations_placeholder
-  ├── Wishlist / Compare pages           → recommendations_placeholder
+  ├── Collection page                    → recommend_placeholder
+  ├── Wishlist / Compare pages           → recommend_placeholder
   ├── Product / Collection showcases     → integration note + extension host
   ├── Quick View                         → existing recommendations extension
   └── Search drawer                      → hidden recommendations placeholder
@@ -120,10 +120,10 @@ Modules reuse Button, Badge, Icon, Typography, Glass, Gradient, Shadow, Radius, 
 | `snippets/nether-cart-recommendations.liquid` | Framework hooks + `data-product-id` fix |
 | `snippets/nether-product-page-related.liquid` | Framework classes/assets; preserves CE |
 | `snippets/nether-product-page-complementary.liquid` | Framework hooks + `product_view_context` |
-| `snippets/nether-collection-page-block.liquid` | `recommendations_placeholder` module |
+| `snippets/nether-collection-page-block.liquid` | `recommend_placeholder` module |
 | `snippets/nether-collection-page-extensions.liquid` | Recommendations extension case |
 | `snippets/nether-compare-block.liquid` | Composes recommendations extensions |
-| `snippets/nether-wishlist-block.liquid` | `recommendations_placeholder` |
+| `snippets/nether-wishlist-block.liquid` | `recommend_placeholder` |
 | `snippets/nether-search-drawer.liquid` | Hidden search recommendations placeholder |
 | `sections/nether-collection-page.liquid` | Recommendations placeholder block schema |
 | `sections/nether-wishlist-page.liquid` | Recommendations placeholder block schema |
@@ -206,16 +206,16 @@ Theme Editor controls on **Nether recommendations**:
 
 | Hook | Mechanism |
 |------|-----------|
-| Frequently bought together | Source option + `frequently_bought_placeholder` block |
+| Frequently bought together | Source option + `freq_bought_placeholder` block |
 | Recently viewed | Extension + QV / collection hooks |
 | Recently purchased | Extension block |
 | Recommended for you | Extension + search / wishlist / compare hosts |
 | AI recommendations | `ai_placeholder` |
-| Personalization | `personalization_placeholder` |
+| Personalization | `personalize_placeholder` |
 | Analytics | `analytics_placeholder` + `NetherRecommendationsAPI.emit` |
 | Merchandising rules | `merchandising_placeholder` |
 | A/B testing | `ab_testing_placeholder` |
-| Collection cards | `collection_cards_placeholder` |
+| Collection cards | `coll_cards_placeholder` |
 | Filters | Toolbar filter placeholder (`data-nether-recommendations-filter-placeholder`) |
 | JS adapters | `window.NetherRecommendationsAPI.extend()` / custom events `nether:recommendations:*` |
 

@@ -19,16 +19,16 @@
   {%- when 'merchant_content' -%}
     {% render 'nether-recommendations-merchant-content', block: block %}
 
-  {%- when 'frequently_bought_placeholder',
-    'recently_viewed_placeholder',
-    'recently_purchased_placeholder',
+  {%- when 'freq_bought_placeholder',
+    'recent_view_placeholder',
+    'recent_buy_placeholder',
     'for_you_placeholder',
     'ai_placeholder',
-    'personalization_placeholder',
+    'personalize_placeholder',
     'analytics_placeholder',
     'merchandising_placeholder',
     'ab_testing_placeholder',
-    'collection_cards_placeholder'
+    'coll_cards_placeholder'
   -%}
     {% render 'nether-recommendations-extensions', block: block, section: section %}
 {%- endcase -%}

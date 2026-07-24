@@ -24,8 +24,16 @@
   assign wishlist_button_style = button_style | default: 'ghost'
   assign wishlist_context = context | default: 'product'
 
-  assign add_label = label_add | default: 'sections.nether_wishlist.actions.add' | t
-  assign remove_label = label_remove | default: 'sections.nether_wishlist.actions.remove' | t
+  if label_add != blank
+    assign add_label = label_add
+  else
+    assign add_label = 'sections.nether_wishlist.actions.add' | t
+  endif
+  if label_remove != blank
+    assign remove_label = label_remove
+  else
+    assign remove_label = 'sections.nether_wishlist.actions.remove' | t
+  endif
 
   assign icon_size = 'md'
   if wishlist_size == 'sm'

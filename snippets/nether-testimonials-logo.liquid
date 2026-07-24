@@ -16,37 +16,37 @@
   assign logo_link = block.settings.link
 -%}
 
-{%- if logo_image != blank or logo_label != blank -%}
-  <div
-    class="nether-testimonials__logo-item"
-    {{ motion_attr }}
-    data-nether-testimonials-logo
-    data-nether-testimonials-role="logo"
-    {{ block.shopify_attributes }}
-  >
-    {%- if logo_link != blank -%}
-      <a class="nether-testimonials__logo-link" href="{{ logo_link }}" aria-label="{{ logo_label | default: logo_image.alt | escape }}">
-    {%- endif -%}
+<div
+  class="nether-testimonials__logo-item{% if logo_image == blank and logo_label == blank %} nether-testimonials__logo-item--placeholder{% endif %}"
+  {{ motion_attr }}
+  data-nether-testimonials-logo
+  data-nether-testimonials-role="logo"
+  {{ block.shopify_attributes }}
+>
+  {%- if logo_link != blank -%}
+    <a class="nether-testimonials__logo-link" href="{{ logo_link }}" aria-label="{{ logo_label | default: logo_image.alt | escape }}">
+  {%- endif -%}
 
-    {%- if logo_image != blank -%}
-      {%- liquid
-        assign logo_alt = logo_label | default: logo_image.alt | escape
-      -%}
-      {{
-        logo_image
-        | image_url: width: 320
-        | image_tag:
-          loading: 'lazy',
-          widths: '120, 180, 240, 320',
-          alt: logo_alt,
-          class: 'nether-testimonials__logo-image'
-      }}
-    {%- elsif logo_label != blank -%}
-      <span class="nether-testimonials__logo-label type-label">{{ logo_label | escape }}</span>
-    {%- endif -%}
+  {%- if logo_image != blank -%}
+    {%- liquid
+      assign logo_alt = logo_label | default: logo_image.alt | escape
+    -%}
+    {{
+      logo_image
+      | image_url: width: 320
+      | image_tag:
+        loading: 'lazy',
+        widths: '120, 180, 240, 320',
+        alt: logo_alt,
+        class: 'nether-testimonials__logo-image'
+    }}
+  {%- elsif logo_label != blank -%}
+    <span class="nether-testimonials__logo-label type-label">{{ logo_label | escape }}</span>
+  {%- else -%}
+    {{ 'image' | placeholder_svg_tag: 'placeholder-svg nether-testimonials__logo-placeholder' }}
+  {%- endif -%}
 
-    {%- if logo_link != blank -%}
-      </a>
-    {%- endif -%}
-  </div>
-{%- endif -%}
+  {%- if logo_link != blank -%}
+    </a>
+  {%- endif -%}
+</div>

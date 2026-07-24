@@ -13,7 +13,13 @@
 
 {%- liquid
   assign summary_layout = layout | default: 'stack'
-  assign region_label = label | default: heading | default: 'sections.nether_commerce.summary.label' | t
+  if label != blank
+    assign region_label = label
+  elsif heading != blank
+    assign region_label = heading
+  else
+    assign region_label = 'sections.nether_commerce.summary.label' | t
+  endif
 -%}
 
 <section
