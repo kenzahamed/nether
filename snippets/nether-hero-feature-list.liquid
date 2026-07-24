@@ -1,6 +1,11 @@
 {% comment %}
   Renders Nether Premium Hero feature list block.
 
+  Shared contract (dual-read for framework schema drift):
+  - feature_N_text + feature_N_icon (Hero / Banner / Content)
+  - feature_N (CTA shorthand — text only)
+  - heading (optional block heading when present)
+
   Accepts:
   - block: {Object} Theme Editor block (required)
 
@@ -13,19 +18,19 @@
   for i in (1..4)
     case i
       when 1
-        if block.settings.feature_1_text != blank
+        if block.settings.feature_1_text != blank or block.settings.feature_1 != blank
           assign has_features = true
         endif
       when 2
-        if block.settings.feature_2_text != blank
+        if block.settings.feature_2_text != blank or block.settings.feature_2 != blank
           assign has_features = true
         endif
       when 3
-        if block.settings.feature_3_text != blank
+        if block.settings.feature_3_text != blank or block.settings.feature_3 != blank
           assign has_features = true
         endif
       when 4
-        if block.settings.feature_4_text != blank
+        if block.settings.feature_4_text != blank or block.settings.feature_4 != blank
           assign has_features = true
         endif
     endcase
@@ -33,35 +38,42 @@
 -%}
 
 {%- if has_features -%}
-  <ul class="nether-hero__features" data-nether-hero-animate data-nether-hero-role="features" role="list" {{ block.shopify_attributes }}>
-    {%- for i in (1..4) -%}
-      {%- liquid
-        case i
-          when 1
-            assign feature_text = block.settings.feature_1_text
-            assign feature_icon = block.settings.feature_1_icon
-          when 2
-            assign feature_text = block.settings.feature_2_text
-            assign feature_icon = block.settings.feature_2_icon
-          when 3
-            assign feature_text = block.settings.feature_3_text
-            assign feature_icon = block.settings.feature_3_icon
-          when 4
-            assign feature_text = block.settings.feature_4_text
-            assign feature_icon = block.settings.feature_4_icon
-        endcase
-      -%}
+  <div class="nether-hero__features-wrap" {{ block.shopify_attributes }}>
+    {%- if block.settings.heading != blank -%}
+      <p class="nether-hero__features-heading type-heading-sm" data-nether-hero-animate data-nether-hero-role="features-heading">
+        {{ block.settings.heading | escape }}
+      </p>
+    {%- endif -%}
+    <ul class="nether-hero__features" data-nether-hero-animate data-nether-hero-role="features" role="list">
+      {%- for i in (1..4) -%}
+        {%- liquid
+          case i
+            when 1
+              assign feature_text = block.settings.feature_1_text | default: block.settings.feature_1
+              assign feature_icon = block.settings.feature_1_icon
+            when 2
+              assign feature_text = block.settings.feature_2_text | default: block.settings.feature_2
+              assign feature_icon = block.settings.feature_2_icon
+            when 3
+              assign feature_text = block.settings.feature_3_text | default: block.settings.feature_3
+              assign feature_icon = block.settings.feature_3_icon
+            when 4
+              assign feature_text = block.settings.feature_4_text | default: block.settings.feature_4
+              assign feature_icon = block.settings.feature_4_icon
+          endcase
+        -%}
 
-      {%- if feature_text != blank -%}
-        <li class="nether-hero__feature">
-          {%- if feature_icon != blank and feature_icon != 'none' -%}
-            <span class="nether-hero__feature-icon">
-              {%- render 'icon', icon: feature_icon, size: 'sm', color: 'link' -%}
-            </span>
-          {%- endif -%}
-          <span class="nether-hero__feature-text type-body-sm">{{ feature_text | escape }}</span>
-        </li>
-      {%- endif -%}
-    {%- endfor -%}
-  </ul>
+        {%- if feature_text != blank -%}
+          <li class="nether-hero__feature">
+            {%- if feature_icon != blank and feature_icon != 'none' -%}
+              <span class="nether-hero__feature-icon">
+                {%- render 'icon', icon: feature_icon, size: 'sm', color: 'link' -%}
+              </span>
+            {%- endif -%}
+            <span class="nether-hero__feature-text type-body-sm">{{ feature_text | escape }}</span>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
 {%- endif -%}

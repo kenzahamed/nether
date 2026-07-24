@@ -588,6 +588,27 @@ nether-compare-button {
 }
 
 /* -----------------------------------------------------------------------------
+ * Merchant glass / gradient bindings
+ * -------------------------------------------------------------------------- */
+
+.nether-compare-page--glass-enabled .nether-compare__header,
+.nether-compare-page--glass-enabled .nether-compare-table,
+.nether-compare-page--glass-enabled .nether-compare__merchant-content {
+  backdrop-filter: blur(var(--glass-blur-medium, 1.2rem));
+  background: rgba(var(--color-background), var(--glass-bg-opacity-medium, 0.55));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-medium, 0.14));
+  border-radius: var(--nether-compare-radius, var(--radius-md, 0.8rem));
+  padding: 1.2rem;
+}
+
+.nether-compare-page--gradient-enabled .nether-compare__heading {
+  background-image: var(--gradient-base-background-1, linear-gradient(90deg, rgb(var(--color-foreground)), rgba(var(--color-foreground), 0.55)));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* -----------------------------------------------------------------------------
  * Reduced motion
  * -------------------------------------------------------------------------- */
 

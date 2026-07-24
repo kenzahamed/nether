@@ -1,6 +1,10 @@
 {% comment %}
   Nether shared multi-stat core (up to 3 value/label pairs).
 
+  Shared contract (dual-read for framework schema drift):
+  - Multi: stat_N_value / stat_N_label (Hero / Content)
+  - Single: value / label / caption (CTA / Newsletter) — maps to stat slot 1
+
   Accepts (normalized only — wrappers own setting IDs / locale keys):
   - block: {Object} Theme Editor block (required)
   - class_prefix: {String} BEM block prefix (required), e.g. nether-hero
@@ -20,6 +24,7 @@
 {%- liquid
   assign value_type_class = value_type_class | default: 'type-display-sm'
   assign has_stats = false
+  assign uses_single_stat = false
 
   for i in (1..3)
     case i
@@ -37,6 +42,13 @@
         endif
     endcase
   endfor
+
+  if has_stats == false
+    if block.settings.value != blank or block.settings.label != blank or block.settings.caption != blank
+      assign has_stats = true
+      assign uses_single_stat = true
+    endif
+  endif
 -%}
 
 {%- if has_stats -%}
@@ -46,31 +58,45 @@
     {% if aria_label != blank %}aria-label="{{ aria_label | escape }}"{% endif %}
     {% if attributes != blank %}{{ attributes }}{% endif %}
   >
-    {%- for i in (1..3) -%}
-      {%- liquid
-        case i
-          when 1
-            assign stat_value = block.settings.stat_1_value
-            assign stat_label = block.settings.stat_1_label
-          when 2
-            assign stat_value = block.settings.stat_2_value
-            assign stat_label = block.settings.stat_2_label
-          when 3
-            assign stat_value = block.settings.stat_3_value
-            assign stat_label = block.settings.stat_3_label
-        endcase
-      -%}
+    {%- if uses_single_stat -%}
+      <div class="{{ class_prefix }}__stat">
+        {%- if block.settings.value != blank -%}
+          <p class="{{ class_prefix }}__stat-value {{ value_type_class }}">{{ block.settings.value | escape }}</p>
+        {%- endif -%}
+        {%- if block.settings.label != blank -%}
+          <p class="{{ class_prefix }}__stat-label type-caption">{{ block.settings.label | escape }}</p>
+        {%- endif -%}
+        {%- if block.settings.caption != blank -%}
+          <p class="{{ class_prefix }}__stat-caption type-caption">{{ block.settings.caption | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      {%- for i in (1..3) -%}
+        {%- liquid
+          case i
+            when 1
+              assign stat_value = block.settings.stat_1_value
+              assign stat_label = block.settings.stat_1_label
+            when 2
+              assign stat_value = block.settings.stat_2_value
+              assign stat_label = block.settings.stat_2_label
+            when 3
+              assign stat_value = block.settings.stat_3_value
+              assign stat_label = block.settings.stat_3_label
+          endcase
+        -%}
 
-      {%- if stat_value != blank or stat_label != blank -%}
-        <div class="{{ class_prefix }}__stat">
-          {%- if stat_value != blank -%}
-            <p class="{{ class_prefix }}__stat-value {{ value_type_class }}">{{ stat_value | escape }}</p>
-          {%- endif -%}
-          {%- if stat_label != blank -%}
-            <p class="{{ class_prefix }}__stat-label type-caption">{{ stat_label | escape }}</p>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-    {%- endfor -%}
+        {%- if stat_value != blank or stat_label != blank -%}
+          <div class="{{ class_prefix }}__stat">
+            {%- if stat_value != blank -%}
+              <p class="{{ class_prefix }}__stat-value {{ value_type_class }}">{{ stat_value | escape }}</p>
+            {%- endif -%}
+            {%- if stat_label != blank -%}
+              <p class="{{ class_prefix }}__stat-label type-caption">{{ stat_label | escape }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
   </div>
 {%- endif -%}

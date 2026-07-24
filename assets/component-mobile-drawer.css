@@ -57,6 +57,14 @@ nether-mobile-drawer {
   overflow: hidden;
 }
 
+.nether-mobile-drawer--position-left.is-enabled .nether-mobile-drawer__panel {
+  left: 0;
+  right: auto;
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  border-left: 0;
+  transform: translateX(-100%);
+}
+
 .nether-mobile-drawer--position-right.is-enabled .nether-mobile-drawer__panel {
   left: auto;
   right: 0;

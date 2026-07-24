@@ -316,11 +316,26 @@ nether-hero {
   margin: 0;
 }
 
-.nether-hero__stat-label {
+.nether-hero__stat-label,
+.nether-hero__stat-caption {
   margin: 0.4rem 0 0;
 }
 
+.nether-hero__stat-caption {
+  opacity: 0.72;
+}
+
 /* ── Feature list ─────────────────────────────────────────────────────────────── */
+
+.nether-hero__features-wrap {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+}
+
+.nether-hero__features-heading {
+  margin: 0;
+}
 
 .nether-hero__features {
   display: grid;

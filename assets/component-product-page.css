@@ -305,3 +305,20 @@
   opacity: 1 !important;
   transform: none !important;
 }
+
+/* Merchant glass / gradient section bindings */
+.nether-product-page--glass-enabled .nether-product-page__module,
+.nether-product-page--glass-enabled .nether-product-page__sticky-summary {
+  backdrop-filter: blur(var(--glass-blur-medium, 1.2rem));
+  background: rgba(var(--color-background), var(--glass-bg-opacity-medium, 0.55));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-medium, 0.14));
+  border-radius: var(--radius-md, 0.8rem);
+}
+
+.nether-product-page--gradient-enabled .nether-product-page__title,
+.nether-product-page--gradient-enabled .product__title {
+  background-image: var(--gradient-base-background-1, linear-gradient(90deg, rgb(var(--color-foreground)), rgba(var(--color-foreground), 0.55)));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}

@@ -371,6 +371,17 @@ nether-commerce-meter {
   border-radius: var(--nether-radius-md, 0.8rem);
 }
 
+/* Merchant section-level glass enable binding */
+.nether-commerce--glass .nether-commerce__header,
+.nether-commerce--glass .nether-commerce__info-inner,
+.nether-commerce--glass .nether-commerce__notice,
+.nether-commerce--glass .nether-commerce__trust {
+  backdrop-filter: blur(var(--glass-blur-medium, 1.2rem));
+  background: rgba(var(--color-background), var(--glass-bg-opacity-medium, 0.55));
+  border: 0.1rem solid rgba(var(--color-foreground), var(--glass-border-opacity-medium, 0.14));
+  border-radius: var(--nether-radius-md, 0.8rem);
+}
+
 /* Motion initial state helpers (GSAP takes over when available) */
 [data-nether-commerce-animate] {
   will-change: opacity, transform;
