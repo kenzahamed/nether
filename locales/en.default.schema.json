@@ -243,7 +243,7 @@
     "nether_motion": {
       "name": "Nether Motion",
       "settings": {
-        "paragraph": "Global motion framework settings. Components adopt these values through the Nether Motion Engine — not all sections are wired yet.",
+        "paragraph": "Global motion defaults for the Nether Motion Engine. Section-level animation controls can still override entrance style and speed.",
         "nether_motion_enabled": {
           "label": "Enable motion",
           "info": "Master switch for Nether Motion Engine animations"
@@ -5018,7 +5018,8 @@
           "label": "Accessibility label"
         },
         "nether_enable_sticky_summary": {
-          "label": "Enable sticky purchase summary"
+          "label": "Sticky buy box (Nether)",
+          "info": "Keeps the Nether buy box / purchase summary sticky while scrolling on large screens."
         },
         "nether_content_gap": {
           "label": "Content spacing"
@@ -7793,7 +7794,55 @@
       "badge_image": "Badge image",
       "exclusive": "Exclusive",
       "nether_brand_logos": "Nether brand logos",
-      "nether_statistics": "Nether statistics"
+      "nether_statistics": "Nether statistics",
+      "header_media": "Media",
+      "header_section_media": "Section media",
+      "header_visual_features": "Visual features",
+      "header_motion": "Motion",
+      "header_responsive": "Responsive layouts",
+      "header_color_scheme": "Color scheme",
+      "header_integrations": "Integrations",
+      "header_product_features": "Product features",
+      "header_call_to_action": "Call to action",
+      "header_content": "Content",
+      "framework_banner": "Nether banner framework",
+      "framework_cta": "Nether CTA & conversion framework",
+      "framework_faq": "Nether FAQ & knowledge framework",
+      "framework_newsletter": "Nether Newsletter & lead generation framework",
+      "framework_product": "Nether product framework",
+      "framework_testimonials": "Nether testimonials framework",
+      "heading_h2": "H2",
+      "heading_h3": "H3",
+      "info_layout": "Chooses the primary composition. Layout-specific controls appear when relevant.",
+      "info_content_position": "Places content inside the section frame using a nine-point grid.",
+      "info_content_alignment": "Aligns text and inline content left, center, or right.",
+      "info_split_media_position": "Applies to split compositions. Moves media to the left or right side.",
+      "info_heading_level": "Semantic heading tag for accessibility and SEO. Visual size is controlled separately.",
+      "info_aria_label": "Optional accessible name announced by screen readers. Leave blank to use the heading.",
+      "info_image_ratio": "Controls media crop ratio for cards and gallery items.",
+      "info_card_style": "Visual treatment applied to cards in this section.",
+      "info_enable_glass": "Applies a frosted glass surface to content panels.",
+      "info_glass_style": "Available when glass is enabled. Controls blur strength and translucency.",
+      "info_enable_gradient": "Adds a branded gradient overlay for depth and text contrast.",
+      "info_gradient_style": "Available when gradient is enabled. Changes overlay character.",
+      "info_enable_overlay": "Darkens media so text stays readable over imagery.",
+      "info_overlay_opacity": "Available when overlay is enabled. Higher values increase contrast.",
+      "info_animation_style": "Entrance animation for this section. Choose None to disable motion here.",
+      "info_animation_speed": "Available when an animation style is active. Controls animation duration.",
+      "info_parallax": "Subtle media parallax on scroll. Respects reduced-motion preferences.",
+      "info_floating_card": "Lifts content onto an elevated floating panel.",
+      "info_responsive_desktop": "Optional desktop override. Default inherits the primary layout.",
+      "info_responsive_tablet": "Optional tablet override for mid-width viewports.",
+      "info_responsive_mobile": "Optional mobile override for phones.",
+      "info_media_type": "Choose image, video, or background video. Related media fields appear to match.",
+      "info_video_fields": "Available when media type includes video.",
+      "info_image_fields": "Available when media type uses an image (including video fallbacks).",
+      "info_divider_style": "Available when a top or bottom section divider is enabled.",
+      "sticky_buy_box": "Sticky buy box (Nether)",
+      "sticky_info_column": "Sticky info column (gallery)",
+      "info_sticky_summary": "Keeps the buy box / order summary sticky while scrolling on large screens.",
+      "info_sticky_info_column": "Sticky product info column paired with the media gallery (Dawn column sticky). Distinct from Nether sticky buy box.",
+      "info_collection_layout_only": "Used for Collection layout — provides fallback image and link."
     }
   }
 }

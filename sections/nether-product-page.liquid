@@ -610,7 +610,8 @@
             }
           ],
           "default": "square",
-          "label": "t:nether.common.image_ratio"
+          "label": "t:nether.common.image_ratio",
+          "info": "t:nether.common.info_image_ratio"
         },
         {
           "type": "checkbox",
@@ -1376,7 +1377,8 @@
               "value": "portrait",
               "label": "t:nether.common.portrait"
             }
-          ]
+          ],
+          "info": "t:nether.common.info_image_ratio"
         },
         {
           "type": "select",
@@ -1559,18 +1561,28 @@
           "value": "editorial",
           "label": "t:nether.common.editorial"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_layout"
     },
     {
       "type": "text",
       "id": "nether_aria_label",
-      "label": "t:sections.nether_product_page.settings.nether_aria_label.label"
+      "label": "t:sections.nether_product_page.settings.nether_aria_label.label",
+      "info": "t:nether.common.info_aria_label"
     },
     {
       "type": "checkbox",
       "id": "nether_enable_sticky_summary",
       "default": true,
-      "label": "t:sections.nether_product_page.settings.nether_enable_sticky_summary.label"
+      "label": "t:nether.common.sticky_buy_box",
+      "info": "t:nether.common.info_sticky_summary"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_info",
+      "default": true,
+      "label": "t:nether.common.sticky_info_column",
+      "info": "t:nether.common.info_sticky_info_column"
     },
     {
       "type": "range",
@@ -1595,12 +1607,6 @@
     {
       "type": "header",
       "content": "t:sections.main-product.settings.header.content"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_sticky_info",
-      "default": true,
-      "label": "t:sections.main-product.settings.enable_sticky_info.label"
     },
     {
       "type": "select",
@@ -1666,7 +1672,8 @@
         }
       ],
       "default": "stacked",
-      "label": "t:sections.main-product.settings.gallery_layout.label"
+      "label": "t:sections.main-product.settings.gallery_layout.label",
+      "info": "t:nether.common.info_layout"
     },
     {
       "type": "select",
@@ -1788,13 +1795,15 @@
       "type": "checkbox",
       "id": "nether_enable_glass",
       "default": false,
-      "label": "t:sections.nether_product_page.settings.nether_enable_glass.label"
+      "label": "t:sections.nether_product_page.settings.nether_enable_glass.label",
+      "info": "t:nether.common.info_enable_glass"
     },
     {
       "type": "checkbox",
       "id": "nether_enable_gradient",
       "default": false,
-      "label": "t:sections.nether_product_page.settings.nether_enable_gradient.label"
+      "label": "t:sections.nether_product_page.settings.nether_enable_gradient.label",
+      "info": "t:nether.common.info_enable_gradient"
     },
     {
       "type": "checkbox",
@@ -1822,7 +1831,9 @@
           "value": "fade",
           "label": "t:nether.common.fade"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_divider_style",
+      "visible_if": "{{ section.settings.nether_show_top_divider or section.settings.nether_show_bottom_divider }}"
     },
     {
       "type": "header",
@@ -1854,7 +1865,8 @@
           "value": "gallery_reveal",
           "label": "t:nether.common.gallery_reveal"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_animation_style"
     },
     {
       "type": "select",
@@ -1874,7 +1886,9 @@
           "value": "fast",
           "label": "t:nether.common.fast"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_animation_speed",
+      "visible_if": "{{ section.settings.nether_animation_style != 'none' }}"
     },
     {
       "type": "header",
@@ -1894,7 +1908,8 @@
           "value": "wide",
           "label": "t:nether.common.wide"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_responsive_desktop"
     },
     {
       "type": "select",
@@ -1910,7 +1925,8 @@
           "value": "stacked",
           "label": "t:nether.common.stacked"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_responsive_tablet"
     },
     {
       "type": "select",
@@ -1930,7 +1946,8 @@
           "value": "centered",
           "label": "t:nether.common.centered"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_responsive_mobile"
     },
     {
       "type": "color_scheme",

@@ -97,7 +97,8 @@
       "type": "text",
       "id": "aria_label",
       "label": "t:sections.nether_commerce.settings.aria_label.label",
-      "default": "Commerce information"
+      "default": "Commerce information",
+      "info": "t:nether.common.info_aria_label"
     },
     {
       "type": "inline_richtext",
@@ -151,7 +152,8 @@
           "value": "grid",
           "label": "t:sections.nether_commerce.settings.trust_layout.options.grid"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_layout"
     },
     {
       "type": "select",
@@ -264,7 +266,8 @@
           "value": "compact",
           "label": "t:nether.common.compact"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_layout"
     },
     {
       "type": "select",
@@ -280,7 +283,8 @@
           "value": "compact",
           "label": "t:nether.common.compact"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_layout"
     },
     {
       "type": "select",
@@ -296,7 +300,8 @@
           "value": "compact",
           "label": "t:nether.common.compact"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_layout"
     },
     {
       "type": "checkbox",
@@ -308,7 +313,8 @@
       "type": "checkbox",
       "id": "enable_glass",
       "label": "t:sections.nether_commerce.settings.enable_glass.label",
-      "default": false
+      "default": false,
+      "info": "t:nether.common.info_enable_glass"
     },
     {
       "type": "header",
@@ -336,7 +342,8 @@
           "value": "stagger",
           "label": "t:nether.common.stagger"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_animation_style"
     },
     {
       "type": "range",
@@ -346,7 +353,9 @@
       "step": 0.1,
       "unit": "s",
       "label": "t:sections.nether_commerce.settings.animation_speed.label",
-      "default": 0.5
+      "default": 0.5,
+      "info": "t:nether.common.info_animation_speed",
+      "visible_if": "{{ section.settings.animation_style != 'none' }}"
     },
     {
       "type": "color_scheme",
@@ -404,7 +413,8 @@
               "value": "grid",
               "label": "t:nether.common.grid"
             }
-          ]
+          ],
+          "info": "t:nether.common.info_layout"
         },
         {
           "type": "select",
@@ -1194,7 +1204,8 @@
               "value": "split",
               "label": "t:nether.common.split"
             }
-          ]
+          ],
+          "info": "t:nether.common.info_layout"
         },
         {
           "type": "checkbox",

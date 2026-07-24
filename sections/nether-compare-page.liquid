@@ -169,7 +169,8 @@
           "value": "editorial",
           "label": "t:sections.nether_compare_page.settings.nether_layout.options__3.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_layout"
     },
     {
       "type": "select",
@@ -254,13 +255,15 @@
       "type": "checkbox",
       "id": "nether_enable_glass",
       "label": "t:sections.nether_compare_page.settings.nether_enable_glass.label",
-      "default": false
+      "default": false,
+      "info": "t:nether.common.info_enable_glass"
     },
     {
       "type": "checkbox",
       "id": "nether_enable_gradient",
       "label": "t:sections.nether_compare_page.settings.nether_enable_gradient.label",
-      "default": false
+      "default": false,
+      "info": "t:nether.common.info_enable_gradient"
     },
     {
       "type": "header",
@@ -288,7 +291,8 @@
           "value": "stagger",
           "label": "t:sections.nether_compare_page.settings.nether_animation_style.options__4.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_animation_style"
     },
     {
       "type": "select",
@@ -308,7 +312,9 @@
           "value": "slow",
           "label": "t:sections.nether_compare_page.settings.nether_animation_speed.options__3.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_animation_speed",
+      "visible_if": "{{ section.settings.nether_animation_style != 'none' }}"
     },
     {
       "type": "header",
@@ -328,7 +334,8 @@
           "value": "stacked",
           "label": "t:sections.nether_compare_page.settings.nether_layout_desktop.options__2.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_responsive_desktop"
     },
     {
       "type": "select",
@@ -344,7 +351,8 @@
           "value": "stacked",
           "label": "t:sections.nether_compare_page.settings.nether_layout_tablet.options__2.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_responsive_tablet"
     },
     {
       "type": "select",
@@ -360,7 +368,8 @@
           "value": "compact",
           "label": "t:sections.nether_compare_page.settings.nether_layout_mobile.options__2.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_responsive_mobile"
     },
     {
       "type": "color_scheme",

@@ -254,7 +254,8 @@
           "value": "minimal",
           "label": "t:sections.nether_content.settings.nether_content_layout.options__10.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_layout"
     },
     {
       "type": "select",
@@ -322,7 +323,8 @@
           "value": "bottom-right",
           "label": "t:sections.nether_content.settings.nether_content_position.options__9.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_content_position"
     },
     {
       "type": "select",
@@ -342,7 +344,8 @@
           "value": "right",
           "label": "t:sections.nether_content.settings.nether_content_alignment.options__3.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_content_alignment"
     },
     {
       "type": "select",
@@ -374,13 +377,15 @@
           "value": "h3",
           "label": "t:sections.nether_content.settings.nether_content_heading_level.options__2.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_heading_level"
     },
     {
       "type": "text",
       "id": "nether_content_aria_label",
       "label": "t:sections.nether_content.settings.nether_content_aria_label.label",
-      "default": "t:sections.nether_content.settings.nether_content_aria_label.default"
+      "default": "t:sections.nether_content.settings.nether_content_aria_label.default",
+      "info": "t:nether.common.info_aria_label"
     },
     {
       "type": "range",
@@ -448,23 +453,29 @@
           "value": "background_video",
           "label": "t:sections.nether_content.settings.nether_content_media_type.options__3.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_media_type"
     },
     {
       "type": "image_picker",
       "id": "nether_content_image_desktop",
-      "label": "t:sections.nether_content.settings.nether_content_image_desktop.label"
+      "label": "t:sections.nether_content.settings.nether_content_image_desktop.label",
+      "visible_if": "{{ section.settings.nether_content_media_type == 'image' or section.settings.nether_content_media_type == 'background_video' }}",
+      "info": "t:nether.common.info_image_fields"
     },
     {
       "type": "image_picker",
       "id": "nether_content_image_mobile",
       "label": "t:sections.nether_content.settings.nether_content_image_mobile.label",
-      "info": "t:sections.nether_content.settings.nether_content_image_mobile.info"
+      "info": "t:sections.nether_content.settings.nether_content_image_mobile.info",
+      "visible_if": "{{ section.settings.nether_content_media_type == 'image' or section.settings.nether_content_media_type == 'background_video' }}"
     },
     {
       "type": "video",
       "id": "nether_content_video",
-      "label": "t:sections.nether_content.settings.nether_content_video.label"
+      "label": "t:sections.nether_content.settings.nether_content_video.label",
+      "visible_if": "{{ section.settings.nether_content_media_type == 'video' or section.settings.nether_content_media_type == 'background_video' }}",
+      "info": "t:nether.common.info_video_fields"
     },
     {
       "type": "video_url",
@@ -473,27 +484,42 @@
         "youtube",
         "vimeo"
       ],
-      "label": "t:sections.nether_content.settings.nether_content_video_url.label"
+      "label": "t:sections.nether_content.settings.nether_content_video_url.label",
+      "visible_if": "{{ section.settings.nether_content_media_type == 'video' or section.settings.nether_content_media_type == 'background_video' }}",
+      "info": "t:nether.common.info_video_fields"
     },
     {
       "type": "image_picker",
       "id": "nether_content_poster_image",
-      "label": "t:sections.nether_content.settings.nether_content_poster_image.label"
+      "label": "t:sections.nether_content.settings.nether_content_poster_image.label",
+      "visible_if": "{{ section.settings.nether_content_media_type == 'video' or section.settings.nether_content_media_type == 'background_video' }}",
+      "info": "t:nether.common.info_video_fields"
     },
     {
       "type": "text",
       "id": "nether_content_video_description",
-      "label": "t:sections.nether_content.settings.nether_content_video_description.label"
+      "label": "t:sections.nether_content.settings.nether_content_video_description.label",
+      "visible_if": "{{ section.settings.nether_content_media_type == 'video' or section.settings.nether_content_media_type == 'background_video' }}",
+      "info": "t:nether.common.info_video_fields"
     },
     {
       "type": "checkbox",
       "id": "nether_content_video_loop",
       "default": true,
-      "label": "t:sections.nether_content.settings.nether_content_video_loop.label"
+      "label": "t:sections.nether_content.settings.nether_content_video_loop.label",
+      "visible_if": "{{ section.settings.nether_content_media_type == 'video' or section.settings.nether_content_media_type == 'background_video' }}",
+      "info": "t:nether.common.info_video_fields"
     },
     {
       "type": "header",
       "content": "t:sections.nether_content.settings.visual_header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "nether_content_enable_image_overlay",
+      "default": false,
+      "label": "t:sections.nether_content.settings.nether_content_enable_image_overlay.label",
+      "info": "t:nether.common.info_enable_overlay"
     },
     {
       "type": "range",
@@ -503,19 +529,16 @@
       "step": 5,
       "unit": "%",
       "label": "t:sections.nether_content.settings.nether_content_overlay_opacity.label",
-      "default": 20
-    },
-    {
-      "type": "checkbox",
-      "id": "nether_content_enable_image_overlay",
-      "default": false,
-      "label": "t:sections.nether_content.settings.nether_content_enable_image_overlay.label"
+      "default": 20,
+      "info": "t:nether.common.info_overlay_opacity",
+      "visible_if": "{{ section.settings.nether_content_enable_image_overlay }}"
     },
     {
       "type": "checkbox",
       "id": "nether_content_enable_glass",
       "default": false,
-      "label": "t:sections.nether_content.settings.nether_content_enable_glass.label"
+      "label": "t:sections.nether_content.settings.nether_content_enable_glass.label",
+      "info": "t:nether.common.info_enable_glass"
     },
     {
       "type": "select",
@@ -539,13 +562,16 @@
           "value": "frosted",
           "label": "t:sections.nether_content.settings.nether_content_glass_style.options__4.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_glass_style",
+      "visible_if": "{{ section.settings.nether_content_enable_glass }}"
     },
     {
       "type": "checkbox",
       "id": "nether_content_enable_gradient",
       "default": false,
-      "label": "t:sections.nether_content.settings.nether_content_enable_gradient.label"
+      "label": "t:sections.nether_content.settings.nether_content_enable_gradient.label",
+      "info": "t:nether.common.info_enable_gradient"
     },
     {
       "type": "select",
@@ -569,7 +595,9 @@
           "value": "fade-down",
           "label": "t:sections.nether_content.settings.nether_content_gradient_style.options__4.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_gradient_style",
+      "visible_if": "{{ section.settings.nether_content_enable_gradient }}"
     },
     {
       "type": "checkbox",
@@ -581,7 +609,8 @@
       "type": "checkbox",
       "id": "nether_content_enable_floating_card",
       "default": false,
-      "label": "t:sections.nether_content.settings.nether_content_enable_floating_card.label"
+      "label": "t:sections.nether_content.settings.nether_content_enable_floating_card.label",
+      "info": "t:nether.common.info_floating_card"
     },
     {
       "type": "checkbox",
@@ -613,7 +642,9 @@
           "value": "wave",
           "label": "t:sections.nether_content.settings.nether_content_divider_style.options__3.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_divider_style",
+      "visible_if": "{{ section.settings.nether_content_show_divider_top or section.settings.nether_content_show_divider_bottom }}"
     },
     {
       "type": "header",
@@ -649,7 +680,8 @@
           "value": "timeline_reveal",
           "label": "t:sections.nether_content.settings.nether_content_animation_style.options__6.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_animation_style"
     },
     {
       "type": "select",
@@ -669,7 +701,8 @@
           "value": "fast",
           "label": "t:sections.nether_content.settings.nether_content_animation_speed.options__3.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_animation_speed"
     },
     {
       "type": "checkbox",
@@ -696,7 +729,8 @@
           "value": "editorial",
           "label": "t:sections.nether_content.settings.nether_content_layout_desktop.options__2.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_responsive_desktop"
     },
     {
       "type": "select",
@@ -716,7 +750,8 @@
           "value": "centered",
           "label": "t:sections.nether_content.settings.nether_content_layout_tablet.options__3.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_responsive_tablet"
     },
     {
       "type": "select",
@@ -740,7 +775,8 @@
           "value": "minimal",
           "label": "t:sections.nether_content.settings.nether_content_layout_mobile.options__4.label"
         }
-      ]
+      ],
+      "info": "t:nether.common.info_responsive_mobile"
     },
     {
       "type": "header",
@@ -922,7 +958,8 @@
               "value": "portrait",
               "label": "t:sections.nether_content.blocks.image.settings.image_ratio.options__3.label"
             }
-          ]
+          ],
+          "info": "t:nether.common.info_image_ratio"
         },
         {
           "type": "text",
@@ -950,12 +987,15 @@
               "value": "background_video",
               "label": "t:sections.nether_content.blocks.video.settings.media_type.options__2.label"
             }
-          ]
+          ],
+          "info": "t:nether.common.info_media_type"
         },
         {
           "type": "video",
           "id": "video",
-          "label": "t:sections.nether_content.blocks.video.settings.video.label"
+          "label": "t:sections.nether_content.blocks.video.settings.video.label",
+          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "video_url",
@@ -964,23 +1004,31 @@
             "youtube",
             "vimeo"
           ],
-          "label": "t:sections.nether_content.blocks.video.settings.video_url.label"
+          "label": "t:sections.nether_content.blocks.video.settings.video_url.label",
+          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "image_picker",
           "id": "poster_image",
-          "label": "t:sections.nether_content.blocks.video.settings.poster_image.label"
+          "label": "t:sections.nether_content.blocks.video.settings.poster_image.label",
+          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "text",
           "id": "video_description",
-          "label": "t:sections.nether_content.blocks.video.settings.video_description.label"
+          "label": "t:sections.nether_content.blocks.video.settings.video_description.label",
+          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "checkbox",
           "id": "video_loop",
           "default": true,
-          "label": "t:sections.nether_content.blocks.video.settings.video_loop.label"
+          "label": "t:sections.nether_content.blocks.video.settings.video_loop.label",
+          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "info": "t:nether.common.info_video_fields"
         }
       ]
     },
@@ -1316,7 +1364,8 @@
               "value": "space",
               "label": "t:sections.nether_content.blocks.divider.settings.divider_style.options__3.label"
             }
-          ]
+          ],
+          "info": "t:nether.common.info_divider_style"
         }
       ]
     },
@@ -1414,7 +1463,8 @@
               "value": "outline",
               "label": "t:sections.nether_hero.blocks.hero_card.settings.card_style.options__4.label"
             }
-          ]
+          ],
+          "info": "t:nether.common.info_card_style"
         },
         {
           "type": "text",
@@ -1523,38 +1573,51 @@
               "value": "video",
               "label": "t:sections.nether_content.blocks.content_row.settings.media_type.options__2.label"
             }
-          ]
+          ],
+          "info": "t:nether.common.info_media_type"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "t:sections.nether_content.blocks.content_row.settings.image.label"
+          "label": "t:sections.nether_content.blocks.content_row.settings.image.label",
+          "visible_if": "{{ block.settings.media_type == 'image' }}",
+          "info": "t:nether.common.info_image_fields"
         },
         {
           "type": "image_picker",
           "id": "image_mobile",
-          "label": "t:sections.nether_content.blocks.content_row.settings.image_mobile.label"
+          "label": "t:sections.nether_content.blocks.content_row.settings.image_mobile.label",
+          "visible_if": "{{ block.settings.media_type == 'image' }}",
+          "info": "t:nether.common.info_image_fields"
         },
         {
           "type": "video",
           "id": "video",
-          "label": "t:sections.nether_content.blocks.content_row.settings.video.label"
+          "label": "t:sections.nether_content.blocks.content_row.settings.video.label",
+          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "image_picker",
           "id": "poster_image",
-          "label": "t:sections.nether_content.blocks.content_row.settings.poster_image.label"
+          "label": "t:sections.nether_content.blocks.content_row.settings.poster_image.label",
+          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "text",
           "id": "video_description",
-          "label": "t:sections.nether_content.blocks.content_row.settings.video_description.label"
+          "label": "t:sections.nether_content.blocks.content_row.settings.video_description.label",
+          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "checkbox",
           "id": "video_loop",
           "default": true,
-          "label": "t:sections.nether_content.blocks.content_row.settings.video_loop.label"
+          "label": "t:sections.nether_content.blocks.content_row.settings.video_loop.label",
+          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "text",

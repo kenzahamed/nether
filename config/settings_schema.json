@@ -268,7 +268,8 @@
             "label": "t:settings_schema.nether_motion.settings.nether_motion_style.options__custom.label"
           }
         ],
-        "default": "minimal"
+        "default": "minimal",
+        "visible_if": "{{ settings.nether_motion_enabled }}"
       },
       {
         "type": "range",
@@ -279,7 +280,8 @@
         "unit": "%",
         "label": "t:settings_schema.nether_motion.settings.nether_motion_intensity.label",
         "info": "t:settings_schema.nether_motion.settings.nether_motion_intensity.info",
-        "default": 50
+        "default": 50,
+        "visible_if": "{{ settings.nether_motion_enabled }}"
       },
       {
         "type": "range",
@@ -290,41 +292,48 @@
         "unit": "%",
         "label": "t:settings_schema.nether_motion.settings.nether_motion_speed.label",
         "info": "t:settings_schema.nether_motion.settings.nether_motion_speed.info",
-        "default": 100
+        "default": 100,
+        "visible_if": "{{ settings.nether_motion_enabled }}"
       },
       {
         "type": "header",
-        "content": "t:settings_schema.nether_motion.settings.header_accessibility.content"
+        "content": "t:settings_schema.nether_motion.settings.header_accessibility.content",
+        "visible_if": "{{ settings.nether_motion_enabled }}"
       },
       {
         "type": "checkbox",
         "id": "nether_motion_respect_reduced",
         "label": "t:settings_schema.nether_motion.settings.nether_motion_respect_reduced.label",
         "info": "t:settings_schema.nether_motion.settings.nether_motion_respect_reduced.info",
-        "default": true
+        "default": true,
+        "visible_if": "{{ settings.nether_motion_enabled }}"
       },
       {
         "type": "checkbox",
         "id": "nether_motion_force_reduced",
         "label": "t:settings_schema.nether_motion.settings.nether_motion_force_reduced.label",
         "info": "t:settings_schema.nether_motion.settings.nether_motion_force_reduced.info",
-        "default": false
+        "default": false,
+        "visible_if": "{{ settings.nether_motion_enabled }}"
       },
       {
         "type": "header",
-        "content": "t:settings_schema.nether_motion.settings.header_viewport.content"
+        "content": "t:settings_schema.nether_motion.settings.header_viewport.content",
+        "visible_if": "{{ settings.nether_motion_enabled }}"
       },
       {
         "type": "checkbox",
         "id": "nether_motion_mobile",
         "label": "t:settings_schema.nether_motion.settings.nether_motion_mobile.label",
-        "default": true
+        "default": true,
+        "visible_if": "{{ settings.nether_motion_enabled }}"
       },
       {
         "type": "checkbox",
         "id": "nether_motion_desktop",
         "label": "t:settings_schema.nether_motion.settings.nether_motion_desktop.label",
-        "default": true
+        "default": true,
+        "visible_if": "{{ settings.nether_motion_enabled }}"
       }
     ]
   },
