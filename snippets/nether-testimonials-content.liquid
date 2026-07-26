@@ -23,7 +23,10 @@
 -%}
 
 {%- if has_header_blocks -%}
-  <div class="nether-testimonials__header page-width" data-nether-testimonials-header>
+  <div
+    class="{% render 'nether-layout-header-class', full_width: section.settings.nether_full_width, class: 'nether-testimonials__header' %}"
+    data-nether-testimonials-header
+  >
     <div
       class="nether-testimonials__header-inner nether-testimonials__header-inner--align-{{ alignment }}"
       data-nether-testimonials-panel

@@ -1,0 +1,392 @@
+/* =============================================================================
+ * Nether Premium Interaction System
+ * Shared hover / focus / active / disabled / hit-target / keyboard feedback.
+ * Extends Dawn focus tokens — does not redesign layouts or motion.
+ * ============================================================================= */
+
+:root {
+  --nether-hit-target: 4.4rem;
+  --nether-hit-target-sm: 3.6rem;
+  --nether-interact-duration: var(--duration-short, 100ms);
+  --nether-interact-duration-md: var(--duration-default, 200ms);
+  --nether-interact-ease: ease;
+  --nether-interact-hover-fg: rgb(var(--color-foreground));
+  --nether-interact-hover-bg: rgba(var(--color-foreground), 0.06);
+  --nether-interact-active-bg: rgba(var(--color-foreground), 0.1);
+  --nether-interact-hover-border: rgba(var(--color-foreground), 0.28);
+  --nether-interact-disabled-opacity: 0.45;
+  --nether-interact-focus-outline: var(--focused-base-outline);
+  --nether-interact-focus-outline-offset: var(--focused-base-outline-offset);
+  --nether-interact-focus-shadow: var(--focused-base-box-shadow);
+}
+
+/* ── Hit targets ───────────────────────────────────────────────────────────── */
+
+.nether-hit-target {
+  min-width: var(--nether-hit-target);
+  min-height: var(--nether-hit-target);
+}
+
+.nether-hit-target--sm {
+  min-width: var(--nether-hit-target-sm);
+  min-height: var(--nether-hit-target-sm);
+}
+
+@media (pointer: coarse) {
+  .nether-hit-target--sm,
+  .button--small,
+  .button--small.button--icon,
+  .nether-wishlist-button--sm .nether-wishlist-button__control,
+  .nether-compare-button--sm .nether-compare-button__control,
+  .nether-quick-view-trigger__control--icon,
+  .nether-quick-view__close {
+    min-width: var(--nether-hit-target);
+    min-height: var(--nether-hit-target);
+  }
+
+  .button--small.button--icon,
+  .nether-quick-view-trigger__control--icon,
+  .nether-quick-view__close {
+    width: var(--nether-hit-target);
+    height: var(--nether-hit-target);
+  }
+}
+
+/* ── Shared interactive control primitive ──────────────────────────────────── */
+
+.nether-interact {
+  --nether-interact-local-duration: var(--nether-interact-duration);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    color var(--nether-interact-local-duration) var(--nether-interact-ease),
+    background-color var(--nether-interact-local-duration) var(--nether-interact-ease),
+    border-color var(--nether-interact-local-duration) var(--nether-interact-ease),
+    opacity var(--nether-interact-local-duration) var(--nether-interact-ease),
+    box-shadow var(--nether-interact-local-duration) var(--nether-interact-ease),
+    transform var(--nether-interact-local-duration) var(--nether-interact-ease);
+}
+
+.nether-interact:focus {
+  outline: 0;
+}
+
+.nether-interact:focus-visible,
+.nether-interact.focused {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+}
+
+.nether-interact--inset:focus-visible,
+.nether-interact--inset.focused {
+  outline-offset: -0.2rem;
+}
+
+/* ── Disabled / inert interactive states ───────────────────────────────────── */
+
+a[aria-disabled='true'],
+[role='link'][aria-disabled='true'],
+[role='button'][aria-disabled='true']:not(button),
+.nether-interact[aria-disabled='true'],
+.nether-interact.is-disabled,
+.nether-interact:disabled {
+  cursor: not-allowed;
+  opacity: var(--nether-interact-disabled-opacity);
+}
+
+a[aria-disabled='true'],
+[role='link'][aria-disabled='true'],
+[role='button'][aria-disabled='true']:not(button),
+.nether-interact[aria-disabled='true'],
+.nether-interact.is-disabled {
+  pointer-events: none;
+}
+
+a[aria-disabled='true']:hover,
+a[aria-disabled='true']:active,
+[role='link'][aria-disabled='true']:hover,
+[role='button'][aria-disabled='true']:not(button):hover {
+  text-decoration: none;
+}
+
+/* ── Link interaction consistency ──────────────────────────────────────────── */
+
+.link:not([aria-disabled='true']),
+.underlined-link:not([aria-disabled='true']),
+.nether-interact-link:not([aria-disabled='true']) {
+  transition:
+    color var(--nether-interact-duration) var(--nether-interact-ease),
+    text-decoration-thickness var(--nether-interact-duration) var(--nether-interact-ease),
+    opacity var(--nether-interact-duration) var(--nether-interact-ease);
+}
+
+.link:focus-visible,
+.underlined-link:focus-visible,
+.nether-interact-link:focus-visible {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+}
+
+/* ── Surface hover / active / focus helpers ────────────────────────────────── */
+
+.nether-interact-surface {
+  transition:
+    background-color var(--nether-interact-duration-md) var(--nether-interact-ease),
+    color var(--nether-interact-duration-md) var(--nether-interact-ease),
+    border-color var(--nether-interact-duration-md) var(--nether-interact-ease);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .nether-interact-surface:hover {
+    background-color: var(--nether-interact-hover-bg);
+  }
+}
+
+.nether-interact-surface:active:not([aria-disabled='true']):not(:disabled) {
+  background-color: var(--nether-interact-active-bg);
+}
+
+.nether-interact-surface:focus-visible {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+}
+
+/* ── Loading / busy feedback ───────────────────────────────────────────────── */
+
+.nether-interact.is-busy,
+.nether-interact[aria-busy='true'],
+.is-busy > .nether-interact {
+  cursor: wait;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ── Keyboard parity for premium card hovers ───────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  .card-hover-lift:focus-within .card--card,
+  .card-hover-lift:focus-within .card--standard .card__inner {
+    transform: translateY(-0.4rem);
+  }
+
+  .card-hover-shadow:focus-within .card--card::after,
+  .card-hover-shadow:focus-within .card--standard .card__inner::after {
+    --shadow-vertical-offset: calc(var(--text-boxes-shadow-vertical-offset, 4px) + 6px);
+    --shadow-blur-radius: calc(var(--text-boxes-shadow-blur-radius, 5px) + 12px);
+    --shadow-opacity: min(calc(var(--shadow-opacity, 0.1) + 0.1), 1);
+  }
+
+  .card-hover-zoom:focus-within .card__media img,
+  .card-hover-zoom:focus-within .media img {
+    transform: scale(1.06);
+  }
+
+  .card-hover-scale:focus-within .card__media {
+    transform: scale(1.02);
+  }
+
+  .card-hover-border:focus-within .card--card,
+  .card-hover-border:focus-within .card--standard .card__inner {
+    --border-opacity: 0.35;
+  }
+
+  .card-hover-arrow:focus-within .icon-wrap,
+  .card-hover-arrow:focus-within .card__cta .button__icon--trailing {
+    transform: translateX(0.3rem);
+  }
+
+  .card-hover-glow:focus-within .card--card::after,
+  .card-hover-glow:focus-within .card--standard .card__inner::after {
+    box-shadow:
+      var(--shadow-horizontal-offset) var(--shadow-vertical-offset) var(--shadow-blur-radius)
+        rgba(var(--color-shadow), var(--shadow-opacity)),
+      0 0 2rem rgba(var(--color-button), 0.18);
+  }
+}
+
+/* ── Navigation / menu soft-binds ──────────────────────────────────────────── */
+
+.mega-menu__link:focus-visible,
+.list-menu__item:focus-visible,
+.header__menu-item:focus-visible,
+.nether-mobile-drawer__link:focus-visible,
+.nether-mobile-drawer__footer-link:focus-visible,
+.nether-mobile-drawer__secondary-link:focus-visible,
+.menu-drawer__menu-item:focus-visible,
+.menu-drawer__close-button:focus-visible {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+  color: var(--nether-interact-hover-fg);
+}
+
+.mega-menu__link:not([aria-disabled='true']) {
+  transition:
+    color var(--nether-interact-duration) var(--nether-interact-ease),
+    text-decoration var(--nether-interact-duration) var(--nether-interact-ease);
+}
+
+.nether-header__action:focus-visible,
+.nether-header .header__icon:focus-visible {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+}
+
+/* ── Pagination soft-binds ─────────────────────────────────────────────────── */
+
+.pagination__item {
+  transition: color var(--nether-interact-duration) var(--nether-interact-ease);
+}
+
+a.pagination__item:focus-visible {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+}
+
+a.pagination__item:focus-visible::after {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 0.1rem;
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: currentColor;
+}
+
+/* ── FAQ / accordion soft-binds ────────────────────────────────────────────── */
+
+.nether-faq__nav-link:focus-visible,
+.nether-faq__summary:focus-visible,
+.disclosures__summary:focus-visible,
+.product__accordion .summary__title:focus-visible,
+.accordion .summary__title:focus-visible {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+  background-color: var(--nether-interact-hover-bg);
+}
+
+.nether-faq__nav-link,
+.nether-faq__summary {
+  transition:
+    background-color var(--nether-interact-duration-md) var(--nether-interact-ease),
+    color var(--nether-interact-duration-md) var(--nether-interact-ease);
+}
+
+.nether-faq__nav-link:active:not([aria-disabled='true']),
+.nether-faq__summary:active {
+  background-color: var(--nether-interact-active-bg);
+}
+
+/* ── Quick actions / commerce controls soft-binds ──────────────────────────── */
+
+.nether-wishlist-button__control:focus-visible,
+.nether-compare-button__control:focus-visible,
+.nether-quick-view-trigger__control:focus-visible,
+.nether-quick-view__close:focus-visible {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+}
+
+.nether-quick-view__close,
+.nether-quick-view-trigger__control--icon {
+  min-width: var(--nether-hit-target);
+  min-height: var(--nether-hit-target);
+  transition:
+    color var(--nether-interact-duration) var(--nether-interact-ease),
+    border-color var(--nether-interact-duration) var(--nether-interact-ease),
+    background-color var(--nether-interact-duration) var(--nether-interact-ease),
+    transform var(--nether-interact-duration) var(--nether-interact-ease);
+}
+
+.nether-quick-view__close:active:not(:disabled),
+.nether-quick-view-trigger__control--icon:active:not([aria-disabled='true']):not(:disabled) {
+  transform: translateY(0);
+  background-color: var(--nether-interact-active-bg);
+}
+
+.nether-wishlist-button__control:disabled,
+.nether-compare-button__control:disabled,
+.nether-wishlist-button__control[aria-disabled='true'],
+.nether-compare-button__control[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: var(--nether-interact-disabled-opacity);
+  pointer-events: none;
+}
+
+/* ── Search / predictive soft-binds ────────────────────────────────────────── */
+
+.search__button:focus-visible,
+.reset__button:focus-visible,
+.predictive-search__item:focus-visible,
+.nether-search-result__link:focus-visible {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+}
+
+/* ── Badge interactive (when used as controls) ─────────────────────────────── */
+
+a.badge:focus-visible,
+button.badge:focus-visible,
+.badge.nether-interact:focus-visible {
+  outline: var(--nether-interact-focus-outline);
+  outline-offset: var(--nether-interact-focus-outline-offset);
+  box-shadow: var(--nether-interact-focus-shadow);
+}
+
+@media (hover: hover) {
+  a.badge:hover,
+  button.badge:hover,
+  .badge.nether-interact:hover {
+    filter: brightness(0.96);
+  }
+}
+
+/* ── Forced colors / reduced motion ────────────────────────────────────────── */
+
+@media (forced-colors: active) {
+  .nether-interact:focus-visible,
+  .nether-interact-surface:focus-visible,
+  .mega-menu__link:focus-visible,
+  .pagination__item:focus-visible,
+  .nether-faq__nav-link:focus-visible,
+  .nether-faq__summary:focus-visible {
+    outline: 2px solid CanvasText;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-interact,
+  .nether-interact-surface,
+  .nether-interact-link,
+  .link,
+  .underlined-link,
+  .mega-menu__link,
+  .pagination__item,
+  .nether-faq__nav-link,
+  .nether-faq__summary,
+  .nether-quick-view__close,
+  .nether-quick-view-trigger__control--icon {
+    transition: none;
+  }
+
+  .card-hover-lift:focus-within .card--card,
+  .card-hover-lift:focus-within .card--standard .card__inner,
+  .card-hover-zoom:focus-within .card__media img,
+  .card-hover-zoom:focus-within .media img,
+  .card-hover-scale:focus-within .card__media,
+  .card-hover-arrow:focus-within .icon-wrap,
+  .card-hover-arrow:focus-within .card__cta .button__icon--trailing {
+    transform: none;
+  }
+}

@@ -24,9 +24,10 @@
 
   assign card_style = section.settings.nether_card_style | default: 'medium'
   assign content_position = section.settings.nether_content_position | default: 'bottom-left'
-  if content_position == 'center'
-    assign content_position = 'middle-center'
-  endif
+  capture content_position
+    render 'nether-position-value', position: content_position, default: 'bottom-left'
+  endcapture
+  assign content_position = content_position | strip
   assign content_alignment = section.settings.nether_content_alignment | default: 'left'
   assign show_overlay = section.settings.nether_enable_overlay
   assign enable_glass = section.settings.nether_enable_glass

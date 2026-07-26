@@ -214,6 +214,11 @@
   --border-offset: 0.5px;
 }
 
+.button--primary:not([disabled]):not([aria-disabled='true']):active,
+.button--secondary:not([disabled]):not([aria-disabled='true']):active {
+  transform: translateY(0.05rem);
+}
+
 /* ── States: Disabled (extended) ───────────────────────────────────────────── */
 
 .button--text:disabled,
@@ -225,7 +230,14 @@
 .button--outline:disabled,
 .button--outline[aria-disabled='true'],
 .button--outline.disabled {
-  opacity: 0.45;
+  opacity: var(--nether-interact-disabled-opacity, 0.45);
+}
+
+/* Disabled link-buttons must not navigate (anchors cannot use [disabled]) */
+a.button[aria-disabled='true'],
+a.button.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 /* ── States: Loading (extended for icon/text variants) ─────────────────────── */
@@ -248,17 +260,25 @@
 @media (prefers-reduced-motion: no-preference) {
   .button--ghost,
   .button--text,
-  .button--outline {
+  .button--outline,
+  .button--primary,
+  .button--secondary,
+  .button--icon,
+  .button--arrow {
     transition:
-      background-color var(--duration-short) ease,
-      color var(--duration-short) ease,
-      box-shadow var(--duration-short) ease;
+      background-color var(--nether-interact-duration, var(--duration-short)) var(--nether-interact-ease, ease),
+      color var(--nether-interact-duration, var(--duration-short)) var(--nether-interact-ease, ease),
+      box-shadow var(--nether-interact-duration, var(--duration-short)) var(--nether-interact-ease, ease),
+      transform var(--nether-interact-duration, var(--duration-short)) var(--nether-interact-ease, ease),
+      opacity var(--nether-interact-duration, var(--duration-short)) var(--nether-interact-ease, ease);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .button--arrow:not([disabled]):hover .button__icon--trailing,
-  .button--arrow .button__icon--trailing .icon-arrow path {
+  .button--arrow .button__icon--trailing .icon-arrow path,
+  .button--primary:not([disabled]):not([aria-disabled='true']):active,
+  .button--secondary:not([disabled]):not([aria-disabled='true']):active {
     transition: none;
     transform: none;
   }

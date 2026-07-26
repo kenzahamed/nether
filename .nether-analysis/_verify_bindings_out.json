@@ -1,0 +1,134 @@
+{
+  "sections": 20,
+  "total_settings": 1679,
+  "dead": [
+    {
+      "section": "nether-product-page.liquid",
+      "scope": "block:product_highlights",
+      "id": "highlight_1",
+      "type": "text",
+      "visible_if": null,
+      "options": []
+    },
+    {
+      "section": "nether-product-page.liquid",
+      "scope": "block:product_highlights",
+      "id": "highlight_2",
+      "type": "text",
+      "visible_if": null,
+      "options": []
+    },
+    {
+      "section": "nether-product-page.liquid",
+      "scope": "block:product_highlights",
+      "id": "highlight_3",
+      "type": "text",
+      "visible_if": null,
+      "options": []
+    },
+    {
+      "section": "nether-product-page.liquid",
+      "scope": "block:product_highlights",
+      "id": "highlight_4",
+      "type": "text",
+      "visible_if": null,
+      "options": []
+    },
+    {
+      "section": "nether-product-page.liquid",
+      "scope": "block:product_highlights",
+      "id": "highlight_5",
+      "type": "text",
+      "visible_if": null,
+      "options": []
+    },
+    {
+      "section": "nether-product-page.liquid",
+      "scope": "block:product_highlights",
+      "id": "highlight_6",
+      "type": "text",
+      "visible_if": null,
+      "options": []
+    }
+  ],
+  "weak": [
+    {
+      "section": "nether-product-page.liquid",
+      "scope": "block:share",
+      "id": "share_label",
+      "type": "text",
+      "visible_if": null,
+      "options": [],
+      "reason": "outside render tree"
+    }
+  ],
+  "media_issues": [],
+  "orphan_heuristics": [
+    {
+      "section": "nether-banner.liquid",
+      "issue": "orphan adapt spacer"
+    },
+    {
+      "section": "nether-banner.liquid",
+      "issue": "ungated width class"
+    },
+    {
+      "section": "nether-banner.liquid",
+      "issue": "ungated position class"
+    },
+    {
+      "section": "nether-hero.liquid",
+      "issue": "orphan adapt spacer"
+    },
+    {
+      "section": "nether-hero.liquid",
+      "issue": "ungated width class"
+    },
+    {
+      "section": "nether-hero.liquid",
+      "issue": "ungated position class"
+    }
+  ],
+  "modifier_orphans": {
+    "nether-banner.liquid": [
+      "nether-hero--glass-enabled"
+    ],
+    "nether-collection.liquid": [
+      "nether-collection--glass-enabled"
+    ],
+    "nether-content.liquid": [
+      "nether-hero--glass-enabled"
+    ],
+    "nether-cta.liquid": [
+      "nether-cta--glass-enabled",
+      "nether-hero--glass-enabled"
+    ],
+    "nether-faq.liquid": [
+      "nether-faq--glass-enabled",
+      "nether-hero--glass-enabled"
+    ],
+    "nether-hero.liquid": [
+      "nether-hero--glass-enabled"
+    ],
+    "nether-media.liquid": [
+      "nether-media--glass-enabled",
+      "nether-media--gradient-enabled",
+      "nether-media-card--featured",
+      "nether-media-card--glass",
+      "nether-media-card--gradient",
+      "nether-media-card--placeholder"
+    ],
+    "nether-newsletter.liquid": [
+      "nether-hero--glass-enabled",
+      "nether-newsletter--glass-enabled"
+    ],
+    "nether-product.liquid": [
+      "nether-product--glass-enabled"
+    ],
+    "nether-testimonials.liquid": [
+      "nether-hero--glass-enabled",
+      "nether-testimonials--glass-enabled"
+    ]
+  },
+  "unused_layout_css_vars": []
+}

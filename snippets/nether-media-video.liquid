@@ -1,0 +1,239 @@
+{% comment %}
+  Nether Media Engine — Shopify-hosted + external video renderer.
+
+  Modes:
+  - deferred  → poster button + <template> (Dawn deferred-media contract)
+  - background → muted autoplay loop, no controls
+
+  Accepts:
+  - mode: {String} 'deferred' (default) | 'background'
+  - shopify_video: {Video} Shopify-hosted video (optional)
+  - video_url: {VideoURL} External YouTube/Vimeo (optional)
+  - poster_image: {Image} Poster / fallback (optional)
+  - fallback_image: {Image} Used when poster blank for image fallback (optional)
+  - video_description: {String} Accessible description
+  - video_loop: {Boolean} Loop playback
+  - widths: {String} Poster srcset widths
+  - sizes: {String} Poster sizes
+  - loading: {String} Poster loading
+  - fetchpriority: {String} Poster fetchpriority
+  - video_class: {String} Class on video / iframe (required for host styling)
+  - deferred_class: {String} Class on deferred-media
+  - poster_class: {String} Class on poster button
+  - play_attr: {String} Optional data attr on play control (e.g. data-nether-media-play)
+  - bg_attr: {String} Wrapper attr for background mode (default: data-nether-media-bg-video)
+  - video_image_size: {String} video_tag image_size (default: 1500x)
+  - poster_width: {Number} Poster image_url width (default: 2000)
+  - placeholder: {String} placeholder_svg_tag name (default: image)
+  - muted: {Boolean} Override mute (background always muted)
+
+  Usage:
+    {% render 'nether-media-video',
+      mode: 'deferred',
+      shopify_video: shopify_video,
+      video_url: video_url,
+      poster_image: poster_image,
+      video_description: video_description,
+      video_loop: video_loop,
+      widths: widths,
+      sizes: sizes,
+      loading: loading_attr,
+      fetchpriority: fetch_priority_value,
+      video_class: 'nether-media-card__video',
+      deferred_class: 'nether-media-card__deferred-media',
+      poster_class: 'nether-media-card__video-poster',
+      play_attr: 'data-nether-media-play'
+    %}
+{% endcomment %}
+
+{%- liquid
+  assign video_mode = mode | default: 'deferred'
+  assign poster = poster_image
+  if poster == blank
+    assign poster = fallback_image
+  endif
+  assign desc = video_description | default: ''
+  # `default` treats false as empty — set loop explicitly
+  assign loop_enabled = true
+  if video_loop == false
+    assign loop_enabled = false
+  endif
+  assign img_widths = widths | default: '375, 550, 750, 1100, 1500, 2000'
+  assign img_sizes = sizes | default: '100vw'
+  assign img_loading = loading | default: 'lazy'
+  assign img_fetch = fetchpriority | default: 'auto'
+  assign v_class = video_class | default: 'nether-media-engine__video'
+  assign d_class = deferred_class | default: 'nether-media-engine__deferred'
+  assign p_class = poster_class | default: 'nether-media-engine__poster'
+  assign bg_data = bg_attr | default: 'data-nether-media-bg-video'
+  assign v_size = video_image_size | default: '1500x'
+  assign p_width = poster_width | default: 2000
+  assign ph = placeholder | default: 'image'
+  assign poster_alt = poster.alt | default: desc
+  assign media_id = blank
+  if shopify_video != blank
+    assign media_id = shopify_video.id
+  elsif video_url != blank
+    assign media_id = video_url.id
+  endif
+-%}
+
+{%- if video_mode == 'background' -%}
+  {%- if shopify_video != blank -%}
+    <div {{ bg_data }}>
+      {{
+        shopify_video
+        | video_tag:
+          image_size: v_size,
+          autoplay: true,
+          loop: loop_enabled,
+          muted: true,
+          controls: false,
+          playsinline: true,
+          class: v_class
+      }}
+    </div>
+  {%- elsif video_url != blank -%}
+    {%- if video_url.type == 'youtube' -%}
+      <iframe
+        src="https://www.youtube.com/embed/{{ video_url.id }}?autoplay=1&mute=1&controls=0&loop=1&playlist={{ video_url.id }}&playsinline=1"
+        class="{{ v_class }}"
+        allow="autoplay; encrypted-media"
+        title="{{ desc | escape }}"
+        loading="lazy"
+      ></iframe>
+    {%- elsif video_url.type == 'vimeo' -%}
+      <iframe
+        src="https://player.vimeo.com/video/{{ video_url.id }}?autoplay=1&muted=1&background=1&loop=1"
+        class="{{ v_class }}"
+        allow="autoplay; encrypted-media"
+        title="{{ desc | escape }}"
+        loading="lazy"
+      ></iframe>
+    {%- endif -%}
+  {%- elsif poster != blank -%}
+    {{
+      poster
+      | image_url: width: p_width
+      | image_tag:
+        widths: img_widths,
+        sizes: img_sizes,
+        alt: poster_alt,
+        loading: img_loading,
+        fetchpriority: img_fetch
+    }}
+  {%- else -%}
+    {{ ph | placeholder_svg_tag: 'placeholder-svg' }}
+  {%- endif -%}
+
+{%- else -%}
+  {%- if shopify_video != blank -%}
+    <deferred-media class="{{ d_class }}"{% if media_id != blank %} data-media-id="{{ media_id }}"{% endif %}>
+      <button
+        type="button"
+        class="deferred-media__poster {{ p_class }}"
+        aria-label="{{ 'sections.video.load_video' | t: description: desc | default: shopify_video.alt | escape }}"
+      >
+        {%- if poster != blank -%}
+          {{
+            poster
+            | image_url: width: p_width
+            | image_tag:
+              widths: img_widths,
+              sizes: img_sizes,
+              alt: poster_alt,
+              loading: img_loading,
+              fetchpriority: img_fetch
+          }}
+        {%- else -%}
+          {{ ph | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+        <span class="deferred-media__poster-button motion-reduce"{% if play_attr != blank %} {{ play_attr }}{% endif %}>
+          <span class="svg-wrapper">
+            {{- 'icon-play.svg' | inline_asset_content -}}
+          </span>
+        </span>
+      </button>
+      <template>
+        {{
+          shopify_video
+          | video_tag:
+            image_size: v_size,
+            autoplay: true,
+            loop: loop_enabled,
+            muted: false,
+            controls: true,
+            playsinline: true,
+            class: v_class
+        }}
+      </template>
+    </deferred-media>
+  {%- elsif video_url != blank -%}
+    <deferred-media class="{{ d_class }}"{% if media_id != blank %} data-media-id="{{ media_id }}"{% endif %}>
+      <button
+        type="button"
+        class="deferred-media__poster {{ p_class }}"
+        aria-label="{{ 'sections.video.load_video' | t: description: desc | escape }}"
+      >
+        {%- if poster != blank -%}
+          {{
+            poster
+            | image_url: width: p_width
+            | image_tag:
+              widths: img_widths,
+              sizes: img_sizes,
+              alt: poster_alt,
+              loading: img_loading,
+              fetchpriority: img_fetch
+          }}
+        {%- else -%}
+          {{ ph | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+        <span class="deferred-media__poster-button motion-reduce"{% if play_attr != blank %} {{ play_attr }}{% endif %}>
+          <span class="svg-wrapper">
+            {{- 'icon-play.svg' | inline_asset_content -}}
+          </span>
+        </span>
+      </button>
+      <template>
+        {%- if video_url.type == 'youtube' -%}
+          {{
+            video_url
+            | external_video_url: autoplay: true, loop: loop_enabled, playlist: video_url.id
+            | external_video_tag: class: v_class
+          }}
+        {%- else -%}
+          {{
+            video_url
+            | external_video_url: autoplay: true, loop: loop_enabled
+            | external_video_tag: class: v_class
+          }}
+        {%- endif -%}
+      </template>
+    </deferred-media>
+  {%- elsif fallback_image != blank -%}
+    {{
+      fallback_image
+      | image_url: width: p_width
+      | image_tag:
+        widths: img_widths,
+        sizes: img_sizes,
+        alt: fallback_image.alt | default: desc,
+        loading: img_loading,
+        fetchpriority: img_fetch
+    }}
+  {%- elsif poster != blank -%}
+    {{
+      poster
+      | image_url: width: p_width
+      | image_tag:
+        widths: img_widths,
+        sizes: img_sizes,
+        alt: poster_alt,
+        loading: img_loading,
+        fetchpriority: img_fetch
+    }}
+  {%- else -%}
+    {{ ph | placeholder_svg_tag: 'placeholder-svg' }}
+  {%- endif -%}
+{%- endif -%}

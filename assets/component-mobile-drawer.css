@@ -104,6 +104,15 @@ nether-mobile-drawer {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  transition:
+    background-color var(--nether-interact-duration-md, var(--nether-drawer-duration, 0.3s))
+      var(--nether-interact-ease, ease),
+    color var(--nether-interact-duration-md, var(--nether-drawer-duration, 0.3s)) var(--nether-interact-ease, ease);
+}
+
+.nether-mobile-drawer__link:hover,
+.nether-mobile-drawer__link:focus-visible {
+  background-color: var(--nether-interact-hover-bg, rgba(var(--color-foreground), 0.04));
 }
 
 .nether-mobile-drawer__link-label {

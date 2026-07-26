@@ -106,11 +106,16 @@
 {%- if link != blank -%}
   <a
     {% if id != blank %}id="{{ id }}"{% endif %}
-    href="{{ link }}"
+    {% if is_disabled %}
+      role="link"
+      aria-disabled="true"
+      tabindex="-1"
+    {% else %}
+      href="{{ link }}"
+    {% endif %}
     class="{{ button_classes }}"
-    {% if is_disabled %}aria-disabled="true" tabindex="-1"{% endif %}
     {% if accessible_label != blank %}aria-label="{{ accessible_label | escape }}"{% endif %}
-    {% if is_new_window %}target="_blank" rel="noopener noreferrer"{% endif %}
+    {% if is_new_window and is_disabled != true %}target="_blank" rel="noopener noreferrer"{% endif %}
     {{ shopify_attributes }}
     {{ attributes }}
   >

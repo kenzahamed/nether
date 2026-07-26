@@ -35,7 +35,7 @@
   class="nether-commerce-section section-{{ section.id }}-padding gradient {{ section_classes }}"
   aria-label="{% render 'nether-locale-text', value: section.settings.aria_label, key: 'sections.nether_commerce.label' %}"
 >
-  <div class="page-width{% if section.settings.full_width %} page-width--full{% endif %}">
+  <div class="{% render 'nether-layout-container-class', full_width: section.settings.full_width, use_full_modifier: true %}">
     <nether-commerce
       id="NetherCommerceRoot-{{ section.id }}"
       class="nether-commerce nether-commerce--layout-{{ desktop_layout }}"
@@ -74,12 +74,12 @@
   </div>
 </section>
 
-<style>
-  #NetherCommerce-{{ section.id }}.section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
-  }
-</style>
+{%- liquid
+  assign nether_commerce_pad_prefix = '#NetherCommerce-' | append: section.id
+-%}
+{%- style -%}
+  {% render 'nether-section-padding', section: section, selector_prefix: nether_commerce_pad_prefix %}
+{%- endstyle -%}
 
 {% schema %}
 {

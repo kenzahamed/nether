@@ -1,0 +1,36 @@
+{% comment %}
+  Nether Media Engine — normalize image loading + fetch priority.
+
+  Converts boolean / blank merchant params into valid HTML attribute values:
+    loading → 'lazy' | 'eager'
+    (echoes loading only; fetchpriority is passed through by callers)
+
+  Accepts:
+  - lazy_load: {Boolean} Prefer lazy when true/blank (default: true)
+  - loading: {String|Boolean} Explicit override ('lazy' | 'eager' | true | false)
+  - fetch_priority: {String} high | low | auto (optional — when 'high', forces eager)
+
+  Usage:
+    {% capture loading_attr %}{% render 'nether-media-loading', lazy_load: is_lazy, fetch_priority: fetch_priority_value %}{% endcapture %}
+    assign loading_attr = loading_attr | strip
+{% endcomment %}
+
+{%- liquid
+  assign load_mode = 'lazy'
+  assign fp = fetch_priority | default: '' | strip
+
+  if loading == 'eager' or loading == false or lazy_load == false
+    assign load_mode = 'eager'
+  elsif loading == 'lazy' or loading == true or lazy_load == true or lazy_load == blank
+    assign load_mode = 'lazy'
+  elsif loading != blank
+    assign load_mode = loading
+  endif
+
+  # LCP / above-fold: high fetch priority implies eager decode
+  if fp == 'high'
+    assign load_mode = 'eager'
+  endif
+
+  echo load_mode
+-%}

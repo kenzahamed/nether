@@ -2,7 +2,7 @@
    Extends Dawn related/complementary product grids — scoped styles only. */
 
 .nether-recommendations {
-  --nether-recommendations-gap: 2.4rem;
+  --nether-recommendations-gap: var(--nether-layout-gap, 2.4rem);
   --nether-recommendations-transition-duration: 0.5s;
   --nether-recommendations-columns-desktop: 4;
   --nether-recommendations-columns-tablet: 2;

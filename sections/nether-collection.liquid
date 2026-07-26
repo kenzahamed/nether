@@ -120,17 +120,7 @@
     --nether-collection-transition-duration: {{ nether_animation_duration }}s;
   }
 
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
+  {% render 'nether-section-padding', section: section %}
 {%- endstyle -%}
 
 {%- if section.settings.nether_show_divider_top -%}
@@ -154,7 +144,7 @@
   role="region"
   aria-label="{% render 'nether-locale-text', value: section.settings.nether_aria_label, key: 'sections.nether_collection.aria_label' %}"
 >
-  <div class="nether-collection__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+  <div class="{% render 'nether-layout-container-class', full_width: section.settings.nether_full_width, class: 'nether-collection__inner' %}">
     {%- render 'nether-collection-content', section: section, heading_tag: heading_tag -%}
 
     {%- if collection_count > 0 -%}
@@ -489,7 +479,8 @@
           "label": "t:nether.common.ui.layout.bottom_right_2"
         }
       ],
-      "info": "t:nether.common.info_content_position"
+      "info": "t:nether.common.info_content_position",
+      "visible_if": "{{ section.settings.nether_layout != 'card_layout' and section.settings.nether_layout != 'minimal_grid' }}"
     },
     {
       "type": "select",
@@ -1003,7 +994,7 @@
           "type": "video",
           "id": "video",
           "label": "t:nether.common.ui.labels.shopify_hosted_video",
-          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "visible_if": "{{ block.settings.media_type == 'video' }}",
           "info": "t:nether.common.info_video_fields"
         },
         {
@@ -1014,21 +1005,21 @@
             "vimeo"
           ],
           "label": "t:nether.common.ui.labels.external_video_url",
-          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "visible_if": "{{ block.settings.media_type == 'video' }}",
           "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "image_picker",
           "id": "poster_image",
           "label": "t:nether.common.ui.labels.video_poster_image",
-          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "visible_if": "{{ block.settings.media_type == 'video' }}",
           "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "text",
           "id": "video_description",
           "label": "t:nether.common.ui.labels.video_description",
-          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "visible_if": "{{ block.settings.media_type == 'video' }}",
           "info": "t:nether.common.info_video_fields"
         },
         {
@@ -1036,7 +1027,7 @@
           "id": "video_loop",
           "label": "t:nether.common.ui.media.loop_video",
           "default": true,
-          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "visible_if": "{{ block.settings.media_type == 'video' }}",
           "info": "t:nether.common.info_video_fields"
         },
         {

@@ -1,0 +1,146 @@
+/* =============================================================================
+ * Nether Media Engine
+ * Shared media architecture: ratios, fit/crop, object position, fill surfaces,
+ * lazy-load CLS guards, and video/poster fill. Complements Dawn `.media` /
+ * `.ratio` and framework-scoped media CSS (Hero, Product, Collection, Media).
+ *
+ * Canonical tokens:
+ *   --nether-media-fit              object-fit (cover | contain)
+ *   --nether-media-object-position  object-position / focal point
+ *   --nether-media-ratio            numeric aspect ratio (w/h)
+ *   --ratio-percent                 Dawn ratio spacer (% padding-bottom)
+ *
+ * Ratio contract (showcase cards — identical across Product / Collection / Media):
+ *   portrait  0.8  → 125%
+ *   landscape 1.4  → ~71.43%
+ *   square    1    → 100%
+ *   adapt     image.aspect_ratio (fallback 1)
+ *
+ * Breakpoints (parity with Responsive / Layout / Position):
+ *   Mobile  …… max-width: 749px
+ *   Tablet  …… min-width: 750px and max-width: 989px
+ *   Desktop …… min-width: 990px
+ * ============================================================================= */
+
+:root {
+  --nether-media-fit: cover;
+  --nether-media-object-position: center center;
+  --nether-media-ratio-portrait: 0.8;
+  --nether-media-ratio-landscape: 1.4;
+  --nether-media-ratio-square: 1;
+  --nether-media-ratio: var(--nether-media-ratio-square);
+}
+
+/* =============================================================================
+ * Opt-in primitives
+ * ============================================================================= */
+
+/* Absolute fill surface for media children (img / video / iframe / picture) */
+.nether-media-fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.nether-media-fill > img,
+.nether-media-fill > video,
+.nether-media-fill > iframe,
+.nether-media-fill > picture,
+.nether-media-fill > deferred-media,
+.nether-media-fill picture > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: var(--nether-media-fit, cover);
+  object-position: var(--nether-media-object-position, center center);
+}
+
+.nether-media-fill > iframe,
+.nether-media-fill iframe {
+  border: 0;
+}
+
+.nether-product-card__media iframe,
+.nether-collection-card__media iframe,
+.nether-media-card__media iframe,
+.nether-hero__media iframe,
+.nether-content__video-block iframe {
+  border: 0;
+}
+
+/* Fit modifiers (merchant media_fit / future card controls) */
+.nether-media-fit--cover {
+  --nether-media-fit: cover;
+}
+
+.nether-media-fit--contain {
+  --nether-media-fit: contain;
+}
+
+/* Object-position 9-point helpers (media crop framing — not content placement) */
+.nether-media-pos--top-left { --nether-media-object-position: left top; }
+.nether-media-pos--top-center { --nether-media-object-position: center top; }
+.nether-media-pos--top-right { --nether-media-object-position: right top; }
+.nether-media-pos--middle-left { --nether-media-object-position: left center; }
+.nether-media-pos--middle-center { --nether-media-object-position: center center; }
+.nether-media-pos--middle-right { --nether-media-object-position: right center; }
+.nether-media-pos--bottom-left { --nether-media-object-position: left bottom; }
+.nether-media-pos--bottom-center { --nether-media-object-position: center bottom; }
+.nether-media-pos--bottom-right { --nether-media-object-position: right bottom; }
+
+/* Background video: decorative, non-interactive (cards / absolute fill surfaces) */
+.nether-media-bg-video,
+[data-nether-media-bg-video],
+[data-nether-content-bg-video] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.nether-media-bg-video video,
+[data-nether-media-bg-video] video,
+[data-nether-content-bg-video] video,
+[data-nether-hero-bg-video] video {
+  width: 100%;
+  height: 100%;
+  object-fit: var(--nether-media-fit, cover);
+  object-position: var(--nether-media-object-position, center center);
+}
+
+[data-nether-hero-bg-video] {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* CLS guard — ratio containers reserve space before media paints */
+.nether-media-ratio.ratio,
+.ratio.nether-media-ratio {
+  display: block;
+  position: relative;
+}
+
+/* Shared img/video fill contract for framework card media surfaces */
+.nether-product-card__media img,
+.nether-product-card__video,
+.nether-collection-card__media img,
+.nether-collection-card__video,
+.nether-media-card__media img,
+.nether-media-card__video {
+  object-fit: var(--nether-media-fit, cover);
+  object-position: var(--nether-media-object-position, center center);
+}
+
+.nether-hero__media img,
+.nether-hero__media video {
+  object-fit: var(--nether-media-fit, cover);
+  object-position: var(--nether-media-object-position, center center);
+}

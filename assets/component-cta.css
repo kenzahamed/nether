@@ -87,7 +87,7 @@ nether-cta {
 }
 
 .nether-cta--layout-luxury_cta .nether-cta__heading {
-  letter-spacing: -0.02em;
+  letter-spacing: var(--type-tracking-tighter, -0.02em);
 }
 
 .nether-cta--layout-luxury_cta .nether-cta__eyebrow {
@@ -122,8 +122,8 @@ nether-cta {
 }
 
 .nether-cta--floating-enabled .nether-hero__content-shell {
-  align-items: flex-end;
-  padding-bottom: 3.2rem;
+  /* Positioning Engine owns vertical placement — do not force flex-end */
+  padding-bottom: max(3.2rem, calc(3.2rem + var(--nether-safe-bottom, 0px)));
 }
 
 .nether-cta--floating-enabled .nether-hero__content {

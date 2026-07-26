@@ -1,0 +1,28 @@
+{% comment %}
+  Nether Layout Engine — section header container class.
+
+  Headers need .page-width only when the parent shell is full-width.
+  When the parent is already constrained, repeating .page-width causes
+  double gutters (nested container debt).
+
+  Accepts:
+  - full_width: {Boolean} Parent shell is full-width
+  - class: {String} Header BEM class (required)
+
+  Usage:
+    <div class="{% render 'nether-layout-header-class', full_width: section.settings.nether_full_width, class: 'nether-media__header' %}">
+{% endcomment %}
+
+{%- liquid
+  assign classes = class | default: '' | strip
+
+  if full_width
+    if classes != blank
+      echo 'page-width ' | append: classes
+    else
+      echo 'page-width'
+    endif
+  else
+    echo classes
+  endif
+-%}

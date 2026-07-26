@@ -15,6 +15,10 @@
   assign nether_banner_height = section.settings.nether_banner_height | default: 'medium'
   assign nether_content_width = section.settings.nether_banner_content_width | default: 'medium'
   assign nether_content_position = section.settings.nether_banner_content_position | default: 'middle-center'
+  capture nether_content_position
+    render 'nether-position-value', position: nether_content_position, default: 'middle-center'
+  endcapture
+  assign nether_content_position = nether_content_position | strip
 
   case nether_banner_layout
     when 'split', 'collection'
@@ -126,17 +130,7 @@
     --nether-hero-transition-duration: {{ nether_animation_duration }}s;
   }
 
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
+  {% render 'nether-section-padding', section: section %}
 
   {%- if nether_banner_height == 'adapt' -%}
     {%- liquid

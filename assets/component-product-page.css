@@ -208,8 +208,8 @@
 }
 
 .nether-product-page--layout-editorial .nether-product-page__module--title h1 {
-  font-size: clamp(2.8rem, 4vw, 4.8rem);
-  line-height: 1.05;
+  font-size: var(--type-size-emphasis-product-title, clamp(2.8rem, 4vw, 4.8rem));
+  line-height: var(--type-leading-emphasis, 1.05);
 }
 
 .nether-product-page--layout-sticky_atc .nether-product-page__buy-box .product__column-sticky {

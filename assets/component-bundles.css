@@ -2,7 +2,7 @@
    Extends product/cart commerce surfaces — scoped styles only. */
 
 .nether-bundles {
-  --nether-bundles-gap: 2.4rem;
+  --nether-bundles-gap: var(--nether-layout-gap, 2.4rem);
   --nether-bundles-transition-duration: 0.5s;
   --nether-bundles-columns-desktop: 3;
   --nether-bundles-columns-tablet: 2;

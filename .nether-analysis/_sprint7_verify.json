@@ -1,0 +1,206 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "position.css exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "position-value snippet exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "theme loads position.css",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "password loads position.css",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "safe-area tokens",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "center alias",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "snippet maps center",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "token map top-left",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "token map top-center",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "token map top-right",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "token map middle-left",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "token map middle-center",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "token map middle-right",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "token map bottom-left",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "token map bottom-center",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "token map bottom-right",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "hero removed duplicated 9-point literals",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "hero re-bridges pos tokens",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "hero safe-area padding",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "component-product-showcase.css deduped 9-point",
+      "pass": true,
+      "detail": "comment or absence of duplicated rules"
+    },
+    {
+      "name": "component-product-showcase.css references engine",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "component-collection-showcase.css deduped 9-point",
+      "pass": true,
+      "detail": "comment or absence of duplicated rules"
+    },
+    {
+      "name": "component-collection-showcase.css references engine",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "component-media.css deduped 9-point",
+      "pass": true,
+      "detail": "comment or absence of duplicated rules"
+    },
+    {
+      "name": "component-media.css references engine",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "component-cta.css floating does not force align-items flex-end on shell",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "component-banner.css floating does not force align-items flex-end on shell",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "component-content.css floating does not force align-items flex-end on shell",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "snippets/nether-product-card.liquid uses nether-position-value",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "snippets/nether-collection-card.liquid uses nether-position-value",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "snippets/nether-media-card.liquid uses nether-position-value",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "snippets/nether-product-promotional-card.liquid uses nether-position-value",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "sections/nether-hero.liquid uses nether-position-value",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "sections/nether-banner.liquid uses nether-position-value",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "sections/nether-content.liquid uses nether-position-value",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "sections/nether-cta.liquid uses nether-position-value",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "sections/nether-newsletter.liquid uses nether-position-value",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "collection card_layout stack rule",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "media minimal_gallery stack rule",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "no bogus media card_grid",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "failures": []
+}

@@ -11,6 +11,16 @@
   --nether-collection-page-columns-mobile: 2;
   --nether-collection-page-sticky-offset: 0px;
   --nether-collection-page-transition-duration: 0.5s;
+  --nether-collection-page-duration: var(--nether-collection-page-transition-duration);
+}
+
+.nether-collection-page [data-nether-collection-page-animate],
+.nether-collection-page .nether-collection-page__hero,
+.nether-collection-page .card-wrapper,
+.nether-collection-page .nether-product-card {
+  transition:
+    opacity var(--nether-collection-page-duration) ease,
+    transform var(--nether-collection-page-duration) ease;
 }
 
 /* Hero */
@@ -314,6 +324,18 @@
   align-items: stretch;
 }
 
+.nether-collection-page--tablet-stacked .nether-collection-page__hero-inner,
+.nether-collection-page--mobile-stacked .nether-collection-page__hero-inner {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.nether-collection-page--tablet-stacked .nether-collection-page__hero-media,
+.nether-collection-page--mobile-stacked .nether-collection-page__hero-media {
+  width: 100%;
+  max-width: none;
+}
+
 .nether-collection-page--mobile-centered .nether-collection-page__hero-content,
 .nether-collection-page--mobile-centered .nether-collection-page__empty-inner {
   text-align: center;
@@ -332,7 +354,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .nether-collection-page__toolbar--sticky,
-  .nether-collection-page [data-nether-collection-page-animate] {
+  .nether-collection-page [data-nether-collection-page-animate],
+  .nether-collection-page .nether-collection-page__hero,
+  .nether-collection-page .card-wrapper,
+  .nether-collection-page .nether-product-card {
     transition: none !important;
     animation: none !important;
   }

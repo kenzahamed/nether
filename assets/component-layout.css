@@ -1,0 +1,182 @@
+/* =============================================================================
+ * Nether Layout Engine
+ * Shared layout architecture for containers, wrappers, stacks, grids, and
+ * spacing rhythm. Complements component-responsive.css (viewport contract).
+ *
+ * Canonical container: Dawn .page-width (max-width + gutters).
+ * Utilities below extend that contract — they do not restyle framework
+ * presentation surfaces or redefine merchant --page-width.
+ *
+ * Breakpoints (parity with Responsive System):
+ *   Mobile  …… max-width: 749px
+ *   Tablet  …… min-width: 750px and max-width: 989px
+ *   Desktop …… min-width: 990px
+ * ============================================================================= */
+
+:root {
+  /* ── Content width presets (align with Hero width system) ──────────────── */
+  --nether-layout-content-narrow: 48rem;
+  --nether-layout-content-medium: 64rem;
+  --nether-layout-content-wide: 84rem;
+  --nether-layout-content-full: 100%;
+  --nether-layout-content-width: var(--nether-layout-content-medium);
+
+  /* ── Shared layout gap tokens (frameworks may alias local gaps) ─────────── */
+  --nether-layout-gap: var(--nether-stack-lg, 2.4rem);
+  --nether-layout-gap-sm: var(--nether-stack-sm, 1.2rem);
+  --nether-layout-gap-xs: var(--nether-stack-xs, 0.8rem);
+  --nether-layout-inner-gap: var(--nether-stack-xl, 3.2rem);
+
+  /* ── Column contract defaults (overridden per section via inline CSS) ───── */
+  --nether-layout-columns-mobile: 1;
+  --nether-layout-columns-tablet: 2;
+  --nether-layout-columns-desktop: 3;
+}
+
+/* =============================================================================
+ * Containers & wrappers
+ * ============================================================================= */
+
+/* Semantic alias — same box model as .page-width when used alone */
+.nether-layout-container {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--nether-gutter, 1.5rem);
+  box-sizing: border-box;
+}
+
+/* Full-width modifier used by Commerce + future frameworks */
+.nether-layout-container--full,
+.page-width--full {
+  max-width: none;
+  width: 100%;
+}
+
+/* Full-bleed shell: edge-to-edge, no horizontal gutter */
+.nether-layout-container--bleed {
+  max-width: none;
+  width: 100%;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+/* Nested page-width guard — prevents double gutters when a constrained
+ * parent already provides .page-width and a child repeats the class
+ * (headers inside Media / Product / Collection / FAQ / Testimonials). */
+.page-width .page-width,
+.nether-layout-container .page-width,
+.page-width .nether-layout-container:not(.nether-layout-container--full):not(.nether-layout-container--bleed) {
+  max-width: none;
+  width: 100%;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+/* Narrow content measure inside a container (opt-in) */
+.nether-layout-measure {
+  width: 100%;
+  max-width: var(--nether-layout-content-width);
+}
+
+.nether-layout-measure--narrow {
+  --nether-layout-content-width: var(--nether-layout-content-narrow);
+}
+
+.nether-layout-measure--medium {
+  --nether-layout-content-width: var(--nether-layout-content-medium);
+}
+
+.nether-layout-measure--wide {
+  --nether-layout-content-width: var(--nether-layout-content-wide);
+}
+
+.nether-layout-measure--full {
+  --nether-layout-content-width: var(--nether-layout-content-full);
+}
+
+.nether-layout-measure--center {
+  margin-inline: auto;
+}
+
+/* =============================================================================
+ * Stack & flex composition (opt-in utilities)
+ * ============================================================================= */
+
+.nether-layout-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nether-layout-gap);
+  min-width: 0;
+}
+
+.nether-layout-stack--sm {
+  gap: var(--nether-layout-gap-sm);
+}
+
+.nether-layout-stack--xs {
+  gap: var(--nether-layout-gap-xs);
+}
+
+.nether-layout-stack--inner {
+  gap: var(--nether-layout-inner-gap);
+}
+
+.nether-layout-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--nether-layout-gap-sm) var(--nether-layout-gap);
+  min-width: 0;
+}
+
+.nether-layout-row--between {
+  justify-content: space-between;
+}
+
+.nether-layout-row--end {
+  justify-content: flex-end;
+}
+
+.nether-layout-row--center {
+  justify-content: center;
+}
+
+/* =============================================================================
+ * Shared responsive grid primitive (opt-in)
+ * Frameworks keep local class names; this utility is the reusable contract.
+ * ============================================================================= */
+
+.nether-layout-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--nether-layout-columns-mobile, 1), minmax(0, 1fr));
+  gap: var(--nether-layout-gap, 2.4rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.nether-layout-grid > * {
+  min-width: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-layout-grid {
+    grid-template-columns: repeat(var(--nether-layout-columns-tablet, 2), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-layout-grid {
+    grid-template-columns: repeat(var(--nether-layout-columns-desktop, 3), minmax(0, 1fr));
+  }
+}
+
+/* =============================================================================
+ * Section spacing helper (merchant padding still emitted via Liquid snippet)
+ * ============================================================================= */
+
+.nether-layout-section-pad {
+  padding-block: calc(3.6rem * var(--nether-section-pad-scale, 0.75));
+}

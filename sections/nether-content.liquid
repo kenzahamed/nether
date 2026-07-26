@@ -22,6 +22,10 @@
   assign nether_content_layout = section.settings.nether_content_layout | default: 'editorial_story'
   assign nether_content_width = section.settings.nether_content_width | default: 'medium'
   assign nether_content_position = section.settings.nether_content_position | default: 'middle-center'
+  capture nether_content_position
+    render 'nether-position-value', position: nether_content_position, default: 'middle-center'
+  endcapture
+  assign nether_content_position = nether_content_position | strip
 
   assign uses_hero_shell = false
   assign uses_row_layout = false
@@ -60,8 +64,10 @@
   assign nether_class_list = 'nether-content nether-hero'
   assign nether_class_list = nether_class_list | append: ' nether-content--layout-' | append: nether_content_layout
   assign nether_class_list = nether_class_list | append: ' nether-hero--layout-' | append: nether_hero_layout
-  assign nether_class_list = nether_class_list | append: ' nether-hero--width-' | append: nether_content_width
-  assign nether_class_list = nether_class_list | append: ' nether-hero--position-' | append: nether_content_position
+  if uses_hero_shell
+    assign nether_class_list = nether_class_list | append: ' nether-hero--width-' | append: nether_content_width
+    assign nether_class_list = nether_class_list | append: ' nether-hero--position-' | append: nether_content_position
+  endif
   assign nether_class_list = nether_class_list | append: ' nether-hero--desktop-' | append: section.settings.nether_content_layout_desktop
   assign nether_class_list = nether_class_list | append: ' nether-hero--tablet-' | append: section.settings.nether_content_layout_tablet
   assign nether_class_list = nether_class_list | append: ' nether-hero--mobile-' | append: section.settings.nether_content_layout_mobile
@@ -132,25 +138,8 @@
     --nether-content-gap: {{ section.settings.nether_content_gap | plus: 8 }}px;
   }
 
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+  {% render 'nether-section-padding', section: section %}
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-
-  {%- if uses_section_media and section.settings.nether_content_image_desktop != blank -%}
-    #NetherContent-{{ section.id }} .nether-hero__media::before {
-      padding-bottom: {{ 1 | divided_by: section.settings.nether_content_image_desktop.aspect_ratio | times: 100 }}%;
-      content: '';
-      display: block;
-    }
-  {%- endif -%}
 {%- endstyle -%}
 
 {%- if section.settings.nether_content_show_divider_top -%}
@@ -279,7 +268,8 @@
           "value": "full",
           "label": "t:nether.common.ui.labels.full"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.nether_content_layout != 'alternating_story' and section.settings.nether_content_layout != 'timeline' and section.settings.nether_content_layout != 'multi_column' and section.settings.nether_content_layout != 'feature_grid' }}"
     },
     {
       "type": "select",
@@ -324,7 +314,8 @@
           "label": "t:nether.common.ui.layout.bottom_right_2"
         }
       ],
-      "info": "t:nether.common.info_content_position"
+      "info": "t:nether.common.info_content_position",
+      "visible_if": "{{ section.settings.nether_content_layout != 'alternating_story' and section.settings.nether_content_layout != 'timeline' and section.settings.nether_content_layout != 'multi_column' and section.settings.nether_content_layout != 'feature_grid' }}"
     },
     {
       "type": "select",
@@ -361,7 +352,8 @@
           "value": "right",
           "label": "t:nether.common.ui.layout.right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.nether_content_layout == 'image_with_text' or section.settings.nether_content_layout == 'split_content' or section.settings.nether_content_layout == 'brand_story' }}"
     },
     {
       "type": "select",
@@ -1594,21 +1586,21 @@
           "type": "video",
           "id": "video",
           "label": "t:nether.common.ui.media.video",
-          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "visible_if": "{{ block.settings.media_type == 'video' }}",
           "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "image_picker",
           "id": "poster_image",
           "label": "t:nether.common.ui.media.poster_image",
-          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "visible_if": "{{ block.settings.media_type == 'video' }}",
           "info": "t:nether.common.info_video_fields"
         },
         {
           "type": "text",
           "id": "video_description",
           "label": "t:nether.common.ui.labels.video_description",
-          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "visible_if": "{{ block.settings.media_type == 'video' }}",
           "info": "t:nether.common.info_video_fields"
         },
         {
@@ -1616,7 +1608,7 @@
           "id": "video_loop",
           "default": true,
           "label": "t:nether.common.ui.media.loop_video",
-          "visible_if": "{{ block.settings.media_type == 'video' or block.settings.media_type == 'background_video' }}",
+          "visible_if": "{{ block.settings.media_type == 'video' }}",
           "info": "t:nether.common.info_video_fields"
         },
         {

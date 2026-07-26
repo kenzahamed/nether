@@ -1,0 +1,128 @@
+{% comment %}
+  Nether Media Engine — responsive <picture> (desktop + optional mobile source).
+
+  Accepts:
+  - desktop_image: {Image} Required
+  - mobile_image: {Image} Optional (emits mobile <source> when different)
+  - widths: {String} Srcset widths list (required)
+  - sizes: {String} Sizes attribute (required)
+  - loading: {String} 'lazy' | 'eager' (default: lazy)
+  - fetchpriority: {String} high | low | auto (default: auto)
+  - alt: {String} Alt text
+  - class: {String} Optional img class
+  - image_width: {Number} Max image_url width (default: 2000)
+  - mobile_preset: {String} 'card' (330/535/750) | 'hero' (375/750/1100) | 'content' (375/750)
+  - object_position: {String} Optional inline object-position (focal point)
+
+  Usage:
+    {% render 'nether-media-picture',
+      desktop_image: desktop_image,
+      mobile_image: mobile_image,
+      widths: widths,
+      sizes: sizes,
+      loading: loading_attr,
+      fetchpriority: fetch_priority_value,
+      alt: desktop_alt,
+      mobile_preset: 'card'
+    %}
+{% endcomment %}
+
+{%- liquid
+  assign img = desktop_image
+  assign mob = mobile_image | default: img
+  assign img_widths = widths
+  assign img_sizes = sizes
+  assign img_loading = loading | default: 'lazy'
+  assign img_fetch = fetchpriority | default: 'auto'
+  assign img_alt = alt | default: img.alt
+  assign img_class = class | default: ''
+  assign max_w = image_width | default: 2000
+  assign preset = mobile_preset | default: 'card'
+  assign obj_pos = object_position | default: ''
+
+  if obj_pos == blank and img.presentation.focal_point != blank
+    assign obj_pos = img.presentation.focal_point
+  endif
+
+  assign img_style = blank
+  if obj_pos != blank
+    assign img_style = 'object-position: ' | append: obj_pos
+  endif
+-%}
+
+{%- if img != blank -%}
+  <picture>
+    {%- if mob != blank and mob != img -%}
+      <source
+        media="(max-width: 749px)"
+        srcset="
+          {%- if preset == 'hero' -%}
+            {%- if mob.width >= 375 -%}{{ mob | image_url: width: 375 }} 375w,{%- endif -%}
+            {%- if mob.width >= 750 -%}{{ mob | image_url: width: 750 }} 750w,{%- endif -%}
+            {%- if mob.width >= 1100 -%}{{ mob | image_url: width: 1100 }} 1100w,{%- endif -%}
+            {{ mob | image_url }} {{ mob.width }}w
+          {%- elsif preset == 'content' -%}
+            {%- if mob.width >= 375 -%}{{ mob | image_url: width: 375 }} 375w,{%- endif -%}
+            {%- if mob.width >= 750 -%}{{ mob | image_url: width: 750 }} 750w,{%- endif -%}
+            {{ mob | image_url }} {{ mob.width }}w
+          {%- else -%}
+            {%- if mob.width >= 330 -%}{{ mob | image_url: width: 330 }} 330w,{%- endif -%}
+            {%- if mob.width >= 535 -%}{{ mob | image_url: width: 535 }} 535w,{%- endif -%}
+            {%- if mob.width >= 750 -%}{{ mob | image_url: width: 750 }} 750w,{%- endif -%}
+            {{ mob | image_url }} {{ mob.width }}w
+          {%- endif -%}
+        "
+        {% if img_sizes != blank %}sizes="{{ img_sizes }}"{% endif %}
+      >
+    {%- endif -%}
+    {%- if img_class != blank and img_style != blank -%}
+      {{
+        img
+        | image_url: width: max_w
+        | image_tag:
+          widths: img_widths,
+          sizes: img_sizes,
+          alt: img_alt,
+          class: img_class,
+          loading: img_loading,
+          fetchpriority: img_fetch,
+          style: img_style
+      }}
+    {%- elsif img_class != blank -%}
+      {{
+        img
+        | image_url: width: max_w
+        | image_tag:
+          widths: img_widths,
+          sizes: img_sizes,
+          alt: img_alt,
+          class: img_class,
+          loading: img_loading,
+          fetchpriority: img_fetch
+      }}
+    {%- elsif img_style != blank -%}
+      {{
+        img
+        | image_url: width: max_w
+        | image_tag:
+          widths: img_widths,
+          sizes: img_sizes,
+          alt: img_alt,
+          loading: img_loading,
+          fetchpriority: img_fetch,
+          style: img_style
+      }}
+    {%- else -%}
+      {{
+        img
+        | image_url: width: max_w
+        | image_tag:
+          widths: img_widths,
+          sizes: img_sizes,
+          alt: img_alt,
+          loading: img_loading,
+          fetchpriority: img_fetch
+      }}
+    {%- endif -%}
+  </picture>
+{%- endif -%}

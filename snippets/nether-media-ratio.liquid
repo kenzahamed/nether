@@ -1,0 +1,46 @@
+{% comment %}
+  Nether Media Engine — compute showcase aspect ratio / --ratio-percent.
+
+  Contract (identical across Product / Collection / Media renderers):
+    portrait  → 0.8
+    landscape → 1.4
+    square    → 1
+    adapt     → image.aspect_ratio (fallback 1)
+
+  When image is blank and mode is portrait/landscape/adapt, ratio stays 1
+  (placeholder-safe — matches prior renderer behavior).
+
+  Accepts:
+  - image_ratio: {String} portrait | landscape | square | adapt (default: portrait)
+  - image: {Image} Source for adapt mode (optional)
+  - output: {String} 'percent' (default) | 'ratio'
+
+  Usage:
+    {% capture ratio_percent %}{% render 'nether-media-ratio', image_ratio: image_ratio, image: desktop_image %}{% endcapture %}
+    style="--ratio-percent: {{ ratio_percent | strip }}%;"
+{% endcomment %}
+
+{%- liquid
+  assign ratio_mode = image_ratio | default: 'portrait' | strip
+  assign ratio = 1
+
+  if image != blank and ratio_mode == 'portrait'
+    assign ratio = 0.8
+  elsif image != blank and ratio_mode == 'landscape'
+    assign ratio = 1.4
+  elsif image != blank and ratio_mode == 'adapt'
+    assign ratio = image.aspect_ratio
+  elsif ratio_mode == 'square'
+    assign ratio = 1
+  endif
+
+  if ratio == 0 or ratio == null
+    assign ratio = 1
+  endif
+
+  if output == 'ratio'
+    echo ratio
+  else
+    echo 1 | divided_by: ratio | times: 100
+  endif
+-%}

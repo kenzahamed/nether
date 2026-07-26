@@ -55,8 +55,11 @@
 
   {%- when 'heading' -%}
     {%- if block.settings.heading != blank -%}
+      {%- capture nether_heading_class -%}
+        {%- render 'nether-type-heading-class', heading_size: block.settings.heading_size, mode: 'both' -%}
+      {%- endcapture -%}
       <{{ heading_element }}
-        class="{{ class_prefix }}__heading inline-richtext {{ block.settings.heading_size }}"
+        class="{{ class_prefix }}__heading inline-richtext {{ nether_heading_class | strip }} type-balance"
         {{ motion_attr }}
         {% if role_attr != blank %}{{ role_attr }}="heading"{% endif %}
         {% if secondary_role_attr != blank %}{{ secondary_role_attr }}="heading"{% endif %}
@@ -68,8 +71,11 @@
 
   {%- when 'subheading' -%}
     {%- if block.settings.subheading != blank -%}
+      {%- capture nether_subheading_class -%}
+        {%- render 'nether-type-heading-class', heading_size: block.settings.subheading_size, mode: 'both' -%}
+      {%- endcapture -%}
       <{{ subheading_element }}
-        class="{{ class_prefix }}__subheading inline-richtext {{ block.settings.subheading_size }}"
+        class="{{ class_prefix }}__subheading inline-richtext {{ nether_subheading_class | strip }}"
         {{ motion_attr }}
         {% if role_attr != blank %}{{ role_attr }}="subheading"{% endif %}
         {% if secondary_role_attr != blank %}{{ secondary_role_attr }}="subheading"{% endif %}
@@ -81,8 +87,11 @@
 
   {%- when 'text' -%}
     {%- if block.settings.text != blank -%}
+      {%- capture nether_text_class -%}
+        {%- render 'nether-type-text-class', text_style: block.settings.text_style -%}
+      {%- endcapture -%}
       <div
-        class="{{ class_prefix }}__text rte {{ block.settings.text_style }}"
+        class="{{ class_prefix }}__text rte type-pretty {{ nether_text_class | strip }}"
         {{ motion_attr }}
         {% if role_attr != blank %}{{ role_attr }}="{{ text_role }}"{% endif %}
         {% if secondary_role_attr != blank %}{{ secondary_role_attr }}="{{ text_role }}"{% endif %}

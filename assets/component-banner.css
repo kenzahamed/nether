@@ -9,24 +9,34 @@ nether-banner {
 }
 
 .nether-banner {
-  --nether-banner-min-height: 36rem;
+  --nether-banner-min-height: 40rem;
   --nether-hero-min-height: var(--nether-banner-min-height);
   --nether-hero-content-padding: 2.4rem;
   --nether-hero-gap: 2rem;
 }
 
+/* Banner height tokens win over shared Hero --height-* class writes on the same node. */
+.nether-banner.nether-hero--height-small,
+.nether-banner.nether-hero--height-medium,
+.nether-banner.nether-hero--height-large,
+.nether-banner.nether-hero--height-adapt,
+.nether-banner.nether-hero--height-fullscreen {
+  --nether-hero-min-height: var(--nether-banner-min-height);
+}
+
 /* ── Banner height presets ──────────────────────────────────────────────────── */
+/* Distinct min-height steps so Theme Editor changes are visibly different. */
 
 .nether-banner--height-small {
-  --nether-banner-min-height: 28rem;
+  --nether-banner-min-height: 24rem;
 }
 
 .nether-banner--height-medium {
-  --nether-banner-min-height: 36rem;
+  --nether-banner-min-height: 40rem;
 }
 
 .nether-banner--height-large {
-  --nether-banner-min-height: 48rem;
+  --nether-banner-min-height: 56rem;
 }
 
 .nether-banner--height-adapt {
@@ -87,8 +97,8 @@ nether-banner {
 }
 
 .nether-banner--floating-card .nether-hero__content-shell {
-  align-items: flex-end;
-  padding-bottom: 3.2rem;
+  /* Positioning Engine owns vertical placement — do not force flex-end */
+  padding-bottom: max(3.2rem, calc(3.2rem + var(--nether-safe-bottom, 0px)));
 }
 
 .nether-banner--floating-card .nether-hero__content {

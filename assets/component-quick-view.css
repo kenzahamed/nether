@@ -107,18 +107,26 @@ nether-quick-view,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 4rem;
-  height: 4rem;
+  width: var(--nether-hit-target, 4.4rem);
+  height: var(--nether-hit-target, 4.4rem);
+  min-width: var(--nether-hit-target, 4.4rem);
+  min-height: var(--nether-hit-target, 4.4rem);
   padding: 0;
   border: 0.1rem solid rgba(var(--color-foreground), 0.1);
   border-radius: 50%;
   background: rgb(var(--color-background));
   color: rgba(var(--color-foreground), 0.7);
   cursor: pointer;
+  transition:
+    color var(--nether-interact-duration, 0.2s) var(--nether-interact-ease, ease),
+    border-color var(--nether-interact-duration, 0.2s) var(--nether-interact-ease, ease),
+    background-color var(--nether-interact-duration, 0.2s) var(--nether-interact-ease, ease);
 }
 
-.nether-quick-view__close:hover {
+.nether-quick-view__close:hover,
+.nether-quick-view__close:focus-visible {
   color: rgb(var(--color-foreground));
+  border-color: var(--nether-interact-hover-border, rgba(var(--color-foreground), 0.28));
 }
 
 .nether-quick-view__actions {
@@ -284,12 +292,18 @@ nether-quick-view,
   justify-content: center;
   gap: 0.4rem;
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform var(--nether-interact-duration, 0.2s) var(--nether-interact-ease, ease),
+    color var(--nether-interact-duration, 0.2s) var(--nether-interact-ease, ease),
+    background-color var(--nether-interact-duration, 0.2s) var(--nether-interact-ease, ease),
+    border-color var(--nether-interact-duration, 0.2s) var(--nether-interact-ease, ease);
 }
 
 .nether-quick-view-trigger__control--icon {
-  width: 3.6rem;
-  height: 3.6rem;
+  width: var(--nether-hit-target, 4.4rem);
+  height: var(--nether-hit-target, 4.4rem);
+  min-width: var(--nether-hit-target, 4.4rem);
+  min-height: var(--nether-hit-target, 4.4rem);
   padding: 0;
   border: 0.1rem solid rgba(var(--color-foreground), 0.12);
   border-radius: 50%;
@@ -297,8 +311,9 @@ nether-quick-view,
   color: rgb(var(--color-foreground));
 }
 
-.nether-quick-view-trigger__control--icon:hover {
-  border-color: rgba(var(--color-foreground), 0.28);
+.nether-quick-view-trigger__control--icon:hover,
+.nether-quick-view-trigger__control--icon:focus-visible {
+  border-color: var(--nether-interact-hover-border, rgba(var(--color-foreground), 0.28));
   transform: translateY(-0.1rem);
 }
 

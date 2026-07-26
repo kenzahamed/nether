@@ -342,8 +342,9 @@ nether-header:not([data-nether-motion-ready]) .is-nether-header-hidden .header-w
 
 .nether-header__action:focus-visible,
 .nether-header .header__icon:focus-visible {
-  outline: 0.2rem solid rgba(var(--color-foreground), 0.72);
-  outline-offset: 0.2rem;
+  outline: var(--nether-interact-focus-outline, var(--focused-base-outline));
+  outline-offset: var(--nether-interact-focus-outline-offset, var(--focused-base-outline-offset));
+  box-shadow: var(--nether-interact-focus-shadow, var(--focused-base-box-shadow));
 }
 
 .nether-header__placeholder-badge {

@@ -5,7 +5,7 @@
  * ============================================================================= */
 
 .nether-product {
-  --nether-product-gap: 2.4rem;
+  --nether-product-gap: var(--nether-layout-gap, 2.4rem);
   --nether-product-columns-desktop: 3;
   --nether-product-columns-tablet: 2;
   --nether-product-columns-mobile: 1;
@@ -18,7 +18,7 @@
 .nether-product__inner {
   display: flex;
   flex-direction: column;
-  gap: 3.2rem;
+  gap: var(--nether-layout-inner-gap, 3.2rem);
 }
 
 /* ── Section header ────────────────────────────────────────────────────────── */
@@ -116,7 +116,7 @@
   }
 
   .nether-product--desktop-editorial .nether-product__item:nth-child(odd) .nether-product-card__heading {
-    font-size: calc(var(--font-heading-scale) * 2.8rem);
+    font-size: var(--type-size-card-editorial, calc(var(--font-heading-scale) * 2.8rem));
   }
 }
 
@@ -397,7 +397,8 @@
 .nether-product-card__video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: var(--nether-media-fit, cover);
+  object-position: var(--nether-media-object-position, center center);
 }
 
 .nether-product-card__video--iframe {
@@ -434,56 +435,7 @@
   transition: transform var(--nether-product-transition-duration) ease, opacity var(--nether-product-transition-duration) ease;
 }
 
-.nether-product-card--position-top-left .nether-product-card__content {
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
-.nether-product-card--position-top-center .nether-product-card__content {
-  justify-content: flex-start;
-  align-items: center;
-  text-align: center;
-}
-
-.nether-product-card--position-top-right .nether-product-card__content {
-  justify-content: flex-start;
-  align-items: flex-end;
-  text-align: right;
-}
-
-.nether-product-card--position-middle-left .nether-product-card__content {
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.nether-product-card--position-middle-center .nether-product-card__content {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.nether-product-card--position-middle-right .nether-product-card__content {
-  justify-content: center;
-  align-items: flex-end;
-  text-align: right;
-}
-
-.nether-product-card--position-bottom-left .nether-product-card__content {
-  justify-content: flex-end;
-  align-items: flex-start;
-}
-
-.nether-product-card--position-bottom-center .nether-product-card__content {
-  justify-content: flex-end;
-  align-items: center;
-  text-align: center;
-}
-
-.nether-product-card--position-bottom-right .nether-product-card__content {
-  justify-content: flex-end;
-  align-items: flex-end;
-  text-align: right;
-}
+/* 9-point placement: component-position.css (Positioning Engine) */
 
 .nether-product-card--align-center .nether-product-card__information {
   text-align: center;
@@ -553,7 +505,7 @@
 }
 
 .nether-product-card--size-small .nether-product-card__heading {
-  font-size: calc(var(--font-heading-scale) * 1.6rem);
+  font-size: var(--type-size-card-sm, calc(var(--font-heading-scale) * 1.6rem));
 }
 
 .nether-product-card--size-large .nether-product-card__content {
@@ -561,12 +513,12 @@
 }
 
 .nether-product-card--size-large .nether-product-card__heading {
-  font-size: calc(var(--font-heading-scale) * 3.2rem);
+  font-size: var(--type-size-card-lg, calc(var(--font-heading-scale) * 3.2rem));
 }
 
 .nether-product-card--size-editorial .nether-product-card__heading {
   font-family: var(--font-heading-family);
-  letter-spacing: calc(var(--font-heading-scale) * 0.04rem);
+  letter-spacing: var(--type-tracking-editorial, calc(var(--font-heading-scale) * 0.04rem));
 }
 
 /* ── Floating cards ────────────────────────────────────────────────────────── */

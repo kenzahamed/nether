@@ -23,7 +23,10 @@
 -%}
 
 {%- if has_header_blocks -%}
-  <div class="nether-media__header page-width" data-nether-media-header>
+  <div
+    class="{% render 'nether-layout-header-class', full_width: section.settings.nether_full_width, class: 'nether-media__header' %}"
+    data-nether-media-header
+  >
     <div
       class="nether-media__header-inner nether-media__header-inner--align-{{ alignment }}"
       data-nether-media-panel

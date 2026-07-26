@@ -1,5 +1,6 @@
 {% comment %}
   Renders Nether Premium Content inline image block.
+  Uses shared Media Engine picture + loading helpers.
 
   Accepts:
   - block: {Object} Theme Editor block (required)
@@ -14,10 +15,20 @@
 {%- liquid
   assign desktop_image = block.settings.image
   assign mobile_image = block.settings.image_mobile | default: desktop_image
-  assign lazy = lazy_load | default: true
+  assign is_lazy = lazy_load | default: true
   assign widths = '375, 550, 750, 1100, 1500, 1780, 2000'
   assign sizes = '(min-width: 990px) 60rem, (min-width: 750px) 50vw, 100vw'
+
+  assign media_object_position = blank
+  if desktop_image.presentation.focal_point != blank
+    assign media_object_position = desktop_image.presentation.focal_point
+  endif
 -%}
+
+{%- capture loading_attr -%}
+  {%- render 'nether-media-loading', lazy_load: is_lazy -%}
+{%- endcapture -%}
+{%- assign loading_attr = loading_attr | strip -%}
 
 {%- if desktop_image != blank -%}
   <div
@@ -29,29 +40,21 @@
     data-nether-hero-animate
     {%- endif %}
     data-nether-hero-role="image"
+    {% if media_object_position != blank %}style="--nether-media-object-position: {{ media_object_position }};"{% endif %}
     {{ block.shopify_attributes }}
   >
-    <picture>
-      {%- if mobile_image != blank and mobile_image != desktop_image -%}
-        <source
-          media="(max-width: 749px)"
-          srcset="
-            {%- if mobile_image.width >= 375 -%}{{ mobile_image | image_url: width: 375 }} 375w,{%- endif -%}
-            {%- if mobile_image.width >= 750 -%}{{ mobile_image | image_url: width: 750 }} 750w,{%- endif -%}
-            {{ mobile_image | image_url }} {{ mobile_image.width }}w
-          "
-        >
-      {%- endif -%}
-      {{
-        desktop_image
-        | image_url: width: 2000
-        | image_tag:
-          widths: widths,
-          sizes: sizes,
-          loading: lazy,
-          alt: desktop_image.alt | escape
-      }}
-    </picture>
+    {%- render 'nether-media-picture',
+      desktop_image: desktop_image,
+      mobile_image: mobile_image,
+      widths: widths,
+      sizes: sizes,
+      loading: loading_attr,
+      fetchpriority: 'auto',
+      alt: desktop_image.alt,
+      mobile_preset: 'content',
+      image_width: 2000,
+      object_position: media_object_position
+    -%}
     {%- if block.settings.caption != blank -%}
       <figcaption class="nether-content__image-caption type-caption">{{ block.settings.caption | escape }}</figcaption>
     {%- endif -%}

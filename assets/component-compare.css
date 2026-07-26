@@ -72,6 +72,12 @@ nether-compare-button {
   transform: scale(1.08);
 }
 
+.nether-compare-button__control:focus-visible {
+  outline: var(--nether-interact-focus-outline, var(--focused-base-outline));
+  outline-offset: var(--nether-interact-focus-outline-offset, var(--focused-base-outline-offset));
+  box-shadow: var(--nether-interact-focus-shadow, var(--focused-base-box-shadow));
+}
+
 .nether-compare-button.is-busy .nether-compare-button__control {
   opacity: 0.7;
   pointer-events: none;
@@ -606,6 +612,18 @@ nether-compare-button {
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+@media screen and (max-width: 749px) {
+  .nether-compare-page--mobile-compact .nether-compare__header,
+  .nether-compare-page--mobile-compact .nether-compare-table,
+  .nether-compare-page--mobile-compact .nether-compare__merchant-content {
+    gap: calc(var(--nether-compare-gap, 1.6rem) * 0.75);
+  }
+
+  .nether-compare-page--mobile-compact .nether-compare-table__scroll {
+    padding: 0.8rem;
+  }
 }
 
 /* -----------------------------------------------------------------------------

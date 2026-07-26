@@ -26,7 +26,10 @@
 -%}
 
 {%- if has_header_blocks -%}
-  <div class="nether-collection__header page-width" data-nether-collection-header>
+  <div
+    class="{% render 'nether-layout-header-class', full_width: section.settings.nether_full_width, class: 'nether-collection__header' %}"
+    data-nether-collection-header
+  >
     <div
       class="nether-collection__header-inner nether-collection__header-inner--align-{{ alignment }}"
       data-nether-collection-panel

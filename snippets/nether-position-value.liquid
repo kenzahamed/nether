@@ -1,0 +1,33 @@
+{% comment %}
+  Nether Positioning Engine — normalize merchant position values.
+
+  Maps legacy / shorthand values onto the canonical 9-point grid:
+    center → middle-center
+
+  Accepts:
+  - position: {String} Raw setting value (required)
+  - default: {String} Fallback when blank (default: middle-center)
+
+  Usage:
+    assign content_position = section.settings.nether_content_position
+    assign content_position = content_position | default: 'bottom-left'
+    {% capture content_position %}{% render 'nether-position-value', position: content_position, default: 'bottom-left' %}{% endcapture %}
+    assign content_position = content_position | strip
+
+  Or inline when appending classes:
+    assign nether_class_list = nether_class_list | append: ' nether-hero--position-' | append: normalized
+{% endcomment %}
+
+{%- liquid
+  assign pos = position | default: default | default: 'middle-center' | strip
+
+  if pos == blank
+    assign pos = default | default: 'middle-center'
+  endif
+
+  if pos == 'center'
+    assign pos = 'middle-center'
+  endif
+
+  echo pos
+-%}

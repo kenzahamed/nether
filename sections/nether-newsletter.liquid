@@ -24,6 +24,10 @@
   assign nether_layout = section.settings.nether_layout | default: 'centered_signup'
   assign nether_content_width = section.settings.nether_content_width | default: 'medium'
   assign nether_content_position = section.settings.nether_content_position | default: 'middle-center'
+  capture nether_content_position
+    render 'nether-position-value', position: nether_content_position, default: 'middle-center'
+  endcapture
+  assign nether_content_position = nether_content_position | strip
 
   assign uses_hero_shell = false
   assign uses_section_media = false
@@ -78,9 +82,11 @@
   assign nether_class_list = nether_class_list | append: ' nether-newsletter--layout-' | append: nether_layout
   if uses_hero_shell
     assign nether_class_list = nether_class_list | append: ' nether-hero--layout-' | append: nether_hero_layout
+    assign nether_class_list = nether_class_list | append: ' nether-hero--position-' | append: nether_content_position
   endif
-  assign nether_class_list = nether_class_list | append: ' nether-hero--width-' | append: nether_content_width
-  assign nether_class_list = nether_class_list | append: ' nether-hero--position-' | append: nether_content_position
+  if uses_hero_shell or nether_layout == 'centered_signup'
+    assign nether_class_list = nether_class_list | append: ' nether-hero--width-' | append: nether_content_width
+  endif
   assign nether_class_list = nether_class_list | append: ' nether-hero--desktop-' | append: section.settings.nether_layout_desktop
   assign nether_class_list = nether_class_list | append: ' nether-hero--tablet-' | append: section.settings.nether_layout_tablet
   assign nether_class_list = nether_class_list | append: ' nether-hero--mobile-' | append: section.settings.nether_layout_mobile
@@ -160,25 +166,8 @@
     --nether-hero-transition-duration: {{ nether_animation_duration }}s;
   }
 
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+  {% render 'nether-section-padding', section: section %}
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-
-  {%- if uses_section_media and section.settings.nether_newsletter_image_desktop != blank -%}
-    #NetherNewsletter-{{ section.id }} .nether-hero__media::before {
-      padding-bottom: {{ 1 | divided_by: section.settings.nether_newsletter_image_desktop.aspect_ratio | times: 100 }}%;
-      content: '';
-      display: block;
-    }
-  {%- endif -%}
 {%- endstyle -%}
 
 {%- if section.settings.nether_show_divider_top -%}
@@ -339,7 +328,8 @@
           "value": "right",
           "label": "t:nether.common.right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.nether_layout == 'split_layout' or section.settings.nether_layout == 'image_with_signup' }}"
     },
     {
       "type": "select",
@@ -384,7 +374,8 @@
           "label": "t:nether.common.bottom_right"
         }
       ],
-      "info": "t:nether.common.info_content_position"
+      "info": "t:nether.common.info_content_position",
+      "visible_if": "{{ section.settings.nether_layout != 'centered_signup' }}"
     },
     {
       "type": "select",

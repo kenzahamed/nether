@@ -1,5 +1,6 @@
 {% comment %}
   Renders media for a Nether Premium Collection card.
+  Uses shared Media Engine helpers (ratio, loading, picture, video).
 
   Accepts:
   - block: {Object} Collection block (required)
@@ -43,111 +44,71 @@
     assign poster_image = desktop_image
   endif
 
-  # Showcase ratio contract (identical across product/collection/media-render):
-  # portrait 0.8 · landscape 1.4 · square 1 · adapt image AR (fallback 1)
-  assign ratio = 1
-  if desktop_image != blank and image_ratio == 'portrait'
-    assign ratio = 0.8
-  elsif desktop_image != blank and image_ratio == 'landscape'
-    assign ratio = 1.4
-  elsif desktop_image != blank and image_ratio == 'adapt'
-    assign ratio = desktop_image.aspect_ratio
-  elsif image_ratio == 'square'
-    assign ratio = 1
-  endif
-  if ratio == 0 or ratio == null
-    assign ratio = 1
-  endif
-
   assign widths = '165, 330, 535, 750, 1000, 1500, 2000, 3000'
   assign sizes = '(min-width: ' | append: settings.page_width | append: 'px) ' | append: settings.page_width | minus: 100 | divided_by: columns_count | append: 'px, (min-width: 750px) calc((100vw - 10rem) / ' | append: columns_count | append: '), calc(100vw - 3rem)'
+
+  assign desktop_alt = desktop_image.alt | default: card_collection.title
+
+  assign media_object_position = blank
+  if desktop_image.presentation.focal_point != blank
+    assign media_object_position = desktop_image.presentation.focal_point
+  endif
 -%}
 
+{%- capture ratio_percent -%}
+  {%- render 'nether-media-ratio', image_ratio: image_ratio, image: desktop_image -%}
+{%- endcapture -%}
+{%- assign ratio_percent = ratio_percent | strip -%}
+
+{%- capture loading_attr -%}
+  {%- render 'nether-media-loading', lazy_load: is_lazy, fetch_priority: fetch_priority_value -%}
+{%- endcapture -%}
+{%- assign loading_attr = loading_attr | strip -%}
+
 <div
-  class="nether-collection-card__media ratio"
-  style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+  class="nether-collection-card__media ratio nether-media-ratio"
+  style="--ratio-percent: {{ ratio_percent }}%;{% if media_object_position != blank %} --nether-media-object-position: {{ media_object_position }};{% endif %}"
   data-nether-collection-media
   {% if section.settings.nether_enable_parallax %}data-nether-collection-parallax{% endif %}
 >
-  <div class="nether-collection-card__media-inner media media--transparent media--hover-effect">
+  <div class="nether-collection-card__media-inner media media--transparent media--hover-effect nether-media-fill">
     {%- case media_type -%}
       {%- when 'video' -%}
-        {%- if shopify_video != blank -%}
-          <deferred-media class="nether-collection-card__deferred-media">
-            {{
-              shopify_video
-              | video_tag:
-                image_size: '1100x',
-                autoplay: false,
-                loop: video_loop,
-                muted: true,
-                controls: true,
-                playsinline: true,
-                poster: poster_image,
-                class: 'nether-collection-card__video'
-            }}
-          </deferred-media>
-        {%- elsif video_url != blank -%}
-          {%- if video_url.type == 'youtube' -%}
-            <iframe
-              src="https://www.youtube.com/embed/{{ video_url.id }}"
-              class="nether-collection-card__video nether-collection-card__video--iframe"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              title="{{ video_description | escape }}"
-              loading="lazy"
-            ></iframe>
-          {%- elsif video_url.type == 'vimeo' -%}
-            <iframe
-              src="https://player.vimeo.com/video/{{ video_url.id }}"
-              class="nether-collection-card__video nether-collection-card__video--iframe"
-              allow="autoplay; encrypted-media"
-              title="{{ video_description | escape }}"
-              loading="lazy"
-            ></iframe>
-          {%- endif -%}
-        {%- elsif desktop_image != blank -%}
-          {{
-            desktop_image
-            | image_url: width: 1500
-            | image_tag:
-              widths: widths,
-              sizes: sizes,
-              alt: desktop_image.alt | default: card_collection.title,
-              class: 'motion-reduce',
-              loading: is_lazy,
-              fetchpriority: fetch_priority_value
-          }}
-        {%- else -%}
-          {{ 'collection-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
-        {%- endif -%}
+        {%- render 'nether-media-video',
+          mode: 'deferred',
+          shopify_video: shopify_video,
+          video_url: video_url,
+          poster_image: poster_image,
+          fallback_image: desktop_image,
+          video_description: video_description,
+          video_loop: video_loop,
+          widths: widths,
+          sizes: sizes,
+          loading: loading_attr,
+          fetchpriority: fetch_priority_value,
+          video_class: 'nether-collection-card__video',
+          deferred_class: 'nether-collection-card__deferred-media',
+          poster_class: 'nether-collection-card__video-poster',
+          video_image_size: '1100x',
+          poster_width: 1500,
+          placeholder: 'collection-apparel-1'
+        -%}
 
       {%- else -%}
         {%- if desktop_image != blank -%}
-          <picture>
-            {%- if mobile_image != blank and mobile_image != desktop_image -%}
-              <source
-                media="(max-width: 749px)"
-                srcset="
-                  {%- if mobile_image.width >= 330 -%}{{ mobile_image | image_url: width: 330 }} 330w,{%- endif -%}
-                  {%- if mobile_image.width >= 535 -%}{{ mobile_image | image_url: width: 535 }} 535w,{%- endif -%}
-                  {%- if mobile_image.width >= 750 -%}{{ mobile_image | image_url: width: 750 }} 750w,{%- endif -%}
-                  {{ mobile_image | image_url }} {{ mobile_image.width }}w
-                "
-                sizes="{{ sizes }}"
-              >
-            {%- endif -%}
-            {{
-              desktop_image
-              | image_url: width: 1500
-              | image_tag:
-                widths: widths,
-                sizes: sizes,
-                alt: desktop_image.alt | default: card_collection.title,
-                class: 'motion-reduce',
-                loading: is_lazy,
-                fetchpriority: fetch_priority_value
-            }}
-          </picture>
+          {%- render 'nether-media-picture',
+            desktop_image: desktop_image,
+            mobile_image: mobile_image,
+            widths: widths,
+            sizes: sizes,
+            loading: loading_attr,
+            fetchpriority: fetch_priority_value,
+            alt: desktop_alt,
+            class: 'motion-reduce',
+            mobile_preset: 'card',
+            image_width: 1500,
+            object_position: media_object_position
+          -%}
         {%- else -%}
           {{ 'collection-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
         {%- endif -%}

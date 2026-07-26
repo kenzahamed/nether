@@ -69,7 +69,7 @@ nether-content {
 
 .nether-content__quote-cite {
   font-style: normal;
-  font-weight: 600;
+  font-weight: var(--type-weight-semibold, 600);
 }
 
 .nether-content__quote-title {
@@ -184,8 +184,8 @@ nether-content {
 }
 
 .nether-content--floating-card .nether-hero__content-shell {
-  align-items: flex-end;
-  padding-bottom: 3.2rem;
+  /* Positioning Engine owns vertical placement — do not force flex-end */
+  padding-bottom: max(3.2rem, calc(3.2rem + var(--nether-safe-bottom, 0px)));
 }
 
 .nether-content--floating-card .nether-hero__content {
@@ -252,8 +252,8 @@ nether-content {
 
 .nether-content--layout-magazine .nether-content__heading {
   max-width: 14ch;
-  font-size: clamp(3.2rem, 5vw, 6.4rem);
-  line-height: 1.04;
+  font-size: var(--type-size-emphasis-magazine, clamp(3.2rem, 5vw, 6.4rem));
+  line-height: var(--type-leading-magazine, 1.04);
 }
 
 .nether-content--layout-magazine .nether-content__text {

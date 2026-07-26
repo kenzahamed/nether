@@ -10,7 +10,7 @@ nether-faq {
 }
 
 .nether-faq {
-  --nether-faq-gap: 2.4rem;
+  --nether-faq-gap: var(--nether-layout-gap, 2.4rem);
   --nether-faq-columns-desktop: 1;
   --nether-faq-columns-tablet: 1;
   --nether-faq-columns-mobile: 1;
@@ -24,7 +24,7 @@ nether-faq {
 .nether-faq__inner {
   display: flex;
   flex-direction: column;
-  gap: 3.2rem;
+  gap: var(--nether-layout-inner-gap, 3.2rem);
 }
 
 /* ── Section header ────────────────────────────────────────────────────────── */
@@ -132,7 +132,7 @@ nether-faq {
   border: 0;
   background: transparent;
   cursor: pointer;
-  font-size: 1.4rem;
+  font-size: var(--type-size-nav, 1.4rem);
 }
 
 .nether-faq__control-separator {
@@ -191,8 +191,9 @@ nether-faq {
 }
 
 .nether-faq__nav-link:hover,
+.nether-faq__nav-link:focus-visible,
 .nether-faq__nav-link.is-active {
-  background: rgba(var(--color-foreground), 0.06);
+  background: var(--nether-interact-hover-bg, rgba(var(--color-foreground), 0.06));
 }
 
 @media screen and (max-width: 989px) {
@@ -327,8 +328,9 @@ nether-faq {
   color: rgba(var(--color-foreground), 0.82);
 }
 
-.nether-faq__summary:hover {
-  background: rgba(var(--color-foreground), 0.04);
+.nether-faq__summary:hover,
+.nether-faq__summary:focus-visible {
+  background: var(--nether-interact-hover-bg, rgba(var(--color-foreground), 0.04));
 }
 
 .nether-faq__item.is-hidden {
@@ -362,8 +364,8 @@ nether-faq {
 }
 
 .nether-faq__item--style-editorial .nether-faq__question {
-  font-size: calc(var(--font-heading-scale) * 2rem);
-  line-height: 1.35;
+  font-size: var(--type-size-faq-editorial, calc(var(--font-heading-scale) * 2rem));
+  line-height: var(--type-leading-quote, 1.35);
 }
 
 .nether-faq__item--style-minimal .nether-faq__details {

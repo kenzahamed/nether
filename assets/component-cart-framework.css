@@ -67,6 +67,22 @@
   background: color-mix(in srgb, rgb(var(--color-background)) 82%, transparent);
 }
 
+.nether-cart-page--gradient-enabled .nether-cart__title {
+  background-image: var(--gradient-base-background-1, linear-gradient(90deg, rgb(var(--color-foreground)), rgba(var(--color-foreground), 0.55)));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.nether-cart-page--mobile-compact .nether-cart-page__layout,
+.nether-cart-page--mobile-compact .nether-cart__module {
+  gap: calc(var(--nether-cart-gap) * 0.75);
+}
+
+.nether-cart-page--mobile-compact .nether-cart__module {
+  margin-bottom: calc(var(--nether-cart-module-gap) * 0.75);
+}
+
 .nether-cart__shipping-track {
   display: block;
   width: 100%;

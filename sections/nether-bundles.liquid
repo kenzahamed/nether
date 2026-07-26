@@ -140,17 +140,7 @@
 -%}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
+  {% render 'nether-section-padding', section: section %}
 
   #shopify-section-{{ section.id }} .nether-bundles {
     --nether-bundles-gap: {{ gap }}px;
@@ -193,7 +183,7 @@
       role="region"
       aria-label="{{ section.settings.nether_aria_label | default: strategy_label | escape }}"
     >
-      <div class="nether-bundles__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+      <div class="{% render 'nether-layout-container-class', full_width: section.settings.nether_full_width, class: 'nether-bundles__inner' %}">
         {%- if recommendations.performed and recommendations.products_count > 0 -%}
           {% render 'nether-bundles-body',
             section: section,
@@ -241,7 +231,7 @@
     role="region"
     aria-label="{{ section.settings.nether_aria_label | default: strategy_label | escape }}"
   >
-    <div class="nether-bundles__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+    <div class="{% render 'nether-layout-container-class', full_width: section.settings.nether_full_width, class: 'nether-bundles__inner' %}">
       {% render 'nether-bundles-header', section: section, strategy_label: strategy_label %}
       {% render 'nether-bundles-extensions', type: strategy, section: section %}
       {%- for block in section.blocks -%}
@@ -272,7 +262,7 @@
     role="region"
     aria-label="{{ section.settings.nether_aria_label | default: strategy_label | escape }}"
   >
-    <div class="nether-bundles__inner{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+    <div class="{% render 'nether-layout-container-class', full_width: section.settings.nether_full_width, class: 'nether-bundles__inner' %}">
       {% render 'nether-bundles-body',
         section: section,
         products: source_products,

@@ -17,9 +17,10 @@
   assign is_lazy = lazy_load | default: true
   assign card_index_num = card_index | default: 1
   assign content_position = section.settings.nether_content_position | default: 'bottom-left'
-  if content_position == 'center'
-    assign content_position = 'middle-center'
-  endif
+  capture content_position
+    render 'nether-position-value', position: content_position, default: 'bottom-left'
+  endcapture
+  assign content_position = content_position | strip
   assign enable_glass = section.settings.nether_enable_glass
   assign enable_gradient = section.settings.nether_enable_gradient
   assign show_overlay = section.settings.nether_enable_overlay
@@ -62,6 +63,11 @@
   assign promo_sizes = '(min-width: 990px) calc((100vw - 10rem) / ' | append: columns_count | append: '), calc(100vw - 3rem)'
 -%}
 
+{%- capture loading_attr -%}
+  {%- render 'nether-media-loading', lazy_load: is_lazy -%}
+{%- endcapture -%}
+{%- assign loading_attr = loading_attr | strip -%}
+
 <article
   class="{{ card_classes }}"
   data-nether-product-animate
@@ -83,7 +89,7 @@
     <div class="nether-product-card__inner card card--card card--media card--premium-editorial">
       {%- if block.settings.image != blank -%}
         <div
-          class="nether-product-card__media ratio"
+          class="nether-product-card__media ratio nether-media-ratio"
           style="--ratio-percent: 125%;"
           data-nether-product-media
         >
@@ -95,7 +101,7 @@
                 widths: '165, 330, 535, 750, 1000, 1500',
                 sizes: promo_sizes,
                 alt: block.settings.image.alt | default: card_title,
-                loading: is_lazy,
+                loading: loading_attr,
                 class: 'motion-reduce'
             }}
           </div>

@@ -10,9 +10,9 @@
   --form-field-height-sm: 3.8rem;
   --form-field-height-md: 4.5rem;
   --form-field-height-lg: 5.5rem;
-  --form-field-font-sm: 1.4rem;
-  --form-field-font-md: 1.6rem;
-  --form-field-font-lg: 1.8rem;
+  --form-field-font-sm: var(--type-size-nav, 1.4rem);
+  --form-field-font-md: var(--type-size-body-desktop, 1.6rem);
+  --form-field-font-lg: var(--type-size-subtitle, 1.8rem);
   --form-field-prefix-width: 2.4rem;
   --form-field-suffix-width: 4.4rem;
   --form-choice-size: 1.8rem;

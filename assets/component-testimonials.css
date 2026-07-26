@@ -10,7 +10,7 @@ nether-testimonials {
 }
 
 .nether-testimonials {
-  --nether-testimonials-gap: 2.4rem;
+  --nether-testimonials-gap: var(--nether-layout-gap, 2.4rem);
   --nether-testimonials-columns-desktop: 3;
   --nether-testimonials-columns-tablet: 2;
   --nether-testimonials-columns-mobile: 1;
@@ -24,7 +24,7 @@ nether-testimonials {
 .nether-testimonials__inner {
   display: flex;
   flex-direction: column;
-  gap: 3.2rem;
+  gap: var(--nether-layout-inner-gap, 3.2rem);
 }
 
 /* ── Section header ────────────────────────────────────────────────────────── */
@@ -183,8 +183,8 @@ nether-testimonials {
 }
 
 .nether-testimonials-card--style-editorial .nether-testimonials-card__quote {
-  font-size: calc(var(--font-heading-scale) * 2.2rem);
-  line-height: 1.35;
+  font-size: var(--type-size-quote, calc(var(--font-heading-scale) * 2.2rem));
+  line-height: var(--type-leading-quote, 1.35);
 }
 
 .nether-testimonials-card--style-minimal .nether-testimonials-card__inner {
@@ -210,7 +210,7 @@ nether-testimonials {
 
 .nether-testimonials-card__quote-mark {
   display: block;
-  font-size: 3.2rem;
+  font-size: var(--type-size-quote-mark, 3.2rem);
   line-height: 1;
   opacity: 0.2;
   margin-bottom: 0.4rem;
@@ -249,7 +249,7 @@ nether-testimonials {
   }
 
   .nether-testimonials--layout-magazine .nether-testimonials__item--featured .nether-testimonials-card__quote {
-    font-size: calc(var(--font-heading-scale) * 2.4rem);
+    font-size: var(--type-size-quote-featured, calc(var(--font-heading-scale) * 2.4rem));
   }
 }
 

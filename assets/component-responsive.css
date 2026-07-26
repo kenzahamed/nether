@@ -189,7 +189,9 @@ nether-footer,
 }
 
 /* =============================================================================
- * Fluid content widths — fixed rem caps never exceed the viewport
+ * Fluid content widths — fixed rem caps never exceed the viewport on mobile.
+ * Merchant width presets (narrow/medium/wide) apply from tablet (750px) up.
+ * `full` remains 100% at all breakpoints.
  * ============================================================================= */
 
 @media screen and (max-width: 749px) {

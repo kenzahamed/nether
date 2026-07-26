@@ -52,6 +52,7 @@
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'component-interaction.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'cart-disclosure-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'cart-disclosure-tooltip.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
@@ -281,9 +282,13 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {{ 'component-responsive.css' | asset_url | stylesheet_tag }}
+    {{ 'component-layout.css' | asset_url | stylesheet_tag }}
+    {{ 'component-position.css' | asset_url | stylesheet_tag }}
+    {{ 'component-media-engine.css' | asset_url | stylesheet_tag }}
     {{ 'component-typography.css' | asset_url | stylesheet_tag }}
     {{ 'component-icon.css' | asset_url | stylesheet_tag }}
     {{ 'component-button.css' | asset_url | stylesheet_tag }}
+    {{ 'component-interaction.css' | asset_url | stylesheet_tag }}
     {{ 'component-card-premium.css' | asset_url | stylesheet_tag }}
     {{ 'component-badge.css' | asset_url | stylesheet_tag }}
     {{ 'component-form.css' | asset_url | stylesheet_tag }}

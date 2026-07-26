@@ -1,0 +1,41 @@
+{% comment %}
+  Nether Typography — normalize merchant text_style values to valid classes.
+
+  Many section schemas use value "body", which is not a Dawn/Nether CSS class.
+  This helper maps schema values onto the shared Typography System.
+
+  Accepts:
+  - text_style: {String} raw setting value (required)
+
+  Outputs a space-separated class string (no leading/trailing space).
+
+  Usage:
+  {% render 'nether-type-text-class', text_style: block.settings.text_style %}
+{% endcomment %}
+
+{%- liquid
+  assign raw_style = text_style | default: 'type-body' | strip
+  assign mapped_style = raw_style
+
+  case raw_style
+    when 'body', 'text-body', 'Body'
+      assign mapped_style = 'type-body'
+    when 'body_large', 'body-lg', 'body_lg', 'large'
+      assign mapped_style = 'type-body-lg'
+    when 'body_small', 'body-sm', 'body_sm', 'small'
+      assign mapped_style = 'type-body-sm'
+    when 'subtitle'
+      assign mapped_style = 'subtitle type-subtitle'
+    when 'subtitle_small', 'subtitle-sm'
+      assign mapped_style = 'subtitle subtitle--small type-subtitle type-subtitle-sm'
+    when 'subtitle_medium', 'subtitle-md'
+      assign mapped_style = 'subtitle subtitle--medium type-subtitle type-subtitle-md'
+    when 'caption'
+      assign mapped_style = 'caption type-caption'
+    when 'caption-with-letter-spacing', 'uppercase', 'overline'
+      assign mapped_style = 'caption-with-letter-spacing type-overline'
+    when 'type-body', 'type-body-lg', 'type-body-sm', 'type-caption', 'type-overline', 'type-label', 'type-subtitle'
+      assign mapped_style = raw_style
+  endcase
+-%}
+{{- mapped_style -}}

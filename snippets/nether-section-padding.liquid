@@ -1,0 +1,30 @@
+{% comment %}
+  Nether Layout Engine — shared section padding CSS.
+
+  Uses --nether-section-pad-scale from component-responsive.css (Sprint 5):
+  0.75 on mobile, 1 from tablet up. Replaces duplicated per-section
+  mobile/desktop padding media-query blocks.
+
+  Accepts:
+  - section: {Object} Section object (required)
+  - padding_top: {Number} Override top padding in px (optional)
+  - padding_bottom: {Number} Override bottom padding in px (optional)
+  - selector_prefix: {String} Optional specificity prefix (e.g. #NetherCommerce-{{ id }})
+
+  Usage (inside {%- style -%}):
+    {% render 'nether-section-padding', section: section %}
+{% endcomment %}
+
+{%- liquid
+  assign pad_top = padding_top | default: section.settings.padding_top | default: 36
+  assign pad_bottom = padding_bottom | default: section.settings.padding_bottom | default: 36
+  assign pad_selector = '.section-' | append: section.id | append: '-padding'
+
+  if selector_prefix != blank
+    assign pad_selector = selector_prefix | append: pad_selector
+  endif
+-%}
+{{ pad_selector }} {
+  padding-top: calc({{ pad_top }}px * var(--nether-section-pad-scale, 0.75));
+  padding-bottom: calc({{ pad_bottom }}px * var(--nether-section-pad-scale, 0.75));
+}

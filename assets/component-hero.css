@@ -80,7 +80,8 @@ nether-hero {
   width: 100%;
   height: 100%;
   min-height: 0;
-  object-fit: cover;
+  object-fit: var(--nether-media-fit, cover);
+  object-position: var(--nether-media-object-position, center center);
 }
 
 .nether-hero--height-adapt .nether-hero__media-inner {
@@ -97,19 +98,19 @@ nether-hero {
 /* ── Content width presets ──────────────────────────────────────────────────── */
 
 .nether-hero--width-narrow {
-  --nether-hero-content-width: 48rem;
+  --nether-hero-content-width: var(--nether-layout-content-narrow, 48rem);
 }
 
 .nether-hero--width-medium {
-  --nether-hero-content-width: 64rem;
+  --nether-hero-content-width: var(--nether-layout-content-medium, 64rem);
 }
 
 .nether-hero--width-wide {
-  --nether-hero-content-width: 84rem;
+  --nether-hero-content-width: var(--nether-layout-content-wide, 84rem);
 }
 
 .nether-hero--width-full {
-  --nether-hero-content-width: 100%;
+  --nether-hero-content-width: var(--nether-layout-content-full, 100%);
 }
 
 /* ── Media layer ────────────────────────────────────────────────────────────── */
@@ -130,7 +131,8 @@ nether-hero {
   width: 100%;
   height: 100%;
   min-height: inherit;
-  object-fit: cover;
+  object-fit: var(--nether-media-fit, cover);
+  object-position: var(--nether-media-object-position, center center);
 }
 
 .nether-hero__media--placeholder {
@@ -202,10 +204,14 @@ nether-hero {
   position: relative;
   z-index: 2;
   display: flex;
-  align-items: var(--nether-hero-justify);
-  justify-content: var(--nether-hero-content-align);
+  align-items: var(--nether-hero-justify, var(--nether-pos-y, center));
+  justify-content: var(--nether-hero-content-align, var(--nether-pos-x, center));
   min-height: inherit;
-  padding: var(--nether-hero-content-padding);
+  /* Safe-area aware — Positioning Engine tokens (--nether-safe-*) */
+  padding-top: calc(var(--nether-hero-content-padding) + var(--nether-safe-top, 0px));
+  padding-right: calc(var(--nether-hero-content-padding) + var(--nether-safe-right, 0px));
+  padding-bottom: calc(var(--nether-hero-content-padding) + var(--nether-safe-bottom, 0px));
+  padding-left: calc(var(--nether-hero-content-padding) + var(--nether-safe-left, 0px));
 }
 
 .nether-hero__content {
@@ -411,6 +417,7 @@ nether-hero {
 
 /* ── Layout: Fullscreen ─────────────────────────────────────────────────────── */
 
+/* Viewport height for fullscreen layout. Height control is hidden in TE for this layout. */
 .nether-hero--layout-fullscreen {
   --nether-hero-min-height: 100svh;
 }
@@ -456,10 +463,7 @@ nether-hero {
   max-width: 18ch;
 }
 
-.nether-hero--layout-editorial.nether-hero--position-bottom-left .nether-hero__content-shell,
-.nether-hero--layout-editorial.nether-hero--position-bottom-right .nether-hero__content-shell {
-  align-items: flex-end;
-}
+/* Editorial bottom positions use Positioning Engine tokens (no layout hack). */
 
 /* ── Layout: Card ───────────────────────────────────────────────────────────── */
 
@@ -470,51 +474,25 @@ nether-hero {
   padding: 3.2rem;
 }
 
-/* ── Content position (9-point grid) ────────────────────────────────────────── */
+/* ── Content position (9-point grid) ──────────────────────────────────────────
+ * Tokens live in component-position.css. Re-bridge here so merchant position
+ * wins over layout defaults (e.g. layout-centered) that load in this file
+ * after the global Positioning Engine stylesheet.
+ * Tablet/mobile --*-centered rules below intentionally override on those viewports.
+ * ─────────────────────────────────────────────────────────────────────────── */
 
-.nether-hero--position-top-left {
-  --nether-hero-content-align: flex-start;
-  --nether-hero-justify: flex-start;
-}
-
-.nether-hero--position-top-center {
-  --nether-hero-content-align: center;
-  --nether-hero-justify: flex-start;
-}
-
-.nether-hero--position-top-right {
-  --nether-hero-content-align: flex-end;
-  --nether-hero-justify: flex-start;
-}
-
-.nether-hero--position-middle-left {
-  --nether-hero-content-align: flex-start;
-  --nether-hero-justify: center;
-}
-
-.nether-hero--position-middle-center {
-  --nether-hero-content-align: center;
-  --nether-hero-justify: center;
-}
-
-.nether-hero--position-middle-right {
-  --nether-hero-content-align: flex-end;
-  --nether-hero-justify: center;
-}
-
-.nether-hero--position-bottom-left {
-  --nether-hero-content-align: flex-start;
-  --nether-hero-justify: flex-end;
-}
-
-.nether-hero--position-bottom-center {
-  --nether-hero-content-align: center;
-  --nether-hero-justify: flex-end;
-}
-
+.nether-hero--position-top-left,
+.nether-hero--position-top-center,
+.nether-hero--position-top-right,
+.nether-hero--position-middle-left,
+.nether-hero--position-middle-center,
+.nether-hero--position-center,
+.nether-hero--position-middle-right,
+.nether-hero--position-bottom-left,
+.nether-hero--position-bottom-center,
 .nether-hero--position-bottom-right {
-  --nether-hero-content-align: flex-end;
-  --nether-hero-justify: flex-end;
+  --nether-hero-content-align: var(--nether-pos-x);
+  --nether-hero-justify: var(--nether-pos-y);
 }
 
 /* ── Responsive layout overrides ────────────────────────────────────────────── */
@@ -586,8 +564,8 @@ nether-hero {
 
 @media screen and (min-width: 990px) {
   .nether-hero--desktop-editorial .nether-hero__heading {
-    font-size: clamp(4rem, 6vw, 7.2rem);
-    line-height: 1.02;
+    font-size: var(--type-size-emphasis-hero, clamp(4rem, 6vw, 7.2rem));
+    line-height: var(--type-leading-hero-emphasis, 1.02);
   }
 
   .nether-hero--desktop-editorial .nether-hero__content {

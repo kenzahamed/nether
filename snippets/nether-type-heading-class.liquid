@@ -1,0 +1,62 @@
+{% comment %}
+  Nether Typography — map Dawn heading_size setting values to type aliases.
+
+  Merchant settings continue to use Dawn classes (h0, h1, hxl, hxxl…).
+  This helper optionally appends the matching Nether type-* alias so both
+  systems stay in sync without replacing the merchant contract.
+
+  Accepts:
+  - heading_size: {String} raw setting value (e.g. h2, hxl)
+  - mode: {String} 'dawn' (default) | 'type' | 'both'
+      dawn — echo Dawn class only (passthrough)
+      type — echo Nether type-* class only
+      both — echo Dawn + type alias
+
+  Usage:
+  {% render 'nether-type-heading-class', heading_size: block.settings.heading_size, mode: 'both' %}
+{% endcomment %}
+
+{%- liquid
+  assign size = heading_size | default: 'h2' | strip
+  assign mode = mode | default: 'dawn' | strip
+  assign dawn_class = size
+  assign type_class = ''
+
+  case size
+    when 'hxxl'
+      assign type_class = 'type-display-xl'
+    when 'hxl'
+      assign type_class = 'type-display-lg'
+    when 'h0'
+      assign type_class = 'type-display-sm'
+    when 'h1'
+      assign type_class = 'type-h1'
+    when 'h2'
+      assign type_class = 'type-h2'
+    when 'h3'
+      assign type_class = 'type-h3'
+    when 'h4'
+      assign type_class = 'type-h4'
+    when 'h5'
+      assign type_class = 'type-h5'
+    when 'h6'
+      assign type_class = 'type-h6'
+    when 'type-display-xl', 'type-display-lg', 'type-display-sm', 'type-h0', 'type-h1', 'type-h2', 'type-h3', 'type-h4', 'type-h5', 'type-h6', 'type-heading-lg', 'type-heading-md', 'type-heading-sm', 'type-heading-xs', 'type-section-title'
+      assign type_class = size
+      assign dawn_class = ''
+  endcase
+
+  assign output_class = dawn_class
+  if mode == 'type'
+    assign output_class = type_class
+  elsif mode == 'both'
+    if dawn_class != blank and type_class != blank
+      assign output_class = dawn_class | append: ' ' | append: type_class
+    elsif type_class != blank
+      assign output_class = type_class
+    else
+      assign output_class = dawn_class
+    endif
+  endif
+-%}
+{{- output_class -}}

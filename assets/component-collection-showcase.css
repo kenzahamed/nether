@@ -5,7 +5,7 @@
  * ============================================================================= */
 
 .nether-collection {
-  --nether-collection-gap: 2.4rem;
+  --nether-collection-gap: var(--nether-layout-gap, 2.4rem);
   --nether-collection-columns-desktop: 3;
   --nether-collection-columns-tablet: 2;
   --nether-collection-columns-mobile: 1;
@@ -18,7 +18,7 @@
 .nether-collection__inner {
   display: flex;
   flex-direction: column;
-  gap: 3.2rem;
+  gap: var(--nether-layout-inner-gap, 3.2rem);
 }
 
 /* ── Section header ────────────────────────────────────────────────────────── */
@@ -116,7 +116,7 @@
   }
 
   .nether-collection--desktop-editorial .nether-collection__item:nth-child(odd) .nether-collection-card__heading {
-    font-size: calc(var(--font-heading-scale) * 2.8rem);
+    font-size: var(--type-size-card-editorial, calc(var(--font-heading-scale) * 2.8rem));
   }
 }
 
@@ -397,7 +397,8 @@
 .nether-collection-card__video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: var(--nether-media-fit, cover);
+  object-position: var(--nether-media-object-position, center center);
 }
 
 .nether-collection-card__video--iframe {
@@ -434,56 +435,7 @@
   transition: transform var(--nether-collection-transition-duration) ease, opacity var(--nether-collection-transition-duration) ease;
 }
 
-.nether-collection-card--position-top-left .nether-collection-card__content {
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
-.nether-collection-card--position-top-center .nether-collection-card__content {
-  justify-content: flex-start;
-  align-items: center;
-  text-align: center;
-}
-
-.nether-collection-card--position-top-right .nether-collection-card__content {
-  justify-content: flex-start;
-  align-items: flex-end;
-  text-align: right;
-}
-
-.nether-collection-card--position-middle-left .nether-collection-card__content {
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.nether-collection-card--position-middle-center .nether-collection-card__content {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.nether-collection-card--position-middle-right .nether-collection-card__content {
-  justify-content: center;
-  align-items: flex-end;
-  text-align: right;
-}
-
-.nether-collection-card--position-bottom-left .nether-collection-card__content {
-  justify-content: flex-end;
-  align-items: flex-start;
-}
-
-.nether-collection-card--position-bottom-center .nether-collection-card__content {
-  justify-content: flex-end;
-  align-items: center;
-  text-align: center;
-}
-
-.nether-collection-card--position-bottom-right .nether-collection-card__content {
-  justify-content: flex-end;
-  align-items: flex-end;
-  text-align: right;
-}
+/* 9-point placement: component-position.css (Positioning Engine) */
 
 .nether-collection-card--align-center .nether-collection-card__information {
   text-align: center;
@@ -553,7 +505,7 @@
 }
 
 .nether-collection-card--size-small .nether-collection-card__heading {
-  font-size: calc(var(--font-heading-scale) * 1.6rem);
+  font-size: var(--type-size-card-sm, calc(var(--font-heading-scale) * 1.6rem));
 }
 
 .nether-collection-card--size-large .nether-collection-card__content {
@@ -561,12 +513,12 @@
 }
 
 .nether-collection-card--size-large .nether-collection-card__heading {
-  font-size: calc(var(--font-heading-scale) * 3.2rem);
+  font-size: var(--type-size-card-lg, calc(var(--font-heading-scale) * 3.2rem));
 }
 
 .nether-collection-card--size-editorial .nether-collection-card__heading {
   font-family: var(--font-heading-family);
-  letter-spacing: calc(var(--font-heading-scale) * 0.04rem);
+  letter-spacing: var(--type-tracking-editorial, calc(var(--font-heading-scale) * 0.04rem));
 }
 
 /* ── Floating cards ────────────────────────────────────────────────────────── */

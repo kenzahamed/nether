@@ -1,0 +1,240 @@
+/* =============================================================================
+ * Nether Positioning Engine
+ * Shared positioning architecture: 9-point placement, alignment, overlays,
+ * and safe-area insets. Complements component-layout.css (boxes/stacks) and
+ * component-responsive.css (viewport contract).
+ *
+ * Surfaces:
+ *   Shell (row flex)  — Hero / Banner / Content / CTA / Newsletter content-shell
+ *   Overlay (column)  — Product / Collection / Media card content overlays
+ *
+ * Canonical tokens:
+ *   --nether-pos-x     horizontal flex axis value (flex-start | center | flex-end)
+ *   --nether-pos-y     vertical flex axis value
+ *   --nether-pos-text  text-align companion (left | center | right)
+ *
+ * Merchant class contract (unchanged):
+ *   .nether-hero--position-{slot}
+ *   .nether-*-card--position-{slot}
+ *   slots: top-left | top-center | top-right |
+ *          middle-left | middle-center | middle-right |
+ *          bottom-left | bottom-center | bottom-right
+ *          (+ legacy alias: center → middle-center)
+ *
+ * Breakpoints (parity with Responsive / Layout):
+ *   Mobile  …… max-width: 749px
+ *   Tablet  …… min-width: 750px and max-width: 989px
+ *   Desktop …… min-width: 990px
+ * ============================================================================= */
+
+:root {
+  /* ── Default placement (middle-center) ──────────────────────────────────── */
+  --nether-pos-x: center;
+  --nether-pos-y: center;
+  --nether-pos-text: center;
+
+  /* ── Safe-area insets (notched devices / home indicator) ────────────────── */
+  --nether-safe-top: env(safe-area-inset-top, 0px);
+  --nether-safe-right: env(safe-area-inset-right, 0px);
+  --nether-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --nether-safe-left: env(safe-area-inset-left, 0px);
+
+  /* ── Overlay inset (card content padding floor) ─────────────────────────── */
+  --nether-pos-overlay-inset: 2rem;
+  --nether-pos-overlay-inset-sm: 1.4rem;
+}
+
+/* =============================================================================
+ * Opt-in primitives
+ * ============================================================================= */
+
+/* Row-flex shell — place children on the 9-point grid */
+.nether-pos-shell {
+  display: flex;
+  justify-content: var(--nether-pos-x);
+  align-items: var(--nether-pos-y);
+  box-sizing: border-box;
+}
+
+/* Column-flex overlay — place stacked content on the 9-point grid */
+.nether-pos-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: var(--nether-pos-y);
+  align-items: var(--nether-pos-x);
+  text-align: var(--nether-pos-text);
+  box-sizing: border-box;
+}
+
+/* Safe padding helper (opt-in) */
+.nether-pos-safe {
+  padding-top: max(0px, var(--nether-safe-top));
+  padding-right: max(0px, var(--nether-safe-right));
+  padding-bottom: max(0px, var(--nether-safe-bottom));
+  padding-left: max(0px, var(--nether-safe-left));
+}
+
+/* Text / block alignment helpers */
+.nether-pos-align--left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.nether-pos-align--center {
+  align-items: center;
+  text-align: center;
+}
+
+.nether-pos-align--right {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* =============================================================================
+ * 9-point token map (shared modifiers)
+ * Applied on hosts that already emit --position-* classes.
+ * ============================================================================= */
+
+.nether-hero--position-top-left,
+.nether-product-card--position-top-left,
+.nether-collection-card--position-top-left,
+.nether-media-card--position-top-left,
+.nether-pos--top-left {
+  --nether-pos-x: flex-start;
+  --nether-pos-y: flex-start;
+  --nether-pos-text: left;
+}
+
+.nether-hero--position-top-center,
+.nether-product-card--position-top-center,
+.nether-collection-card--position-top-center,
+.nether-media-card--position-top-center,
+.nether-pos--top-center {
+  --nether-pos-x: center;
+  --nether-pos-y: flex-start;
+  --nether-pos-text: center;
+}
+
+.nether-hero--position-top-right,
+.nether-product-card--position-top-right,
+.nether-collection-card--position-top-right,
+.nether-media-card--position-top-right,
+.nether-pos--top-right {
+  --nether-pos-x: flex-end;
+  --nether-pos-y: flex-start;
+  --nether-pos-text: right;
+}
+
+.nether-hero--position-middle-left,
+.nether-product-card--position-middle-left,
+.nether-collection-card--position-middle-left,
+.nether-media-card--position-middle-left,
+.nether-pos--middle-left {
+  --nether-pos-x: flex-start;
+  --nether-pos-y: center;
+  --nether-pos-text: left;
+}
+
+.nether-hero--position-middle-center,
+.nether-hero--position-center,
+.nether-product-card--position-middle-center,
+.nether-product-card--position-center,
+.nether-collection-card--position-middle-center,
+.nether-collection-card--position-center,
+.nether-media-card--position-middle-center,
+.nether-media-card--position-center,
+.nether-pos--middle-center,
+.nether-pos--center {
+  --nether-pos-x: center;
+  --nether-pos-y: center;
+  --nether-pos-text: center;
+}
+
+.nether-hero--position-middle-right,
+.nether-product-card--position-middle-right,
+.nether-collection-card--position-middle-right,
+.nether-media-card--position-middle-right,
+.nether-pos--middle-right {
+  --nether-pos-x: flex-end;
+  --nether-pos-y: center;
+  --nether-pos-text: right;
+}
+
+.nether-hero--position-bottom-left,
+.nether-product-card--position-bottom-left,
+.nether-collection-card--position-bottom-left,
+.nether-media-card--position-bottom-left,
+.nether-pos--bottom-left {
+  --nether-pos-x: flex-start;
+  --nether-pos-y: flex-end;
+  --nether-pos-text: left;
+}
+
+.nether-hero--position-bottom-center,
+.nether-product-card--position-bottom-center,
+.nether-collection-card--position-bottom-center,
+.nether-media-card--position-bottom-center,
+.nether-pos--bottom-center {
+  --nether-pos-x: center;
+  --nether-pos-y: flex-end;
+  --nether-pos-text: center;
+}
+
+.nether-hero--position-bottom-right,
+.nether-product-card--position-bottom-right,
+.nether-collection-card--position-bottom-right,
+.nether-media-card--position-bottom-right,
+.nether-pos--bottom-right {
+  --nether-pos-x: flex-end;
+  --nether-pos-y: flex-end;
+  --nether-pos-text: right;
+}
+
+/* =============================================================================
+ * Hero shell bridge
+ * Maps Positioning Engine tokens → existing Hero CSS custom properties.
+ * Hero content-shell remains the consumer (row flex).
+ * ============================================================================= */
+
+.nether-hero--position-top-left,
+.nether-hero--position-top-center,
+.nether-hero--position-top-right,
+.nether-hero--position-middle-left,
+.nether-hero--position-middle-center,
+.nether-hero--position-center,
+.nether-hero--position-middle-right,
+.nether-hero--position-bottom-left,
+.nether-hero--position-bottom-center,
+.nether-hero--position-bottom-right {
+  --nether-hero-content-align: var(--nether-pos-x);
+  --nether-hero-justify: var(--nether-pos-y);
+}
+
+/* =============================================================================
+ * Overlay card bridge
+ * Product / Collection / Media absolute content panels consume shared tokens.
+ * ============================================================================= */
+
+.nether-product-card__content,
+.nether-collection-card__content,
+.nether-media-card__content {
+  justify-content: var(--nether-pos-y, flex-end);
+  align-items: var(--nether-pos-x, flex-start);
+  text-align: var(--nether-pos-text, left);
+}
+
+/* =============================================================================
+ * Stack / non-overlay card layouts
+ * When content is position:relative (card_grid / minimal), vertical 9-point
+ * placement has no overlay plane — preserve horizontal + text alignment only.
+ * ============================================================================= */
+
+.nether-product--layout-card_grid .nether-product-card__content,
+.nether-product--layout-minimal_layout .nether-product-card__content,
+.nether-collection--layout-card_layout .nether-collection-card__content,
+.nether-collection--layout-minimal_grid .nether-collection-card__content,
+.nether-media--layout-minimal_gallery .nether-media-card__content {
+  justify-content: flex-start;
+  align-items: var(--nether-pos-x, flex-start);
+  text-align: var(--nether-pos-text, left);
+}

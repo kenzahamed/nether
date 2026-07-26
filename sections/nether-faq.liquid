@@ -131,25 +131,8 @@
     --nether-faq-transition-duration: {{ nether_animation_duration }}s;
   }
 
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+  {% render 'nether-section-padding', section: section %}
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-
-  {%- if uses_section_media and section.settings.nether_faq_image_desktop != blank -%}
-    #NetherFaq-{{ section.id }} .nether-hero__media::before {
-      padding-bottom: {{ 1 | divided_by: section.settings.nether_faq_image_desktop.aspect_ratio | times: 100 }}%;
-      content: '';
-      display: block;
-    }
-  {%- endif -%}
 {%- endstyle -%}
 
 {%- if section.settings.nether_show_divider_top -%}
@@ -185,7 +168,7 @@
     {%- if uses_hero_shell -%}
       {%- render 'nether-faq-shell', section: section, heading_tag: heading_tag -%}
     {%- else -%}
-      <div class="nether-faq__body-wrap{% unless section.settings.nether_full_width %} page-width{% endunless %}">
+      <div class="{% render 'nether-layout-container-class', full_width: section.settings.nether_full_width, class: 'nether-faq__body-wrap' %}">
         {%- render 'nether-faq-content', section: section, heading_tag: heading_tag -%}
 
         {%- render 'nether-faq-search', section: section -%}
@@ -478,6 +461,10 @@
         {
           "value": "video",
           "label": "t:nether.common.video"
+        },
+        {
+          "value": "background_video",
+          "label": "t:nether.common.background_video"
         }
       ],
       "info": "t:nether.common.info_media_type"
@@ -486,14 +473,14 @@
       "type": "image_picker",
       "id": "nether_faq_image_desktop",
       "label": "t:nether.common.desktop_image",
-      "visible_if": "{{ section.settings.nether_faq_media_type == 'image' }}",
+      "visible_if": "{{ section.settings.nether_faq_media_type == 'image' or section.settings.nether_faq_media_type == 'background_video' }}",
       "info": "t:nether.common.info_image_fields"
     },
     {
       "type": "image_picker",
       "id": "nether_faq_image_mobile",
       "label": "t:nether.common.mobile_image",
-      "visible_if": "{{ section.settings.nether_faq_media_type == 'image' }}",
+      "visible_if": "{{ section.settings.nether_faq_media_type == 'image' or section.settings.nether_faq_media_type == 'background_video' }}",
       "info": "t:nether.common.info_image_fields"
     },
     {

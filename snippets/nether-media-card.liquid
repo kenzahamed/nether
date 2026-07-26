@@ -21,9 +21,10 @@
 
   assign card_style = section.settings.nether_media_style | default: 'medium'
   assign content_position = section.settings.nether_content_position | default: 'bottom-left'
-  if content_position == 'center'
-    assign content_position = 'middle-center'
-  endif
+  capture content_position
+    render 'nether-position-value', position: content_position, default: 'bottom-left'
+  endcapture
+  assign content_position = content_position | strip
   assign content_alignment = section.settings.nether_content_alignment | default: 'left'
   assign show_overlay = section.settings.nether_enable_overlay
   assign enable_glass = section.settings.nether_enable_glass
@@ -80,6 +81,9 @@
   assign badge_style = block.settings.badge_style | default: 'soft'
   assign media_label = block.settings.media_label
   assign cta_label = block.settings.cta_label
+  if cta_label == blank and section.settings.nether_default_cta_label != blank
+    assign cta_label = section.settings.nether_default_cta_label
+  endif
   assign cta_style = block.settings.cta_style | default: section.settings.nether_default_cta_style | default: 'arrow'
 
   assign card_classes = 'nether-media-card'

@@ -1,0 +1,15 @@
+{
+  "sections": 20,
+  "total_settings": 1679,
+  "verified": 1679,
+  "dead": [],
+  "media_drift": [],
+  "position_gates": [
+    "nether-collection.liquid:nether_content_position",
+    "nether-content.liquid:nether_content_position",
+    "nether-cta.liquid:nether_content_position",
+    "nether-media.liquid:nether_content_position",
+    "nether-newsletter.liquid:nether_content_position",
+    "nether-product.liquid:nether_content_position"
+  ]
+}

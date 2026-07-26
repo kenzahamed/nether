@@ -1,0 +1,35 @@
+{% comment %}
+  Nether Layout Engine — container class helper.
+
+  Emits a class string for constrained vs full-width shells.
+  Reuses Dawn .page-width as the canonical container.
+
+  Accepts:
+  - full_width: {Boolean} When true, omit page-width (full-bleed shell)
+  - class: {String} Additional BEM / utility classes
+  - use_full_modifier: {Boolean} When true with full_width, keep page-width
+    and append page-width--full (Commerce pattern)
+
+  Usage:
+    <div class="{% render 'nether-layout-container-class', full_width: section.settings.nether_full_width, class: 'nether-media__inner' %}">
+{% endcomment %}
+
+{%- liquid
+  assign classes = class | default: '' | strip
+
+  if full_width and use_full_modifier
+    assign base = 'page-width page-width--full'
+  elsif full_width
+    assign base = ''
+  else
+    assign base = 'page-width'
+  endif
+
+  if base != blank and classes != blank
+    echo base | append: ' ' | append: classes
+  elsif base != blank
+    echo base
+  else
+    echo classes
+  endif
+-%}
