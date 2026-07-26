@@ -77,9 +77,25 @@
     },
   };
 
+  /**
+   * Canonical Nether viewport contract (CSS + Motion parity).
+   * CSS media queries use the same boundaries:
+   *   Mobile  …… max-width: 749px
+   *   Tablet  …… min-width: 750px and max-width: 989px
+   *   Desktop …… min-width: 990px
+   */
   const BREAKPOINTS = {
     mobileMax: 749,
+    tabletMin: 750,
     tabletMax: 989,
+    desktopMin: 990,
+    queries: {
+      mobile: '(max-width: 749px)',
+      tablet: '(min-width: 750px) and (max-width: 989px)',
+      desktop: '(min-width: 990px)',
+      tabletUp: '(min-width: 750px)',
+      mobileAndTablet: '(max-width: 989px)',
+    },
   };
 
   const EVENT_NAMES = {
@@ -260,7 +276,16 @@
     },
 
     isDesktop: function () {
+      /* Tablet + desktop — used by motion mobile/desktop merchant flags. */
       return Breakpoints.getWidth() > BREAKPOINTS.mobileMax;
+    },
+
+    isDesktopOnly: function () {
+      return Breakpoints.getWidth() >= BREAKPOINTS.desktopMin;
+    },
+
+    query: function (name) {
+      return (BREAKPOINTS.queries && BREAKPOINTS.queries[name]) || name;
     },
 
     /**

@@ -546,7 +546,7 @@ nether-hero {
 
 @media screen and (max-width: 749px) {
   .nether-hero {
-    --nether-hero-content-padding: 2rem;
+    --nether-hero-content-padding: var(--nether-inset-mobile, 2rem);
   }
 
   .nether-hero--mobile-stacked.nether-hero--layout-split .nether-hero__inner {

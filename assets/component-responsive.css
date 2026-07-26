@@ -1,0 +1,279 @@
+/* =============================================================================
+ * Nether Responsive System
+ * Canonical viewport contract for CSS + Motion Engine + section layouts.
+ *
+ * Breakpoints (Dawn-aligned, Motion-parity):
+ *   Mobile  …… max-width: 749px
+ *   Tablet  …… min-width: 750px and max-width: 989px
+ *   Desktop …… min-width: 990px  (laptop + large desktop)
+ *
+ * Laptop is not a separate media query — desktop rules apply from 990px up;
+ * large screens are constrained by --page-width / .page-width.
+ *
+ * NOTE: Custom properties cannot be used inside @media queries in CSS.
+ * Numeric tokens below document the contract for JS/Liquid parity and calc().
+ * Always use the literal px values listed above in media queries.
+ * ============================================================================= */
+
+:root {
+  /* ── Breakpoint contract (documentation + JS parity) ───────────────────── */
+  --nether-bp-mobile-max: 749;
+  --nether-bp-tablet-min: 750;
+  --nether-bp-tablet-max: 989;
+  --nether-bp-desktop-min: 990;
+
+  /* ── Responsive gutters (align with .page-width padding) ───────────────── */
+  --nether-gutter-mobile: 1.5rem;
+  --nether-gutter-tablet: 5rem;
+  --nether-gutter-desktop: 5rem;
+  --nether-gutter: var(--nether-gutter-mobile);
+
+  /* ── Section padding scale (Liquid uses 0.75 on mobile; token for CSS) ─── */
+  --nether-section-pad-scale-mobile: 0.75;
+  --nether-section-pad-scale: var(--nether-section-pad-scale-mobile);
+
+  /* ── Content inset rhythm ──────────────────────────────────────────────── */
+  --nether-inset-mobile: 1.6rem;
+  --nether-inset-tablet: 2.4rem;
+  --nether-inset-desktop: 3.2rem;
+  --nether-inset: var(--nether-inset-mobile);
+
+  /* ── Stack / gap rhythm ────────────────────────────────────────────────── */
+  --nether-stack-xs: 0.8rem;
+  --nether-stack-sm: 1.2rem;
+  --nether-stack-md: 1.6rem;
+  --nether-stack-lg: 2.4rem;
+  --nether-stack-xl: 3.2rem;
+}
+
+@media screen and (min-width: 750px) {
+  :root {
+    --nether-gutter: var(--nether-gutter-tablet);
+    --nether-section-pad-scale: 1;
+    --nether-inset: var(--nether-inset-tablet);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  :root {
+    --nether-gutter: var(--nether-gutter-desktop);
+    --nether-inset: var(--nether-inset-desktop);
+  }
+}
+
+/* =============================================================================
+ * Viewport containment — prevent horizontal scrolling from framework roots
+ * Do NOT set overflow-x on .content-for-layout — it can create a scroll
+ * container and break position:sticky (product summary, etc.).
+ * ============================================================================= */
+
+.content-for-layout {
+  max-width: 100%;
+}
+
+/* Presentation + commerce hosts — containment only (do not reset display) */
+nether-hero,
+nether-banner,
+nether-content,
+nether-cta,
+nether-newsletter,
+nether-faq,
+nether-testimonials,
+nether-media,
+nether-product,
+nether-collection,
+nether-product-page,
+nether-collection-page,
+nether-cart-page,
+nether-recommendations,
+nether-bundles,
+nether-commerce,
+nether-wishlist-page,
+nether-compare-page,
+nether-header,
+nether-footer,
+.nether-hero,
+.nether-banner,
+.nether-content,
+.nether-cta,
+.nether-newsletter,
+.nether-faq,
+.nether-testimonials,
+.nether-media,
+.nether-product,
+.nether-collection,
+.nether-product-page,
+.nether-collection-page,
+.nether-cart-page,
+.nether-recommendations,
+.nether-bundles,
+.nether-commerce,
+.nether-wishlist-page,
+.nether-compare-page {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* =============================================================================
+ * Media adaptation — images, video, embeds stay inside their containers
+ * ============================================================================= */
+
+.nether-hero img,
+.nether-banner img,
+.nether-content img,
+.nether-cta img,
+.nether-newsletter img,
+.nether-faq img,
+.nether-testimonials img,
+.nether-media img,
+.nether-product img,
+.nether-collection img,
+.nether-product-page img,
+.nether-collection-page img,
+.nether-recommendations img,
+.nether-bundles img,
+.nether-hero video,
+.nether-banner video,
+.nether-content video,
+.nether-cta video,
+.nether-media video,
+.nether-product video,
+.nether-collection video,
+.nether-hero iframe,
+.nether-banner iframe,
+.nether-content iframe,
+.nether-media iframe,
+.nether-product iframe,
+.nether-collection iframe,
+.nether-cta iframe {
+  max-width: 100%;
+}
+
+.nether-hero svg,
+.nether-banner svg,
+.nether-content svg,
+.nether-cta svg,
+.nether-media svg {
+  max-width: 100%;
+}
+
+/* =============================================================================
+ * Grid / flex children — allow shrinking below intrinsic content size
+ * ============================================================================= */
+
+.nether-grid-safe,
+.nether-hero__inner,
+.nether-content__rows,
+.nether-faq__list,
+.nether-testimonials__grid,
+.nether-media__grid,
+.nether-product__grid,
+.nether-collection__grid,
+.nether-recommendations__grid,
+.nether-bundles__grid {
+  min-width: 0;
+}
+
+.nether-grid-safe > *,
+.nether-hero__inner > *,
+.nether-content__rows > *,
+.nether-faq__list > *,
+.nether-testimonials__grid > *,
+.nether-media__grid > *,
+.nether-product__grid > *,
+.nether-collection__grid > *,
+.nether-recommendations__grid > *,
+.nether-bundles__grid > * {
+  min-width: 0;
+}
+
+/* =============================================================================
+ * Fluid content widths — fixed rem caps never exceed the viewport
+ * ============================================================================= */
+
+@media screen and (max-width: 749px) {
+  .nether-hero--width-narrow,
+  .nether-hero--width-medium,
+  .nether-hero--width-wide {
+    --nether-hero-content-width: 100%;
+  }
+
+  .nether-hero__content,
+  .nether-banner .nether-hero__content {
+    max-width: 100%;
+  }
+}
+
+/* =============================================================================
+ * Shared visibility utilities (extend Dawn .small-hide / .medium-hide / .large-up-hide)
+ * Prefer Dawn classes in Liquid; these aliases keep Nether naming consistent.
+ * ============================================================================= */
+
+.nether-hide-mobile {
+  display: none !important;
+}
+
+@media screen and (min-width: 750px) {
+  .nether-hide-mobile {
+    display: revert !important;
+  }
+
+  .nether-hide-tablet-up {
+    display: none !important;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .nether-hide-tablet {
+    display: none !important;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .nether-hide-desktop {
+    display: none !important;
+  }
+
+  .nether-hide-tablet-up {
+    display: revert !important;
+  }
+}
+
+/* =============================================================================
+ * Overflow utilities (complement Dawn .overflow-hidden-*)
+ * ============================================================================= */
+
+.nether-overflow-x-auto {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.nether-overflow-x-clip {
+  overflow-x: clip;
+}
+
+@supports not (overflow: clip) {
+  .nether-overflow-x-clip {
+    overflow-x: hidden;
+  }
+}
+
+/* =============================================================================
+ * Button / form touch comfort on small viewports (no visual redesign)
+ * ============================================================================= */
+
+@media screen and (max-width: 749px) {
+  .nether-hero__buttons,
+  .nether-cta__buttons,
+  .nether-banner .nether-hero__buttons {
+    width: 100%;
+  }
+
+  .nether-hero__buttons .button,
+  .nether-cta__buttons .button,
+  .nether-banner .nether-hero__buttons .button {
+    max-width: 100%;
+  }
+}

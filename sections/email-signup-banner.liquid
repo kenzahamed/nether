@@ -164,7 +164,7 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "t:sections.email-signup-banner.settings.image.label"
+      "label": "t:nether.common.ui.media.background_image"
     },
     {
       "type": "range",
@@ -173,7 +173,7 @@
       "max": 100,
       "step": 10,
       "unit": "%",
-      "label": "t:sections.email-signup-banner.settings.image_overlay_opacity.label",
+      "label": "t:nether.common.ui.media.overlay_opacity",
       "default": 0
     },
     {
@@ -182,23 +182,23 @@
       "options": [
         {
           "value": "adapt-image",
-          "label": "t:sections.email-signup-banner.settings.image_height.options__1.label"
+          "label": "t:nether.common.ui.media.adapt_to_image"
         },
         {
           "value": "small",
-          "label": "t:sections.email-signup-banner.settings.image_height.options__2.label"
+          "label": "t:nether.common.ui.sizing.small"
         },
         {
           "value": "medium",
-          "label": "t:sections.email-signup-banner.settings.image_height.options__3.label"
+          "label": "t:nether.common.ui.sizing.medium"
         },
         {
           "value": "large",
-          "label": "t:sections.email-signup-banner.settings.image_height.options__4.label"
+          "label": "t:nether.common.ui.sizing.large"
         }
       ],
       "default": "medium",
-      "label": "t:sections.email-signup-banner.settings.image_height.label"
+      "label": "t:nether.common.ui.labels.height"
     },
     {
       "type": "header",
@@ -210,43 +210,43 @@
       "options": [
         {
           "value": "top-left",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_position.options__1.label"
+          "label": "t:nether.common.ui.layout.top_left"
         },
         {
           "value": "top-center",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_position.options__2.label"
+          "label": "t:nether.common.ui.layout.top_center"
         },
         {
           "value": "top-right",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_position.options__3.label"
+          "label": "t:nether.common.ui.layout.top_right"
         },
         {
           "value": "middle-left",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_position.options__4.label"
+          "label": "t:nether.common.ui.layout.middle_left"
         },
         {
           "value": "middle-center",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_position.options__5.label"
+          "label": "t:nether.common.ui.layout.middle_center"
         },
         {
           "value": "middle-right",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_position.options__6.label"
+          "label": "t:nether.common.ui.layout.middle_right"
         },
         {
           "value": "bottom-left",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_position.options__7.label"
+          "label": "t:nether.common.ui.layout.bottom_left"
         },
         {
           "value": "bottom-center",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_position.options__8.label"
+          "label": "t:nether.common.ui.layout.bottom_center"
         },
         {
           "value": "bottom-right",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_position.options__9.label"
+          "label": "t:nether.common.ui.layout.bottom_right"
         }
       ],
       "default": "middle-center",
-      "label": "t:sections.email-signup-banner.settings.desktop_content_position.label"
+      "label": "t:nether.common.ui.labels.position"
     },
     {
       "type": "select",
@@ -254,25 +254,25 @@
       "options": [
         {
           "value": "left",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_alignment.options__1.label"
+          "label": "t:nether.common.ui.layout.left"
         },
         {
           "value": "center",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_alignment.options__2.label"
+          "label": "t:nether.common.ui.layout.center"
         },
         {
           "value": "right",
-          "label": "t:sections.email-signup-banner.settings.desktop_content_alignment.options__3.label"
+          "label": "t:nether.common.ui.layout.right"
         }
       ],
       "default": "center",
-      "label": "t:sections.email-signup-banner.settings.desktop_content_alignment.label"
+      "label": "t:nether.common.ui.layout.alignment"
     },    
     {
       "type": "checkbox",
       "id": "show_text_box",
       "default": true,
-      "label": "t:sections.email-signup-banner.settings.show_text_box.label"
+      "label": "t:nether.common.ui.labels.container"
     },
     {
       "type": "color_scheme",
@@ -291,25 +291,25 @@
       "options": [
         {
           "value": "left",
-          "label": "t:sections.email-signup-banner.settings.mobile_content_alignment.options__1.label"
+          "label": "t:nether.common.ui.layout.left"
         },
         {
           "value": "center",
-          "label": "t:sections.email-signup-banner.settings.mobile_content_alignment.options__2.label"
+          "label": "t:nether.common.ui.layout.center"
         },
         {
           "value": "right",
-          "label": "t:sections.email-signup-banner.settings.mobile_content_alignment.options__3.label"
+          "label": "t:nether.common.ui.layout.right"
         }
       ],
       "default": "center",
-      "label": "t:sections.email-signup-banner.settings.mobile_content_alignment.label"
+      "label": "t:nether.common.ui.layout.alignment"
     },
     {
       "type": "checkbox",
       "id": "show_text_below",
       "default": true,
-      "label": "t:sections.email-signup-banner.settings.show_text_below.label"
+      "label": "t:nether.common.ui.labels.stack_text_below_image"
     }
   ],
   "blocks": [
@@ -322,7 +322,7 @@
           "type": "text",
           "id": "heading",
           "default": "t:sections.email-signup-banner.blocks.heading.settings.heading.default",
-          "label": "t:sections.email-signup-banner.blocks.heading.settings.heading.label"
+          "label": "t:nether.common.ui.typography.heading"
         },
         {
           "type": "select",
@@ -363,7 +363,7 @@
           "type": "richtext",
           "id": "text",
           "default": "t:sections.email-signup-banner.blocks.paragraph.settings.paragraph.default",
-          "label": "t:sections.email-signup-banner.blocks.paragraph.settings.paragraph.label"
+          "label": "t:nether.common.ui.typography.text"
         },
         {
           "type": "select",
@@ -371,15 +371,15 @@
           "options": [
             {
               "value": "body",
-              "label": "t:sections.email-signup-banner.blocks.paragraph.settings.text_style.options__1.label"
+              "label": "t:nether.common.ui.typography.body"
             },
             {
               "value": "subtitle",
-              "label": "t:sections.email-signup-banner.blocks.paragraph.settings.text_style.options__2.label"
+              "label": "t:nether.common.ui.typography.subtitle"
             }
           ],
           "default": "body",
-          "label": "t:sections.email-signup-banner.blocks.paragraph.settings.text_style.label"
+          "label": "t:nether.common.ui.labels.style"
         }
       ]
     },

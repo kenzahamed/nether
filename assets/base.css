@@ -3088,7 +3088,7 @@ details-disclosure > details {
     padding-bottom: 0;
   }
 
-  @media screen and (min-width: 749px) {
+  @media screen and (min-width: 750px) {
     .grid--peek .grid__item {
       padding-left: var(--grid-mobile-horizontal-spacing);
     }

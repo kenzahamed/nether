@@ -188,7 +188,7 @@ nether-banner {
 
 @media screen and (max-width: 749px) {
   .nether-banner {
-    --nether-hero-content-padding: 1.6rem;
+    --nether-hero-content-padding: var(--nether-inset-mobile, 1.6rem);
   }
 
   .nether-banner--floating-card .nether-hero__content {

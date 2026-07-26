@@ -14,9 +14,9 @@
       "label": "t:sections.nether_cart_drawer.settings.nether_drawer_style.label",
       "default": "standard",
       "options": [
-        { "value": "standard", "label": "t:sections.nether_cart_drawer.settings.nether_drawer_style.options__1.label" },
-        { "value": "wide", "label": "t:sections.nether_cart_drawer.settings.nether_drawer_style.options__2.label" },
-        { "value": "minimal", "label": "t:sections.nether_cart_drawer.settings.nether_drawer_style.options__3.label" }
+        { "value": "standard", "label": "t:nether.common.ui.states.standard" },
+        { "value": "wide", "label": "t:nether.common.ui.layout.wide" },
+        { "value": "minimal", "label": "t:nether.common.ui.states.minimal" }
       ]
     },
     {
@@ -28,7 +28,7 @@
     {
       "type": "text",
       "id": "nether_drawer_aria_label",
-      "label": "t:sections.nether_cart_drawer.settings.nether_drawer_aria_label.label"
+      "label": "t:nether.common.ui.content.accessibility_label"
     },
     {
       "type": "header",
@@ -37,20 +37,20 @@
     {
       "type": "checkbox",
       "id": "nether_enable_shipping_progress",
-      "label": "t:sections.nether_cart_drawer.settings.nether_enable_shipping_progress.label",
+      "label": "t:nether.common.ui.labels.enable_shipping_progress_bar",
       "default": true
     },
     {
       "type": "number",
       "id": "nether_free_shipping_threshold",
-      "label": "t:sections.nether_cart_drawer.settings.nether_free_shipping_threshold.label",
+      "label": "t:nether.common.ui.labels.free_shipping_threshold",
       "default": 100,
       "info": "t:sections.nether_cart_drawer.settings.nether_free_shipping_threshold.info"
     },
     {
       "type": "checkbox",
       "id": "nether_enable_notes",
-      "label": "t:sections.nether_cart_drawer.settings.nether_enable_notes.label",
+      "label": "t:nether.common.ui.labels.enable_order_notes",
       "default": true
     },
     {
@@ -60,22 +60,22 @@
     {
       "type": "text",
       "id": "nether_empty_heading",
-      "label": "t:sections.nether_cart_drawer.settings.nether_empty_heading.label"
+      "label": "t:nether.common.ui.labels.empty_cart_heading"
     },
     {
       "type": "textarea",
       "id": "nether_empty_text",
-      "label": "t:sections.nether_cart_drawer.settings.nether_empty_text.label"
+      "label": "t:nether.common.ui.labels.empty_cart_text"
     },
     {
       "type": "text",
       "id": "nether_empty_button_label",
-      "label": "t:sections.nether_cart_drawer.settings.nether_empty_button_label.label"
+      "label": "t:nether.common.ui.labels.empty_cart_button_label"
     },
     {
       "type": "url",
       "id": "nether_empty_button_link",
-      "label": "t:sections.nether_cart_drawer.settings.nether_empty_button_link.label"
+      "label": "t:nether.common.ui.labels.empty_cart_button_link"
     },
     {
       "type": "header",
@@ -84,30 +84,30 @@
     {
       "type": "checkbox",
       "id": "nether_enable_trust",
-      "label": "t:sections.nether_cart_drawer.settings.nether_enable_trust.label",
+      "label": "t:nether.common.ui.labels.enable_trust_area",
       "default": true
     },
     {
       "type": "text",
       "id": "nether_trust_heading",
-      "label": "t:sections.nether_cart_drawer.settings.nether_trust_heading.label",
+      "label": "t:nether.common.ui.labels.trust_heading",
       "default": "Secure checkout"
     },
     {
       "type": "textarea",
       "id": "nether_trust_text",
-      "label": "t:sections.nether_cart_drawer.settings.nether_trust_text.label"
+      "label": "t:nether.common.ui.labels.trust_text"
     },
     {
       "type": "text",
       "id": "nether_secure_checkout_text",
-      "label": "t:sections.nether_cart_drawer.settings.nether_secure_checkout_text.label",
+      "label": "t:nether.common.ui.labels.secure_checkout_message",
       "default": "Payments are encrypted and secure."
     },
     {
       "type": "select",
       "id": "nether_trust_icon",
-      "label": "t:sections.nether_cart_drawer.settings.nether_trust_icon.label",
+      "label": "t:nether.common.ui.labels.trust_icon",
       "default": "lock",
       "options": [
         { "value": "lock", "label": "Lock" },
@@ -122,7 +122,7 @@
     {
       "type": "checkbox",
       "id": "nether_enable_glass",
-      "label": "t:sections.nether_cart_drawer.settings.nether_enable_glass.label",
+      "label": "t:nether.common.ui.labels.enable_glass_drawer_panel",
       "default": false
     },
     {
@@ -132,23 +132,23 @@
     {
       "type": "select",
       "id": "nether_animation_style",
-      "label": "t:sections.nether_cart_drawer.settings.nether_animation_style.label",
+      "label": "t:nether.common.ui.motion.animation_style",
       "default": "slide",
       "options": [
-        { "value": "none", "label": "t:sections.nether_cart_drawer.settings.nether_animation_style.options__1.label" },
-        { "value": "fade", "label": "t:sections.nether_cart_drawer.settings.nether_animation_style.options__2.label" },
-        { "value": "slide", "label": "t:sections.nether_cart_drawer.settings.nether_animation_style.options__3.label" }
+        { "value": "none", "label": "t:nether.common.ui.states.none" },
+        { "value": "fade", "label": "t:nether.common.ui.motion.fade" },
+        { "value": "slide", "label": "t:nether.common.ui.motion.slide" }
       ]
     },
     {
       "type": "select",
       "id": "nether_animation_speed",
-      "label": "t:sections.nether_cart_drawer.settings.nether_animation_speed.label",
+      "label": "t:nether.common.ui.motion.animation_speed",
       "default": "normal",
       "options": [
-        { "value": "slow", "label": "t:sections.nether_cart_drawer.settings.nether_animation_speed.options__1.label" },
-        { "value": "normal", "label": "t:sections.nether_cart_drawer.settings.nether_animation_speed.options__2.label" },
-        { "value": "fast", "label": "t:sections.nether_cart_drawer.settings.nether_animation_speed.options__3.label" }
+        { "value": "slow", "label": "t:nether.common.ui.motion.slow" },
+        { "value": "normal", "label": "t:nether.common.ui.labels.normal" },
+        { "value": "fast", "label": "t:nether.common.ui.motion.fast" }
       ]
     }
   ],
@@ -158,10 +158,10 @@
       "name": "t:sections.nether_cart_drawer.blocks.trust_badges.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "heading", "label": "t:sections.nether_cart_drawer.blocks.trust_badges.settings.heading.label" },
-        { "type": "textarea", "id": "text", "label": "t:sections.nether_cart_drawer.blocks.trust_badges.settings.text.label" },
-        { "type": "text", "id": "secure_text", "label": "t:sections.nether_cart_drawer.blocks.trust_badges.settings.secure_text.label" },
-        { "type": "select", "id": "icon", "label": "t:sections.nether_cart_drawer.blocks.trust_badges.settings.icon.label", "default": "lock", "options": [
+        { "type": "text", "id": "heading", "label": "t:nether.common.ui.typography.heading" },
+        { "type": "textarea", "id": "text", "label": "t:nether.common.ui.typography.text" },
+        { "type": "text", "id": "secure_text", "label": "t:nether.common.ui.labels.secure_checkout_message" },
+        { "type": "select", "id": "icon", "label": "t:nether.common.ui.content.icon", "default": "lock", "options": [
           { "value": "lock", "label": "Lock" },
           { "value": "check_mark", "label": "Check mark" },
           { "value": "heart", "label": "Heart" }
@@ -173,15 +173,15 @@
       "name": "t:sections.nether_cart_drawer.blocks.payment_methods.name",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "heading", "label": "t:sections.nether_cart_drawer.blocks.payment_methods.settings.heading.label", "default": "Payment methods" }
+        { "type": "text", "id": "heading", "label": "t:nether.common.ui.typography.heading", "default": "Payment methods" }
       ]
     },
     {
       "type": "promotional_notice",
       "name": "t:sections.nether_cart_drawer.blocks.promotional_notice.name",
       "settings": [
-        { "type": "inline_richtext", "id": "heading", "label": "t:sections.nether_cart_drawer.blocks.promotional_notice.settings.heading.label" },
-        { "type": "richtext", "id": "text", "label": "t:sections.nether_cart_drawer.blocks.promotional_notice.settings.text.label" },
+        { "type": "inline_richtext", "id": "heading", "label": "t:nether.common.ui.typography.heading" },
+        { "type": "richtext", "id": "text", "label": "t:nether.common.ui.typography.text" },
         { "type": "select", "id": "notice_style", "default": "soft", "label": "Style", "options": [
           { "value": "soft", "label": "Soft" },
           { "value": "outline", "label": "Outline" },

@@ -192,7 +192,7 @@
       "max": 100,
       "step": 10,
       "unit": "%",
-      "label": "t:sections.image-banner.settings.image_overlay_opacity.label",
+      "label": "t:nether.common.ui.media.overlay_opacity",
       "default": 0
     },
     {
@@ -201,23 +201,23 @@
       "options": [
         {
           "value": "adapt",
-          "label": "t:sections.image-banner.settings.image_height.options__1.label"
+          "label": "t:nether.common.ui.labels.adapt_to_first_image"
         },
         {
           "value": "small",
-          "label": "t:sections.image-banner.settings.image_height.options__2.label"
+          "label": "t:nether.common.ui.sizing.small"
         },
         {
           "value": "medium",
-          "label": "t:sections.image-banner.settings.image_height.options__3.label"
+          "label": "t:nether.common.ui.sizing.medium"
         },
         {
           "value": "large",
-          "label": "t:sections.image-banner.settings.image_height.options__4.label"
+          "label": "t:nether.common.ui.sizing.large"
         }
       ],
       "default": "medium",
-      "label": "t:sections.image-banner.settings.image_height.label"
+      "label": "t:nether.common.ui.labels.height"
     },
     {
       "type": "select",
@@ -253,43 +253,43 @@
       "options": [
         {
           "value": "top-left",
-          "label": "t:sections.image-banner.settings.desktop_content_position.options__1.label"
+          "label": "t:nether.common.ui.layout.top_left"
         },
         {
           "value": "top-center",
-          "label": "t:sections.image-banner.settings.desktop_content_position.options__2.label"
+          "label": "t:nether.common.ui.layout.top_center"
         },
         {
           "value": "top-right",
-          "label": "t:sections.image-banner.settings.desktop_content_position.options__3.label"
+          "label": "t:nether.common.ui.layout.top_right"
         },
         {
           "value": "middle-left",
-          "label": "t:sections.image-banner.settings.desktop_content_position.options__4.label"
+          "label": "t:nether.common.ui.layout.middle_left"
         },
         {
           "value": "middle-center",
-          "label": "t:sections.image-banner.settings.desktop_content_position.options__5.label"
+          "label": "t:nether.common.ui.layout.middle_center"
         },
         {
           "value": "middle-right",
-          "label": "t:sections.image-banner.settings.desktop_content_position.options__6.label"
+          "label": "t:nether.common.ui.layout.middle_right"
         },
         {
           "value": "bottom-left",
-          "label": "t:sections.image-banner.settings.desktop_content_position.options__7.label"
+          "label": "t:nether.common.ui.layout.bottom_left"
         },
         {
           "value": "bottom-center",
-          "label": "t:sections.image-banner.settings.desktop_content_position.options__8.label"
+          "label": "t:nether.common.ui.layout.bottom_center"
         },
         {
           "value": "bottom-right",
-          "label": "t:sections.image-banner.settings.desktop_content_position.options__9.label"
+          "label": "t:nether.common.ui.layout.bottom_right"
         }
       ],
       "default": "middle-center",
-      "label": "t:sections.image-banner.settings.desktop_content_position.label"
+      "label": "t:nether.common.ui.labels.position"
     },
     {
       "type": "select",
@@ -297,25 +297,25 @@
       "options": [
         {
           "value": "left",
-          "label": "t:sections.image-banner.settings.desktop_content_alignment.options__1.label"
+          "label": "t:nether.common.ui.layout.left"
         },
         {
           "value": "center",
-          "label": "t:sections.image-banner.settings.desktop_content_alignment.options__2.label"
+          "label": "t:nether.common.ui.layout.center"
         },
         {
           "value": "right",
-          "label": "t:sections.image-banner.settings.desktop_content_alignment.options__3.label"
+          "label": "t:nether.common.ui.layout.right"
         }
       ],
       "default": "center",
-      "label": "t:sections.image-banner.settings.desktop_content_alignment.label"
+      "label": "t:nether.common.ui.layout.alignment"
     },
     {
       "type": "checkbox",
       "id": "show_text_box",
       "default": true,
-      "label": "t:sections.image-banner.settings.show_text_box.label"
+      "label": "t:nether.common.ui.labels.container"
     },
     {
       "type": "color_scheme",
@@ -339,25 +339,25 @@
       "options": [
         {
           "value": "left",
-          "label": "t:sections.image-banner.settings.mobile_content_alignment.options__1.label"
+          "label": "t:nether.common.ui.layout.left"
         },
         {
           "value": "center",
-          "label": "t:sections.image-banner.settings.mobile_content_alignment.options__2.label"
+          "label": "t:nether.common.ui.layout.center"
         },
         {
           "value": "right",
-          "label": "t:sections.image-banner.settings.mobile_content_alignment.options__3.label"
+          "label": "t:nether.common.ui.layout.right"
         }
       ],
       "default": "center",
-      "label": "t:sections.image-banner.settings.mobile_content_alignment.label"
+      "label": "t:nether.common.ui.layout.alignment"
     },
     {
       "type": "checkbox",
       "id": "show_text_below",
       "default": true,
-      "label": "t:sections.image-banner.settings.show_text_below.label"
+      "label": "t:nether.common.ui.labels.container"
     }
   ],
   "blocks": [
@@ -370,7 +370,7 @@
           "type": "inline_richtext",
           "id": "heading",
           "default": "t:sections.image-banner.blocks.heading.settings.heading.default",
-          "label": "t:sections.image-banner.blocks.heading.settings.heading.label"
+          "label": "t:nether.common.ui.typography.heading"
         },
         {
           "type": "select",
@@ -411,7 +411,7 @@
           "type": "inline_richtext",
           "id": "text",
           "default": "t:sections.image-banner.blocks.text.settings.text.default",
-          "label": "t:sections.image-banner.blocks.text.settings.text.label"
+          "label": "t:nether.common.ui.typography.text"
         },
         {
           "type": "select",
@@ -419,19 +419,19 @@
           "options": [
             {
               "value": "body",
-              "label": "t:sections.image-banner.blocks.text.settings.text_style.options__1.label"
+              "label": "t:nether.common.ui.typography.body"
             },
             {
               "value": "subtitle",
-              "label": "t:sections.image-banner.blocks.text.settings.text_style.options__2.label"
+              "label": "t:nether.common.ui.typography.subtitle"
             },
             {
               "value": "caption-with-letter-spacing",
-              "label": "t:sections.image-banner.blocks.text.settings.text_style.options__3.label"
+              "label": "t:nether.common.ui.typography.uppercase"
             }
           ],
           "default": "body",
-          "label": "t:sections.image-banner.blocks.text.settings.text_style.label"
+          "label": "t:nether.common.ui.labels.style"
         }
       ]
     },
@@ -448,19 +448,19 @@
           "type": "text",
           "id": "button_label_1",
           "default": "t:sections.image-banner.blocks.buttons.settings.button_label_1.default",
-          "label": "t:sections.image-banner.blocks.buttons.settings.button_label_1.label",
+          "label": "t:nether.common.ui.content.label",
           "info": "t:sections.image-banner.blocks.buttons.settings.button_label_1.info"
         },
         {
           "type": "url",
           "id": "button_link_1",
-          "label": "t:sections.image-banner.blocks.buttons.settings.button_link_1.label"
+          "label": "t:nether.common.ui.actions.link"
         },
         {
           "type": "checkbox",
           "id": "button_style_secondary_1",
           "default": false,
-          "label": "t:sections.image-banner.blocks.buttons.settings.button_style_secondary_1.label"
+          "label": "t:nether.common.ui.labels.outline_style"
         },
         {
         "type": "header",
@@ -470,19 +470,19 @@
           "type": "text",
           "id": "button_label_2",
           "default": "t:sections.image-banner.blocks.buttons.settings.button_label_2.default",
-          "label": "t:sections.image-banner.blocks.buttons.settings.button_label_2.label",
+          "label": "t:nether.common.ui.content.label",
           "info": "t:sections.image-banner.blocks.buttons.settings.button_label_2.info"
         },
         {
           "type": "url",
           "id": "button_link_2",
-          "label": "t:sections.image-banner.blocks.buttons.settings.button_link_2.label"
+          "label": "t:nether.common.ui.actions.link"
         },
         {
           "type": "checkbox",
           "id": "button_style_secondary_2",
           "default": false,
-          "label": "t:sections.image-banner.blocks.buttons.settings.button_style_secondary_2.label"
+          "label": "t:nether.common.ui.labels.outline_style"
         }
       ]
     }
